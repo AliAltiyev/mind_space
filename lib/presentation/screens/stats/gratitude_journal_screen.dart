@@ -34,4 +34,3 @@ class GratitudeJournalScreen extends ConsumerWidget {
     );
   }
 }
-
