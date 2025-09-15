@@ -1,80 +1,103 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'constants/app_design.dart';
-import 'features/mood_tracking/data/datasources/mood_local_datasource.dart';
-import 'features/mood_tracking/data/models/mood_entry_model.dart';
-import 'features/mood_tracking/data/repositories/mood_repository_impl.dart';
-import 'features/mood_tracking/presentation/bloc/mood_tracking_bloc.dart';
-import 'features/mood_tracking/presentation/bloc/mood_tracking_event.dart';
-import 'screens/onboarding_screen.dart';
+import 'app/providers/ai_features_provider.dart';
+import 'app/providers/profile_providers.dart';
+import 'app/routing/app_router.dart';
+import 'core/di/injection.dart';
+import 'features/ai/presentation/blocs/ai_insights_bloc.dart';
+import 'features/ai/presentation/blocs/gratitude_bloc.dart';
+import 'features/ai/presentation/blocs/meditation_bloc.dart';
+import 'features/ai/presentation/blocs/patterns_bloc.dart';
+import 'features/profile/presentation/blocs/achievements_bloc.dart';
+import 'features/profile/presentation/blocs/preferences_bloc.dart';
+import 'features/profile/presentation/blocs/profile_bloc.dart';
+import 'features/profile/presentation/blocs/stats_bloc.dart';
+import 'shared/presentation/theme/app_theme.dart' as app_theme;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Инициализация Hive
-  await Hive.initFlutter();
-  Hive.registerAdapter(MoodEntryModelAdapter());
+  // Инициализация локализации
+  await EasyLocalization.ensureInitialized();
 
-  // Инициализация локального источника данных
-  final moodLocalDataSource = MoodLocalDataSourceImpl();
-  await moodLocalDataSource.init();
+  // Инициализация DI
+  await configureDependencies();
 
-  // Создание репозитория
-  final moodRepository = MoodRepositoryImpl(
-    localDataSource: moodLocalDataSource,
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ru')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: const ProviderScope(child: MindSpaceApp()),
+    ),
   );
-
-  runApp(MindSpaceApp(moodRepository: moodRepository));
 }
 
-class MindSpaceApp extends StatelessWidget {
-  final MoodRepositoryImpl moodRepository;
-
-  const MindSpaceApp({super.key, required this.moodRepository});
+/// Главное приложение
+class MindSpaceApp extends ConsumerWidget {
+  const MindSpaceApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MindSpace',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: GoogleFonts.inter().fontFamily,
-        scaffoldBackgroundColor: AppDesign.primaryBackground,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          iconTheme: IconThemeData(color: AppDesign.textPrimary),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(appRouterProvider);
+
+    return MultiBlocProvider(
+      providers: [
+        // AI Bloc'и
+        BlocProvider<AIInsightsBloc>(
+          create: (context) => ref.read(aiInsightsBlocProvider),
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppDesign.radiusMedium),
-            ),
-          ),
+        BlocProvider<PatternsBloc>(
+          create: (context) => ref.read(patternsBlocProvider),
         ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppDesign.radiusMedium),
-            borderSide: BorderSide(
-              color: AppDesign.accentColor.withOpacity(0.3),
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppDesign.radiusMedium),
-            borderSide: const BorderSide(color: AppDesign.accentColor),
-          ),
+        BlocProvider<GratitudeBloc>(
+          create: (context) => ref.read(gratitudeBlocProvider),
         ),
-      ),
-      home: BlocProvider(
-        create: (context) =>
-            MoodTrackingBloc(moodRepository: moodRepository)
-              ..add(LoadMoodEntries()),
-        child: const OnboardingScreen(),
+        BlocProvider<MeditationBloc>(
+          create: (context) => ref.read(meditationBlocProvider),
+        ),
+
+        // Profile Bloc'и
+        BlocProvider<ProfileBloc>(
+          create: (context) => ref.read(profileBlocProvider),
+        ),
+        BlocProvider<PreferencesBloc>(
+          create: (context) => ref.read(preferencesBlocProvider),
+        ),
+        BlocProvider<StatsBloc>(
+          create: (context) => ref.read(statsBlocProvider),
+        ),
+        BlocProvider<AchievementsBloc>(
+          create: (context) => ref.read(achievementsBlocProvider),
+        ),
+      ],
+      child: MaterialApp.router(
+        title: 'Mind Space',
+        debugShowCheckedModeBanner: false,
+
+        // Локализация
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+
+        // Тема
+        theme: app_theme.AppTheme.lightTheme,
+
+        // Роутинг
+        routerConfig: router,
+
+        // Настройки
+        builder: (context, child) {
+          return MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: TextScaler.noScaling),
+            child: child!,
+          );
+        },
       ),
     );
   }

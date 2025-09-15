@@ -1,7 +1,73 @@
 targets:
   $default:
     builders:
-      hive_generator:
+      # Freezed
+      freezed:
+        enabled: true
         generate_for:
-          - lib/**/*.dart
+          - lib/features/**/*.dart
+          - lib/shared/**/*.dart
+          - lib/core/**/*.dart
+        options:
+          # Настройки для freezed
+          equal: true
+          when: true
+          map: true
+          maybeWhen: true
+          maybeMap: true
 
+      # Json Serializable
+      json_serializable:
+        enabled: true
+        generate_for:
+          - lib/features/**/*.dart
+          - lib/shared/**/*.dart
+          - lib/core/**/*.dart
+        options:
+          # Настройки для json_serializable
+          create_factory: true
+          create_to_json: true
+          create_per_file_to_string: false
+          explicit_to_json: true
+          field_rename: snake
+          include_if_null: false
+
+      # Injectable
+      injectable_generator:
+        enabled: true
+        generate_for:
+          - lib/core/di/injection.dart
+        options:
+          auto_register: true
+          generate_for_dir: ['lib']
+
+      # Riverpod Generator
+      riverpod_generator:
+        enabled: true
+        generate_for:
+          - lib/features/**/*.dart
+          - lib/app/**/*.dart
+          - lib/core/**/*.dart
+        options:
+          # Настройки для riverpod_generator
+          auto_dispose: true
+          generate_provider_overrides: true
+
+      # Drift
+      drift_dev:
+        enabled: true
+        generate_for:
+          - lib/core/database/*.dart
+        options:
+          # Настройки для drift
+          sqlite3: true
+
+      # Retrofit
+      retrofit_generator:
+        enabled: true
+        generate_for:
+          - lib/core/network/*.dart
+          - lib/features/*/data/datasources/*.dart
+        options:
+          # Настройки для retrofit
+          type_aware: true

@@ -1,0 +1,73 @@
+{
+    "app": {
+        "name": "Mind Space",
+        "description": "Smart mood and thoughts diary with AI elements"
+    },
+    "common": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "add": "Add",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "retry": "Retry",
+        "close": "Close",
+        "back": "Back",
+        "next": "Next",
+        "done": "Done",
+        "yes": "Yes",
+        "no": "No"
+    },
+    "navigation": {
+        "home": "Home",
+        "mood_tracking": "Mood Tracking",
+        "analytics": "Analytics",
+        "settings": "Settings",
+        "profile": "Profile"
+    },
+    "mood": {
+        "title": "How are you feeling?",
+        "add_mood": "Add Mood",
+        "mood_history": "Mood History",
+        "mood_analytics": "Mood Analytics",
+        "note": "Note",
+        "note_hint": "How are you feeling today? What's on your mind?",
+        "moods": {
+            "very_happy": "Very Happy",
+            "happy": "Happy",
+            "neutral": "Neutral",
+            "sad": "Sad",
+            "very_sad": "Very Sad"
+        }
+    },
+    "ai_insights": {
+        "title": "AI Insights",
+        "recommendations": "Recommendations",
+        "patterns": "Patterns",
+        "trends": "Trends",
+        "insights": "Insights"
+    },
+    "settings": {
+        "title": "Settings",
+        "theme": "Theme",
+        "language": "Language",
+        "notifications": "Notifications",
+        "privacy": "Privacy",
+        "about": "About",
+        "themes": {
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System"
+        }
+    },
+    "errors": {
+        "network_error": "Network error. Please check your connection.",
+        "server_error": "Server error. Please try again later.",
+        "unknown_error": "An unknown error occurred.",
+        "validation_error": "Please check your input.",
+        "permission_error": "Permission denied."
+    }
+}
+
