@@ -17,6 +17,7 @@ import '../../presentation/screens/entry/entry_detail_screen.dart';
 import '../../presentation/screens/home/entries_list_screen.dart';
 // Основные экраны
 import '../../presentation/screens/home/home_screen_new.dart';
+import '../../presentation/screens/entries/entries_screen.dart';
 import '../../presentation/screens/home/quick_add_screen.dart';
 import '../../presentation/screens/settings/about_screen.dart';
 import '../../presentation/screens/settings/appearance_settings_screen.dart';
@@ -113,7 +114,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/entries',
                 name: 'entries',
-                builder: (context, state) => const EntriesListScreen(),
+                builder: (context, state) => const EntriesScreen(),
               ),
             ],
           ),
