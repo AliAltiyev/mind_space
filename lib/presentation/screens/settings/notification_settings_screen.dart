@@ -34,6 +34,20 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
 
   Future<void> _initializeSettings() async {
     await _notificationService.initialize();
+    
+    // Запрашиваем разрешения
+    final hasPermissions = await _notificationService.requestPermissions();
+    if (!hasPermissions) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Notification permissions are required for reminders'),
+            backgroundColor: Color(0xFFEA2F14),
+          ),
+        );
+      }
+    }
+    
     final pendingNotifications = await _notificationService.getPendingNotifications();
     
     setState(() {
@@ -311,18 +325,40 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
   }
 
   Future<void> _updateDailyReminders() async {
-    await _notificationService.setupDailyMoodReminders(
-      enabled: _dailyRemindersEnabled,
-      reminderTime: _dailyReminderTime,
-    );
+    try {
+      await _notificationService.setupDailyMoodReminders(
+        enabled: _dailyRemindersEnabled,
+        reminderTime: _dailyReminderTime,
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error setting up daily reminders: $e'),
+            backgroundColor: const Color(0xFFEA2F14),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _updateWeeklyReflection() async {
-    await _notificationService.setupWeeklyReflectionReminders(
-      enabled: _weeklyReflectionEnabled,
-      reminderTime: _weeklyReminderTime,
-      dayOfWeek: _weeklyReminderDay,
-    );
+    try {
+      await _notificationService.setupWeeklyReflectionReminders(
+        enabled: _weeklyReflectionEnabled,
+        reminderTime: _weeklyReminderTime,
+        dayOfWeek: _weeklyReminderDay,
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error setting up weekly reminders: $e'),
+            backgroundColor: const Color(0xFFEA2F14),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _selectDailyReminderTime() async {

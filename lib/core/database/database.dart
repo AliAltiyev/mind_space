@@ -1,4 +1,7 @@
-// Простая реализация базы данных для демонстрации архитектуры
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Реализация базы данных с локальным сохранением
 
 /// Модель настроения
 class MoodEntry {
@@ -84,13 +87,83 @@ class AiInsight {
 
 /// Основная база данных приложения
 class AppDatabase {
-  // Простая реализация без SQLite для демонстрации архитектуры
+  SharedPreferences? _prefs;
   final Map<String, String> _settings = {};
   final List<MoodEntry> _moodEntries = [];
   final List<AiInsight> _aiInsights = [];
 
+  // Ключи для SharedPreferences
+  static const String _moodEntriesKey = 'mood_entries';
+  static const String _aiInsightsKey = 'ai_insights';
+  static const String _settingsKey = 'settings';
+
   Future<void> initialize() async {
-    // Инициализация базы данных
+    _prefs = await SharedPreferences.getInstance();
+    await _loadData();
+  }
+
+  /// Загрузка данных из локального хранилища
+  Future<void> _loadData() async {
+    if (_prefs == null) return;
+
+    // Загружаем записи настроения
+    final moodEntriesJson = _prefs!.getStringList(_moodEntriesKey) ?? [];
+    _moodEntries.clear();
+    for (final json in moodEntriesJson) {
+      try {
+        final map = jsonDecode(json) as Map<String, dynamic>;
+        _moodEntries.add(MoodEntry.fromMap(map));
+      } catch (e) {
+        print('Ошибка загрузки записи настроения: $e');
+      }
+    }
+
+    // Загружаем AI инсайты
+    final aiInsightsJson = _prefs!.getStringList(_aiInsightsKey) ?? [];
+    _aiInsights.clear();
+    for (final json in aiInsightsJson) {
+      try {
+        final map = jsonDecode(json) as Map<String, dynamic>;
+        _aiInsights.add(AiInsight.fromMap(map));
+      } catch (e) {
+        print('Ошибка загрузки AI инсайта: $e');
+      }
+    }
+
+    // Загружаем настройки
+    final settingsJson = _prefs!.getString(_settingsKey);
+    if (settingsJson != null) {
+      try {
+        final map = jsonDecode(settingsJson) as Map<String, dynamic>;
+        _settings.addAll(Map<String, String>.from(map));
+      } catch (e) {
+        print('Ошибка загрузки настроек: $e');
+      }
+    }
+
+    print('✅ Данные загружены: ${_moodEntries.length} записей настроения, ${_aiInsights.length} AI инсайтов');
+  }
+
+  /// Сохранение данных в локальное хранилище
+  Future<void> _saveData() async {
+    if (_prefs == null) return;
+
+    try {
+      // Сохраняем записи настроения
+      final moodEntriesJson = _moodEntries.map((entry) => jsonEncode(entry.toMap())).toList();
+      await _prefs!.setStringList(_moodEntriesKey, moodEntriesJson);
+
+      // Сохраняем AI инсайты
+      final aiInsightsJson = _aiInsights.map((insight) => jsonEncode(insight.toMap())).toList();
+      await _prefs!.setStringList(_aiInsightsKey, aiInsightsJson);
+
+      // Сохраняем настройки
+      await _prefs!.setString(_settingsKey, jsonEncode(_settings));
+
+      print('💾 Данные сохранены локально');
+    } catch (e) {
+      print('Ошибка сохранения данных: $e');
+    }
   }
 
   /// Получение настроек по ключу
@@ -101,6 +174,7 @@ class AppDatabase {
   /// Сохранение настройки
   Future<void> setSetting(String key, String value) async {
     _settings[key] = value;
+    await _saveData();
   }
 
   /// Получение настроений за период
@@ -134,8 +208,9 @@ class AppDatabase {
   /// Добавление новой записи настроения
   Future<void> addMoodEntry(MoodEntry entry) async {
     _moodEntries.add(entry);
+    await _saveData(); // Сохраняем данные локально
     print(
-      '✅ Запись настроения добавлена: ${entry.moodValue}/5 - ${entry.note ?? "без заметки"}',
+      '✅ Запись настроения добавлена: ${entry.moodValue}/5 - ${entry.note ?? "без заметки"} - Дата: ${entry.createdAt}',
     );
   }
 
@@ -143,5 +218,29 @@ class AppDatabase {
   Future<List<MoodEntry>> getAllMoodEntries() async {
     return List.from(_moodEntries)
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
+
+  /// Добавление нового AI инсайта
+  Future<void> addAiInsight(AiInsight insight) async {
+    _aiInsights.add(insight);
+    await _saveData(); // Сохраняем данные локально
+    print(
+      '✅ AI инсайт добавлен: ${insight.title} - ${insight.type}',
+    );
+  }
+
+  /// Получение всех AI инсайтов
+  Future<List<AiInsight>> getAllAiInsights() async {
+    return List.from(_aiInsights)
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
+
+  /// Очистка всех данных (для отладки)
+  Future<void> clearAllData() async {
+    _moodEntries.clear();
+    _aiInsights.clear();
+    _settings.clear();
+    await _saveData();
+    print('🗑️ Все данные очищены');
   }
 }

@@ -135,6 +135,223 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
+  /// Секция с Mood Blob
+  Widget _buildMoodBlobSection(BuildContext context) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final lastMoodAsync = ref.watch(lastMoodProvider);
+        
+        return Center(
+          child: amazing.AmazingGlassSurface(
+            effectType: amazing.GlassEffectType.neon,
+            colorScheme: amazing.ColorScheme.neon,
+            child: Container(
+              padding: const EdgeInsets.all(40),
+              child: Column(
+                children: [
+                  lastMoodAsync.when(
+                    data: (lastMood) => PerfectedMoodBlobWithFAB(
+                      moodRating: lastMood?.moodValue ?? 3,
+                      onTap: () => context.push('/add-entry'),
+                    ),
+                    loading: () => PerfectedMoodBlobWithFAB(
+                      moodRating: 3,
+                      onTap: () => context.push('/add-entry'),
+                    ),
+                    error: (_, __) => PerfectedMoodBlobWithFAB(
+                      moodRating: 3,
+                      onTap: () => context.push('/add-entry'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  lastMoodAsync.when(
+                    data: (lastMood) => Text(
+                      lastMood != null 
+                        ? 'Last mood: ${_getMoodLabel(lastMood.moodValue)}'
+                        : 'Tap to add your mood',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white.withOpacity(0.8),
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    loading: () => Text(
+                      'Loading...',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white.withOpacity(0.8),
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    error: (_, __) => Text(
+                      'Tap to add your mood',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white.withOpacity(0.8),
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String _getMoodLabel(int mood) {
+    switch (mood) {
+      case 1:
+        return 'Very Bad';
+      case 2:
+        return 'Bad';
+      case 3:
+        return 'Okay';
+      case 4:
+        return 'Good';
+      case 5:
+        return 'Excellent';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  /// Быстрая статистика
+  Widget _buildQuickStats() {
+    return amazing.AmazingGlassSurface(
+      effectType: amazing.GlassEffectType.cyber,
+      colorScheme: amazing.ColorScheme.cyber,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Today\'s Overview',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: [Shadow(color: Color(0xFFFCEF91), blurRadius: 8)],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _StatCard(
+                    title: 'Current Mood',
+                    value: 'Good',
+                    icon: Icons.mood,
+                    color: const Color(0xFFFCEF91),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _StatCard(
+                    title: 'Streak',
+                    value: '12 days',
+                    icon: Icons.local_fire_department,
+                    color: const Color(0xFFFB9E3A),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: _StatCard(
+                    title: 'Entries',
+                    value: '47',
+                    icon: Icons.list_alt,
+                    color: const Color(0xFFE6521F),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _StatCard(
+                    title: 'Avg Mood',
+                    value: '4.2',
+                    icon: Icons.trending_up,
+                    color: const Color(0xFFEA2F14),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Сетка быстрых действий
+  Widget _buildQuickActionsGrid(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Quick Actions',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 8)],
+          ),
+        ),
+        const SizedBox(height: 16),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 1.2,
+          children: [
+            _ModernQuickActionCard(
+              icon: Icons.analytics,
+              title: 'Statistics',
+              subtitle: 'View your progress',
+              gradient: const LinearGradient(
+                colors: [Color(0xFFFB9E3A), Color(0xFFE6521F)],
+              ),
+              onTap: () => context.go('/stats'),
+            ),
+            _ModernQuickActionCard(
+              icon: Icons.list,
+              title: 'All Entries',
+              subtitle: 'Browse history',
+              gradient: const LinearGradient(
+                colors: [Color(0xFFE6521F), Color(0xFFEA2F14)],
+              ),
+              onTap: () => context.go('/home/entries'),
+            ),
+            _ModernQuickActionCard(
+              icon: Icons.insights,
+              title: 'AI Insights',
+              subtitle: 'Get recommendations',
+              gradient: const LinearGradient(
+                colors: [Color(0xFFEA2F14), Color(0xFF6D67E4)],
+              ),
+              onTap: () => context.go('/stats/insights'),
+            ),
+            _ModernQuickActionCard(
+              icon: Icons.self_improvement,
+              title: 'Meditation',
+              subtitle: 'Find peace',
+              gradient: const LinearGradient(
+                colors: [Color(0xFF6D67E4), Color(0xFFFCEF91)],
+              ),
+              onTap: () => context.go('/stats/meditation'),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   /// Секция AI функций для главного экрана
   Widget _buildAIFeaturesSection(BuildContext context, WidgetRef ref) {
     return Consumer(
@@ -147,22 +364,29 @@ class HomeScreen extends ConsumerWidget {
             Row(
               children: [
                 Text(
-                  'home.ai_features'.tr(),
+                  'AI Features',
                   style: const TextStyle(
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 8)],
                   ),
                 ),
                 const Spacer(),
-                IconButton(
-                  onPressed: () {
-                    // Обновляем все AI функции
-                    ref.invalidate(recentMoodEntriesProvider);
-                  },
-                  icon: const Icon(Icons.refresh),
-                  tooltip: 'Обновить AI функции',
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFFB9E3A), Color(0xFFE6521F)],
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      ref.invalidate(recentMoodEntriesProvider);
+                    },
+                    icon: const Icon(Icons.refresh, color: Colors.white),
+                    tooltip: 'Refresh AI features',
+                  ),
                 ),
               ],
             ),
@@ -171,24 +395,41 @@ class HomeScreen extends ConsumerWidget {
             moodEntriesAsync.when(
               data: (moodEntries) {
                 if (moodEntries.isEmpty) {
-                  return Container(
-                    height: 400,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Color(0xFFFB9E3A).withOpacity(0.3)),
-                    ),
-                    child:  Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.psychology, size: 48, color: Color(0xFFFB9E3A)),
-                          SizedBox(height: 16),
-                          Text(
-                            'home.add_mood_entries'.tr(),
-                            style: TextStyle(fontSize: 16, color: Colors.white70),
-                          ),
-                        ],
+                  return amazing.AmazingGlassSurface(
+                    effectType: amazing.GlassEffectType.cosmic,
+                    colorScheme: amazing.ColorScheme.cosmic,
+                    child: Container(
+                      height: 200,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.psychology,
+                              size: 48,
+                              color: Color(0xFFFB9E3A),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Add mood entries for AI features',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white.withOpacity(0.8),
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton.icon(
+                              onPressed: () => context.push('/add-entry'),
+                              icon: const Icon(Icons.add),
+                              label: const Text('Add First Entry'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFFB9E3A),
+                                foregroundColor: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -201,55 +442,69 @@ class HomeScreen extends ConsumerWidget {
                   },
                 );
               },
-              loading: () => Container(
-                height: 400,
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child:  Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 16),
-                      Text(
-                        'home.loading_ai_features'.tr(),
-                        style: TextStyle(fontSize: 16, color: Colors.white70),
-                      ),
-                    ],
+              loading: () => amazing.AmazingGlassSurface(
+                effectType: amazing.GlassEffectType.neon,
+                colorScheme: amazing.ColorScheme.neon,
+                child: Container(
+                  height: 200,
+                  child: const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFB9E3A)),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Loading AI features...',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white70,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              error: (error, stack) => Container(
-                height: 400,
-                decoration: BoxDecoration(
-                  color: Color(0xFFEA2F14).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Color(0xFFEA2F14).withOpacity(0.3)),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.error_outline,
-                        size: 48,
-                        color: Color(0xFFEA2F14),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'home.error_loading_ai'.tr(),
-                        style: TextStyle(fontSize: 16, color: Colors.white70),
-                      ),
-                      const SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          ref.invalidate(recentMoodEntriesProvider);
-                        },
-                        child: Text('common.try_again'.tr()),
-                      ),
-                    ],
+              error: (error, stack) => amazing.AmazingGlassSurface(
+                effectType: amazing.GlassEffectType.rainbow,
+                colorScheme: amazing.ColorScheme.rainbow,
+                child: Container(
+                  height: 200,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          size: 48,
+                          color: Color(0xFFEA2F14),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Error loading AI features',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white.withOpacity(0.8),
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            ref.invalidate(recentMoodEntriesProvider);
+                          },
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Try Again'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFEA2F14),
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -261,6 +516,205 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
+// Action Button для App Bar
+class _ActionButton extends StatelessWidget {
+  final IconData icon;
+  final Gradient gradient;
+  final VoidCallback onPressed;
+
+  const _ActionButton({
+    required this.icon,
+    required this.gradient,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: gradient.colors.first.withOpacity(0.4),
+            blurRadius: 8,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onPressed,
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            child: Icon(
+              icon,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Stat Card для быстрой статистики
+class _StatCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const _StatCard({
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            color.withOpacity(0.2),
+            Colors.transparent,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 20),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 11,
+              color: Colors.white70,
+              fontWeight: FontWeight.w300,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Modern Quick Action Card
+class _ModernQuickActionCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Gradient gradient;
+  final VoidCallback onTap;
+
+  const _ModernQuickActionCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.gradient,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            gradient.colors.first.withOpacity(0.2),
+            gradient.colors.last.withOpacity(0.1),
+            Colors.transparent,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: gradient.colors.first.withOpacity(0.3),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: gradient.colors.first.withOpacity(0.1),
+            blurRadius: 10,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    gradient: gradient,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: gradient.colors.first.withOpacity(0.3),
+                        blurRadius: 8,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    icon,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white.withOpacity(0.7),
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Старый QuickActionCard (для совместимости)
 class _QuickActionCard extends StatelessWidget {
   const _QuickActionCard({
     required this.icon,

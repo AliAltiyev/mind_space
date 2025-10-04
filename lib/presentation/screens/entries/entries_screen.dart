@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:intl/intl.dart';
 
+import '../../../app/providers/ai_features_provider.dart';
+import '../../../core/database/database.dart';
 import '../../widgets/core/amazing_background.dart' as amazing;
 import '../../widgets/core/amazing_glass_surface.dart' as amazing;
 
@@ -19,45 +22,6 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
   int? _selectedMoodFilter;
   DateTimeRange? _selectedDateRange;
 
-  // Mock данные для демонстрации
-  final List<Map<String, dynamic>> _entries = [
-    {
-      'id': '1',
-      'mood': 5,
-      'note': 'Great day! Finished my project and went for a walk.',
-      'date': DateTime.now().subtract(const Duration(days: 1)),
-      'tags': ['work', 'exercise', 'achievement'],
-    },
-    {
-      'id': '2',
-      'mood': 3,
-      'note': 'Feeling a bit stressed about the upcoming deadline.',
-      'date': DateTime.now().subtract(const Duration(days: 2)),
-      'tags': ['work', 'stress'],
-    },
-    {
-      'id': '3',
-      'mood': 4,
-      'note': 'Had a nice dinner with friends. Good conversation.',
-      'date': DateTime.now().subtract(const Duration(days: 3)),
-      'tags': ['social', 'friends'],
-    },
-    {
-      'id': '4',
-      'mood': 2,
-      'note': 'Not feeling well today. Need to take it easy.',
-      'date': DateTime.now().subtract(const Duration(days: 4)),
-      'tags': ['health', 'rest'],
-    },
-    {
-      'id': '5',
-      'mood': 4,
-      'note': 'Watched a great movie and relaxed at home.',
-      'date': DateTime.now().subtract(const Duration(days: 5)),
-      'tags': ['entertainment', 'relaxation'],
-    },
-  ];
-
   @override
   void dispose() {
     _searchController.dispose();
@@ -66,7 +30,19 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredEntries = _getFilteredEntries();
+    final moodEntriesAsync = ref.watch(allMoodEntriesProvider);
+    
+    return moodEntriesAsync.when(
+      data: (moodEntries) {
+        final filteredEntries = _getFilteredEntries(moodEntries);
+        return _buildContent(context, filteredEntries);
+      },
+      loading: () => _buildLoadingState(),
+      error: (error, stack) => _buildErrorState(error),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, List<Map<String, dynamic>> filteredEntries) {
 
     return amazing.AmazingBackground(
       type: amazing.BackgroundType.cosmic,
@@ -164,8 +140,17 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
     );
   }
 
-  List<Map<String, dynamic>> _getFilteredEntries() {
-    var filtered = List<Map<String, dynamic>>.from(_entries);
+  List<Map<String, dynamic>> _getFilteredEntries(List<MoodEntry> moodEntries) {
+    // Конвертируем MoodEntry в Map для совместимости с существующим кодом
+    final entries = moodEntries.map((entry) => {
+      'id': entry.id?.toString() ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      'mood': entry.moodValue,
+      'note': entry.note ?? '',
+      'date': entry.createdAt,
+      'tags': [], // TODO: Добавить теги в модель MoodEntry
+    }).toList();
+    
+    var filtered = List<Map<String, dynamic>>.from(entries);
 
     // Поиск
     final searchQuery = _searchController.text.toLowerCase();
@@ -292,6 +277,122 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
       builder: (context) => _EntryDetailsSheet(entry: entry),
     );
   }
+
+  Widget _buildLoadingState() {
+    return amazing.AmazingBackground(
+      type: amazing.BackgroundType.cosmic,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(
+            'entries.title'.tr(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 10)],
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/home');
+              }
+            },
+          ),
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFB9E3A)),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorState(Object error) {
+    return amazing.AmazingBackground(
+      type: amazing.BackgroundType.cosmic,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(
+            'entries.title'.tr(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 10)],
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/home');
+              }
+            },
+          ),
+        ),
+        body: Center(
+          child: amazing.AmazingGlassSurface(
+            effectType: amazing.GlassEffectType.cosmic,
+            colorScheme: amazing.ColorScheme.cosmic,
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: Color(0xFFEA2F14),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Error loading entries',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    error.toString(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      ref.invalidate(allMoodEntriesProvider);
+                    },
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Try Again'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFEA2F14),
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _FilterChip extends StatelessWidget {
@@ -338,7 +439,10 @@ class _EntryCard extends StatelessWidget {
     final mood = entry['mood'] as int;
     final note = entry['note'] as String;
     final date = entry['date'] as DateTime;
-    final tags = entry['tags'] as List<String>;
+    final tags = (entry['tags'] as List<dynamic>).cast<String>();
+    
+    // Отладочная информация (можно убрать после тестирования)
+    // print('🔍 Отображение записи: mood=$mood, date=$date, note=$note');
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -723,7 +827,7 @@ class _EntryDetailsSheet extends StatelessWidget {
     final mood = entry['mood'] as int;
     final note = entry['note'] as String;
     final date = entry['date'] as DateTime;
-    final tags = entry['tags'] as List<String>;
+    final tags = (entry['tags'] as List<dynamic>).cast<String>();
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,

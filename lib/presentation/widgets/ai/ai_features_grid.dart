@@ -118,6 +118,7 @@ class AIFeaturesGrid extends ConsumerWidget {
         effectType: effectType,
         colorScheme: colorScheme,
         child: Container(
+          height: 200, // Fixed height to prevent unbounded constraints
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +130,7 @@ class AIFeaturesGrid extends ConsumerWidget {
                     height: 50,
                     decoration: BoxDecoration(
                       gradient: RadialGradient(
-                        colors: colorScheme.neonColors,
+                        colors: colorScheme.neonColors.take(2).toList(),
                         stops: [0.0, 1.0],
                       ),
                       borderRadius: BorderRadius.circular(12),
@@ -168,7 +169,7 @@ class AIFeaturesGrid extends ConsumerWidget {
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: colorScheme.neonColors,
+                          colors: colorScheme.neonColors.take(2).toList(),
                         ),
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
@@ -215,10 +216,14 @@ class _AIInsightsWidgetState extends State<_AIInsightsWidget> {
     super.initState();
     // Загружаем AI инсайты при инициализации
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.moodEntries.isNotEmpty) {
-        context.read<AIInsightsBloc>().add(
-          LoadAIInsights(widget.moodEntries, days: 7),
-        );
+      if (mounted && widget.moodEntries.isNotEmpty) {
+        try {
+          context.read<AIInsightsBloc>().add(
+            LoadAIInsights(widget.moodEntries, days: 7),
+          );
+        } catch (e) {
+          debugPrint('Error loading AI insights: $e');
+        }
       }
     });
   }
@@ -292,15 +297,19 @@ class _PatternsWidgetState extends State<_PatternsWidget> {
     super.initState();
     // Загружаем анализ паттернов при инициализации
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.moodEntries.isNotEmpty) {
-        if (widget.moodEntries.length >= 7) {
-          context.read<PatternsBloc>().add(
-            LoadPatternAnalysis(widget.moodEntries, days: 30),
-          );
-        } else {
-          context.read<PatternsBloc>().add(
-            QuickPatternAnalysis(widget.moodEntries),
-          );
+      if (mounted && widget.moodEntries.isNotEmpty) {
+        try {
+          if (widget.moodEntries.length >= 7) {
+            context.read<PatternsBloc>().add(
+              LoadPatternAnalysis(widget.moodEntries, days: 30),
+            );
+          } else {
+            context.read<PatternsBloc>().add(
+              QuickPatternAnalysis(widget.moodEntries),
+            );
+          }
+        } catch (e) {
+          debugPrint('Error loading patterns: $e');
         }
       }
     });
@@ -374,10 +383,14 @@ class _GratitudeWidgetState extends State<_GratitudeWidget> {
     super.initState();
     // Загружаем благодарственные предложения при инициализации
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.moodEntries.isNotEmpty) {
-        context.read<GratitudeBloc>().add(
-          LoadGratitudeForCurrentMood(widget.moodEntries),
-        );
+      if (mounted && widget.moodEntries.isNotEmpty) {
+        try {
+          context.read<GratitudeBloc>().add(
+            LoadGratitudeForCurrentMood(widget.moodEntries),
+          );
+        } catch (e) {
+          debugPrint('Error loading gratitude: $e');
+        }
       }
     });
   }
@@ -450,10 +463,14 @@ class _MeditationWidgetState extends State<_MeditationWidget> {
     super.initState();
     // Загружаем медитацию при инициализации
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.moodEntries.isNotEmpty) {
-        context.read<MeditationBloc>().add(
-          LoadMeditationForTimeOfDay(widget.moodEntries),
-        );
+      if (mounted && widget.moodEntries.isNotEmpty) {
+        try {
+          context.read<MeditationBloc>().add(
+            LoadMeditationForTimeOfDay(widget.moodEntries),
+          );
+        } catch (e) {
+          debugPrint('Error loading meditation: $e');
+        }
       }
     });
   }

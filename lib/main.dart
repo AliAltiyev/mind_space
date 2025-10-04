@@ -16,7 +16,7 @@ import 'features/profile/presentation/blocs/achievements_bloc.dart';
 import 'features/profile/presentation/blocs/preferences_bloc.dart';
 import 'features/profile/presentation/blocs/profile_bloc.dart';
 import 'features/profile/presentation/blocs/stats_bloc.dart';
-import 'shared/presentation/theme/app_theme.dart' as app_theme;
+import 'core/constants/app_typography.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,7 +88,7 @@ class MindSpaceApp extends ConsumerWidget {
         locale: context.locale,
 
         // Тема
-        theme: app_theme.AppTheme.lightTheme,
+        theme: AppTheme.lightTheme,
 
         // Роутинг
         routerConfig: router,

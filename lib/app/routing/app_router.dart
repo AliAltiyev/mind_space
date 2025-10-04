@@ -9,23 +9,25 @@ import 'package:mind_space/features/ai/presentation/pages/patterns_page.dart';
 import '../../features/profile/presentation/pages/achievements_page.dart';
 import '../../features/profile/presentation/pages/edit_profile_page.dart';
 // Новые страницы профиля
-import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/profile/presentation/pages/statistics_page.dart';
 import '../../presentation/screens/auth/auth_screen.dart';
-import '../../presentation/screens/entry/add_entry_screen.dart';
+import '../../presentation/screens/entry/add_entry_screen_clean.dart';
 import '../../presentation/screens/entry/entry_detail_screen.dart';
-import '../../presentation/screens/home/entries_list_screen.dart';
 // Основные экраны
-import '../../presentation/screens/home/home_screen_new.dart';
-import '../../presentation/screens/entries/entries_screen.dart';
+import '../../presentation/screens/home/home_screen_clean.dart';
+import '../../presentation/screens/entries/entries_screen_clean.dart';
 import '../../presentation/screens/home/quick_add_screen.dart';
 import '../../presentation/screens/settings/about_screen.dart';
 import '../../presentation/screens/settings/appearance_settings_screen.dart';
 import '../../presentation/screens/settings/data_export_screen.dart';
 import '../../presentation/screens/settings/notification_settings_screen.dart';
 import '../../presentation/screens/settings/privacy_settings_screen.dart';
-import '../../presentation/screens/settings/settings_screen.dart';
+import '../../presentation/screens/settings/settings_screen_clean.dart';
 import '../../presentation/screens/stats/stats_screen.dart';
+import '../../presentation/screens/stats/stats_screen_clean.dart';
+import '../../presentation/screens/ai/ai_chat_screen.dart';
+import '../../presentation/screens/profile/profile_screen_clean.dart';
+import '../../features/ai/presentation/pages/ai_insights_page_clean.dart';
 import '../../shared/presentation/pages/onboarding_page.dart';
 import '../../shared/presentation/pages/splash_page.dart';
 
@@ -87,7 +89,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/home',
             name: 'home',
             pageBuilder: (context, state) =>
-                NoTransitionPage(key: state.pageKey, child: const HomeScreen()),
+                NoTransitionPage(key: state.pageKey, child: const HomeScreenClean()),
             routes: [
               // Quick Add Modal
               GoRoute(
@@ -114,7 +116,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/entries',
                 name: 'entries',
-                builder: (context, state) => const EntriesScreen(),
+                builder: (context, state) => const EntriesScreenClean(),
               ),
             ],
           ),
@@ -125,14 +127,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: 'stats',
             pageBuilder: (context, state) => NoTransitionPage(
               key: state.pageKey,
-              child: const StatsScreen(),
+              child: const StatsScreenClean(),
             ),
             routes: [
               // Insights Overview
               GoRoute(
                 path: '/insights',
                 name: 'insights',
-                builder: (context, state) => const AIInsightsPage(),
+                builder: (context, state) => const AIInsightsPageClean(),
               ),
               // Patterns
               GoRoute(
@@ -155,13 +157,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
 
+          // AI Chat Tab
+          GoRoute(
+            path: '/ai-chat',
+            name: 'ai-chat',
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const AiChatScreen(),
+            ),
+          ),
+
           // Profile Tab
           GoRoute(
             path: '/profile',
             name: 'profile',
             pageBuilder: (context, state) => NoTransitionPage(
               key: state.pageKey,
-              child: const ProfilePage(),
+              child: const ProfileScreenClean(),
             ),
             routes: [
               // Edit Profile
@@ -236,7 +248,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: 'ai-insights',
             pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
-              child: const AIInsightsPage(),
+              child: const AIInsightsPageClean(),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                     return SlideTransition(
@@ -323,7 +335,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'add-entry',
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
-          child: const AddEntryScreen(),
+          child: const AddEntryScreenClean(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SlideTransition(
               position: animation.drive(
@@ -352,7 +364,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings',
         name: 'settings',
-        builder: (context, state) => const SettingsScreen(),
+        builder: (context, state) => const SettingsScreenClean(),
         routes: [
           // Notification Settings
           GoRoute(
@@ -425,6 +437,11 @@ class MainShell extends ConsumerWidget {
             label: 'Stats',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.psychology_outlined),
+            activeIcon: Icon(Icons.psychology),
+            label: 'AI Chat',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.person_outlined),
             activeIcon: Icon(Icons.person),
             label: 'Profile',
@@ -439,7 +456,8 @@ class MainShell extends ConsumerWidget {
 
     if (location.startsWith('/home')) return 0;
     if (location.startsWith('/stats')) return 1;
-    if (location.startsWith('/profile')) return 2;
+    if (location.startsWith('/ai-chat')) return 2;
+    if (location.startsWith('/profile')) return 3;
 
     return 0;
   }
@@ -453,6 +471,9 @@ class MainShell extends ConsumerWidget {
         context.go('/stats');
         break;
       case 2:
+        context.go('/ai-chat');
+        break;
+      case 3:
         context.go('/profile');
         break;
     }

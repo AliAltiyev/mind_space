@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../../../app/providers/app_providers.dart';
+
 /// Главный экран настроек
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -79,6 +81,19 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ),
 
+          // Управление данными
+          _SettingsSection(
+            title: 'Управление данными',
+            children: [
+              _SettingsTile(
+                icon: Icons.delete_forever,
+                title: 'Очистить все данные',
+                subtitle: 'Удалить все записи настроения и AI инсайты',
+                onTap: () => _showClearDataDialog(context, ref),
+              ),
+            ],
+          ),
+
           // О приложении
           _SettingsSection(
             title: 'settings.about'.tr(),
@@ -94,6 +109,47 @@ class SettingsScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  /// Показать диалог подтверждения очистки данных
+  void _showClearDataDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Очистить данные'),
+        content: const Text(
+          'Вы уверены, что хотите удалить все записи настроения и AI инсайты? Это действие нельзя отменить.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Отмена'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await _clearAllData(ref);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Все данные очищены'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Удалить'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Очистка всех данных
+  Future<void> _clearAllData(WidgetRef ref) async {
+    final database = ref.read(appDatabaseProvider);
+    await database.clearAllData();
   }
 }
 

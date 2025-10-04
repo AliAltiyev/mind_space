@@ -122,3 +122,9 @@ final allMoodEntriesProvider = FutureProvider<List<MoodEntry>>((ref) async {
 
   return await database.getMoodsForPeriod(startDate, endDate);
 });
+
+/// Провайдер для получения последней записи настроения
+final lastMoodProvider = FutureProvider<MoodEntry?>((ref) async {
+  final database = ref.watch(appDatabaseProvider);
+  return await database.getLastMood();
+});

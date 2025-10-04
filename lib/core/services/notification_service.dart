@@ -49,8 +49,18 @@ class NotificationService {
 
   /// Запрос разрешений на уведомления
   Future<bool> requestPermissions() async {
-    final status = await Permission.notification.request();
-    return status.isGranted;
+    // Запрашиваем базовые разрешения на уведомления
+    final notificationStatus = await Permission.notification.request();
+    
+    // На Android 12+ также запрашиваем разрешение на точные уведомления
+    try {
+      await _notificationsPlugin.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()?.requestExactAlarmsPermission();
+    } catch (e) {
+      debugPrint('Error requesting exact alarms permission: $e');
+    }
+    
+    return notificationStatus.isGranted;
   }
 
   /// Обработка нажатия на уведомление
@@ -133,17 +143,41 @@ class NotificationService {
       iOS: iOSDetails,
     );
 
-    await _notificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      tz.TZDateTime.from(scheduledDate, tz.local),
-      notificationDetails,
-      payload: payload,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
-    );
+    try {
+      await _notificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        tz.TZDateTime.from(scheduledDate, tz.local),
+        notificationDetails,
+        payload: payload,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+    } catch (e) {
+      // Если точные уведомления не разрешены, используем менее точное время
+      if (e.toString().contains('exact_alarms_not_permitted')) {
+        debugPrint('Exact alarms not permitted, using approximate time');
+        
+        // Добавляем небольшую задержку для приблизительного времени
+        final approximateDate = scheduledDate.add(const Duration(minutes: 5));
+        
+        await _notificationsPlugin.zonedSchedule(
+          id,
+          title,
+          body,
+          tz.TZDateTime.from(approximateDate, tz.local),
+          notificationDetails,
+          payload: payload,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          matchDateTimeComponents: DateTimeComponents.time,
+        );
+      } else {
+        rethrow;
+      }
+    }
   }
 
   /// Отмена уведомления
@@ -166,36 +200,41 @@ class NotificationService {
     required bool enabled,
     required TimeOfDay reminderTime,
   }) async {
-    if (!enabled) {
-      // Отменить все уведомления настроения (ID 1-7 для дней недели)
-      for (int i = 1; i <= 7; i++) {
-        await cancelNotification(i);
+    try {
+      if (!enabled) {
+        // Отменить все уведомления настроения (ID 1-7 для дней недели)
+        for (int i = 1; i <= 7; i++) {
+          await cancelNotification(i);
+        }
+        return;
       }
-      return;
-    }
 
-    // Создать уведомления для каждого дня недели
-    final now = DateTime.now();
-    final messages = [
-      "How's your mood today? Start your week with positive energy! 🌟",
-      "Take a moment to check in with yourself today 💭",
-      "Mid-week mood check! How are you feeling? 🤔",
-      "Thursday vibes! What's your mood today? ✨",
-      "TGIF! How was your mood this Friday? 🎉",
-      "Weekend mood check! How are you feeling? 😌",
-      "Sunday reflection time! How's your mood? 🌅",
-    ];
+      // Создать уведомления для каждого дня недели
+      final now = DateTime.now();
+      final messages = [
+        "How's your mood today? Start your week with positive energy! 🌟",
+        "Take a moment to check in with yourself today 💭",
+        "Mid-week mood check! How are you feeling? 🤔",
+        "Thursday vibes! What's your mood today? ✨",
+        "TGIF! How was your mood this Friday? 🎉",
+        "Weekend mood check! How are you feeling? 😌",
+        "Sunday reflection time! How's your mood? 🌅",
+      ];
 
-    for (int dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
-      final scheduledDate = _getNextWeekday(now, dayOfWeek, reminderTime);
-      
-      await scheduleNotification(
-        id: dayOfWeek,
-        title: "Mind Space Reminder",
-        body: messages[dayOfWeek - 1],
-        scheduledDate: scheduledDate,
-        payload: 'mood_reminder_$dayOfWeek',
-      );
+      for (int dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
+        final scheduledDate = _getNextWeekday(now, dayOfWeek, reminderTime);
+        
+        await scheduleNotification(
+          id: dayOfWeek,
+          title: "Mind Space Reminder",
+          body: messages[dayOfWeek - 1],
+          scheduledDate: scheduledDate,
+          payload: 'mood_reminder_$dayOfWeek',
+        );
+      }
+    } catch (e) {
+      debugPrint('Error setting up daily mood reminders: $e');
+      rethrow;
     }
   }
 

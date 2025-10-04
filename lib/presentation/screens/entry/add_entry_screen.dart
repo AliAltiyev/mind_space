@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../../app/providers/app_providers.dart';
+import '../../../app/providers/ai_features_provider.dart';
 import '../../../core/database/database.dart';
 import '../../widgets/core/amazing_background.dart' as amazing;
 import '../../widgets/core/amazing_glass_surface.dart' as amazing;
@@ -546,6 +547,12 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
 
       // Сохраняем в базу данных
       await database.addMoodEntry(entry);
+
+      // Инвалидируем провайдеры для обновления данных
+      ref.invalidate(allMoodEntriesProvider);
+      ref.invalidate(moodEntriesProvider);
+      ref.invalidate(recentMoodEntriesProvider);
+      ref.invalidate(lastMoodProvider);
 
       // Показываем уведомление об успехе
       if (mounted) {

@@ -6,7 +6,10 @@ import '../../core/services/shared_preferences_service.dart';
 
 /// Провайдер для базы данных
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  return AppDatabase();
+  final database = AppDatabase();
+  // Инициализируем базу данных при создании
+  database.initialize();
+  return database;
 });
 
 /// Провайдер для API клиента
