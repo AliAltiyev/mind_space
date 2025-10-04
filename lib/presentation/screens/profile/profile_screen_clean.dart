@@ -9,6 +9,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../app/providers/ai_features_provider.dart';
 import '../../../core/services/profile_image_service.dart';
+import '../../../core/services/user_level_service.dart';
 
 /// Экран профиля - строгий и понятный дизайн
 class ProfileScreenClean extends ConsumerStatefulWidget {
@@ -21,6 +22,54 @@ class ProfileScreenClean extends ConsumerStatefulWidget {
 class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
   File? _profileImage;
   final ImagePicker _picker = ImagePicker();
+  final ProfileImageService _profileImageService = ProfileImageService();
+  final UserLevelService _levelService = UserLevelService();
+  bool _isLoadingImage = false;
+  UserLevelStats? _userStats;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImage();
+    _loadUserStats();
+  }
+
+  /// Загрузить статистику пользователя
+  Future<void> _loadUserStats() async {
+    try {
+      final stats = await _levelService.getUserStats();
+      if (mounted) {
+        setState(() {
+          _userStats = stats;
+        });
+      }
+    } catch (e) {
+      print('Error loading user stats: $e');
+    }
+  }
+
+  /// Загрузить фото профиля
+  Future<void> _loadProfileImage() async {
+    setState(() {
+      _isLoadingImage = true;
+    });
+
+    try {
+      final imageFile = await _profileImageService.getProfileImage();
+      if (mounted) {
+        setState(() {
+          _profileImage = imageFile;
+          _isLoadingImage = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoadingImage = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,11 +157,15 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
                         : null,
                   ),
                   child: _profileImage == null 
-                      ? const Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 40,
-                        )
+                      ? _isLoadingImage
+                          ? const CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            )
+                          : const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 40,
+                            )
                       : null,
                 ),
                 Positioned(
@@ -164,6 +217,34 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
 
   /// Уровень прогресса
   Widget _buildProgressLevel() {
+    if (_userStats == null) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.border,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Загрузка...',
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -174,14 +255,13 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.star,
-            color: AppColors.primary,
-            size: 16,
+          Text(
+            _userStats!.levelIcon,
+            style: const TextStyle(fontSize: 16),
           ),
           const SizedBox(width: 8),
           Text(
-            'Уровень 1 - Новичок',
+            'Уровень ${_userStats!.level} - ${_userStats!.levelName}',
             style: AppTypography.bodySmall.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w600,
@@ -280,7 +360,64 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             ),
           ],
         ),
+        
+        // Дополнительная информация об уровне, если есть
+        if (_userStats != null) ...[
+          const SizedBox(height: 12),
+          _buildLevelProgressCard(),
+        ],
       ],
+    );
+  }
+
+  /// Карточка прогресса уровня
+  Widget _buildLevelProgressCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                _userStats!.levelIcon,
+                style: const TextStyle(fontSize: 20),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Уровень ${_userStats!.level} - ${_userStats!.levelName}',
+                      style: AppTypography.bodyLarge.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${_userStats!.experienceToNext} опыта до следующего уровня',
+                      style: AppTypography.caption,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          LinearProgressIndicator(
+            value: _userStats!.progress,
+            backgroundColor: AppColors.border,
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+          ),
+        ],
+      ),
     );
   }
 
@@ -517,12 +654,28 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
       );
 
       if (image != null) {
+        final imageFile = File(image.path);
         setState(() {
-          _profileImage = File(image.path);
+          _profileImage = imageFile;
         });
 
-        // TODO: Сохранить изображение в локальное хранилище
-        // await _saveProfileImage(_profileImage!);
+        // Сохранить изображение в локальное хранилище
+        final success = await _profileImageService.saveProfileImage(imageFile);
+        if (success && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Фото профиля сохранено'),
+              backgroundColor: AppColors.success,
+            ),
+          );
+        } else if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ошибка при сохранении фото'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -537,19 +690,19 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
   }
 
   /// Удалить изображение
-  void _removeImage() {
+  Future<void> _removeImage() async {
     setState(() {
       _profileImage = null;
     });
 
-    // TODO: Удалить изображение из локального хранилища
-    // await _removeProfileImage();
+    // Удалить изображение из локального хранилища
+    final success = await _profileImageService.removeProfileImage();
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Фото профиля удалено'),
-          backgroundColor: AppColors.success,
+        SnackBar(
+          content: Text(success ? 'Фото профиля удалено' : 'Ошибка при удалении фото'),
+          backgroundColor: success ? AppColors.success : AppColors.error,
         ),
       );
     }

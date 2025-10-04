@@ -1,0 +1,161 @@
+{
+    "app": {
+        "name": "心灵空间",
+        "description": "智能情绪和思维日记，带有AI元素"
+    },
+    "common": {
+        "save": "保存",
+        "cancel": "取消",
+        "delete": "删除",
+        "edit": "编辑",
+        "add": "添加",
+        "loading": "加载中...",
+        "error": "错误",
+        "success": "成功",
+        "retry": "重试",
+        "close": "关闭",
+        "back": "返回",
+        "next": "下一步",
+        "done": "完成",
+        "yes": "是",
+        "no": "否",
+        "try_again": "再试一次",
+        "refresh": "刷新"
+    },
+    "navigation": {
+        "home": "首页",
+        "mood_tracking": "情绪追踪",
+        "analytics": "分析",
+        "settings": "设置",
+        "profile": "个人资料",
+        "stats": "统计",
+        "entries": "条目"
+    },
+    "splash": {
+        "title": "心灵空间",
+        "subtitle": "您的心理健康伴侣"
+    },
+    "home": {
+        "title": "心灵空间",
+        "quick_actions": "快速操作",
+        "ai_features": "AI功能",
+        "view_stats": "查看统计",
+        "see_progress": "查看您的进度",
+        "all_entries": "所有条目",
+        "browse_history": "浏览历史",
+        "ai_insights": "AI洞察",
+        "get_recommendations": "获取建议",
+        "meditation": "冥想",
+        "find_peace": "寻找平静",
+        "add_mood_entries": "添加情绪条目以使用AI功能",
+        "loading_ai_features": "加载AI功能中...",
+        "error_loading_ai": "加载AI功能时出错"
+    },
+    "mood": {
+        "title": "您感觉如何？",
+        "add_mood": "添加情绪",
+        "add_entry": "添加条目",
+        "mood_history": "情绪历史",
+        "mood_analytics": "情绪分析",
+        "note": "备注",
+        "note_hint": "您今天感觉如何？您在想什么？",
+        "note_optional": "添加备注（可选）",
+        "note_placeholder": "告诉我们什么影响了您的情绪...",
+        "additional": "其他",
+        "current_time": "现在",
+        "first_entry_today": "这将是您今天的第一条条目",
+        "select_mood": "选择情绪",
+        "moods": {
+            "very_happy": "非常开心",
+            "happy": "开心",
+            "neutral": "中性",
+            "sad": "难过",
+            "very_sad": "非常难过"
+        }
+    },
+    "ai_insights": {
+        "title": "AI洞察",
+        "recommendations": "建议",
+        "patterns": "模式",
+        "trends": "趋势",
+        "insights": "洞察",
+        "gratitude_journal": "感恩日记",
+        "meditation": "冥想"
+    },
+    "settings": {
+        "title": "设置",
+        "theme": "主题",
+        "language": "语言",
+        "notifications": "通知",
+        "privacy": "隐私",
+        "about": "关于",
+        "appearance": "外观",
+        "data": "数据",
+        "export_data": "导出数据",
+        "download_data": "将您的数据下载为PDF或CSV",
+        "privacy_security": "隐私和安全",
+        "privacy_settings": "隐私设置",
+        "manage_privacy": "管理您的隐私偏好",
+        "notification_settings": "通知设置",
+        "manage_notifications": "管理您的通知偏好",
+        "appearance_settings": "外观设置",
+        "customize_theme": "自定义主题和颜色",
+        "about_app": "关于",
+        "app_version": "应用版本、条款和联系方式",
+        "themes": {
+            "light": "浅色",
+            "dark": "深色",
+            "system": "系统"
+        },
+        "languages": {
+            "english": "English",
+            "russian": "Русский",
+            "chinese": "中文 (Mandarin)",
+            "hindi": "हिन्दी",
+            "spanish": "Español",
+            "french": "Français",
+            "turkish": "Türkçe",
+            "turkmen": "Türkmen"
+        }
+    },
+    "errors": {
+        "network_error": "网络错误。请检查您的连接。",
+        "server_error": "服务器错误。请稍后再试。",
+        "unknown_error": "发生未知错误。",
+        "validation_error": "请检查您的输入。",
+        "permission_error": "权限被拒绝。",
+        "save_error": "保存错误：{error}",
+        "save_success": "条目保存成功！🎉"
+    },
+    "onboarding": {
+        "welcome": "欢迎使用心灵空间",
+        "get_started": "开始使用",
+        "skip": "跳过"
+    },
+    "profile": {
+        "recent_achievements": "最近的成就",
+        "error_loading": "加载个人资料时出错",
+        "stats": "统计",
+        "achievements": "成就",
+        "no_achievements": "还没有成就",
+        "keep_tracking": "继续追踪您的情绪以获得第一个成就！"
+    },
+    "statistics": {
+        "title": "统计",
+        "mood_trends": "情绪趋势",
+        "weekly_overview": "周概览",
+        "monthly_overview": "月概览",
+        "average_mood": "平均情绪",
+        "total_entries": "总条目",
+        "streak": "当前连续天数",
+        "best_day": "最佳日子"
+    },
+    "entries": {
+        "title": "所有条目",
+        "no_entries": "还没有条目",
+        "start_tracking": "开始追踪您的情绪以在此处查看您的条目",
+        "filter_by_date": "按日期筛选",
+        "filter_by_mood": "按情绪筛选",
+        "search_entries": "搜索条目..."
+    }
+}

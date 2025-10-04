@@ -1,0 +1,161 @@
+{
+    "app": {
+        "name": "Zihin Alanı",
+        "description": "AI öğeleri ile akıllı ruh hali ve düşünce günlüğü"
+    },
+    "common": {
+        "save": "Kaydet",
+        "cancel": "İptal",
+        "delete": "Sil",
+        "edit": "Düzenle",
+        "add": "Ekle",
+        "loading": "Yükleniyor...",
+        "error": "Hata",
+        "success": "Başarılı",
+        "retry": "Tekrar Dene",
+        "close": "Kapat",
+        "back": "Geri",
+        "next": "İleri",
+        "done": "Tamam",
+        "yes": "Evet",
+        "no": "Hayır",
+        "try_again": "Tekrar Dene",
+        "refresh": "Yenile"
+    },
+    "navigation": {
+        "home": "Ana Sayfa",
+        "mood_tracking": "Ruh Hali Takibi",
+        "analytics": "Analitik",
+        "settings": "Ayarlar",
+        "profile": "Profil",
+        "stats": "İstatistikler",
+        "entries": "Girişler"
+    },
+    "splash": {
+        "title": "Zihin Alanı",
+        "subtitle": "Zihinsel refah arkadaşınız"
+    },
+    "home": {
+        "title": "Zihin Alanı",
+        "quick_actions": "Hızlı İşlemler",
+        "ai_features": "AI Özellikleri",
+        "view_stats": "İstatistikleri Gör",
+        "see_progress": "İlerlemenizi görün",
+        "all_entries": "Tüm Girişler",
+        "browse_history": "Geçmişi göz at",
+        "ai_insights": "AI İçgörüleri",
+        "get_recommendations": "Öneriler al",
+        "meditation": "Meditasyon",
+        "find_peace": "Huzur bul",
+        "add_mood_entries": "AI özellikleri için ruh hali girişleri ekle",
+        "loading_ai_features": "AI özellikleri yükleniyor...",
+        "error_loading_ai": "AI özelliklerini yüklerken hata"
+    },
+    "mood": {
+        "title": "Nasıl hissediyorsunuz?",
+        "add_mood": "Ruh Hali Ekle",
+        "add_entry": "Giriş Ekle",
+        "mood_history": "Ruh Hali Geçmişi",
+        "mood_analytics": "Ruh Hali Analitiği",
+        "note": "Not",
+        "note_hint": "Bugün nasıl hissediyorsunuz? Aklınızda neler var?",
+        "note_optional": "Not ekle (isteğe bağlı)",
+        "note_placeholder": "Ruh halinizi neyin etkilediğini söyleyin...",
+        "additional": "Ek",
+        "current_time": "Şimdi",
+        "first_entry_today": "Bu bugünkü ilk girişiniz olacak",
+        "select_mood": "Ruh hali seç",
+        "moods": {
+            "very_happy": "Çok Mutlu",
+            "happy": "Mutlu",
+            "neutral": "Nötr",
+            "sad": "Üzgün",
+            "very_sad": "Çok Üzgün"
+        }
+    },
+    "ai_insights": {
+        "title": "AI İçgörüleri",
+        "recommendations": "Öneriler",
+        "patterns": "Desenler",
+        "trends": "Eğilimler",
+        "insights": "İçgörüler",
+        "gratitude_journal": "Şükran Günlüğü",
+        "meditation": "Meditasyon"
+    },
+    "settings": {
+        "title": "Ayarlar",
+        "theme": "Tema",
+        "language": "Dil",
+        "notifications": "Bildirimler",
+        "privacy": "Gizlilik",
+        "about": "Hakkında",
+        "appearance": "Görünüm",
+        "data": "Veri",
+        "export_data": "Veri Dışa Aktar",
+        "download_data": "Verilerinizi PDF veya CSV olarak indirin",
+        "privacy_security": "Gizlilik ve Güvenlik",
+        "privacy_settings": "Gizlilik Ayarları",
+        "manage_privacy": "Gizlilik tercihlerinizi yönetin",
+        "notification_settings": "Bildirim Ayarları",
+        "manage_notifications": "Bildirim tercihlerinizi yönetin",
+        "appearance_settings": "Görünüm Ayarları",
+        "customize_theme": "Tema ve renkleri özelleştirin",
+        "about_app": "Hakkında",
+        "app_version": "Uygulama sürümü, şartlar ve iletişim",
+        "themes": {
+            "light": "Açık",
+            "dark": "Koyu",
+            "system": "Sistem"
+        },
+        "languages": {
+            "english": "English",
+            "russian": "Русский",
+            "chinese": "中文 (Mandarin)",
+            "hindi": "हिन्दी",
+            "spanish": "Español",
+            "french": "Français",
+            "turkish": "Türkçe",
+            "turkmen": "Türkmen"
+        }
+    },
+    "errors": {
+        "network_error": "Ağ hatası. Lütfen bağlantınızı kontrol edin.",
+        "server_error": "Sunucu hatası. Lütfen daha sonra tekrar deneyin.",
+        "unknown_error": "Bilinmeyen bir hata oluştu.",
+        "validation_error": "Lütfen girişinizi kontrol edin.",
+        "permission_error": "İzin reddedildi.",
+        "save_error": "Kaydetme hatası: {error}",
+        "save_success": "Giriş başarıyla kaydedildi! 🎉"
+    },
+    "onboarding": {
+        "welcome": "Zihin Alanı'na Hoş Geldiniz",
+        "get_started": "Başlayın",
+        "skip": "Atla"
+    },
+    "profile": {
+        "recent_achievements": "Son Başarılar",
+        "error_loading": "Profil Yükleme Hatası",
+        "stats": "İstatistikler",
+        "achievements": "Başarılar",
+        "no_achievements": "Henüz başarı yok",
+        "keep_tracking": "İlk başarılarınızı elde etmek için ruh halinizi takip etmeye devam edin!"
+    },
+    "statistics": {
+        "title": "İstatistikler",
+        "mood_trends": "Ruh Hali Eğilimleri",
+        "weekly_overview": "Haftalık Genel Bakış",
+        "monthly_overview": "Aylık Genel Bakış",
+        "average_mood": "Ortalama Ruh Hali",
+        "total_entries": "Toplam Girişler",
+        "streak": "Mevcut Seri",
+        "best_day": "En İyi Gün"
+    },
+    "entries": {
+        "title": "Tüm Girişler",
+        "no_entries": "Henüz giriş yok",
+        "start_tracking": "Girişlerinizi burada görmek için ruh halinizi takip etmeye başlayın",
+        "filter_by_date": "Tarihe Göre Filtrele",
+        "filter_by_mood": "Ruh Haline Göre Filtrele",
+        "search_entries": "Girişleri ara..."
+    }
+}

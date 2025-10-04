@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/services/user_level_service.dart';
 
 /// Экран чата с AI - простой и понятный дизайн
 class AiChatScreen extends ConsumerStatefulWidget {
@@ -17,6 +18,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   final _scrollController = ScrollController();
   final List<ChatMessage> _messages = [];
   bool _isLoading = false;
+  final UserLevelService _levelService = UserLevelService();
 
   @override
   void initState() {
@@ -279,6 +281,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
         timestamp: DateTime.now(),
       ));
     });
+
+    // Начисляем опыт за использование AI чата
+    await _levelService.addExperienceForAIChat();
 
     _scrollToBottom();
 

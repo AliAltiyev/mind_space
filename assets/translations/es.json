@@ -1,0 +1,161 @@
+{
+    "app": {
+        "name": "Espacio Mental",
+        "description": "Diario inteligente de emociones y pensamientos con elementos de IA"
+    },
+    "common": {
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "add": "Agregar",
+        "loading": "Cargando...",
+        "error": "Error",
+        "success": "Éxito",
+        "retry": "Reintentar",
+        "close": "Cerrar",
+        "back": "Atrás",
+        "next": "Siguiente",
+        "done": "Hecho",
+        "yes": "Sí",
+        "no": "No",
+        "try_again": "Intentar de nuevo",
+        "refresh": "Actualizar"
+    },
+    "navigation": {
+        "home": "Inicio",
+        "mood_tracking": "Seguimiento de Estado de Ánimo",
+        "analytics": "Análisis",
+        "settings": "Configuración",
+        "profile": "Perfil",
+        "stats": "Estadísticas",
+        "entries": "Entradas"
+    },
+    "splash": {
+        "title": "Espacio Mental",
+        "subtitle": "Tu compañero de bienestar mental"
+    },
+    "home": {
+        "title": "Espacio Mental",
+        "quick_actions": "Acciones Rápidas",
+        "ai_features": "Características de IA",
+        "view_stats": "Ver Estadísticas",
+        "see_progress": "Ver tu progreso",
+        "all_entries": "Todas las Entradas",
+        "browse_history": "Navegar historial",
+        "ai_insights": "Perspectivas de IA",
+        "get_recommendations": "Obtener recomendaciones",
+        "meditation": "Meditación",
+        "find_peace": "Encontrar paz",
+        "add_mood_entries": "Agregar entradas de estado de ánimo para características de IA",
+        "loading_ai_features": "Cargando características de IA...",
+        "error_loading_ai": "Error al cargar características de IA"
+    },
+    "mood": {
+        "title": "¿Cómo te sientes?",
+        "add_mood": "Agregar Estado de Ánimo",
+        "add_entry": "Agregar Entrada",
+        "mood_history": "Historial de Estado de Ánimo",
+        "mood_analytics": "Análisis de Estado de Ánimo",
+        "note": "Nota",
+        "note_hint": "¿Cómo te sientes hoy? ¿Qué tienes en mente?",
+        "note_optional": "Agregar nota (opcional)",
+        "note_placeholder": "Cuéntanos qué influyó en tu estado de ánimo...",
+        "additional": "Adicional",
+        "current_time": "Ahora",
+        "first_entry_today": "Esta será tu primera entrada de hoy",
+        "select_mood": "Seleccionar estado de ánimo",
+        "moods": {
+            "very_happy": "Muy Feliz",
+            "happy": "Feliz",
+            "neutral": "Neutral",
+            "sad": "Triste",
+            "very_sad": "Muy Triste"
+        }
+    },
+    "ai_insights": {
+        "title": "Perspectivas de IA",
+        "recommendations": "Recomendaciones",
+        "patterns": "Patrones",
+        "trends": "Tendencias",
+        "insights": "Perspectivas",
+        "gratitude_journal": "Diario de Gratitud",
+        "meditation": "Meditación"
+    },
+    "settings": {
+        "title": "Configuración",
+        "theme": "Tema",
+        "language": "Idioma",
+        "notifications": "Notificaciones",
+        "privacy": "Privacidad",
+        "about": "Acerca de",
+        "appearance": "Apariencia",
+        "data": "Datos",
+        "export_data": "Exportar Datos",
+        "download_data": "Descargar tus datos como PDF o CSV",
+        "privacy_security": "Privacidad y Seguridad",
+        "privacy_settings": "Configuración de Privacidad",
+        "manage_privacy": "Gestionar tus preferencias de privacidad",
+        "notification_settings": "Configuración de Notificaciones",
+        "manage_notifications": "Gestionar tus preferencias de notificaciones",
+        "appearance_settings": "Configuración de Apariencia",
+        "customize_theme": "Personalizar tema y colores",
+        "about_app": "Acerca de",
+        "app_version": "Versión de la app, términos y contacto",
+        "themes": {
+            "light": "Claro",
+            "dark": "Oscuro",
+            "system": "Sistema"
+        },
+        "languages": {
+            "english": "English",
+            "russian": "Русский",
+            "chinese": "中文 (Mandarin)",
+            "hindi": "हिन्दी",
+            "spanish": "Español",
+            "french": "Français",
+            "turkish": "Türkçe",
+            "turkmen": "Türkmen"
+        }
+    },
+    "errors": {
+        "network_error": "Error de red. Por favor verifica tu conexión.",
+        "server_error": "Error del servidor. Por favor intenta de nuevo más tarde.",
+        "unknown_error": "Ocurrió un error desconocido.",
+        "validation_error": "Por favor verifica tu entrada.",
+        "permission_error": "Permiso denegado.",
+        "save_error": "Error al guardar: {error}",
+        "save_success": "¡Entrada guardada exitosamente! 🎉"
+    },
+    "onboarding": {
+        "welcome": "Bienvenido a Espacio Mental",
+        "get_started": "Comenzar",
+        "skip": "Omitir"
+    },
+    "profile": {
+        "recent_achievements": "Logros Recientes",
+        "error_loading": "Error al Cargar Perfil",
+        "stats": "Estadísticas",
+        "achievements": "Logros",
+        "no_achievements": "Aún no hay logros",
+        "keep_tracking": "¡Sigue rastreando tu estado de ánimo para obtener tus primeros logros!"
+    },
+    "statistics": {
+        "title": "Estadísticas",
+        "mood_trends": "Tendencias de Estado de Ánimo",
+        "weekly_overview": "Resumen Semanal",
+        "monthly_overview": "Resumen Mensual",
+        "average_mood": "Estado de Ánimo Promedio",
+        "total_entries": "Entradas Totales",
+        "streak": "Racha Actual",
+        "best_day": "Mejor Día"
+    },
+    "entries": {
+        "title": "Todas las Entradas",
+        "no_entries": "Aún no hay entradas",
+        "start_tracking": "Comienza a rastrear tu estado de ánimo para ver tus entradas aquí",
+        "filter_by_date": "Filtrar por Fecha",
+        "filter_by_mood": "Filtrar por Estado de Ánimo",
+        "search_entries": "Buscar entradas..."
+    }
+}

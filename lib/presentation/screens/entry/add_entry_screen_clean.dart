@@ -7,6 +7,7 @@ import '../../../core/constants/app_typography.dart';
 import '../../../core/database/database.dart';
 import '../../../app/providers/app_providers.dart';
 import '../../../app/providers/ai_features_provider.dart';
+import '../../../core/services/user_level_service.dart';
 
 /// Экран добавления записи настроения - простой и понятный
 class AddEntryScreenClean extends ConsumerStatefulWidget {
@@ -271,6 +272,10 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
       );
 
       await database.addMoodEntry(entry);
+
+      // Начисляем опыт за запись настроения
+      final levelService = UserLevelService();
+      await levelService.addExperienceForMoodEntry();
 
       // Инвалидируем провайдеры для обновления данных
       ref.invalidate(allMoodEntriesProvider);

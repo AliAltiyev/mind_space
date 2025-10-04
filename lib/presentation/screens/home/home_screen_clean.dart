@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -21,17 +22,32 @@ class HomeScreenClean extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           'Mind Space',
-          style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+          style: AppTypography.h3.copyWith(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         backgroundColor: AppColors.surface,
-        elevation: 1,
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: AppColors.surface,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined),
+            icon: Icon(
+              Icons.notifications_outlined,
+              color: AppColors.textSecondary,
+            ),
             onPressed: () => context.go('/settings/notifications'),
           ),
           IconButton(
-            icon: const Icon(Icons.settings_outlined),
+            icon: Icon(
+              Icons.settings_outlined,
+              color: AppColors.textSecondary,
+            ),
             onPressed: () => context.go('/settings'),
           ),
         ],
@@ -207,9 +223,41 @@ class HomeScreenClean extends ConsumerWidget {
           style: AppTypography.bodyLarge.copyWith(color: AppColors.textSecondary),
         ),
         const SizedBox(height: 8),
-        ElevatedButton(
-          onPressed: () => context.push('/add-entry'),
-          child: const Text('Добавить настроение'),
+        Container(
+          decoration: BoxDecoration(
+            gradient: AppColors.primaryGradient,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: AppColors.cardShadow,
+          ),
+          child: ElevatedButton(
+            onPressed: () => context.push('/add-entry'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Добавить настроение',
+                  style: AppTypography.button.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );

@@ -22,7 +22,7 @@ import '../../presentation/screens/settings/appearance_settings_screen.dart';
 import '../../presentation/screens/settings/data_export_screen.dart';
 import '../../presentation/screens/settings/notification_settings_screen.dart';
 import '../../presentation/screens/settings/privacy_settings_screen.dart';
-import '../../presentation/screens/settings/settings_screen_clean.dart';
+import '../../presentation/screens/settings/settings_screen_modern.dart';
 import '../../presentation/screens/stats/stats_screen.dart';
 import '../../presentation/screens/stats/stats_screen_clean.dart';
 import '../../presentation/screens/ai/ai_chat_screen.dart';
@@ -364,7 +364,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings',
         name: 'settings',
-        builder: (context, state) => const SettingsScreenClean(),
+        builder: (context, state) => const SettingsScreenModern(),
         routes: [
           // Notification Settings
           GoRoute(

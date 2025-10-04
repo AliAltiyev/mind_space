@@ -1,0 +1,161 @@
+{
+    "app": {
+        "name": "Espace Mental",
+        "description": "Journal intelligent d'humeur et de pensées avec éléments d'IA"
+    },
+    "common": {
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "add": "Ajouter",
+        "loading": "Chargement...",
+        "error": "Erreur",
+        "success": "Succès",
+        "retry": "Réessayer",
+        "close": "Fermer",
+        "back": "Retour",
+        "next": "Suivant",
+        "done": "Terminé",
+        "yes": "Oui",
+        "no": "Non",
+        "try_again": "Essayer à nouveau",
+        "refresh": "Actualiser"
+    },
+    "navigation": {
+        "home": "Accueil",
+        "mood_tracking": "Suivi de l'Humeur",
+        "analytics": "Analytiques",
+        "settings": "Paramètres",
+        "profile": "Profil",
+        "stats": "Statistiques",
+        "entries": "Entrées"
+    },
+    "splash": {
+        "title": "Espace Mental",
+        "subtitle": "Votre compagnon de bien-être mental"
+    },
+    "home": {
+        "title": "Espace Mental",
+        "quick_actions": "Actions Rapides",
+        "ai_features": "Fonctionnalités IA",
+        "view_stats": "Voir les Statistiques",
+        "see_progress": "Voir votre progression",
+        "all_entries": "Toutes les Entrées",
+        "browse_history": "Parcourir l'historique",
+        "ai_insights": "Insights IA",
+        "get_recommendations": "Obtenir des recommandations",
+        "meditation": "Méditation",
+        "find_peace": "Trouver la paix",
+        "add_mood_entries": "Ajouter des entrées d'humeur pour les fonctionnalités IA",
+        "loading_ai_features": "Chargement des fonctionnalités IA...",
+        "error_loading_ai": "Erreur lors du chargement des fonctionnalités IA"
+    },
+    "mood": {
+        "title": "Comment vous sentez-vous ?",
+        "add_mood": "Ajouter Humeur",
+        "add_entry": "Ajouter Entrée",
+        "mood_history": "Historique de l'Humeur",
+        "mood_analytics": "Analytiques de l'Humeur",
+        "note": "Note",
+        "note_hint": "Comment vous sentez-vous aujourd'hui ? Qu'avez-vous en tête ?",
+        "note_optional": "Ajouter une note (optionnel)",
+        "note_placeholder": "Dites-nous ce qui a influencé votre humeur...",
+        "additional": "Supplémentaire",
+        "current_time": "Maintenant",
+        "first_entry_today": "Ce sera votre première entrée d'aujourd'hui",
+        "select_mood": "Sélectionner l'humeur",
+        "moods": {
+            "very_happy": "Très Heureux",
+            "happy": "Heureux",
+            "neutral": "Neutre",
+            "sad": "Triste",
+            "very_sad": "Très Triste"
+        }
+    },
+    "ai_insights": {
+        "title": "Insights IA",
+        "recommendations": "Recommandations",
+        "patterns": "Modèles",
+        "trends": "Tendances",
+        "insights": "Insights",
+        "gratitude_journal": "Journal de Gratitude",
+        "meditation": "Méditation"
+    },
+    "settings": {
+        "title": "Paramètres",
+        "theme": "Thème",
+        "language": "Langue",
+        "notifications": "Notifications",
+        "privacy": "Confidentialité",
+        "about": "À propos",
+        "appearance": "Apparence",
+        "data": "Données",
+        "export_data": "Exporter les Données",
+        "download_data": "Télécharger vos données en PDF ou CSV",
+        "privacy_security": "Confidentialité et Sécurité",
+        "privacy_settings": "Paramètres de Confidentialité",
+        "manage_privacy": "Gérer vos préférences de confidentialité",
+        "notification_settings": "Paramètres de Notifications",
+        "manage_notifications": "Gérer vos préférences de notifications",
+        "appearance_settings": "Paramètres d'Apparence",
+        "customize_theme": "Personnaliser le thème et les couleurs",
+        "about_app": "À propos",
+        "app_version": "Version de l'app, conditions et contact",
+        "themes": {
+            "light": "Clair",
+            "dark": "Sombre",
+            "system": "Système"
+        },
+        "languages": {
+            "english": "English",
+            "russian": "Русский",
+            "chinese": "中文 (Mandarin)",
+            "hindi": "हिन्दी",
+            "spanish": "Español",
+            "french": "Français",
+            "turkish": "Türkçe",
+            "turkmen": "Türkmen"
+        }
+    },
+    "errors": {
+        "network_error": "Erreur réseau. Veuillez vérifier votre connexion.",
+        "server_error": "Erreur serveur. Veuillez réessayer plus tard.",
+        "unknown_error": "Une erreur inconnue s'est produite.",
+        "validation_error": "Veuillez vérifier votre saisie.",
+        "permission_error": "Permission refusée.",
+        "save_error": "Erreur lors de l'enregistrement : {error}",
+        "save_success": "Entrée enregistrée avec succès ! 🎉"
+    },
+    "onboarding": {
+        "welcome": "Bienvenue dans Espace Mental",
+        "get_started": "Commencer",
+        "skip": "Ignorer"
+    },
+    "profile": {
+        "recent_achievements": "Réalisations Récentes",
+        "error_loading": "Erreur de Chargement du Profil",
+        "stats": "Statistiques",
+        "achievements": "Réalisations",
+        "no_achievements": "Aucune réalisation pour le moment",
+        "keep_tracking": "Continuez à suivre votre humeur pour obtenir vos premières réalisations !"
+    },
+    "statistics": {
+        "title": "Statistiques",
+        "mood_trends": "Tendances de l'Humeur",
+        "weekly_overview": "Aperçu Hebdomadaire",
+        "monthly_overview": "Aperçu Mensuel",
+        "average_mood": "Humeur Moyenne",
+        "total_entries": "Entrées Totales",
+        "streak": "Série Actuelle",
+        "best_day": "Meilleur Jour"
+    },
+    "entries": {
+        "title": "Toutes les Entrées",
+        "no_entries": "Aucune entrée pour le moment",
+        "start_tracking": "Commencez à suivre votre humeur pour voir vos entrées ici",
+        "filter_by_date": "Filtrer par Date",
+        "filter_by_mood": "Filtrer par Humeur",
+        "search_entries": "Rechercher des entrées..."
+    }
+}
