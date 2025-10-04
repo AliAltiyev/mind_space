@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../app/providers/app_providers.dart';
 import '../../../core/database/database.dart';
@@ -26,11 +27,11 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
   final TextEditingController _noteController = TextEditingController();
   final List<String> _moodEmojis = ['😢', '😔', '😐', '😊', '🤩'];
   final List<String> _moodLabels = [
-    'Очень плохо',
-    'Плохо',
-    'Нормально',
-    'Хорошо',
-    'Отлично',
+    'mood.moods.very_sad'.tr(),
+    'mood.moods.sad'.tr(),
+    'mood.moods.neutral'.tr(),
+    'mood.moods.happy'.tr(),
+    'mood.moods.very_happy'.tr(),
   ];
   final List<Color> _moodColors = [
     const Color(0xFFEA2F14), // Rich Red - очень плохо

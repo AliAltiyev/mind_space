@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../app/providers/ai_features_provider.dart';
 import '../../widgets/ai/ai_features_grid.dart';
@@ -18,14 +19,14 @@ class HomeScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text(
-            'Mind Space',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 10)],
-            ),
+        title: Text(
+          'home.title'.tr(),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 10)],
           ),
+        ),
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
@@ -107,9 +108,9 @@ class HomeScreen extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Quick Actions',
-                              style: TextStyle(
+                            Text(
+                              'home.quick_actions'.tr(),
+                              style: const TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -124,8 +125,8 @@ class HomeScreen extends ConsumerWidget {
                                 Expanded(
                                   child: _QuickActionCard(
                                     icon: Icons.analytics,
-                                    title: 'View Stats',
-                                    subtitle: 'See your progress',
+                                    title: 'home.view_stats'.tr(),
+                                    subtitle: 'home.see_progress'.tr(),
                                     onTap: () => context.go('/stats'),
                                   ),
                                 ),
@@ -133,8 +134,8 @@ class HomeScreen extends ConsumerWidget {
                                 Expanded(
                                   child: _QuickActionCard(
                                     icon: Icons.list,
-                                    title: 'All Entries',
-                                    subtitle: 'Browse history',
+                                    title: 'home.all_entries'.tr(),
+                                    subtitle: 'home.browse_history'.tr(),
                                     onTap: () => context.go('/home/entries'),
                                   ),
                                 ),
@@ -148,8 +149,8 @@ class HomeScreen extends ConsumerWidget {
                                 Expanded(
                                   child: _QuickActionCard(
                                     icon: Icons.insights,
-                                    title: 'AI Insights',
-                                    subtitle: 'Get recommendations',
+                                    title: 'home.ai_insights'.tr(),
+                                    subtitle: 'home.get_recommendations'.tr(),
                                     onTap: () => context.go('/stats/insights'),
                                   ),
                                 ),
@@ -157,8 +158,8 @@ class HomeScreen extends ConsumerWidget {
                                 Expanded(
                                   child: _QuickActionCard(
                                     icon: Icons.self_improvement,
-                                    title: 'Meditation',
-                                    subtitle: 'Find peace',
+                                    title: 'home.meditation'.tr(),
+                                    subtitle: 'home.find_peace'.tr(),
                                     onTap: () =>
                                         context.go('/stats/meditation'),
                                   ),
@@ -195,9 +196,9 @@ class HomeScreen extends ConsumerWidget {
           children: [
             Row(
               children: [
-                const Text(
-                  'AI Features',
-                  style: TextStyle(
+                Text(
+                  'home.ai_features'.tr(),
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -227,14 +228,14 @@ class HomeScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Color(0xFFFB9E3A).withOpacity(0.3)),
                     ),
-                    child: const Center(
+                    child:  Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.psychology, size: 48, color: Color(0xFFFB9E3A)),
                           SizedBox(height: 16),
                           Text(
-                            'Добавьте записи настроения для AI функций',
+                            'home.add_mood_entries'.tr(),
                             style: TextStyle(fontSize: 16, color: Colors.white70),
                           ),
                         ],
@@ -256,14 +257,14 @@ class HomeScreen extends ConsumerWidget {
                   color: Colors.grey[100],
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Center(
+                child:  Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(),
                       SizedBox(height: 16),
                       Text(
-                        'Загружаем AI функции...',
+                        'home.loading_ai_features'.tr(),
                         style: TextStyle(fontSize: 16, color: Colors.white70),
                       ),
                     ],
@@ -288,7 +289,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Ошибка загрузки AI функций',
+                        'home.error_loading_ai'.tr(),
                         style: TextStyle(fontSize: 16, color: Colors.white70),
                       ),
                       const SizedBox(height: 8),
@@ -296,7 +297,7 @@ class HomeScreen extends ConsumerWidget {
                         onPressed: () {
                           ref.invalidate(recentMoodEntriesProvider);
                         },
-                        child: const Text('Попробовать снова'),
+                        child: Text('common.try_again'.tr()),
                       ),
                     ],
                   ),

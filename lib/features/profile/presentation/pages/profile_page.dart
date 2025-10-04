@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../blocs/achievements_bloc.dart';
 import '../blocs/profile_bloc.dart';
@@ -10,39 +12,77 @@ import '../widgets/stats_grid_widget.dart';
 import 'achievements_page.dart';
 import 'edit_profile_page.dart';
 import 'statistics_page.dart';
-
+import '../../../../presentation/widgets/core/amazing_background.dart' as amazing;
+    
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Профиль'),
+    return amazing.AmazingBackground(
+      type: amazing.BackgroundType.cosmic,
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () => _navigateToEditProfile(context),
-            icon: const Icon(Icons.edit),
+        appBar: AppBar(
+          title: Text(
+            'navigation.profile'.tr(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 10)],
+            ),
           ),
-        ],
-      ),
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider<ProfileBloc>(
-            create: (context) =>
-                context.read<ProfileBloc>()..add(LoadProfile()),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/home');
+              }
+            },
           ),
-          BlocProvider<StatsBloc>(
-            create: (context) => context.read<StatsBloc>()..add(LoadStats()),
-          ),
-          BlocProvider<AchievementsBloc>(
-            create: (context) =>
-                context.read<AchievementsBloc>()..add(LoadAchievements()),
-          ),
-        ],
-        child: const _ProfilePageContent(),
+          actions: [
+            Container(
+              margin: const EdgeInsets.only(right: 16),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFFB9E3A), Color(0xFFE6521F)],
+                ),
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFFB9E3A).withOpacity(0.5),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: IconButton(
+                onPressed: () => _navigateToEditProfile(context),
+                icon: const Icon(Icons.edit, color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider<ProfileBloc>(
+              create: (context) =>
+                  context.read<ProfileBloc>()..add(LoadProfile()),
+            ),
+            BlocProvider<StatsBloc>(
+              create: (context) => context.read<StatsBloc>()..add(LoadStats()),
+            ),
+            BlocProvider<AchievementsBloc>(
+              create: (context) =>
+                  context.read<AchievementsBloc>()..add(LoadAchievements()),
+            ),
+          ],
+          child: const _ProfilePageContent(),
+        ),
       ),
     );
   }
@@ -152,16 +192,20 @@ class _ProfilePageContent extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Недавние достижения',
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                            'profile.recent_achievements'.tr(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 8)],
+                            ),
                           ),
                           TextButton(
                             onPressed: () => _navigateToAchievements(context),
-                            child: const Text('Все'),
+                            child: Text(
+                              'common.all'.tr(),
+                              style: const TextStyle(color: Color(0xFFFB9E3A)),
+                            ),
                           ),
                         ],
                       ),
@@ -230,8 +274,13 @@ class _ProfileLoadingWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFFB9E3A).withOpacity(0.3)),
       ),
-      child: const Center(child: CircularProgressIndicator()),
+      child: const Center(
+        child: CircularProgressIndicator(
+          color: Color(0xFFFB9E3A),
+        ),
+      ),
     );
   }
 }
@@ -247,30 +296,40 @@ class _ProfileErrorWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.1),
+        color: const Color(0xFFEA2F14).withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.red.withOpacity(0.3)),
+        border: Border.all(color: const Color(0xFFEA2F14).withOpacity(0.3)),
       ),
       child: Column(
         children: [
-          const Icon(Icons.error, color: Colors.red, size: 48),
+          const Icon(Icons.error, color: Color(0xFFEA2F14), size: 48),
           const SizedBox(height: 16),
           Text(
-            'Ошибка загрузки профиля',
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(color: Colors.red),
+            'profile.error_loading'.tr(),
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white70,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             message,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: Colors.red),
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.white60,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          ElevatedButton(onPressed: onRetry, child: const Text('Повторить')),
+          ElevatedButton(
+            onPressed: onRetry,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFB9E3A),
+              foregroundColor: Colors.white,
+            ),
+            child: Text('common.retry'.tr()),
+          ),
         ],
       ),
     );

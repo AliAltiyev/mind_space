@@ -125,6 +125,32 @@
         "welcome": "Welcome to Mind Space",
         "get_started": "Get Started",
         "skip": "Skip"
+    },
+    "profile": {
+        "recent_achievements": "Recent Achievements",
+        "error_loading": "Error Loading Profile",
+        "stats": "Statistics",
+        "achievements": "Achievements",
+        "no_achievements": "No achievements yet",
+        "keep_tracking": "Keep tracking your mood to get first achievements!"
+    },
+    "statistics": {
+        "title": "Statistics",
+        "mood_trends": "Mood Trends",
+        "weekly_overview": "Weekly Overview",
+        "monthly_overview": "Monthly Overview",
+        "average_mood": "Average Mood",
+        "total_entries": "Total Entries",
+        "streak": "Current Streak",
+        "best_day": "Best Day"
+    },
+    "entries": {
+        "title": "All Entries",
+        "no_entries": "No entries yet",
+        "start_tracking": "Start tracking your mood to see your entries here",
+        "filter_by_date": "Filter by Date",
+        "filter_by_mood": "Filter by Mood",
+        "search_entries": "Search entries..."
     }
 }
 

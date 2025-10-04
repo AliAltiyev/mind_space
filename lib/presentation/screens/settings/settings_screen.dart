@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Главный экран настроек
 class SettingsScreen extends ConsumerWidget {
@@ -10,7 +11,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text('settings.title'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -28,12 +29,12 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           // Уведомления
           _SettingsSection(
-            title: 'Notifications',
+            title: 'settings.notifications'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.notifications,
-                title: 'Notification Settings',
-                subtitle: 'Manage your notification preferences',
+                title: 'settings.notification_settings'.tr(),
+                subtitle: 'settings.manage_notifications'.tr(),
                 onTap: () => context.go('/settings/notifications'),
               ),
             ],
@@ -41,12 +42,12 @@ class SettingsScreen extends ConsumerWidget {
 
           // Внешний вид
           _SettingsSection(
-            title: 'Appearance',
+            title: 'settings.appearance'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.palette,
-                title: 'Appearance Settings',
-                subtitle: 'Customize theme and colors',
+                title: 'settings.appearance_settings'.tr(),
+                subtitle: 'settings.customize_theme'.tr(),
                 onTap: () => context.go('/settings/appearance'),
               ),
             ],
@@ -54,12 +55,12 @@ class SettingsScreen extends ConsumerWidget {
 
           // Данные
           _SettingsSection(
-            title: 'Data',
+            title: 'settings.data'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.download,
-                title: 'Export Data',
-                subtitle: 'Download your data as PDF or CSV',
+                title: 'settings.export_data'.tr(),
+                subtitle: 'settings.download_data'.tr(),
                 onTap: () => context.go('/settings/export'),
               ),
             ],
@@ -67,12 +68,12 @@ class SettingsScreen extends ConsumerWidget {
 
           // Конфиденциальность
           _SettingsSection(
-            title: 'Privacy & Security',
+            title: 'settings.privacy_security'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.privacy_tip,
-                title: 'Privacy Settings',
-                subtitle: 'Manage your privacy preferences',
+                title: 'settings.privacy_settings'.tr(),
+                subtitle: 'settings.manage_privacy'.tr(),
                 onTap: () => context.go('/settings/privacy'),
               ),
             ],
@@ -80,12 +81,12 @@ class SettingsScreen extends ConsumerWidget {
 
           // О приложении
           _SettingsSection(
-            title: 'About',
+            title: 'settings.about'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.info,
-                title: 'About',
-                subtitle: 'App version, terms, and contact',
+                title: 'settings.about_app'.tr(),
+                subtitle: 'settings.app_version'.tr(),
                 onTap: () => context.go('/settings/about'),
               ),
             ],
