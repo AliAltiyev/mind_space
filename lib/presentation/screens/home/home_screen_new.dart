@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../app/providers/ai_features_provider.dart';
 import '../../widgets/ai/ai_features_grid.dart';
 import '../../widgets/core/amazing_background.dart' as amazing;
+import '../../widgets/core/amazing_glass_surface.dart' as amazing;
 import '../../widgets/core/perfected_mood_blob.dart';
 
 /// Главный экран приложения
@@ -18,168 +19,117 @@ class HomeScreen extends ConsumerWidget {
       type: amazing.BackgroundType.cosmic,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-        title: Text(
-          'home.title'.tr(),
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 10)],
-          ),
-        ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 8),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFFB9E3A), Color(0xFFE6521F)],
-                ),
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFFB9E3A).withOpacity(0.5),
-                    blurRadius: 10,
-                    spreadRadius: 2,
+        body: CustomScrollView(
+          slivers: [
+            // Custom App Bar
+            SliverAppBar(
+              expandedHeight: 120,
+              floating: false,
+              pinned: true,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        const Color(0xFFFB9E3A).withOpacity(0.1),
+                        const Color(0xFFE6521F).withOpacity(0.1),
+                        const Color(0xFFEA2F14).withOpacity(0.1),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'home.title'.tr(),
+                                style: const TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(color: Color(0xFFFB9E3A), blurRadius: 15),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Good morning! How are you feeling?',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            _ActionButton(
+                              icon: Icons.notifications_outlined,
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFFB9E3A), Color(0xFFE6521F)],
+                              ),
+                              onPressed: () => context.go('/settings/notifications'),
+                            ),
+                            const SizedBox(width: 12),
+                            _ActionButton(
+                              icon: Icons.settings_outlined,
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFE6521F), Color(0xFFEA2F14)],
+                              ),
+                              onPressed: () => context.go('/settings'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                onPressed: () {},
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFE6521F), Color(0xFFEA2F14)],
+
+            // Main Content
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Mood Blob Section
+                    _buildMoodBlobSection(context),
+                    
+                    const SizedBox(height: 30),
+                    
+                    // Quick Stats
+                    _buildQuickStats(),
+                    
+                    const SizedBox(height: 30),
+                    
+                    // Quick Actions Grid
+                    _buildQuickActionsGrid(context),
+                    
+                    const SizedBox(height: 30),
+                    
+                    // AI Features Section
+                    _buildAIFeaturesSection(context, ref),
+                    
+                    const SizedBox(height: 100), // Bottom padding for navigation
+                  ],
                 ),
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFE6521F).withOpacity(0.5),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.settings_outlined, color: Colors.white),
-                onPressed: () => context.go('/settings'),
               ),
             ),
           ],
-        ),
-        body: SafeArea(
-          child: Container(
-            child: Column(
-              children: [
-                // Центральная область с MoodBlob
-                Expanded(
-                  flex: 3,
-                  child: Center(
-                    child: PerfectedMoodBlobWithFAB(
-                      moodRating: 3, // TODO: Получать из реальных данных
-                      onTap: () => context.push('/add-entry'),
-                    ),
-                  ),
-                ),
-
-                // Нижняя область с быстрыми действиями и AI функциями
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'home.quick_actions'.tr(),
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 8)],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // Быстрые действия
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _QuickActionCard(
-                                    icon: Icons.analytics,
-                                    title: 'home.view_stats'.tr(),
-                                    subtitle: 'home.see_progress'.tr(),
-                                    onTap: () => context.go('/stats'),
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: _QuickActionCard(
-                                    icon: Icons.list,
-                                    title: 'home.all_entries'.tr(),
-                                    subtitle: 'home.browse_history'.tr(),
-                                    onTap: () => context.go('/home/entries'),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            const SizedBox(height: 16),
-
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _QuickActionCard(
-                                    icon: Icons.insights,
-                                    title: 'home.ai_insights'.tr(),
-                                    subtitle: 'home.get_recommendations'.tr(),
-                                    onTap: () => context.go('/stats/insights'),
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: _QuickActionCard(
-                                    icon: Icons.self_improvement,
-                                    title: 'home.meditation'.tr(),
-                                    subtitle: 'home.find_peace'.tr(),
-                                    onTap: () =>
-                                        context.go('/stats/meditation'),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            const SizedBox(height: 24),
-
-                            // AI Features Section
-                            _buildAIFeaturesSection(context, ref),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
