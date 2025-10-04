@@ -288,24 +288,40 @@ class OptimizedLiquidBlobPainter extends CustomPainter {
   }
 }
 
-/// Предустановленные градиенты для разных настроений
+/// Предустановленные градиенты для разных настроений - Color Hunt Palette
+/// https://colorhunt.co/palette/fcef91fb9e3ae6521fea2f14
 class MoodBlobGradients {
   MoodBlobGradients._();
 
-  /// Очень плохое настроение (1) - глубокий серый
-  static const List<Color> veryBad = [Color(0xFF4A5568), Color(0xFF2D3748)];
+  /// Очень плохое настроение (1) - Rich Red
+  static const List<Color> veryBad = [
+    Color(0xFFEA2F14), // Rich Red
+    Color(0xFFB91C1C), // Darker Red
+  ];
 
-  /// Плохое настроение (2) - фиолетово-синий
-  static const List<Color> bad = [Color(0xFF6B73FF), Color(0xFF9B59B6)];
+  /// Плохое настроение (2) - Deep Orange-Red
+  static const List<Color> bad = [
+    Color(0xFFE6521F), // Deep Orange-Red
+    Color(0xFFDC2626), // Darker Orange-Red
+  ];
 
-  /// Нейтральное настроение (3) - голубой
-  static const List<Color> neutral = [Color(0xFF74B9FF), Color(0xFF0984E3)];
+  /// Нейтральное настроение (3) - Vibrant Orange
+  static const List<Color> neutral = [
+    Color(0xFFFB9E3A), // Vibrant Orange
+    Color(0xFFEA580C), // Darker Orange
+  ];
 
-  /// Хорошее настроение (4) - теплый желтый
-  static const List<Color> good = [Color(0xFFFFEAA7), Color(0xFFFDCB6E)];
+  /// Хорошее настроение (4) - Warm Yellow/Cream
+  static const List<Color> good = [
+    Color(0xFFFCEF91), // Warm Yellow/Cream
+    Color(0xFFFBBF24), // Golden Yellow
+  ];
 
-  /// Отличное настроение (5) - яркий розово-красный
-  static const List<Color> excellent = [Color(0xFFFF7675), Color(0xFFE84393)];
+  /// Отличное настроение (5) - Bright Warm Yellow
+  static const List<Color> excellent = [
+    Color(0xFFFCEF91), // Warm Yellow/Cream
+    Color(0xFFFCD34D), // Bright Yellow
+  ];
 
   /// Получить градиент по рейтингу настроения
   static List<Color> getGradientForRating(int rating) {

@@ -23,7 +23,7 @@ class HomeScreen extends ConsumerWidget {
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              shadows: [Shadow(color: Color(0xFF8B5CF6), blurRadius: 10)],
+              shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 10)],
             ),
           ),
           backgroundColor: Colors.transparent,
@@ -33,12 +33,12 @@ class HomeScreen extends ConsumerWidget {
               margin: const EdgeInsets.only(right: 8),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF8B5CF6), Color(0xFF06B6D4)],
+                  colors: [Color(0xFFFB9E3A), Color(0xFFE6521F)],
                 ),
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF8B5CF6).withOpacity(0.5),
+                    color: const Color(0xFFFB9E3A).withOpacity(0.5),
                     blurRadius: 10,
                     spreadRadius: 2,
                   ),
@@ -56,12 +56,12 @@ class HomeScreen extends ConsumerWidget {
               margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF06B6D4), Color(0xFF8B5CF6)],
+                  colors: [Color(0xFFE6521F), Color(0xFFEA2F14)],
                 ),
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF06B6D4).withOpacity(0.5),
+                    color: const Color(0xFFE6521F).withOpacity(0.5),
                     blurRadius: 10,
                     spreadRadius: 2,
                   ),
@@ -84,7 +84,7 @@ class HomeScreen extends ConsumerWidget {
                   child: Center(
                     child: PerfectedMoodBlobWithFAB(
                       moodRating: 3, // TODO: Получать из реальных данных
-                      onTap: () => context.go('/add-entry'),
+                      onTap: () => context.push('/add-entry'),
                     ),
                   ),
                 ),
@@ -112,7 +112,8 @@ class HomeScreen extends ConsumerWidget {
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF2D3748),
+                                color: Colors.white,
+                                shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 8)],
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -199,7 +200,8 @@ class HomeScreen extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF2D3748),
+                    color: Colors.white,
+                    shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 8)],
                   ),
                 ),
                 const Spacer(),
@@ -221,18 +223,19 @@ class HomeScreen extends ConsumerWidget {
                   return Container(
                     height: 400,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: Colors.white.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Color(0xFFFB9E3A).withOpacity(0.3)),
                     ),
                     child: const Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.psychology, size: 48, color: Colors.grey),
+                          Icon(Icons.psychology, size: 48, color: Color(0xFFFB9E3A)),
                           SizedBox(height: 16),
                           Text(
                             'Добавьте записи настроения для AI функций',
-                            style: TextStyle(fontSize: 16, color: Colors.grey),
+                            style: TextStyle(fontSize: 16, color: Colors.white70),
                           ),
                         ],
                       ),
@@ -261,7 +264,7 @@ class HomeScreen extends ConsumerWidget {
                       SizedBox(height: 16),
                       Text(
                         'Загружаем AI функции...',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                        style: TextStyle(fontSize: 16, color: Colors.white70),
                       ),
                     ],
                   ),
@@ -270,9 +273,9 @@ class HomeScreen extends ConsumerWidget {
               error: (error, stack) => Container(
                 height: 400,
                 decoration: BoxDecoration(
-                  color: Colors.red[50],
+                  color: Color(0xFFEA2F14).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.red[200]!),
+                  border: Border.all(color: Color(0xFFEA2F14).withOpacity(0.3)),
                 ),
                 child: Center(
                   child: Column(
@@ -281,12 +284,12 @@ class HomeScreen extends ConsumerWidget {
                       Icon(
                         Icons.error_outline,
                         size: 48,
-                        color: Colors.red[400],
+                        color: Color(0xFFEA2F14),
                       ),
                       const SizedBox(height: 16),
                       Text(
                         'Ошибка загрузки AI функций',
-                        style: TextStyle(fontSize: 16, color: Colors.red[600]),
+                        style: TextStyle(fontSize: 16, color: Colors.white70),
                       ),
                       const SizedBox(height: 8),
                       ElevatedButton(
@@ -340,13 +343,17 @@ class _QuickActionCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF2D3748),
+                  color: Colors.white,
                 ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
               const SizedBox(height: 4),
               Text(
                 subtitle,
-                style: const TextStyle(fontSize: 12, color: Color(0xFF718096)),
+                style: const TextStyle(fontSize: 12, color: Colors.white70),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
             ],
           ),

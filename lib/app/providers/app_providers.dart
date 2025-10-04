@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/database/database.dart';
 import '../../core/network/api_client.dart';
+import '../../core/services/shared_preferences_service.dart';
 
 /// Провайдер для базы данных
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
@@ -12,6 +13,11 @@ final appDatabaseProvider = Provider<AppDatabase>((ref) {
 final apiClientProvider = Provider<ApiClient>((ref) {
   final dio = createDioClient();
   return ApiClient(dio);
+});
+
+/// Провайдер для SharedPreferences сервиса
+final sharedPreferencesProvider = Provider<SharedPreferencesService>((ref) {
+  return SharedPreferencesService.instance;
 });
 
 /// Провайдер для настроек приложения
@@ -25,11 +31,18 @@ class AppSettingsNotifier
 
   Future<void> _loadSettings() async {
     try {
-      // Загрузка настроек из базы данных
-      final settings = <String, String>{};
+      final sharedPrefs = ref.read(sharedPreferencesProvider);
+      await sharedPrefs.init();
 
-      // Здесь можно загрузить настройки из базы данных
-      // Например: settings['theme'] = await database.getSetting('theme') ?? 'light';
+      // Загрузка настроек из SharedPreferences
+      final settings = <String, String>{};
+      
+      // Загружаем основные настройки
+      final theme = await sharedPrefs.getSetting('theme');
+      if (theme != null) settings['theme'] = theme;
+      
+      final locale = await sharedPrefs.getSetting('locale');
+      if (locale != null) settings['locale'] = locale;
 
       state = AsyncValue.data(settings);
     } catch (e) {
@@ -39,16 +52,46 @@ class AppSettingsNotifier
 
   /// Обновление настройки
   Future<void> updateSetting(String key, String value) async {
-    final database = ref.read(appDatabaseProvider);
-    await database.setSetting(key, value);
+    try {
+      final sharedPrefs = ref.read(sharedPreferencesProvider);
+      await sharedPrefs.setSetting(key, value);
 
-    // Обновляем состояние
-    state = AsyncValue.data({...state.value!, key: value});
+      // Обновляем состояние
+      if (state.hasValue) {
+        state = AsyncValue.data({...state.value!, key: value});
+      }
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    }
   }
 
   /// Получение настройки
   String? getSetting(String key) {
     return state.value?[key];
+  }
+
+  /// Проверка первого запуска
+  Future<bool> isFirstLaunch() async {
+    final sharedPrefs = ref.read(sharedPreferencesProvider);
+    return await sharedPrefs.isFirstLaunch();
+  }
+
+  /// Отметить первый запуск как завершенный
+  Future<void> setFirstLaunchCompleted() async {
+    final sharedPrefs = ref.read(sharedPreferencesProvider);
+    await sharedPrefs.setFirstLaunchCompleted();
+  }
+
+  /// Проверка, показывался ли splash
+  Future<bool> hasShownSplash() async {
+    final sharedPrefs = ref.read(sharedPreferencesProvider);
+    return await sharedPrefs.hasShownSplash();
+  }
+
+  /// Отметить, что splash был показан
+  Future<void> setSplashShown() async {
+    final sharedPrefs = ref.read(sharedPreferencesProvider);
+    await sharedPrefs.setSplashShown();
   }
 }
 

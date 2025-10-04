@@ -7,6 +7,7 @@ import 'app/providers/ai_features_provider.dart';
 import 'app/providers/profile_providers.dart';
 import 'app/routing/app_router.dart';
 import 'core/di/injection.dart';
+import 'core/services/shared_preferences_service.dart';
 import 'features/ai/presentation/blocs/ai_insights_bloc.dart';
 import 'features/ai/presentation/blocs/gratitude_bloc.dart';
 import 'features/ai/presentation/blocs/meditation_bloc.dart';
@@ -22,6 +23,9 @@ void main() async {
 
   // Инициализация локализации
   await EasyLocalization.ensureInitialized();
+
+  // Инициализация SharedPreferences
+  await SharedPreferencesService.instance.init();
 
   // Инициализация DI
   await configureDependencies();

@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 /// Главный класс для управления темами приложения
 class AppTheme {
-  /// Получение светлой темы
+  /// Получение светлой темы с Color Hunt палитрой
   static ThemeData get lightTheme => ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFF6366F1),
+      seedColor: AppColors.primary, // Vibrant Orange
       brightness: Brightness.light,
     ),
   );
 
-  /// Получение темной темы
+  /// Получение темной темы с Color Hunt палитрой
   static ThemeData get darkTheme => ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFF6366F1),
+      seedColor: AppColors.primary, // Vibrant Orange
       brightness: Brightness.dark,
     ),
   );

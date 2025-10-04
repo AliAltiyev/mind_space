@@ -18,22 +18,53 @@
         "next": "Next",
         "done": "Done",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "try_again": "Try Again",
+        "refresh": "Refresh"
     },
     "navigation": {
         "home": "Home",
         "mood_tracking": "Mood Tracking",
         "analytics": "Analytics",
         "settings": "Settings",
-        "profile": "Profile"
+        "profile": "Profile",
+        "stats": "Statistics",
+        "entries": "Entries"
+    },
+    "splash": {
+        "title": "Mind Space",
+        "subtitle": "Your mental wellness companion"
+    },
+    "home": {
+        "title": "Mind Space",
+        "quick_actions": "Quick Actions",
+        "ai_features": "AI Features",
+        "view_stats": "View Stats",
+        "see_progress": "See your progress",
+        "all_entries": "All Entries",
+        "browse_history": "Browse history",
+        "ai_insights": "AI Insights",
+        "get_recommendations": "Get recommendations",
+        "meditation": "Meditation",
+        "find_peace": "Find peace",
+        "add_mood_entries": "Add mood entries for AI features",
+        "loading_ai_features": "Loading AI features...",
+        "error_loading_ai": "Error loading AI features"
     },
     "mood": {
         "title": "How are you feeling?",
         "add_mood": "Add Mood",
+        "add_entry": "Add Entry",
         "mood_history": "Mood History",
         "mood_analytics": "Mood Analytics",
         "note": "Note",
         "note_hint": "How are you feeling today? What's on your mind?",
+        "note_optional": "Add note (optional)",
+        "note_placeholder": "Tell us what influenced your mood...",
+        "additional": "Additional",
+        "current_time": "Now",
+        "first_entry_today": "This will be your 1st entry today",
+        "select_mood": "Select mood",
         "moods": {
             "very_happy": "Very Happy",
             "happy": "Happy",
@@ -47,7 +78,9 @@
         "recommendations": "Recommendations",
         "patterns": "Patterns",
         "trends": "Trends",
-        "insights": "Insights"
+        "insights": "Insights",
+        "gratitude_journal": "Gratitude Journal",
+        "meditation": "Meditation"
     },
     "settings": {
         "title": "Settings",
@@ -56,10 +89,27 @@
         "notifications": "Notifications",
         "privacy": "Privacy",
         "about": "About",
+        "appearance": "Appearance",
+        "data": "Data",
+        "export_data": "Export Data",
+        "download_data": "Download your data as PDF or CSV",
+        "privacy_security": "Privacy & Security",
+        "privacy_settings": "Privacy Settings",
+        "manage_privacy": "Manage your privacy preferences",
+        "notification_settings": "Notification Settings",
+        "manage_notifications": "Manage your notification preferences",
+        "appearance_settings": "Appearance Settings",
+        "customize_theme": "Customize theme and colors",
+        "about_app": "About",
+        "app_version": "App version, terms, and contact",
         "themes": {
             "light": "Light",
             "dark": "Dark",
             "system": "System"
+        },
+        "languages": {
+            "english": "English",
+            "russian": "Русский"
         }
     },
     "errors": {
@@ -67,7 +117,14 @@
         "server_error": "Server error. Please try again later.",
         "unknown_error": "An unknown error occurred.",
         "validation_error": "Please check your input.",
-        "permission_error": "Permission denied."
+        "permission_error": "Permission denied.",
+        "save_error": "Error saving: {error}",
+        "save_success": "Entry saved successfully! 🎉"
+    },
+    "onboarding": {
+        "welcome": "Welcome to Mind Space",
+        "get_started": "Get Started",
+        "skip": "Skip"
     }
 }
 

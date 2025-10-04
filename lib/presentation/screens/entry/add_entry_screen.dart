@@ -33,11 +33,11 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
     'Отлично',
   ];
   final List<Color> _moodColors = [
-    const Color(0xFFE53E3E), // Red
-    const Color(0xFFDD6B20), // Orange
-    const Color(0xFFD69E2E), // Yellow
-    const Color(0xFF38A169), // Green
-    const Color(0xFF805AD5), // Purple
+    const Color(0xFFEA2F14), // Rich Red - очень плохо
+    const Color(0xFFE6521F), // Deep Orange-Red - плохо
+    const Color(0xFFFB9E3A), // Vibrant Orange - нормально
+    const Color(0xFFFCEF91), // Warm Yellow/Cream - хорошо
+    const Color(0xFFFCEF91), // Warm Yellow/Cream - отлично
   ];
 
   @override
@@ -94,12 +94,12 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
         margin: const EdgeInsets.only(left: 16),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [Color(0xFF8B5CF6), Color(0xFF06B6D4)],
+            colors: [Color(0xFFFB9E3A), Color(0xFFE6521F)],
           ),
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF8B5CF6).withOpacity(0.5),
+              color: const Color(0xFFFB9E3A).withOpacity(0.5),
               blurRadius: 10,
               spreadRadius: 2,
             ),
@@ -107,7 +107,13 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
         ),
         child: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/home');
+            }
+          },
         ),
       ),
       title: const Text(
@@ -115,7 +121,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
         style: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
-          shadows: [Shadow(color: Color(0xFF8B5CF6), blurRadius: 10)],
+          shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 10)],
         ),
       ),
       actions: [
@@ -123,12 +129,12 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
           margin: const EdgeInsets.only(right: 16),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xFF06B6D4), Color(0xFF8B5CF6)],
+              colors: [Color(0xFFE6521F), Color(0xFFEA2F14)],
             ),
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF06B6D4).withOpacity(0.5),
+                color: const Color(0xFFE6521F).withOpacity(0.5),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),
@@ -206,7 +212,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               fontSize: 28,
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              shadows: [Shadow(color: const Color(0xFF00FFFF), blurRadius: 15)],
+              shadows: [Shadow(color: const Color(0xFFFB9E3A), blurRadius: 15)],
             ),
           ),
           const SizedBox(height: 8),
@@ -217,7 +223,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               color: Colors.white70,
               shadows: [
                 Shadow(
-                  color: const Color(0xFF00FFFF).withOpacity(0.5),
+                  color: const Color(0xFFFB9E3A).withOpacity(0.5),
                   blurRadius: 8,
                 ),
               ],
@@ -243,7 +249,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 shadows: [
-                  Shadow(color: const Color(0xFF8B5CF6), blurRadius: 10),
+                  Shadow(color: const Color(0xFFFB9E3A), blurRadius: 10),
                 ],
               ),
             ),
@@ -287,8 +293,10 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
   Widget _buildMoodSlider() {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
           children: List.generate(5, (index) {
             final isSelected = index == _selectedMood;
             return GestureDetector(
@@ -301,8 +309,8 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                width: 60,
-                height: 60,
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
                   gradient: isSelected
                       ? RadialGradient(
@@ -313,7 +321,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
                         )
                       : null,
                   color: isSelected ? null : Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(25),
                   border: Border.all(
                     color: isSelected
                         ? _moodColors[index]
@@ -390,7 +398,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              shadows: [Shadow(color: const Color(0xFF00FF41), blurRadius: 10)],
+              shadows: [Shadow(color: const Color(0xFFFCEF91), blurRadius: 10)],
             ),
           ),
           const SizedBox(height: 16),
@@ -404,7 +412,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               ),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: const Color(0xFF00FF41).withOpacity(0.3),
+                color: const Color(0xFFFCEF91).withOpacity(0.3),
                 width: 1,
               ),
             ),
@@ -438,7 +446,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              shadows: [Shadow(color: const Color(0xFFFFD700), blurRadius: 10)],
+              shadows: [Shadow(color: const Color(0xFFFB9E3A), blurRadius: 10)],
             ),
           ),
           const SizedBox(height: 16),
@@ -455,7 +463,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               ),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: const Color(0xFFFFD700).withOpacity(0.3),
+                color: const Color(0xFFFB9E3A).withOpacity(0.3),
                 width: 1,
               ),
             ),
@@ -463,13 +471,16 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               children: [
                 Icon(
                   Icons.access_time,
-                  color: const Color(0xFFFFD700),
+                  color: const Color(0xFFFB9E3A),
                   size: 20,
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  'Сейчас: ${_getCurrentTime()}',
-                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                Expanded(
+                  child: Text(
+                    'Сейчас: ${_getCurrentTime()}',
+                    style: const TextStyle(color: Colors.white70, fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -489,7 +500,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               ),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: const Color(0xFFFFD700).withOpacity(0.3),
+                color: const Color(0xFFFB9E3A).withOpacity(0.3),
                 width: 1,
               ),
             ),
@@ -497,13 +508,16 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               children: [
                 Icon(
                   Icons.trending_up,
-                  color: const Color(0xFFFFD700),
+                  color: const Color(0xFFFB9E3A),
                   size: 20,
                 ),
                 const SizedBox(width: 12),
-                const Text(
-                  'Это будет ваша 1-я запись сегодня',
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                Expanded(
+                  child: Text(
+                    'Это будет ваша 1-я запись сегодня',
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -553,7 +567,11 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
         );
 
         // Возвращаемся на главный экран
-        context.pop();
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/home');
+        }
       }
     } catch (e) {
       if (mounted) {

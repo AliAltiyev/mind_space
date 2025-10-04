@@ -49,11 +49,11 @@ class _PerfectedMoodBlobState extends State<PerfectedMoodBlob>
     with TickerProviderStateMixin {
   late AnimationController _breathingController;
   late AnimationController _tapController;
-  late AnimationController _parallaxController;
+  AnimationController? _parallaxController;
 
   late Animation<double> _breathingAnimation;
   late Animation<double> _tapAnimation;
-  late Animation<double> _parallaxAnimation;
+  Animation<double>? _parallaxAnimation;
 
   final List<RippleAnimation> _ripples = [];
 
@@ -105,10 +105,10 @@ class _PerfectedMoodBlobState extends State<PerfectedMoodBlob>
       );
 
       _parallaxAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: _parallaxController, curve: Curves.easeInOut),
+        CurvedAnimation(parent: _parallaxController??AnimationController(duration: const Duration(seconds: 8), vsync: this), curve: Curves.easeInOut),
       );
 
-      _parallaxController.repeat();
+      _parallaxController?.repeat();
     }
 
     // Запускаем дыхание
@@ -138,7 +138,7 @@ class _PerfectedMoodBlobState extends State<PerfectedMoodBlob>
   void dispose() {
     _breathingController.dispose();
     _tapController.dispose();
-    _parallaxController.dispose();
+    _parallaxController?.dispose();
     _rippleCleanupTimer?.cancel();
     super.dispose();
   }
@@ -240,12 +240,12 @@ class _PerfectedMoodBlobState extends State<PerfectedMoodBlob>
                 ),
 
               // Параллакс эффект для фона (если включен)
-              if (widget.enableParallax)
+              if (widget.enableParallax && _parallaxAnimation != null)
                 AnimatedBuilder(
-                  animation: _parallaxAnimation,
+                  animation: _parallaxAnimation!,
                   builder: (context, child) {
                     final parallaxOffset =
-                        math.sin(_parallaxAnimation.value * 2 * math.pi) * 4;
+                        math.sin(_parallaxAnimation!.value * 2 * math.pi) * 4;
                     return Transform.translate(
                       offset: Offset(parallaxOffset, 0),
                       child: Container(

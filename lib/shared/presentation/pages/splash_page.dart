@@ -20,17 +20,39 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   }
 
   Future<void> _initializeApp() async {
-    // Инициализация приложения
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (mounted) {
-      // Проверяем, нужно ли показать onboarding
-      final settings = ref.read(appSettingsProvider);
-      final isFirstLaunch = settings.value?['is_first_launch'] != 'false';
-
-      if (isFirstLaunch) {
-        context.go('/onboarding');
+    try {
+      // Получаем настройки приложения
+      final settingsNotifier = ref.read(appSettingsProvider.notifier);
+      
+      // Проверяем, показывался ли уже splash screen
+      final hasShownSplash = await settingsNotifier.hasShownSplash();
+      
+      if (!hasShownSplash) {
+        // Показываем splash screen в первый раз
+        await Future.delayed(const Duration(seconds: 2));
+        
+        // Отмечаем, что splash был показан
+        await settingsNotifier.setSplashShown();
       } else {
+        // Если splash уже показывался, делаем короткую задержку для инициализации
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
+
+      if (mounted) {
+        // Проверяем, нужно ли показать onboarding
+        final isFirstLaunch = await settingsNotifier.isFirstLaunch();
+
+        if (isFirstLaunch) {
+          // Отмечаем, что первый запуск завершен
+          await settingsNotifier.setFirstLaunchCompleted();
+          context.go('/onboarding');
+        } else {
+          context.go('/home');
+        }
+      }
+    } catch (e) {
+      // В случае ошибки переходим на главный экран
+      if (mounted) {
         context.go('/home');
       }
     }
@@ -44,7 +66,11 @@ class _SplashPageState extends ConsumerState<SplashPage> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFF6366F1), Color(0xFFEC4899)],
+            colors: [
+              Color(0xFFFB9E3A), // Vibrant Orange
+              Color(0xFFE6521F), // Deep Orange-Red
+              Color(0xFFEA2F14), // Rich Red
+            ],
           ),
         ),
         child: const Center(

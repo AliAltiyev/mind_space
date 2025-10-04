@@ -13,6 +13,16 @@ class SettingsScreen extends ConsumerWidget {
         title: const Text('Settings'),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/home');
+            }
+          },
+        ),
       ),
       body: ListView(
         children: [
