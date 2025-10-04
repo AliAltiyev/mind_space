@@ -8,6 +8,7 @@ import 'dart:io';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../app/providers/ai_features_provider.dart';
+import '../../../core/services/profile_image_service.dart';
 
 /// Экран профиля - строгий и понятный дизайн
 class ProfileScreenClean extends ConsumerStatefulWidget {
