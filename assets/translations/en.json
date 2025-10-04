@@ -37,6 +37,10 @@
     },
     "home": {
         "title": "Mind Space",
+        "welcome": "Welcome!",
+        "how_are_you_today": "How are you today? Share your mood.",
+        "current_mood": "Current mood",
+        "today": "Today",
         "quick_actions": "Quick Actions",
         "ai_features": "AI Features",
         "view_stats": "View Stats",
@@ -49,7 +53,9 @@
         "find_peace": "Find peace",
         "add_mood_entries": "Add mood entries for AI features",
         "loading_ai_features": "Loading AI features...",
-        "error_loading_ai": "Error loading AI features"
+        "error_loading_ai": "Error loading AI features",
+        "recent_entries": "Recent entries",
+        "add_first_entry": "Add your first mood entry"
     },
     "mood": {
         "title": "How are you feeling?",
@@ -102,6 +108,67 @@
         "customize_theme": "Customize theme and colors",
         "about_app": "About",
         "app_version": "App version, terms, and contact",
+        "personal_settings": "Personal Settings",
+        "additional": "Additional",
+        "profile_management": "Manage profile and level",
+        "mood_tracking_goal": "Mood tracking goal",
+        "days_per_week": "days per week",
+        "day": "day",
+        "days": "days",
+        "days_many": "days",
+        "sounds": "Sounds",
+        "sound_effects": "Sound effects in the app",
+        "haptic_feedback": "Haptic feedback",
+        "haptic_feedback_desc": "Vibration on touches",
+        "notifications": "Notifications",
+        "notifications_desc": "Allow notifications from the app",
+        "daily_reminders": "Daily reminders",
+        "daily_reminders_desc": "Reminder to record mood",
+        "reminder_time": "Reminder time",
+        "weekly_reports": "Weekly reports",
+        "weekly_reports_desc": "Reports about your progress",
+        "analytics": "Analytics",
+        "analytics_desc": "Help improve the app",
+        "export_data": "Export data",
+        "export_data_desc": "Ability to export your data",
+        "download_data": "Download your data",
+        "delete_all_data": "Delete all data",
+        "delete_all_data_desc": "Clear all app data",
+        "help_support": "Help and support",
+        "help_support_desc": "Frequently asked questions",
+        "feedback": "Feedback",
+        "feedback_desc": "Report a problem or suggestion",
+        "rate_app": "Rate app",
+        "rate_app_desc": "Rate on App Store / Google Play",
+        "app_version": "App version",
+        "privacy_policy": "Privacy policy",
+        "privacy_policy_desc": "How we use your data",
+        "terms_of_service": "Terms of service",
+        "terms_of_service_desc": "App usage rules",
+        "reset_settings": "Reset settings",
+        "reset_settings_desc": "Restore default settings",
+        "settings_loading_error": "Error loading settings",
+        "settings_update_error": "Error updating setting",
+        "select_theme": "Select theme",
+        "theme_changed": "Theme changed to {theme}",
+        "language_changed": "Language changed to {language}",
+        "mood_tracking_goal_dialog": "Mood tracking goal",
+        "goal_set": "Goal set: {days} days per week",
+        "reminder_time_changed": "Reminder time changed to {time}",
+        "export_data_message": "Data export will be implemented in the next version",
+        "delete_all_data_dialog": "Delete all data?",
+        "delete_all_data_warning": "This action cannot be undone. All your mood entries and settings will be deleted.",
+        "feedback_dialog": "Feedback",
+        "feedback_message": "Thank you for using Mind Space! Your feedback is very important to us. You can send feedback through App Store or Google Play.",
+        "thank_you_rating": "Thank you for rating!",
+        "privacy_policy_content": "Here will be the privacy policy text describing how we collect, use and protect your data.",
+        "terms_of_service_content": "Here will be the app terms of service, rules and restrictions.",
+        "enabled": "enabled",
+        "disabled": "disabled",
+        "enabled_single": "enabled",
+        "disabled_single": "disabled",
+        "enabled_export": "enabled",
+        "disabled_export": "disabled",
         "themes": {
             "light": "Light",
             "dark": "Dark",
@@ -109,7 +176,13 @@
         },
         "languages": {
             "english": "English",
-            "russian": "Русский"
+            "russian": "Русский",
+            "chinese": "中文 (Mandarin)",
+            "hindi": "हिन्दी",
+            "spanish": "Español",
+            "french": "Français",
+            "turkish": "Türkçe",
+            "turkmen": "Türkmen"
         }
     },
     "errors": {
@@ -151,6 +224,153 @@
         "filter_by_date": "Filter by Date",
         "filter_by_mood": "Filter by Mood",
         "search_entries": "Search entries..."
+    },
+    "ai": {
+        "chat": {
+            "title": "AI Chat",
+            "placeholder": "Type a message...",
+            "send": "Send",
+            "thinking": "Thinking...",
+            "error": "Error sending message",
+            "welcome_message": "Hello! I'm your AI assistant for mood tracking. How are you? I can help with analyzing your emotions, give tips for improving mood, or just chat! 😊",
+            "clear_chat": "Clear chat",
+            "clear_chat_confirm": "Are you sure you want to clear the entire chat history?",
+            "quick_questions": "Quick questions",
+            "how_are_you": "How are you?",
+            "mood_analysis": "Mood analysis",
+            "analyze_my_mood": "Analyze my mood",
+            "tips": "Tips",
+            "give_tips_for_mood": "Give tips for improving mood",
+            "recommend_meditation": "Recommend meditation",
+            "ask_any_question": "Ask any question about mood or request advice",
+            "response_greeting": "Hello! I'm doing great, thank you! 😊 How are you doing? How's your mood today?",
+            "response_mood_analysis": "I can analyze your mood based on your entries! 📊 Tell me, how are you feeling today? Or add a mood entry, and I'll give you a detailed analysis of your emotional patterns.",
+            "response_tips": "Of course I'll help! 💡 Here are some tips for improving mood:\n\n• Take a deep breath and exhale\n• Take a walk in fresh air\n• Listen to your favorite music\n• Write down 3 things you're grateful for\n• Do something nice for yourself\n\nWhat works best for you?",
+            "response_meditation": "Meditation is a great way to improve mood! 🧘‍♀️\n\nTry:\n• 5-minute mindfulness meditation\n• Breathing exercises\n• Progressive muscle relaxation\n• Gratitude meditation\n\nWould you like me to tell you more about any of these methods?",
+            "response_sad": "I understand you're going through a tough time. 💙 Remember that bad days are normal and they pass. Try:\n\n• Talking to a loved one\n• Doing something nice for yourself\n• Writing down your feelings\n• Seeking professional help if needed\n\nYou're not alone in this. Would you like to talk about it in more detail?"
+        },
+        "insights": {
+            "title": "AI Insights",
+            "loading": "Loading insights...",
+            "error": "Error loading insights",
+            "no_insights": "No insights yet",
+            "generate": "Generate insights"
+        },
+        "gratitude": {
+            "title": "Gratitude Journal",
+            "suggestion": "Gratitude suggestion",
+            "write": "Write gratitude",
+            "prompts": "Gratitude prompts"
+        },
+        "meditation": {
+            "title": "Meditation",
+            "suggestion": "Meditation suggestion",
+            "start": "Start meditation",
+            "duration": "Duration"
+        },
+        "patterns": {
+            "title": "Patterns",
+            "analysis": "Pattern analysis",
+            "insights": "Pattern insights"
+        }
+    },
+    "profile": {
+        "title": "Profile",
+        "user": "User",
+        "member_since": "Member since {date}",
+        "edit": "Edit Profile",
+        "level": "Level",
+        "experience": "Experience",
+        "achievements": "Achievements",
+        "statistics": "Statistics",
+        "settings": "Settings",
+        "logout": "Logout",
+        "record_current_state": "Record current state",
+        "view_analytics": "View analytics",
+        "chat_with_ai": "Chat with AI",
+        "app_configuration": "App configuration",
+        "share": "Share",
+        "tell_friends": "Tell friends about the app",
+        "help": "Help",
+        "support_faq": "Support and FAQ",
+        "version_1_0_0": "Version 1.0.0",
+        "select_photo": "Select profile photo",
+        "camera": "Camera",
+        "gallery": "Gallery",
+        "photo_saved": "Profile photo saved",
+        "photo_save_error": "Error saving photo",
+        "image_selection_error": "Error selecting image: {error}",
+        "photo_deleted": "Profile photo deleted",
+        "photo_delete_error": "Error deleting photo"
+    },
+    "stats": {
+        "title": "Statistics",
+        "overall_stats": "Overall Statistics",
+        "mood_trends": "Mood Trends",
+        "weekly_overview": "Weekly Overview",
+        "monthly_overview": "Monthly Overview",
+        "average_mood": "Average Mood",
+        "total_entries": "Total Entries",
+        "streak": "Current Streak",
+        "best_day": "Best Day",
+        "this_week": "This Week",
+        "mood_distribution": "Mood Distribution",
+        "weekly_trends": "Weekly Trends",
+        "no_data": "No data for statistics",
+        "add_entries_for_stats": "Add mood entries to view statistics",
+        "no_data_display": "No data to display",
+        "unknown": "Unknown"
+    },
+    "achievements": {
+        "title": "Achievements",
+        "first_entry": "First Entry",
+        "week_streak": "Week Streak",
+        "month_streak": "Month Streak",
+        "hundred_entries": "100 Entries",
+        "five_hundred_entries": "500 Entries"
+    },
+    "notifications": {
+        "title": "Notifications",
+        "daily_reminder": "Daily reminder",
+        "weekly_report": "Weekly report",
+        "achievement_unlocked": "Achievement unlocked",
+        "streak_reminder": "Streak reminder"
+    },
+    "user_level": {
+        "level": "Level",
+        "experience": "Experience",
+        "next_level": "To next level",
+        "level_up": "Level up!",
+        "achievement_unlocked": "Achievement unlocked",
+        "points_earned": "Points earned"
+    },
+    "database": {
+        "error_saving": "Error saving",
+        "error_loading": "Error loading",
+        "data_cleared": "Data cleared",
+        "backup_created": "Backup created"
+    },
+    "api": {
+        "connection_error": "Connection error",
+        "timeout_error": "Timeout error",
+        "server_error": "Server error",
+        "invalid_response": "Invalid server response"
+    },
+    "prompts": {
+        "gratitude_prompts": [
+            "What are you grateful for today?",
+            "What kind deed did someone do for you today?",
+            "What good happened in your life this week?",
+            "What qualities in yourself do you value?",
+            "What in nature makes you grateful?"
+        ],
+        "meditation_prompts": [
+            "Breathing meditation",
+            "Gratitude meditation",
+            "Calmness meditation",
+            "Acceptance meditation",
+            "Love meditation"
+        ]
     }
 }
 

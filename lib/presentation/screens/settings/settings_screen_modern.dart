@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/services/app_settings_service.dart' as settings;
 import '../../../core/services/user_level_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Современный экран настроек для iOS и Android
 class SettingsScreenModern extends ConsumerStatefulWidget {
@@ -40,7 +41,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        _showErrorSnackBar('Ошибка загрузки настроек');
+        _showErrorSnackBar('settings.settings_loading_error'.tr());
       }
     }
   }
@@ -84,37 +85,37 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Персональные настройки
-            _buildSectionHeader('Персональные настройки'),
+            _buildSectionHeader('settings.personal_settings'.tr()),
             _buildPersonalSettings(),
             
             const SizedBox(height: 24),
             
             // Внешний вид
-            _buildSectionHeader('Внешний вид'),
+            _buildSectionHeader('settings.appearance'.tr()),
             _buildAppearanceSettings(),
             
             const SizedBox(height: 24),
             
             // Уведомления
-            _buildSectionHeader('Уведомления'),
+            _buildSectionHeader('settings.notifications'.tr()),
             _buildNotificationSettings(),
             
             const SizedBox(height: 24),
             
             // Приватность и данные
-            _buildSectionHeader('Приватность и данные'),
+            _buildSectionHeader('settings.privacy_security'.tr()),
             _buildPrivacySettings(),
             
             const SizedBox(height: 24),
             
             // Дополнительно
-            _buildSectionHeader('Дополнительно'),
+            _buildSectionHeader('settings.additional'.tr()),
             _buildAdditionalSettings(),
             
             const SizedBox(height: 24),
             
             // О приложении
-            _buildSectionHeader('О приложении'),
+            _buildSectionHeader('settings.about_app'.tr()),
             _buildAboutSection(),
             
             const SizedBox(height: 32),
@@ -127,7 +128,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       title: Text(
-        'Настройки',
+        'settings.title'.tr(),
         style: AppTypography.h4.copyWith(
           color: AppColors.textPrimary,
           fontWeight: FontWeight.w600,
@@ -142,7 +143,13 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           Icons.arrow_back_ios,
           color: AppColors.textPrimary,
         ),
-        onPressed: () => context.pop(),
+        onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/');
+          }
+        },
       ),
     );
   }
@@ -171,24 +178,24 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
         children: [
           _buildSettingTile(
             icon: Icons.person_outline,
-            title: 'Профиль',
-            subtitle: 'Управление профилем и уровнем',
+            title: 'settings.profile'.tr(),
+            subtitle: 'settings.profile_management'.tr(),
             onTap: () => context.go('/profile'),
             trailing: const Icon(Icons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
             icon: Icons.language,
-            title: 'Язык',
-            subtitle: _settings?.language.displayName ?? 'Русский',
+            title: 'settings.language'.tr(),
+            subtitle: _settings?.language.displayName ?? settings.AppLanguage.russian.displayName,
             onTap: _showLanguageDialog,
             trailing: const Icon(Icons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
             icon: Icons.emoji_emotions_outlined,
-            title: 'Цель отслеживания',
-            subtitle: '${_settings?.moodTrackingGoal ?? 7} дней в неделю',
+            title: 'settings.mood_tracking_goal'.tr(),
+            subtitle: '${_settings?.moodTrackingGoal ?? 7} ${'settings.days_per_week'.tr()}',
             onTap: _showMoodGoalDialog,
             trailing: const Icon(Icons.chevron_right),
           ),
@@ -208,7 +215,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
         children: [
           _buildSettingTile(
             icon: Icons.palette_outlined,
-            title: 'Тема',
+            title: 'settings.theme'.tr(),
             subtitle: _settings?.theme.displayName ?? 'Системная',
             onTap: _showThemeDialog,
             trailing: const Icon(Icons.chevron_right),
@@ -216,12 +223,12 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           _buildDivider(),
           _buildSwitchTile(
             icon: Icons.volume_up_outlined,
-            title: 'Звуки',
-            subtitle: 'Звуковые эффекты в приложении',
+            title: 'settings.sounds'.tr(),
+            subtitle: 'settings.sound_effects'.tr(),
             value: _settings?.soundEnabled ?? true,
             onChanged: (value) => _updateSetting(
               () => _settingsService.setSoundEnabled(value),
-              'Звуки ${value ? 'включены' : 'выключены'}',
+              '${'settings.sounds'.tr()} ${value ? 'settings.enabled'.tr() : 'settings.disabled'.tr()}',
             ),
           ),
           _buildDivider(),
@@ -568,7 +575,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Выберите язык'),
+        title: Text('settings.language'.tr()),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: settings.AppLanguage.values.map((language) {

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:io';
 
 import '../../../core/constants/app_colors.dart';
@@ -78,14 +79,14 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Профиль'),
+        title: Text('profile.title'.tr()),
         backgroundColor: AppColors.surface,
         elevation: 1,
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined),
             onPressed: () => context.go('/settings'),
-            tooltip: 'Настройки',
+            tooltip: 'settings.title'.tr(),
           ),
         ],
       ),
@@ -194,7 +195,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           
           // Имя пользователя
           Text(
-            'Пользователь',
+            'profile.user'.tr(),
             style: AppTypography.h2.copyWith(color: AppColors.textPrimary),
           ),
           
@@ -202,7 +203,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           
           // Дата регистрации
           Text(
-            'Участник с ${DateFormat('MMMM yyyy').format(DateTime.now())}',
+            'profile.member_since'.tr(namedArgs: {'date': DateFormat('MMMM yyyy').format(DateTime.now())}),
             style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
           ),
           
@@ -234,7 +235,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             ),
             const SizedBox(width: 8),
             Text(
-              'Загрузка...',
+              'common.loading'.tr(),
               style: AppTypography.bodySmall.copyWith(
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w600,
@@ -261,7 +262,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           ),
           const SizedBox(width: 8),
           Text(
-            'Уровень ${_userStats!.level} - ${_userStats!.levelName}',
+            'user_level.level'.tr(namedArgs: {'level': _userStats!.level.toString(), 'name': _userStats!.levelName}),
             style: AppTypography.bodySmall.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w600,
@@ -286,7 +287,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Статистика',
+            'stats.title'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
           
@@ -319,7 +320,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           children: [
             Expanded(
               child: _StatCard(
-                title: 'Всего записей',
+                title: 'stats.total_entries'.tr(),
                 value: totalEntries.toString(),
                 icon: Icons.list_alt,
                 color: AppColors.primary,
@@ -328,7 +329,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             const SizedBox(width: 12),
             Expanded(
               child: _StatCard(
-                title: 'Серия дней',
+                title: 'stats.streak'.tr(),
                 value: '$streak дней',
                 icon: Icons.local_fire_department,
                 color: AppColors.warning,
@@ -343,7 +344,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           children: [
             Expanded(
               child: _StatCard(
-                title: 'За неделю',
+                title: 'stats.weekly_overview'.tr(),
                 value: thisWeek.toString(),
                 icon: Icons.calendar_today,
                 color: AppColors.info,
@@ -352,7 +353,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             const SizedBox(width: 12),
             Expanded(
               child: _StatCard(
-                title: 'Среднее настроение',
+                title: 'stats.average_mood'.tr(),
                 value: avgMood.toStringAsFixed(1),
                 icon: Icons.sentiment_satisfied,
                 color: AppColors.success,
@@ -395,7 +396,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Уровень ${_userStats!.level} - ${_userStats!.levelName}',
+                      'user_level.level'.tr(namedArgs: {'level': _userStats!.level.toString(), 'name': _userStats!.levelName}),
                       style: AppTypography.bodyLarge.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
@@ -435,7 +436,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Быстрые действия',
+            'home.quick_actions'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
           
@@ -443,24 +444,24 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           
           _ActionTile(
             icon: Icons.add_circle_outline,
-            title: 'Добавить настроение',
-            subtitle: 'Записать текущее состояние',
+            title: 'mood.add_mood'.tr(),
+            subtitle: 'profile.record_current_state'.tr(),
             onTap: () => context.push('/add-entry'),
             color: AppColors.primary,
           ),
           
           _ActionTile(
             icon: Icons.analytics_outlined,
-            title: 'Статистика',
-            subtitle: 'Посмотреть аналитику',
+            title: 'stats.title'.tr(),
+            subtitle: 'profile.view_analytics'.tr(),
             onTap: () => context.go('/stats'),
             color: AppColors.secondary,
           ),
           
           _ActionTile(
             icon: Icons.psychology_outlined,
-            title: 'AI Помощник',
-            subtitle: 'Поговорить с AI',
+            title: 'ai.chat.title'.tr(),
+            subtitle: 'profile.chat_with_ai'.tr(),
             onTap: () => context.go('/ai-chat'),
             color: AppColors.secondary,
           ),
@@ -483,7 +484,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Дополнительно',
+            'settings.additional'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
           
@@ -491,29 +492,29 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           
           _ActionTile(
             icon: Icons.settings_outlined,
-            title: 'Настройки',
-            subtitle: 'Конфигурация приложения',
+            title: 'settings.title'.tr(),
+            subtitle: 'profile.app_configuration'.tr(),
             onTap: () => context.go('/settings'),
           ),
           
           _ActionTile(
             icon: Icons.share_outlined,
-            title: 'Поделиться',
-            subtitle: 'Рассказать друзьям о приложении',
+            title: 'profile.share'.tr(),
+            subtitle: 'profile.tell_friends'.tr(),
             onTap: _shareApp,
           ),
           
           _ActionTile(
             icon: Icons.help_outline,
-            title: 'Помощь',
-            subtitle: 'Поддержка и FAQ',
+            title: 'profile.help'.tr(),
+            subtitle: 'profile.support_faq'.tr(),
             onTap: _showHelp,
           ),
           
           _ActionTile(
             icon: Icons.info_outline,
-            title: 'О приложении',
-            subtitle: 'Версия 1.0.0',
+            title: 'settings.about_app'.tr(),
+            subtitle: 'profile.version_1_0_0'.tr(),
             onTap: () => context.go('/settings/about'),
           ),
         ],
@@ -534,7 +535,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Ошибка загрузки данных',
+            'database.error_loading'.tr(),
             style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
           ),
         ],
@@ -601,7 +602,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Выберите фото профиля',
+              'profile.select_photo'.tr(),
               style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
             ),
             const SizedBox(height: 20),
@@ -610,7 +611,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
               children: [
                 _ImagePickerOption(
                   icon: Icons.camera_alt,
-                  label: 'Камера',
+                  label: 'profile.camera'.tr(),
                   onTap: () {
                     Navigator.pop(context);
                     _pickImage(ImageSource.camera);
@@ -618,7 +619,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
                 ),
                 _ImagePickerOption(
                   icon: Icons.photo_library,
-                  label: 'Галерея',
+                  label: 'profile.gallery'.tr(),
                   onTap: () {
                     Navigator.pop(context);
                     _pickImage(ImageSource.gallery);
@@ -627,7 +628,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
                 if (_profileImage != null)
                   _ImagePickerOption(
                     icon: Icons.delete,
-                    label: 'Удалить',
+                    label: 'common.delete'.tr(),
                     onTap: () {
                       Navigator.pop(context);
                       _removeImage();
@@ -664,14 +665,14 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
         if (success && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Фото профиля сохранено'),
+              content: Text('profile.photo_saved'.tr()),
               backgroundColor: AppColors.success,
             ),
           );
         } else if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Ошибка при сохранении фото'),
+              content: Text('profile.photo_save_error'.tr()),
               backgroundColor: AppColors.error,
             ),
           );
@@ -681,7 +682,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка при выборе изображения: $e'),
+            content: Text('profile.image_selection_error'.tr(namedArgs: {'error': e.toString()})),
             backgroundColor: AppColors.error,
           ),
         );
@@ -701,7 +702,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(success ? 'Фото профиля удалено' : 'Ошибка при удалении фото'),
+          content: Text(success ? 'profile.photo_deleted'.tr() : 'profile.photo_delete_error'.tr()),
           backgroundColor: success ? AppColors.success : AppColors.error,
         ),
       );

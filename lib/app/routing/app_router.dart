@@ -23,6 +23,8 @@ import '../../presentation/screens/settings/data_export_screen.dart';
 import '../../presentation/screens/settings/notification_settings_screen.dart';
 import '../../presentation/screens/settings/privacy_settings_screen.dart';
 import '../../presentation/screens/settings/settings_screen_modern.dart';
+import '../../core/constants/navigation.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../presentation/screens/stats/stats_screen.dart';
 import '../../presentation/screens/stats/stats_screen_clean.dart';
 import '../../presentation/screens/ai/ai_chat_screen.dart';
@@ -36,6 +38,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/splash',
     debugLogDiagnostics: true,
+    navigatorKey: navigatorKey,
     routes: [
       // Splash Screen
       GoRoute(
@@ -425,26 +428,26 @@ class MainShell extends ConsumerWidget {
         type: BottomNavigationBarType.fixed,
         currentIndex: _getCurrentIndex(context),
         onTap: (index) => _onTabTapped(context, index),
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home),
+            label: 'navigation.home'.tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.analytics_outlined),
-            activeIcon: Icon(Icons.analytics),
-            label: 'Stats',
+            icon: const Icon(Icons.analytics_outlined),
+            activeIcon: const Icon(Icons.analytics),
+            label: 'navigation.stats'.tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.psychology_outlined),
-            activeIcon: Icon(Icons.psychology),
+            icon: const Icon(Icons.psychology_outlined),
+            activeIcon: const Icon(Icons.psychology),
             label: 'AI Chat',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outlined),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
+            icon: const Icon(Icons.person_outlined),
+            activeIcon: const Icon(Icons.person),
+            label: 'navigation.profile'.tr(),
           ),
         ],
       ),

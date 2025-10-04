@@ -21,7 +21,7 @@ class HomeScreenClean extends ConsumerWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
-          'Mind Space',
+          'home.title'.tr(),
           style: AppTypography.h3.copyWith(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.w700,
@@ -104,12 +104,12 @@ class HomeScreenClean extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Добро пожаловать!',
+            'home.welcome'.tr(),
             style: AppTypography.h2.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 8),
           Text(
-            'Как дела сегодня? Поделитесь своим настроением.',
+            'home.how_are_you_today'.tr(),
             style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
           ),
         ],
@@ -131,7 +131,7 @@ class HomeScreenClean extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Текущее настроение',
+            'home.current_mood'.tr(),
             style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 16),
@@ -219,7 +219,7 @@ class HomeScreenClean extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          'Пока нет записей',
+          'entries.no_entries'.tr(),
           style: AppTypography.bodyLarge.copyWith(color: AppColors.textSecondary),
         ),
         const SizedBox(height: 8),
@@ -249,7 +249,7 @@ class HomeScreenClean extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Добавить настроение',
+                  'mood.add_mood'.tr(),
                   style: AppTypography.button.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -274,13 +274,13 @@ class HomeScreenClean extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Ошибка загрузки',
+          'common.error'.tr(),
           style: AppTypography.bodyMedium.copyWith(color: AppColors.error),
         ),
         const SizedBox(height: 8),
         OutlinedButton(
           onPressed: () {},
-          child: const Text('Попробовать снова'),
+          child: Text('common.try_again'.tr()),
         ),
       ],
     );
@@ -300,7 +300,7 @@ class HomeScreenClean extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Статистика',
+            'stats.title'.tr(),
             style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 16),
@@ -308,7 +308,7 @@ class HomeScreenClean extends ConsumerWidget {
             children: [
               Expanded(
                 child: _StatCard(
-                  title: 'Всего записей',
+                  title: 'stats.total_entries'.tr(),
                   value: '12',
                   icon: Icons.list_alt,
                   color: AppColors.primary,
@@ -317,7 +317,7 @@ class HomeScreenClean extends ConsumerWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: _StatCard(
-                  title: 'Сегодня',
+                  title: 'home.today'.tr(),
                   value: '1',
                   icon: Icons.today,
                   color: AppColors.secondary,
@@ -344,7 +344,7 @@ class HomeScreenClean extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Быстрые действия',
+            'home.quick_actions'.tr(),
             style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 16),
@@ -357,13 +357,13 @@ class HomeScreenClean extends ConsumerWidget {
             childAspectRatio: 1.5,
             children: [
               _ActionCard(
-                title: 'Статистика',
+                title: 'stats.title'.tr(),
                 icon: Icons.analytics,
                 color: AppColors.primary,
                 onTap: () => context.go('/stats'),
               ),
               _ActionCard(
-                title: 'Все записи',
+                title: 'entries.title'.tr(),
                 icon: Icons.list,
                 color: AppColors.secondary,
                 onTap: () => context.go('/home/entries'),
@@ -375,7 +375,7 @@ class HomeScreenClean extends ConsumerWidget {
                 onTap: () => context.go('/stats/insights'),
               ),
               _ActionCard(
-                title: 'Медитация',
+                title: 'ai.meditation.title'.tr(),
                 icon: Icons.self_improvement,
                 color: AppColors.success,
                 onTap: () => context.go('/stats/meditation'),
@@ -404,12 +404,12 @@ class HomeScreenClean extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Последние записи',
+                'home.recent_entries'.tr(),
                 style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
               ),
               TextButton(
                 onPressed: () => context.go('/home/entries'),
-                child: const Text('Все записи'),
+                child: Text('entries.title'.tr()),
               ),
             ],
           ),
@@ -440,12 +440,12 @@ class HomeScreenClean extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Пока нет записей',
+            'entries.no_entries'.tr(),
             style: AppTypography.bodyLarge.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 8),
           Text(
-            'Добавьте первую запись настроения',
+            'home.add_first_entry'.tr(),
             style: AppTypography.caption,
           ),
         ],
@@ -475,15 +475,15 @@ class HomeScreenClean extends ConsumerWidget {
   String _getMoodLabel(int mood) {
     switch (mood) {
       case 5:
-        return 'Отличное';
+        return 'mood.moods.very_happy'.tr();
       case 4:
-        return 'Хорошее';
+        return 'mood.moods.happy'.tr();
       case 3:
-        return 'Нормальное';
+        return 'mood.moods.neutral'.tr();
       case 2:
-        return 'Плохое';
+        return 'mood.moods.sad'.tr();
       case 1:
-        return 'Ужасное';
+        return 'mood.moods.very_sad'.tr();
       default:
         return 'Неизвестно';
     }

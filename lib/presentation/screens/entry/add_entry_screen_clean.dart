@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
@@ -23,11 +24,11 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
   bool _isLoading = false;
 
   final List<String> _moodLabels = [
-    'Ужасное',
-    'Плохое', 
-    'Нормальное',
-    'Хорошее',
-    'Отличное',
+    'mood.moods.very_sad',
+    'mood.moods.sad', 
+    'mood.moods.neutral',
+    'mood.moods.happy',
+    'mood.moods.very_happy',
   ];
 
   @override
@@ -41,7 +42,7 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Добавить настроение'),
+        title: Text('mood.add_mood'.tr()),
         backgroundColor: AppColors.surface,
         elevation: 1,
         leading: IconButton(
@@ -143,7 +144,7 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
           const SizedBox(height: 16),
           Center(
             child: Text(
-              _moodLabels[_selectedMood],
+              _moodLabels[_selectedMood].tr(),
               style: AppTypography.bodyLarge.copyWith(
                 color: getMoodColor(_selectedMood + 1),
                 fontWeight: FontWeight.w600,
@@ -286,7 +287,7 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Настроение сохранено: ${_moodLabels[_selectedMood]}'),
+            content: Text('${'common.success'.tr()}: ${_moodLabels[_selectedMood].tr()}'),
             backgroundColor: AppColors.success,
           ),
         );

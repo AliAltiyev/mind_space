@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'app/providers/ai_features_provider.dart';
 import 'app/providers/profile_providers.dart';
@@ -17,24 +18,40 @@ import 'features/profile/presentation/blocs/preferences_bloc.dart';
 import 'features/profile/presentation/blocs/profile_bloc.dart';
 import 'features/profile/presentation/blocs/stats_bloc.dart';
 import 'core/constants/app_typography.dart';
+import 'core/constants/navigation.dart';
+import 'core/services/app_settings_service.dart' hide AppTheme;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Инициализация локализации
-  await EasyLocalization.ensureInitialized();
-
   // Инициализация SharedPreferences
   await SharedPreferencesService.instance.init();
+
+  // Получаем сохраненный язык
+  final settingsService = AppSettingsService();
+  final savedLanguage = await settingsService.getLanguage();
+
+  // Инициализация локализации
+  await EasyLocalization.ensureInitialized();
 
   // Инициализация DI
   await configureDependencies();
 
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('en'), Locale('ru')],
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('ru'), // Russian
+        Locale('zh'), // Chinese (Mandarin)
+        Locale('hi'), // Hindi
+        Locale('es'), // Spanish
+        Locale('fr'), // French
+        Locale('tr'), // Turkish
+        Locale('tk'), // Turkmen (используем турецкий как fallback)
+      ],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
+      startLocale: savedLanguage.code == 'tk' ? const Locale('tr') : Locale(savedLanguage.code),
       child: const ProviderScope(child: MindSpaceApp()),
     ),
   );
@@ -83,9 +100,23 @@ class MindSpaceApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
 
         // Локализация
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
+        localizationsDelegates: [
+          ...context.localizationDelegates,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'), // English - поддерживается MaterialLocalizations
+          Locale('ru'), // Russian - поддерживается MaterialLocalizations
+          Locale('zh'), // Chinese - поддерживается MaterialLocalizations
+          Locale('hi'), // Hindi - поддерживается MaterialLocalizations
+          Locale('es'), // Spanish - поддерживается MaterialLocalizations
+          Locale('fr'), // French - поддерживается MaterialLocalizations
+          Locale('tr'), // Turkish - поддерживается MaterialLocalizations
+          // Locale('tk'), // Turkmen - НЕ поддерживается MaterialLocalizations
+        ],
+        locale: context.locale.languageCode == 'tk' ? const Locale('tr') : context.locale,
 
         // Тема
         theme: AppTheme.lightTheme,

@@ -131,7 +131,7 @@ class AIFeaturesGrid extends ConsumerWidget {
                     decoration: BoxDecoration(
                       gradient: RadialGradient(
                         colors: colorScheme.neonColors.take(2).toList(),
-                        stops: [0.0, 1.0],
+                        stops: const [0.0, 1.0],
                       ),
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [

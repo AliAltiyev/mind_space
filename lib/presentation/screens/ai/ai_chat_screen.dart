@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
@@ -36,7 +37,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   /// Добавить приветственное сообщение
   void _addWelcomeMessage() {
     _messages.add(ChatMessage(
-      text: "Привет! Я ваш ИИ-помощник для отслеживания настроения. Как дела? Могу помочь с анализом ваших эмоций, дать советы по улучшению настроения или просто поговорить! 😊",
+      text: "ai.chat.welcome_message".tr(),
       isUser: false,
       timestamp: DateTime.now(),
     ));
@@ -74,7 +75,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _clearChat,
-            tooltip: 'Очистить чат',
+            tooltip: 'ai.chat.clear_chat'.tr(),
           ),
         ],
       ),
@@ -118,7 +119,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Быстрые вопросы',
+            'ai.chat.quick_questions'.tr(),
             style: AppTypography.bodySmall.copyWith(
               color: AppColors.textSecondary,
               fontWeight: FontWeight.w600,
@@ -130,20 +131,20 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             runSpacing: 8,
             children: [
               _QuickActionChip(
-                text: 'Как дела?',
-                onTap: () => _sendMessage('Как дела?'),
+                text: 'ai.chat.how_are_you'.tr(),
+                onTap: () => _sendMessage('ai.chat.how_are_you'.tr()),
               ),
               _QuickActionChip(
-                text: 'Анализ настроения',
-                onTap: () => _sendMessage('Проанализируй мое настроение'),
+                text: 'ai.chat.mood_analysis'.tr(),
+                onTap: () => _sendMessage('ai.chat.analyze_my_mood'.tr()),
               ),
               _QuickActionChip(
-                text: 'Советы',
-                onTap: () => _sendMessage('Дай советы для улучшения настроения'),
+                text: 'ai.chat.tips'.tr(),
+                onTap: () => _sendMessage('ai.chat.give_tips_for_mood'.tr()),
               ),
               _QuickActionChip(
-                text: 'Медитация',
-                onTap: () => _sendMessage('Рекомендуй медитацию'),
+                text: 'ai.meditation.title'.tr(),
+                onTap: () => _sendMessage('ai.chat.recommend_meditation'.tr()),
               ),
             ],
           ),
@@ -180,7 +181,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Задайте любой вопрос о настроении или попросите совета',
+            'ai.chat.ask_any_question'.tr(),
             style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
             textAlign: TextAlign.center,
           ),
@@ -205,7 +206,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             child: TextField(
               controller: _messageController,
               decoration: InputDecoration(
-                hintText: 'Введите сообщение...',
+                hintText: 'ai.chat.placeholder'.tr(),
                 hintStyle: AppTypography.bodyMedium.copyWith(
                   color: AppColors.textHint,
                 ),
@@ -310,23 +311,23 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     final message = userMessage.toLowerCase();
     
     if (message.contains('как дела') || message.contains('привет')) {
-      return "Привет! У меня все отлично, спасибо! 😊 А как дела у вас? Как настроение сегодня?";
+      return 'ai.chat.response_greeting'.tr();
     }
     
     if (message.contains('настроение') || message.contains('анализ')) {
-      return "Я могу проанализировать ваше настроение на основе ваших записей! 📊 Расскажите, как вы себя чувствуете сегодня? Или добавьте запись настроения, и я дам подробный анализ ваших эмоциональных паттернов.";
+      return 'ai.chat.response_mood_analysis'.tr();
     }
     
     if (message.contains('совет') || message.contains('помощь')) {
-      return "Конечно помогу! 💡 Вот несколько советов для улучшения настроения:\n\n• Сделайте глубокий вдох и выдох\n• Прогуляйтесь на свежем воздухе\n• Послушайте любимую музыку\n• Запишите 3 вещи, за которые вы благодарны\n• Сделайте что-то приятное для себя\n\nЧто из этого вам больше подходит?";
+      return 'ai.chat.response_tips'.tr();
     }
     
     if (message.contains('медитац') || message.contains('расслабить')) {
-      return "Медитация - отличный способ улучшить настроение! 🧘‍♀️\n\nПопробуйте:\n• 5-минутную медитацию осознанности\n• Дыхательные упражнения\n• Прогрессивную мышечную релаксацию\n• Медитацию благодарности\n\nХотите, чтобы я рассказал подробнее о каком-то из этих методов?";
+      return 'ai.chat.response_meditation'.tr();
     }
     
     if (message.contains('плохо') || message.contains('грустно')) {
-      return "Понимаю, что вам сейчас непросто. 💙 Помните, что плохие дни - это нормально, и они проходят. Попробуйте:\n\n• Поговорить с близким человеком\n• Сделать что-то приятное для себя\n• Записать свои чувства\n• Обратиться за профессиональной помощью, если нужно\n\nВы не одни в этом. Хотите поговорить об этом подробнее?";
+      return 'ai.chat.response_sad'.tr();
     }
     
     // Общий ответ
@@ -351,12 +352,12 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Очистить чат'),
-        content: const Text('Вы уверены, что хотите очистить всю историю чата?'),
+        title: Text('ai.chat.clear_chat'.tr()),
+        content: Text('ai.chat.clear_chat_confirm'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Отмена'),
+            child: Text('common.cancel'.tr()),
           ),
           TextButton(
             onPressed: () {
@@ -367,7 +368,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               });
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: const Text('Очистить'),
+            child: Text('common.clear'.tr()),
           ),
         ],
       ),

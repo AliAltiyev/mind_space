@@ -1,0 +1,161 @@
+{
+    "app": {
+        "name": "Akyl Meken",
+        "description": "AI elementleri bilen akylly köwüş we pikir gündelik"
+    },
+    "common": {
+        "save": "Saklamak",
+        "cancel": "Ýatyrmak",
+        "delete": "Pozmak",
+        "edit": "Üýtgetmek",
+        "add": "Goşmak",
+        "loading": "Ýüklenýär...",
+        "error": "Ýalňyşlyk",
+        "success": "Üstünlik",
+        "retry": "Gaýtadan synanyşmak",
+        "close": "Ýapmak",
+        "back": "Yza",
+        "next": "Indiki",
+        "done": "Täze",
+        "yes": "Hawa",
+        "no": "Ýok",
+        "try_again": "Gaýtadan synanyşmak",
+        "refresh": "Täzelemek"
+    },
+    "navigation": {
+        "home": "Baş sahypa",
+        "mood_tracking": "Köwüş Yzarlama",
+        "analytics": "Analitika",
+        "settings": "Sazlamalar",
+        "profile": "Profil",
+        "stats": "Statistika",
+        "entries": "Ýazgylar"
+    },
+    "splash": {
+        "title": "Akyl Meken",
+        "subtitle": "Akyl saglygyňyzyň ýoldaşy"
+    },
+    "home": {
+        "title": "Akyl Meken",
+        "quick_actions": "Çalt Amallar",
+        "ai_features": "AI Aýratynlyklary",
+        "view_stats": "Statistikany Gör",
+        "see_progress": "Ösüşiňizi görüň",
+        "all_entries": "Hemme Ýazgylar",
+        "browse_history": "Geçmişi göz aýlaň",
+        "ai_insights": "AI Düşünjeleri",
+        "get_recommendations": "Teklip almak",
+        "meditation": "Meditasiýa",
+        "find_peace": "Rahatlyk tapmak",
+        "add_mood_entries": "AI aýratynlyklary üçin köwüş ýazgylary goşuň",
+        "loading_ai_features": "AI aýratynlyklary ýüklenýär...",
+        "error_loading_ai": "AI aýratynlyklary ýükleýärkä ýalňyşlyk"
+    },
+    "mood": {
+        "title": "Nähili duýýarsyňyz?",
+        "add_mood": "Köwüş Goşmak",
+        "add_entry": "Ýazgy Goşmak",
+        "mood_history": "Köwüş Geçmişi",
+        "mood_analytics": "Köwüş Analitikasy",
+        "note": "Bellik",
+        "note_hint": "Bu gün nähili duýýarsyňyz? Aklyňyzda näme bar?",
+        "note_optional": "Bellik goşmak (islege bagly)",
+        "note_placeholder": "Köwüşiňizi nämeniň täsir etdigini aýdyň...",
+        "additional": "Goşmaça",
+        "current_time": "Şu wagt",
+        "first_entry_today": "Bu bu günki ilkinji ýazgyňyz bolar",
+        "select_mood": "Köwüş saýlaň",
+        "moods": {
+            "very_happy": "Örän Bagtly",
+            "happy": "Bagtly",
+            "neutral": "Bitarap",
+            "sad": "Gamly",
+            "very_sad": "Örän Gamly"
+        }
+    },
+    "ai_insights": {
+        "title": "AI Düşünjeleri",
+        "recommendations": "Teklipler",
+        "patterns": "Nusgalar",
+        "trends": "Ugurlar",
+        "insights": "Düşünjeler",
+        "gratitude_journal": "Minnetdarlyk Gündeligi",
+        "meditation": "Meditasiýa"
+    },
+    "settings": {
+        "title": "Sazlamalar",
+        "theme": "Tema",
+        "language": "Dil",
+        "notifications": "Bildirişler",
+        "privacy": "Gizlinlik",
+        "about": "Hakynda",
+        "appearance": "Görnüş",
+        "data": "Maglumat",
+        "export_data": "Maglumaty Eksport Etmek",
+        "download_data": "Maglumatlaryňyzy PDF ýa-da CSV formatda göçürip alyň",
+        "privacy_security": "Gizlinlik we Howpsuzlyk",
+        "privacy_settings": "Gizlinlik Sazlamalary",
+        "manage_privacy": "Gizlinlik saýlamlaryňyzy dolandyryň",
+        "notification_settings": "Bildiriş Sazlamalary",
+        "manage_notifications": "Bildiriş saýlamlaryňyzy dolandyryň",
+        "appearance_settings": "Görnüş Sazlamalary",
+        "customize_theme": "Tema we reňkleri özleşdiriň",
+        "about_app": "Hakynda",
+        "app_version": "Programma wersiýasy, şertler we habarlaşyk",
+        "themes": {
+            "light": "Ýagty",
+            "dark": "Garaňky",
+            "system": "Ulgam"
+        },
+        "languages": {
+            "english": "English",
+            "russian": "Русский",
+            "chinese": "中文 (Mandarin)",
+            "hindi": "हिन्दी",
+            "spanish": "Español",
+            "french": "Français",
+            "turkish": "Türkçe",
+            "turkmen": "Türkmen"
+        }
+    },
+    "errors": {
+        "network_error": "Tor ýalňyşlygy. Baglanyşygyňyzy barlaň.",
+        "server_error": "Serwer ýalňyşlygy. Soňra gaýtadan synanyşyň.",
+        "unknown_error": "Näbelli ýalňyşlyk ýüze çykdy.",
+        "validation_error": "Girişiňizi barlaň.",
+        "permission_error": "Rugsat berilmedi.",
+        "save_error": "Saklamakda ýalňyşlyk: {error}",
+        "save_success": "Ýazgy üstünlikli saklandy! 🎉"
+    },
+    "onboarding": {
+        "welcome": "Akyl Mekene Hoş geldiňiz",
+        "get_started": "Başlamak",
+        "skip": "Geçmek"
+    },
+    "profile": {
+        "recent_achievements": "Soňky Üstünlikler",
+        "error_loading": "Profil Ýükleme Ýalňyşlygy",
+        "stats": "Statistika",
+        "achievements": "Üstünlikler",
+        "no_achievements": "Heniz üstünlik ýok",
+        "keep_tracking": "Ilkinji üstünlikleriňizi gazanmak üçin köwüşiňizi yzarlamagy dowam ediň!"
+    },
+    "statistics": {
+        "title": "Statistika",
+        "mood_trends": "Köwüş Ugurlary",
+        "weekly_overview": "Hepdelik Gözden Geçirme",
+        "monthly_overview": "Aýlyk Gözden Geçirme",
+        "average_mood": "Ortaça Köwüş",
+        "total_entries": "Jemi Ýazgylar",
+        "streak": "Häzirki Seriýa",
+        "best_day": "Iň Gowy Gün"
+    },
+    "entries": {
+        "title": "Hemme Ýazgylar",
+        "no_entries": "Heniz ýazgy ýok",
+        "start_tracking": "Ýazgylaryňyzy bu ýerde görmek üçin köwüşiňizi yzarlamagy başlaň",
+        "filter_by_date": "Senä Göre Süz",
+        "filter_by_mood": "Köwüşe Göre Süz",
+        "search_entries": "Ýazgylary gözle..."
+    }
+}

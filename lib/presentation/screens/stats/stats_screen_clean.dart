@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
@@ -18,7 +19,7 @@ class StatsScreenClean extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Статистика'),
+        title: Text('stats.title'.tr()),
         backgroundColor: AppColors.surface,
         elevation: 1,
         leading: IconButton(
@@ -90,7 +91,7 @@ class StatsScreenClean extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Общая статистика',
+            'stats.overall_stats'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 16),
@@ -98,7 +99,7 @@ class StatsScreenClean extends ConsumerWidget {
             children: [
               Expanded(
                 child: _StatCard(
-                  title: 'Всего записей',
+                  title: 'stats.total_entries'.tr(),
                   value: totalEntries.toString(),
                   icon: Icons.list_alt,
                   color: AppColors.primary,
@@ -107,7 +108,7 @@ class StatsScreenClean extends ConsumerWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _StatCard(
-                  title: 'Среднее настроение',
+                  title: 'stats.average_mood'.tr(),
                   value: avgMood.toStringAsFixed(1),
                   icon: Icons.trending_up,
                   color: AppColors.secondary,
@@ -120,7 +121,7 @@ class StatsScreenClean extends ConsumerWidget {
             children: [
               Expanded(
                 child: _StatCard(
-                  title: 'Серия дней',
+                  title: 'stats.streak'.tr(),
                   value: streak.toString(),
                   icon: Icons.local_fire_department,
                   color: AppColors.warning,
@@ -129,7 +130,7 @@ class StatsScreenClean extends ConsumerWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _StatCard(
-                  title: 'За эту неделю',
+                  title: 'stats.this_week'.tr(),
                   value: thisWeek.toString(),
                   icon: Icons.calendar_today,
                   color: AppColors.info,
@@ -159,7 +160,7 @@ class StatsScreenClean extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Распределение настроений',
+            'stats.mood_distribution'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 16),
@@ -196,7 +197,7 @@ class StatsScreenClean extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Тренды за неделю',
+            'stats.weekly_trends'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 16),
@@ -228,12 +229,12 @@ class StatsScreenClean extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Последние записи',
+                'home.recent_entries'.tr(),
                 style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
               ),
               TextButton(
                 onPressed: () => context.go('/home/entries'),
-                child: const Text('Все записи'),
+                child: Text('entries.title'.tr()),
               ),
             ],
           ),
@@ -257,19 +258,19 @@ class StatsScreenClean extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Нет данных для статистики',
+            'stats.no_data'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 8),
           Text(
-            'Добавьте записи настроения для просмотра статистики',
+            'stats.add_entries_for_stats'.tr(),
             style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => context.push('/add-entry'),
-            child: const Text('Добавить настроение'),
+            child: Text('mood.add_mood'.tr()),
           ),
         ],
       ),
@@ -289,7 +290,7 @@ class StatsScreenClean extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Ошибка загрузки',
+            'common.error'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.error),
           ),
           const SizedBox(height: 8),
@@ -308,7 +309,7 @@ class StatsScreenClean extends ConsumerWidget {
     if (data.isEmpty) {
       return Center(
         child: Text(
-          'Нет данных для отображения',
+          'stats.no_data_display'.tr(),
           style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
         ),
       );
@@ -491,12 +492,12 @@ class _MoodStatBar extends StatelessWidget {
 
   String _getMoodLabel(int mood) {
     switch (mood) {
-      case 5: return 'Отличное';
-      case 4: return 'Хорошее';
-      case 3: return 'Нормальное';
-      case 2: return 'Плохое';
-      case 1: return 'Ужасное';
-      default: return 'Неизвестно';
+      case 5: return 'mood.moods.very_happy'.tr();
+      case 4: return 'mood.moods.happy'.tr();
+      case 3: return 'mood.moods.neutral'.tr();
+      case 2: return 'mood.moods.sad'.tr();
+      case 1: return 'mood.moods.very_sad'.tr();
+      default: return 'stats.unknown'.tr();
     }
   }
 }
@@ -539,12 +540,12 @@ class _RecentEntryItem extends StatelessWidget {
 
   String _getMoodLabel(int mood) {
     switch (mood) {
-      case 5: return 'Отличное';
-      case 4: return 'Хорошее';
-      case 3: return 'Нормальное';
-      case 2: return 'Плохое';
-      case 1: return 'Ужасное';
-      default: return 'Неизвестно';
+      case 5: return 'mood.moods.very_happy'.tr();
+      case 4: return 'mood.moods.happy'.tr();
+      case 3: return 'mood.moods.neutral'.tr();
+      case 2: return 'mood.moods.sad'.tr();
+      case 1: return 'mood.moods.very_sad'.tr();
+      default: return 'stats.unknown'.tr();
     }
   }
 }
