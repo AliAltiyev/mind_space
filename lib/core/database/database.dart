@@ -211,7 +211,7 @@ class AppDatabase {
     _moodEntries.add(entry);
     await _saveData(); // Сохраняем данные локально
     print(
-      '✅ Запись настроения добавлена: ${entry.moodValue}/5 - ${entry.note ?? "без заметки"} - Дата: ${entry.createdAt}',
+      'database.mood_entry_added'.tr().replaceAll('{mood}', '${entry.moodValue}/5').replaceAll('{note}', entry.note ?? 'database.no_note'.tr()).replaceAll('{date}', '${entry.createdAt}'),
     );
   }
 

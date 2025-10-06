@@ -201,12 +201,14 @@ class AppSettingsService {
 
 /// Тема приложения
 enum AppTheme {
-  light('Светлая'),
-  dark('Темная'),
-  system('Системная');
+  light('settings.themes.light'),
+  dark('settings.themes.dark'),
+  system('settings.themes.system');
 
-  const AppTheme(this.displayName);
-  final String displayName;
+  const AppTheme(this.displayNameKey);
+  final String displayNameKey;
+  
+  String get displayName => displayNameKey.tr();
 }
 
 /// Язык приложения

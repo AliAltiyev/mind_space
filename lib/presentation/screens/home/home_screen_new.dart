@@ -167,8 +167,8 @@ class HomeScreen extends ConsumerWidget {
                   lastMoodAsync.when(
                     data: (lastMood) => Text(
                       lastMood != null 
-                        ? 'Last mood: ${_getMoodLabel(lastMood.moodValue)}'
-                        : 'Tap to add your mood',
+                        ? '${'home.last_mood'.tr()}: ${_getMoodLabel(lastMood.moodValue)}'
+                        : 'home.tap_to_add_mood'.tr(),
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.8),
@@ -176,7 +176,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                     loading: () => Text(
-                      'Loading...',
+                      'common.loading'.tr(),
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.8),
@@ -184,7 +184,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                     error: (_, __) => Text(
-                      'Tap to add your mood',
+                      'home.tap_to_add_mood'.tr(),
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.8),
@@ -204,17 +204,17 @@ class HomeScreen extends ConsumerWidget {
   String _getMoodLabel(int mood) {
     switch (mood) {
       case 1:
-        return 'Very Bad';
+        return 'entries.very_bad'.tr();
       case 2:
-        return 'Bad';
+        return 'entries.bad'.tr();
       case 3:
-        return 'Okay';
+        return 'entries.okay'.tr();
       case 4:
-        return 'Good';
+        return 'entries.good'.tr();
       case 5:
-        return 'Excellent';
+        return 'entries.excellent'.tr();
       default:
-        return 'Unknown';
+        return 'common.unknown'.tr();
     }
   }
 

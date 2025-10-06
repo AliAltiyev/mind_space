@@ -310,28 +310,28 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     // Простая логика ответов (в реальном приложении здесь будет AI сервис)
     final message = userMessage.toLowerCase();
     
-    if (message.contains('как дела') || message.contains('привет')) {
+    if (message.contains('как дела') || message.contains('привет') || message.contains('hello') || message.contains('hi')) {
       return 'ai.chat.response_greeting'.tr();
     }
     
-    if (message.contains('настроение') || message.contains('анализ')) {
+    if (message.contains('настроение') || message.contains('анализ') || message.contains('mood') || message.contains('analysis')) {
       return 'ai.chat.response_mood_analysis'.tr();
     }
     
-    if (message.contains('совет') || message.contains('помощь')) {
+    if (message.contains('совет') || message.contains('помощь') || message.contains('advice') || message.contains('help')) {
       return 'ai.chat.response_tips'.tr();
     }
     
-    if (message.contains('медитац') || message.contains('расслабить')) {
+    if (message.contains('медитац') || message.contains('расслабить') || message.contains('meditation') || message.contains('relax')) {
       return 'ai.chat.response_meditation'.tr();
     }
     
-    if (message.contains('плохо') || message.contains('грустно')) {
+    if (message.contains('плохо') || message.contains('грустно') || message.contains('bad') || message.contains('sad')) {
       return 'ai.chat.response_sad'.tr();
     }
     
     // Общий ответ
-    return "Интересный вопрос! 🤔 Я здесь, чтобы помочь вам с вопросами о настроении, эмоциях и психическом благополучии. Могу проанализировать ваши записи настроения, дать советы или просто поддержать в разговоре. О чем бы вы хотели поговорить?";
+    return "ai.chat.response_general".tr();
   }
 
   /// Прокрутка вниз

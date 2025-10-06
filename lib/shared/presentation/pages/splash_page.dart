@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../app/providers/app_providers.dart';
 
@@ -73,27 +74,27 @@ class _SplashPageState extends ConsumerState<SplashPage> {
             ],
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.psychology, size: 100, color: Colors.white),
-              SizedBox(height: 24),
+              const Icon(Icons.psychology, size: 100, color: Colors.white),
+              const SizedBox(height: 24),
               Text(
-                'Mind Space',
-                style: TextStyle(
+                'splash.title'.tr(),
+                style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
-                'Your mental wellness companion',
-                style: TextStyle(fontSize: 16, color: Colors.white70),
+                'splash.subtitle'.tr(),
+                style: const TextStyle(fontSize: 16, color: Colors.white70),
               ),
-              SizedBox(height: 48),
-              CircularProgressIndicator(color: Colors.white),
+              const SizedBox(height: 48),
+              const CircularProgressIndicator(color: Colors.white),
             ],
           ),
         ),

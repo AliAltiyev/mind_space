@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../../presentation/widgets/core/glass_surface.dart';
 import '../../domain/entities/mood_pattern_entity.dart';
@@ -539,7 +540,7 @@ class PatternAnalysisErrorCard extends StatelessWidget {
 
             // Сообщение об ошибке
             Text(
-              'Ошибка анализа',
+              'ai.error_analysis'.tr(),
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

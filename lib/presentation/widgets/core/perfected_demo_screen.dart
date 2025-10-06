@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'animated_mood_icon.dart';
 import 'glass_surface.dart';
@@ -103,18 +104,18 @@ class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Заголовок
-                const Text(
-                  'Perfected MoodBlob Showcase',
-                  style: TextStyle(
+                Text(
+                  'demo.title'.tr(),
+                  style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Демонстрация всех улучшений и оптимизаций',
-                  style: TextStyle(
+                Text(
+                  'demo.description'.tr(),
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white70,
                   ),
@@ -147,9 +148,9 @@ class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
                 const SizedBox(height: 32),
 
                 // Селектор настроения
-                const Text(
-                  'Select Mood Rating',
-                  style: TextStyle(
+                Text(
+                  'demo.select_mood'.tr(),
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -281,14 +282,14 @@ class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
                 GlassSurface(
                   blurStrength: 10.0,
                   borderRadius: BorderRadius.circular(16),
-                  child: const Padding(
-                    padding: EdgeInsets.all(16.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Performance Optimizations',
-                          style: TextStyle(
+                          'demo.performance_optimizations'.tr(),
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,

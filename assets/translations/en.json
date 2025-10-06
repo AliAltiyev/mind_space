@@ -53,6 +53,8 @@
         "meditation": "Meditation",
         "find_peace": "Find peace",
         "add_mood_entries": "Add mood entries for AI features",
+        "last_mood": "Last mood",
+        "tap_to_add_mood": "Tap to add your mood",
         "loading_ai_features": "Loading AI features...",
         "error_loading_ai": "Error loading AI features",
         "recent_entries": "Recent entries",
@@ -258,7 +260,8 @@
             "response_mood_analysis": "I can analyze your mood based on your entries! 📊 Tell me, how are you feeling today? Or add a mood entry, and I'll give you a detailed analysis of your emotional patterns.",
             "response_tips": "Of course I'll help! 💡 Here are some tips for improving mood:\n\n• Take a deep breath and exhale\n• Take a walk in fresh air\n• Listen to your favorite music\n• Write down 3 things you're grateful for\n• Do something nice for yourself\n\nWhat works best for you?",
             "response_meditation": "Meditation is a great way to improve mood! 🧘‍♀️\n\nTry:\n• 5-minute mindfulness meditation\n• Breathing exercises\n• Progressive muscle relaxation\n• Gratitude meditation\n\nWould you like me to tell you more about any of these methods?",
-            "response_sad": "I understand you're going through a tough time. 💙 Remember that bad days are normal and they pass. Try:\n\n• Talking to a loved one\n• Doing something nice for yourself\n• Writing down your feelings\n• Seeking professional help if needed\n\nYou're not alone in this. Would you like to talk about it in more detail?"
+            "response_sad": "I understand you're going through a tough time. 💙 Remember that bad days are normal and they pass. Try:\n\n• Talking to a loved one\n• Doing something nice for yourself\n• Writing down your feelings\n• Seeking professional help if needed\n\nYou're not alone in this. Would you like to talk about it in more detail?",
+            "response_general": "Interesting question! 🤔 I'm here to help you with questions about mood, emotions, and mental wellness. I can analyze your mood entries, give advice, or just support you in conversation. What would you like to talk about?"
         },
         "insights": {
             "title": "AI Insights",
@@ -401,6 +404,87 @@
         "ai_pattern_format": "Format the response as JSON with title, description, emoji, accentColor, patterns, and recommendations fields",
         "ai_gratitude_format": "Format the response as JSON with title, description, emoji, accentColor, and prompts fields",
         "ai_meditation_format": "Format the response as JSON with title, description, emoji, accentColor, type, duration, instructions, and tips fields"
+    },
+    "onboarding": {
+        "welcome": {
+            "title": "Welcome to Mind Space",
+            "description": "Track your mood and thoughts with AI-powered insights"
+        },
+        "mood_tracking": {
+            "title": "Mood Tracking",
+            "description": "Log your daily mood and discover patterns over time"
+        },
+        "ai_insights": {
+            "title": "AI Insights",
+            "description": "Get personalized recommendations based on your data"
+        }
+    },
+    "splash": {
+        "title": "Mind Space",
+        "subtitle": "Your mental wellness companion"
+    },
+    "error": {
+        "title": "Error",
+        "occurred": "An error occurred",
+        "unknown_error": "Unknown error",
+        "go_home": "Go Home"
+    },
+    "common": {
+        "loading": "Loading...",
+        "unknown": "Unknown"
+    },
+    "ai": {
+        "error_analysis": "Analysis Error",
+        "error_loading": "Loading Error",
+        "fallback_unavailable": "AI temporarily unavailable",
+        "fallback_try_later": "Try later or contact a specialist",
+        "fallback_suggestions": ["Try later", "Contact a specialist"],
+        "fallback_great_mood": "Great mood!",
+        "fallback_positive_attitude": "You maintain a positive attitude. Keep it up!",
+        "fallback_stable_state": "Stable state",
+        "fallback_good_balance": "Your mood is in good balance. This is a great foundation!",
+        "fallback_self_care": "Self-care",
+        "fallback_emotional_wellbeing": "It's important to take care of your emotional wellbeing. Small steps every day.",
+        "fallback_start_tracking": "Start tracking your mood",
+        "fallback_add_entries": "Add several entries to get personalized insights",
+        "fallback_suggestions_list": ["Add your first mood entry", "Try tracking your mood every day"]
+    },
+    "notifications": {
+        "daily_reminders": "Daily Reminders",
+        "enable_reminders": "Enable Reminders",
+        "daily_mood_reminders": "Daily mood tracking reminders",
+        "reminder_time": "Reminder Time",
+        "test_notification": "Test Notification",
+        "send_test_notification": "Send test notification",
+        "weekly_reminders": "Weekly Reminders",
+        "enable_weekly_reminders": "Enable weekly reminders",
+        "weekly_reflection_reminders": "Reflection reminders",
+        "day_of_week": "Day of Week",
+        "additional_settings": "Additional Settings",
+        "permissions": "Permissions",
+        "manage_permissions": "Manage app permissions",
+        "cancel_all_notifications": "Cancel all notifications"
+    },
+    "settings": {
+        "themes": {
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System"
+        }
+    },
+    "demo": {
+        "title": "Perfected MoodBlob Showcase",
+        "description": "Demonstration of all improvements and optimizations",
+        "select_mood": "Select Mood Rating",
+        "performance_optimizations": "Performance Optimizations"
+    },
+    "analytics": {
+        "title": "Analytics",
+        "page": "Analytics Page"
+    },
+    "database": {
+        "mood_entry_added": "✅ Mood entry added: {mood} - {note} - Date: {date}",
+        "no_note": "no note"
     }
 }
 

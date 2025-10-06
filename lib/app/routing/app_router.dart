@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mind_space/features/ai/presentation/pages/ai_insights_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mind_space/features/ai/presentation/pages/gratitude_journal_page.dart';
 import 'package:mind_space/features/ai/presentation/pages/meditation_page.dart';
 import 'package:mind_space/features/ai/presentation/pages/patterns_page.dart';
@@ -24,8 +24,6 @@ import '../../presentation/screens/settings/notification_settings_screen.dart';
 import '../../presentation/screens/settings/privacy_settings_screen.dart';
 import '../../presentation/screens/settings/settings_screen_modern.dart';
 import '../../core/constants/navigation.dart';
-import 'package:easy_localization/easy_localization.dart';
-import '../../presentation/screens/stats/stats_screen.dart';
 import '../../presentation/screens/stats/stats_screen_clean.dart';
 import '../../presentation/screens/ai/ai_chat_screen.dart';
 import '../../presentation/screens/profile/profile_screen_clean.dart';
@@ -442,7 +440,7 @@ class MainShell extends ConsumerWidget {
           BottomNavigationBarItem(
             icon: const Icon(Icons.psychology_outlined),
             activeIcon: const Icon(Icons.psychology),
-            label: 'AI Chat',
+            label: 'ai.chat.title'.tr(),
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.person_outlined),
@@ -492,7 +490,7 @@ class ErrorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Error')),
+      appBar: AppBar(title: Text('error.title'.tr())),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -500,14 +498,14 @@ class ErrorPage extends StatelessWidget {
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
             Text(
-              'An error occurred: ${error?.toString() ?? 'Unknown error'}',
+              '${'error.occurred'.tr()}: ${error?.toString() ?? 'error.unknown_error'.tr()}',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => context.go('/home'),
-              child: const Text('Go Home'),
+              child: Text('error.go_home'.tr()),
             ),
           ],
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Страница аналитики
 class AnalyticsPage extends StatelessWidget {
@@ -8,12 +9,12 @@ class AnalyticsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Analytics'),
+        title: Text('analytics.title'.tr()),
       ),
-      body: const Center(
+      body: Center(
         child: Text(
-          'Analytics Page',
-          style: TextStyle(fontSize: 24),
+          'analytics.page'.tr(),
+          style: const TextStyle(fontSize: 24),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../../presentation/widgets/core/glass_surface.dart';
 import '../../domain/entities/ai_insight_entity.dart';
@@ -378,7 +379,7 @@ class AIInsightErrorCard extends StatelessWidget {
 
             // Сообщение об ошибке
             Text(
-              'Ошибка загрузки',
+              'ai.error_loading'.tr(),
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

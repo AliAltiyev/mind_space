@@ -198,7 +198,7 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
       case 5:
         return 'entries.excellent'.tr();
       default:
-        return 'Unknown';
+        return 'common.unknown'.tr();
     }
   }
 

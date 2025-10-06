@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../app/providers/app_providers.dart';
 
@@ -18,18 +19,18 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
 
   final List<OnboardingStep> _steps = [
     OnboardingStep(
-      title: 'Welcome to Mind Space',
-      description: 'Track your mood and thoughts with AI-powered insights',
+      title: 'onboarding.welcome.title'.tr(),
+      description: 'onboarding.welcome.description'.tr(),
       icon: Icons.psychology,
     ),
     OnboardingStep(
-      title: 'Mood Tracking',
-      description: 'Log your daily mood and discover patterns over time',
+      title: 'onboarding.mood_tracking.title'.tr(),
+      description: 'onboarding.mood_tracking.description'.tr(),
       icon: Icons.mood,
     ),
     OnboardingStep(
-      title: 'AI Insights',
-      description: 'Get personalized recommendations based on your data',
+      title: 'onboarding.ai_insights.title'.tr(),
+      description: 'onboarding.ai_insights.description'.tr(),
       icon: Icons.auto_awesome,
     ),
   ];
