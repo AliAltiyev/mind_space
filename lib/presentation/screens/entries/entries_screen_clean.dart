@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
@@ -33,7 +34,7 @@ class _EntriesScreenCleanState extends ConsumerState<EntriesScreenClean> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Все записи'),
+        title: Text('entries.title'.tr()),
         backgroundColor: AppColors.surface,
         elevation: 1,
         leading: IconButton(
@@ -80,41 +81,41 @@ class _EntriesScreenCleanState extends ConsumerState<EntriesScreenClean> {
         child: Row(
           children: [
             _FilterChip(
-              label: 'Все',
+              label: 'entries.all'.tr(),
               isSelected: _selectedFilter == 'all',
               onTap: () => setState(() => _selectedFilter = 'all'),
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'Отличное',
+              label: 'mood.moods.very_happy'.tr(),
               isSelected: _selectedFilter == 'excellent',
               onTap: () => setState(() => _selectedFilter = 'excellent'),
               color: AppColors.moodExcellent,
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'Хорошее',
+              label: 'mood.moods.happy'.tr(),
               isSelected: _selectedFilter == 'good',
               onTap: () => setState(() => _selectedFilter = 'good'),
               color: AppColors.moodGood,
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'Нормальное',
+              label: 'mood.moods.neutral'.tr(),
               isSelected: _selectedFilter == 'okay',
               onTap: () => setState(() => _selectedFilter = 'okay'),
               color: AppColors.moodOkay,
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'Плохое',
+              label: 'mood.moods.sad'.tr(),
               isSelected: _selectedFilter == 'bad',
               onTap: () => setState(() => _selectedFilter = 'bad'),
               color: AppColors.moodBad,
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'Ужасное',
+              label: 'mood.moods.very_sad'.tr(),
               isSelected: _selectedFilter == 'terrible',
               onTap: () => setState(() => _selectedFilter = 'terrible'),
               color: AppColors.moodTerrible,
@@ -196,7 +197,7 @@ class _EntriesScreenCleanState extends ConsumerState<EntriesScreenClean> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Ошибка загрузки',
+            'common.error'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.error),
           ),
           const SizedBox(height: 8),
@@ -208,7 +209,7 @@ class _EntriesScreenCleanState extends ConsumerState<EntriesScreenClean> {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => ref.invalidate(allMoodEntriesProvider),
-            child: const Text('Попробовать снова'),
+            child: Text('common.try_again'.tr()),
           ),
         ],
       ),
@@ -228,21 +229,21 @@ class _EntriesScreenCleanState extends ConsumerState<EntriesScreenClean> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Записей не найдено',
+            'entries.no_entries_found'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 8),
           Text(
             _selectedFilter == 'all' 
-                ? 'Добавьте первую запись настроения'
-                : 'Попробуйте другой фильтр',
+                ? 'home.add_first_entry'.tr()
+                : 'entries.try_other_filter'.tr(),
             style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
           ),
           if (_selectedFilter == 'all') ...[
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => context.push('/add-entry'),
-              child: const Text('Добавить настроение'),
+              child: Text('mood.add_mood'.tr()),
             ),
           ],
         ],
@@ -255,24 +256,24 @@ class _EntriesScreenCleanState extends ConsumerState<EntriesScreenClean> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Поиск'),
+        title: Text('common.search'.tr()),
         content: TextField(
           controller: _searchController,
-          decoration: const InputDecoration(
-            hintText: 'Поиск по заметкам...',
+          decoration:  InputDecoration(
+            hintText: 'entries.search_notes'.tr(),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Отмена'),
+            child: Text('common.cancel'.tr()),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               // TODO: Implement search
             },
-            child: const Text('Поиск'),
+            child: Text('common.search'.tr()),
           ),
         ],
       ),
@@ -296,7 +297,7 @@ class _EntriesScreenCleanState extends ConsumerState<EntriesScreenClean> {
             if (entry.note != null && entry.note!.isNotEmpty) ...[
               const SizedBox(height: 16),
               Text(
-                'Заметка:',
+                'entries.note'.tr(),
                 style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
@@ -310,7 +311,7 @@ class _EntriesScreenCleanState extends ConsumerState<EntriesScreenClean> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Закрыть'),
+            child: Text('common.close'.tr()),
           ),
         ],
       ),
@@ -321,17 +322,17 @@ class _EntriesScreenCleanState extends ConsumerState<EntriesScreenClean> {
   String _getMoodLabel(int mood) {
     switch (mood) {
       case 5:
-        return 'Отличное';
+        return 'mood.moods.very_happy'.tr();
       case 4:
-        return 'Хорошее';
+        return 'mood.moods.happy'.tr();
       case 3:
-        return 'Нормальное';
+        return 'mood.moods.neutral'.tr();
       case 2:
-        return 'Плохое';
+        return 'mood.moods.sad'.tr();
       case 1:
-        return 'Ужасное';
+        return 'mood.moods.very_sad'.tr();
       default:
-        return 'Неизвестно';
+        return 'stats.unknown'.tr();
     }
   }
 }
@@ -484,17 +485,17 @@ class _EntryCardClean extends StatelessWidget {
   String _getMoodLabel(int mood) {
     switch (mood) {
       case 5:
-        return 'Отличное';
+        return 'mood.moods.very_happy'.tr();
       case 4:
-        return 'Хорошее';
+        return 'mood.moods.happy'.tr();
       case 3:
-        return 'Нормальное';
+        return 'mood.moods.neutral'.tr();
       case 2:
-        return 'Плохое';
+        return 'mood.moods.sad'.tr();
       case 1:
-        return 'Ужасное';
+        return 'mood.moods.very_sad'.tr();
       default:
-        return 'Неизвестно';
+        return 'stats.unknown'.tr();
     }
   }
 }

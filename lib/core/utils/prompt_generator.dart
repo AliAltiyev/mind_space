@@ -1,5 +1,6 @@
 import '../../features/profile/domain/entities/user_profile_entity.dart';
 import '../database/database.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Генератор умных промптов для AI
 class PromptGenerator {
@@ -21,8 +22,7 @@ class PromptGenerator {
         .toList();
 
     return '''
-Ты — персональный AI-ассистент в приложении для ментального здоровья MindSpace.
-Проанализируй следующие данные настроения пользователя и предоставь полезный, поддерживающий инсайт.
+${"prompts.ai_insight_prompt".tr()}
 
 ДАННЫЕ ПОЛЬЗОВАТЕЛЯ:
 Количество записей: ${recentMoods.length}
@@ -47,14 +47,7 @@ ${recentNotes.map((m) => '• "${m.note}"').join('\n')}
 6. Ответ должен быть на русском языке
 7. Длина: 2-3 абзаца
 
-СФОРМАТИРУЙ ОТВЕТ В ВИДЕ JSON:
-{
-  "title": "Краткий заголовок инсайта (максимум 50 символов)",
-  "description": "Подробное описание с анализом и рекомендациями (150-300 символов)",
-  "emoji": "Подходящий emoji для инсайта",
-  "accentColor": "hex код цвета (например, #4ECDC4)",
-  "suggestions": ["Практический совет 1", "Практический совет 2"]
-}
+${"prompts.ai_insight_format".tr()}
 
 Цвета для разных типов инсайтов:
 - Позитивные: #4ECDC4, #45B7D1, #96CEB4, #6BCF7F
@@ -74,8 +67,7 @@ ${recentNotes.map((m) => '• "${m.note}"').join('\n')}
     final monthlyTrends = _analyzeMonthlyTrends(moodHistory);
 
     return '''
-Ты — эксперт по анализу паттернов настроения в приложении MindSpace.
-Проанализируй следующие данные и выяви ключевые паттерны и тренды.
+${"prompts.ai_pattern_prompt".tr()}
 
 ДАННЫЕ ДЛЯ АНАЛИЗА:
 Общее количество записей: ${moodHistory.length}
@@ -117,8 +109,7 @@ $monthlyTrends
         : 3;
 
     return '''
-Ты — AI-ассистент для практики благодарности в приложении MindSpace.
-Создай персонализированные предложения для дневника благодарности.
+${"prompts.ai_gratitude_prompt".tr()}
 
 КОНТЕКСТ ПОЛЬЗОВАТЕЛЯ:
 Текущее настроение: $currentMood/5
@@ -132,20 +123,7 @@ ${recentMoods.isNotEmpty ? 'Последняя заметка: "${recentMoods.fi
 4. Включи разные категории: люди, события, достижения, простые радости
 5. Ответ должен быть на русском языке
 
-СФОРМАТИРУЙ ОТВЕТ В ВИДЕ JSON:
-{
-  "title": "Заголовок для раздела благодарности",
-  "description": "Краткое описание важности благодарности",
-  "emoji": "Подходящий emoji",
-  "accentColor": "hex код цвета",
-  "prompts": [
-    "Предложение для благодарности 1",
-    "Предложение для благодарности 2",
-    "Предложение для благодарности 3",
-    "Предложение для благодарности 4",
-    "Предложение для благодарности 5"
-  ]
-}
+${"prompts.ai_gratitude_format".tr()}
 
 Цвета для благодарности: #FFD93D, #FFEAA7, #FDCB6E, #E17055
 ''';
@@ -160,8 +138,7 @@ ${recentMoods.isNotEmpty ? 'Последняя заметка: "${recentMoods.fi
     final stressLevel = _calculateStressLevel(recentMoods);
 
     return '''
-Ты — AI-тренер по медитации в приложении MindSpace.
-Создай персонализированную медитационную сессию на основе текущего состояния пользователя.
+${"prompts.ai_meditation_prompt".tr()}
 
 АНАЛИЗ СОСТОЯНИЯ:
 Средний уровень настроения: ${averageMood.toStringAsFixed(1)}/5
@@ -175,21 +152,7 @@ ${recentMoods.isNotEmpty ? 'Последняя заметка: "${recentMoods.fi
 4. Дай практические советы
 5. Ответ должен быть на русском языке
 
-СФОРМАТИРУЙ ОТВЕТ В ВИДЕ JSON:
-{
-  "title": "Название медитационной сессии",
-  "description": "Описание техники и её пользы",
-  "emoji": "Подходящий emoji",
-  "accentColor": "hex код цвета",
-  "type": "Тип медитации",
-  "duration": "Рекомендуемая длительность в минутах",
-  "instructions": [
-    "Шаг 1: Подготовка",
-    "Шаг 2: Основная техника",
-    "Шаг 3: Завершение"
-  ],
-  "tips": ["Практический совет 1", "Практический совет 2"]
-}
+${"prompts.ai_meditation_format".tr()}
 
 Цвета для медитации: #74B9FF, #0984E3, #81ECEC, #00B894
 ''';
@@ -199,10 +162,7 @@ ${recentMoods.isNotEmpty ? 'Последняя заметка: "${recentMoods.fi
 
   static String _generateEmptyDataPrompt(String type) {
     return '''
-Ты — AI-ассистент в приложении MindSpace для $type.
-Пользователь пока не добавил достаточно данных для анализа.
-
-Предоставь мотивирующее сообщение и общие рекомендации.
+${"prompts.ai_empty_data_prompt".tr().replaceAll('{type}', type)}
 
 СФОРМАТИРУЙ ОТВЕТ В ВИДЕ JSON:
 {

@@ -219,6 +219,44 @@
         "filter_by_mood": "Filtrar por Estado de Ánimo",
         "search_entries": "Buscar entradas..."
     },
+    "notifications": {
+        "title": "Notificaciones",
+        "daily_reminder_title": "Recordatorio Mind Space",
+        "monday_message": "¿Cómo está tu estado de ánimo hoy? ¡Comienza la semana con energía positiva! 🌟",
+        "tuesday_message": "Tómate un momento para conectarte contigo mismo hoy 💭",
+        "wednesday_message": "¡Verificación de estado de ánimo a mitad de semana! ¿Cómo te sientes? 🤔",
+        "thursday_message": "¡Vibraciones de jueves! ¿Cuál es tu estado de ánimo hoy? ✨",
+        "friday_message": "¡TGIF! ¿Cómo estuvo tu estado de ánimo este viernes? 🎉",
+        "saturday_message": "¡Verificación de estado de ánimo del fin de semana! ¿Cómo te sientes? 😌",
+        "sunday_message": "¡Hora de reflexión dominical! ¿Cómo está tu estado de ánimo? 🌅",
+        "weekly_reflection_title": "Hora de Reflexión Semanal",
+        "weekly_reflection_body": "Tómate tiempo para reflexionar sobre tu semana y rastrear tus patrones de estado de ánimo 📊"
+    },
+    "prompts": {
+        "gratitude_prompts": [
+            "¿Por qué estás agradecido hoy?",
+            "¿Qué acto de bondad hizo alguien por ti hoy?",
+            "¿Qué bueno pasó en tu vida esta semana?",
+            "¿Qué cualidades en ti mismo valoras?",
+            "¿Qué en la naturaleza te hace agradecido?"
+        ],
+        "meditation_prompts": [
+            "Meditación de respiración",
+            "Meditación de gratitud",
+            "Meditación de calma",
+            "Meditación de aceptación",
+            "Meditación de amor"
+        ],
+        "ai_insight_prompt": "Eres un experto en análisis de estado de ánimo para la aplicación MindSpace. Analiza los siguientes datos y proporciona insights personalizados y recomendaciones.",
+        "ai_pattern_prompt": "Eres un experto en análisis de patrones de estado de ánimo para la aplicación MindSpace. Analiza los siguientes datos e identifica patrones y tendencias clave.",
+        "ai_gratitude_prompt": "Eres un experto en prácticas de gratitud para la aplicación MindSpace. Genera sugerencias de gratitud personalizadas y recomendaciones.",
+        "ai_meditation_prompt": "Eres un experto en meditación y relajación para la aplicación MindSpace. Genera prácticas de meditación personalizadas y recomendaciones.",
+        "ai_empty_data_prompt": "Comienza a rastrear tu estado de ánimo para obtener {type} personalizados",
+        "ai_insight_format": "FORMATEA LA RESPUESTA COMO JSON con campos title, description, emoji, accentColor y suggestions",
+        "ai_pattern_format": "FORMATEA LA RESPUESTA COMO JSON con campos title, description, emoji, accentColor, patterns y recommendations",
+        "ai_gratitude_format": "FORMATEA LA RESPUESTA COMO JSON con campos title, description, emoji, accentColor y prompts",
+        "ai_meditation_format": "FORMATEA LA RESPUESTA COMO JSON con campos title, description, emoji, accentColor, type, duration, instructions y tips"
+    },
     "ai": {
         "chat": {
             "title": "Chat IA",

@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
+
 class UserConstants {
   // Profile Constants
   static const String defaultUserId = 'user_001';
-  static const String defaultUserName = 'Пользователь';
+  static String get defaultUserName => 'profile.user'.tr();
   static const String defaultUserEmail = '';
   static const String defaultUserBio = '';
 
@@ -26,9 +28,9 @@ class UserConstants {
     'ko',
   ];
 
-  // Language Names
-  static const Map<String, String> languageNames = {
-    'ru': 'Русский',
+  //  Map<String, String> languageNames = {
+    static  Map<String, String> languageNames = {
+    'ru': 'settings.languages.russian'.tr(),
     'en': 'English',
     'es': 'Español',
     'fr': 'Français',
@@ -39,41 +41,41 @@ class UserConstants {
   };
 
   // Available Interests
-  static const List<String> availableInterests = [
-    'Медитация',
-    'Йога',
-    'Спорт',
-    'Чтение',
-    'Музыка',
-    'Искусство',
-    'Природа',
-    'Путешествия',
-    'Кулинария',
-    'Технологии',
-    'Наука',
-    'Психология',
-    'Фотография',
-    'Танцы',
-    'Театр',
-    'Кино',
-    'Игры',
-    'Программирование',
-    'Дизайн',
-    'Садоводство',
+  static    List<String> availableInterests = [
+    'interests.meditation'.tr(),
+    'interests.yoga'.tr(),
+    'interests.sports'.tr(),
+    'interests.reading'.tr(),
+    'interests.music'.tr(),
+    'interests.art'.tr(),
+    'interests.nature'.tr(),
+    'interests.travel'.tr(),  
+    'interests.cooking'.tr(),
+    'interests.technology'.tr(),
+    'interests.science'.tr(),
+    'interests.psychology'.tr(),
+    'interests.photography'.tr(),
+    'interests.dancing'.tr(),
+    'interests.theater'.tr(),
+    'interests.movies'.tr(),
+    'interests.games'.tr(),
+    'interests.programming'.tr(),
+    'interests.design'.tr(),
+    'interests.gardening'.tr(),
   ];
 
-  // Mental Health Goals
-  static const List<String> mentalHealthGoals = [
-    'Улучшить настроение',
-    'Снизить стресс',
-    'Улучшить сон',
-    'Повысить мотивацию',
-    'Развить самосознание',
-    'Улучшить отношения',
-    'Повысить продуктивность',
-    'Найти баланс в жизни',
-    'Развить эмоциональный интеллект',
-    'Победить тревожность',
+    // Mental Health Goals
+    static  List<String> mentalHealthGoals = [
+    'goals.improve_mood'.tr(),
+    'goals.reduce_stress'.tr(),
+    'goals.improve_sleep'.tr(),
+    'goals.increase_motivation'.tr(),
+    'goals.develop_self_awareness'.tr(),
+    'goals.improve_relationships'.tr(),
+    'goals.increase_productivity'.tr(),
+    'goals.find_life_balance'.tr(),
+    'goals.develop_emotional_intelligence'.tr(),
+    'goals.overcome_anxiety'.tr(),
   ];
 
   // Achievement Categories
@@ -82,11 +84,11 @@ class UserConstants {
     'mood',
     'frequency',
     'milestone',
-    'special',
+    'special',   
   ];
 
   // Achievement Rarities
-  static const List<String> achievementRarities = [
+   static const List<String> achievementRarities = [
     'common',
     'uncommon',
     'rare',
@@ -95,7 +97,7 @@ class UserConstants {
   ];
 
   // Rarity Colors
-  static const Map<String, int> rarityColors = {
+    Map<String, int> rarityColors = {
     'common': 0xFF9E9E9E, // Grey
     'uncommon': 0xFF4CAF50, // Green
     'rare': 0xFF2196F3, // Blue
@@ -104,7 +106,7 @@ class UserConstants {
   };
 
   // Mood Categories
-  static const Map<String, List<int>> moodCategories = {
+    Map<String, List<int>> moodCategories = {
     'very_low': [1],
     'low': [2],
     'medium': [3],
@@ -113,16 +115,16 @@ class UserConstants {
   };
 
   // Mood Category Names
-  static const Map<String, String> moodCategoryNames = {
-    'very_low': 'Очень низкое',
-    'low': 'Низкое',
-    'medium': 'Среднее',
-    'high': 'Хорошее',
-    'very_high': 'Отличное',
+    Map<String, String> moodCategoryNames = {
+    'very_low': 'mood.moods.very_sad'.tr(),
+    'low': 'mood.moods.sad'.tr(),
+    'medium': 'mood.moods.neutral'.tr(),
+    'high': 'mood.moods.happy'.tr(),
+    'very_high': 'mood.moods.very_happy'.tr(),
   };
 
   // Mood Category Colors
-  static const Map<String, int> moodCategoryColors = {
+    Map<String, int> moodCategoryColors = {
     'very_low': 0xFFE53E3E, // Red
     'low': 0xFFED8936, // Orange
     'medium': 0xFFECC94B, // Yellow
@@ -131,11 +133,11 @@ class UserConstants {
   };
 
   // Default Achievement Definitions
-  static const List<Map<String, dynamic>> defaultAchievements = [
+    List<Map<String, dynamic>> defaultAchievements = [
     {
       'id': 'first_entry',
-      'title': 'Первая запись',
-      'description': 'Создайте свою первую запись настроения',
+      'title': 'achievements.first_entry'.tr(),
+      'description': 'achievements.first_entry_desc'.tr(),
       'icon': 'first_entry',
       'target': 1,
       'category': 'milestone',
@@ -143,8 +145,8 @@ class UserConstants {
     },
     {
       'id': 'streak_3',
-      'title': 'Начинающий',
-      'description': 'Ведите дневник 3 дня подряд',
+      'title': 'achievements.beginner'.tr(),
+      'description': 'achievements.beginner_desc'.tr(),
       'icon': 'streak_3',
       'target': 3,
       'category': 'streak',
@@ -152,8 +154,8 @@ class UserConstants {
     },
     {
       'id': 'streak_7',
-      'title': 'Неделя привычки',
-      'description': 'Ведите дневник 7 дней подряд',
+      'title': 'achievements.week_habit'.tr(),
+      'description': 'achievements.week_habit_desc'.tr(),
       'icon': 'streak_7',
       'target': 7,
       'category': 'streak',
@@ -161,8 +163,8 @@ class UserConstants {
     },
     {
       'id': 'streak_30',
-      'title': 'Месяц осознанности',
-      'description': 'Ведите дневник 30 дней подряд',
+      'title': 'achievements.month_mindfulness'.tr(),
+      'description': 'achievements.month_mindfulness_desc'.tr(),
       'icon': 'streak_30',
       'target': 30,
       'category': 'streak',
@@ -170,8 +172,8 @@ class UserConstants {
     },
     {
       'id': 'streak_100',
-      'title': 'Мастер привычек',
-      'description': 'Ведите дневник 100 дней подряд',
+      'title': 'achievements.habit_master'.tr(),
+      'description': 'achievements.habit_master_desc'.tr(),
       'icon': 'streak_100',
       'target': 100,
       'category': 'streak',
@@ -179,8 +181,8 @@ class UserConstants {
     },
     {
       'id': 'mood_master',
-      'title': 'Мастер настроения',
-      'description': 'Достигните среднего настроения 4.0+ за месяц',
+      'title': 'achievements.mood_master'.tr(),
+      'description': 'achievements.mood_master_desc'.tr(),
       'icon': 'mood_master',
       'target': 1,
       'category': 'mood',
@@ -188,8 +190,8 @@ class UserConstants {
     },
     {
       'id': 'data_collector',
-      'title': 'Сборщик данных',
-      'description': 'Создайте 100 записей настроения',
+      'title': 'achievements.data_collector'.tr(),
+      'description': 'achievements.data_collector_desc'.tr(),
       'icon': 'data_collector',
       'target': 100,
       'category': 'frequency',
@@ -197,8 +199,8 @@ class UserConstants {
     },
     {
       'id': 'early_bird',
-      'title': 'Ранняя пташка',
-      'description': 'Создайте 10 записей до 8 утра',
+      'title': 'achievements.early_bird'.tr(),
+      'description': 'achievements.early_bird_desc'.tr(),
       'icon': 'early_bird',
       'target': 10,
       'category': 'special',
@@ -206,8 +208,8 @@ class UserConstants {
     },
     {
       'id': 'night_owl',
-      'title': 'Сова',
-      'description': 'Создайте 10 записей после 22:00',
+      'title': 'achievements.night_owl'.tr(),
+      'description': 'achievements.night_owl_desc'.tr(),
       'icon': 'night_owl',
       'target': 10,
       'category': 'special',
@@ -216,7 +218,7 @@ class UserConstants {
   ];
 
   // Notification Types
-  static const List<String> notificationTypes = [
+   static const List<String> notificationTypes = [
     'daily_reminder',
     'streak_reminder',
     'achievement_unlocked',
@@ -224,8 +226,8 @@ class UserConstants {
     'monthly_insights',
   ];
 
-  // Default Notification Preferences
-  static const Map<String, bool> defaultNotificationPreferences = {
+  //Default Notification Preferences
+     static const Map<String, bool> defaultNotificationPreferences = {
     'daily_reminder': true,
     'streak_reminder': true,
     'achievement_unlocked': true,
@@ -234,11 +236,11 @@ class UserConstants {
   };
 
   // Feature Flags
-  static const List<String> availableFeatures = [
+   static const List<String> availableFeatures = [
     'insights',
     'patterns',
     'gratitude',
-    'meditation',
+    'meditatio  n',
     'achievements',
     'stats',
     'export',
@@ -246,7 +248,7 @@ class UserConstants {
   ];
 
   // Default Enabled Features
-  static const List<String> defaultEnabledFeatures = [
+   static const List<String> defaultEnabledFeatures = [
     'insights',
     'patterns',
     'gratitude',
@@ -256,30 +258,30 @@ class UserConstants {
   ];
 
   // Profile Image Constants
-  static const int maxProfileImageSize = 5 * 1024 * 1024; // 5MB
-  static const List<String> allowedImageFormats = [
+   static const int maxProfileImageSize = 5 * 1024 * 1024; // 5MB
+   static const List<String> allowedImageFormats = [
     'jpg',
     'jpeg',
     'png',
     'webp',
   ];
-  static const int profileImageSize = 200; // pixels
+   static const int profileImageSize = 200; // pixels
 
   // Validation Constants
-  static const int minNameLength = 2;
-  static const int maxNameLength = 50;
-  static const int maxBioLength = 200;
-  static const int maxInterestsCount = 10;
-  static const int minAge = 13;
-  static const int maxAge = 120;
+   static const int minNameLength = 2;
+   static   const int maxNameLength = 50;
+   static const int maxBioLength = 200;
+   static const int maxInterestsCount = 10;
+   static const int minAge = 13;
+   static const int maxAge = 120;
 
   // Cache Constants
-  static const Duration profileCacheDuration = Duration(hours: 1);
-  static const Duration statsCacheDuration = Duration(minutes: 30);
-  static const Duration achievementsCacheDuration = Duration(hours: 6);
+   static const Duration profileCacheDuration = Duration(hours: 1);
+   static const Duration statsCacheDuration = Duration(minutes: 30);
+   static const Duration achievementsCacheDuration = Duration(hours: 6);
 
   // Sync Constants
-  static const Duration syncInterval = Duration(hours: 2);
-  static const int maxRetryAttempts = 3;
-  static const Duration retryDelay = Duration(seconds: 5);
+   static const Duration syncInterval = Duration(hours: 2);
+   static const int maxRetryAttempts = 3;
+   static const Duration retryDelay = Duration(seconds: 5);
 }

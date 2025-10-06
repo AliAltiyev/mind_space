@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mind_space/core/database/database.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../app/providers/ai_features_provider.dart';
 import '../../../features/ai/presentation/blocs/ai_insights_bloc.dart';
@@ -263,13 +264,13 @@ class _AIInsightsWidgetState extends State<_AIInsightsWidget> {
         return Container(
           height: 120,
           padding: const EdgeInsets.all(16),
-          child: const Column(
+          child:  Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.psychology_outlined, color: Colors.white70, size: 32),
               SizedBox(height: 8),
               Text(
-                'Добавьте записи настроения для AI инсайтов',
+                'home.add_mood_entries'.tr(),
                 style: TextStyle(color: Colors.white70, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
@@ -349,13 +350,13 @@ class _PatternsWidgetState extends State<_PatternsWidget> {
         return Container(
           height: 120,
           padding: const EdgeInsets.all(16),
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.psychology_outlined, color: Colors.white70, size: 32),
               SizedBox(height: 8),
               Text(
-                'Добавьте записи настроения для AI инсайтов',
+                'home.add_mood_entries'.tr(),
                 style: TextStyle(color: Colors.white70, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
@@ -429,13 +430,13 @@ class _GratitudeWidgetState extends State<_GratitudeWidget> {
         return Container(
           height: 120,
           padding: const EdgeInsets.all(16),
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.psychology_outlined, color: Colors.white70, size: 32),
               SizedBox(height: 8),
               Text(
-                'Добавьте записи настроения для AI инсайтов',
+                'home.add_mood_entries'.tr(),
                 style: TextStyle(color: Colors.white70, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
@@ -512,13 +513,13 @@ class _MeditationWidgetState extends State<_MeditationWidget> {
         return Container(
           height: 120,
           padding: const EdgeInsets.all(16),
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.psychology_outlined, color: Colors.white70, size: 32),
               SizedBox(height: 8),
               Text(
-                'Добавьте записи настроения для AI инсайтов',
+                'home.add_mood_entries'.tr(),
                 style: TextStyle(color: Colors.white70, fontSize: 12),
                 textAlign: TextAlign.center,
               ),

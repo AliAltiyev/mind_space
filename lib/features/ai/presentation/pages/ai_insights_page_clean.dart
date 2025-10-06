@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
@@ -17,7 +18,7 @@ class AIInsightsPageClean extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('AI Инсайты'),
+        title: Text('ai.insights.title'.tr()),
         backgroundColor: AppColors.surface,
         elevation: 1,
         leading: IconButton(
@@ -116,7 +117,7 @@ class AIInsightsPageClean extends ConsumerWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                'Обзор ваших данных',
+                'ai.insights.data_overview'.tr(),
                 style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
               ),
             ],
@@ -128,7 +129,7 @@ class AIInsightsPageClean extends ConsumerWidget {
             children: [
               Expanded(
                 child: _InsightCard(
-                  title: 'Всего записей',
+                  title: 'stats.total_entries'.tr(),
                   value: totalEntries.toString(),
                   icon: Icons.list_alt,
                   color: AppColors.primary,
@@ -137,7 +138,7 @@ class AIInsightsPageClean extends ConsumerWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _InsightCard(
-                  title: 'Среднее настроение',
+                  title: 'stats.average_mood'.tr(),
                   value: avgMood.toStringAsFixed(1),
                   icon: Icons.sentiment_satisfied,
                   color: AppColors.success,
@@ -149,7 +150,7 @@ class AIInsightsPageClean extends ConsumerWidget {
           const SizedBox(height: 12),
           
           _InsightCard(
-            title: 'Записи за неделю',
+            title: 'ai.insights.weekly_entries'.tr(),
             value: '$thisWeek записей',
             icon: Icons.calendar_today,
             color: AppColors.info,
@@ -197,7 +198,7 @@ class AIInsightsPageClean extends ConsumerWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                'Анализ настроений',
+                'ai.insights.mood_analysis'.tr(),
                 style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
               ),
             ],
@@ -235,7 +236,7 @@ class AIInsightsPageClean extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Преобладающее настроение',
+                        'ai.insights.dominant_mood'.tr(),
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -315,7 +316,7 @@ class AIInsightsPageClean extends ConsumerWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                'Паттерны',
+                'ai.insights.patterns'.tr(),
                 style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
               ),
             ],
@@ -325,7 +326,7 @@ class AIInsightsPageClean extends ConsumerWidget {
           
           // Недельный паттерн
           _PatternCard(
-            title: 'Недельный паттерн',
+            title: 'ai.insights.weekly_pattern'.tr(),
             description: weeklyPattern,
             icon: Icons.calendar_view_week,
             color: AppColors.primary,
@@ -335,7 +336,7 @@ class AIInsightsPageClean extends ConsumerWidget {
           
           // Месячный паттерн
           _PatternCard(
-            title: 'Месячный паттерн',
+            title: 'ai.insights.monthly_pattern'.tr(),
             description: monthlyPattern,
             icon: Icons.calendar_month,
             color: AppColors.secondary,
@@ -421,19 +422,19 @@ class AIInsightsPageClean extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Нет данных для анализа',
+            'ai.insights.no_data_for_analysis'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 8),
           Text(
-            'Добавьте записи настроения для получения AI инсайтов',
+            'ai.insights.add_entries_for_insights'.tr(),
             style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => context.push('/add-entry'),
-            child: const Text('Добавить настроение'),
+            child: Text('mood.add_mood'.tr()),
           ),
         ],
       ),
@@ -460,7 +461,7 @@ class AIInsightsPageClean extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Ошибка загрузки',
+            'common.error'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.error),
           ),
           const SizedBox(height: 8),
@@ -488,17 +489,17 @@ class AIInsightsPageClean extends ConsumerWidget {
 
   String _getMoodLabel(int mood) {
     switch (mood) {
-      case 5: return 'Отличное';
-      case 4: return 'Хорошее';
-      case 3: return 'Нормальное';
-      case 2: return 'Плохое';
-      case 1: return 'Ужасное';
-      default: return 'Неизвестно';
+      case 5: return 'mood.moods.very_happy'.tr();
+      case 4: return 'mood.moods.happy'.tr();
+      case 3: return 'mood.moods.neutral'.tr();
+      case 2: return 'mood.moods.sad'.tr();
+      case 1: return 'mood.moods.very_sad'.tr();
+      default: return 'stats.unknown'.tr();
     }
   }
 
   String _getWeeklyPattern(List<dynamic> entries) {
-    if (entries.isEmpty) return 'Недостаточно данных';
+    if (entries.isEmpty) return 'ai.insights.insufficient_data'.tr();
     
     final weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     final counts = List.generate(7, (index) => 0);
@@ -509,11 +510,11 @@ class AIInsightsPageClean extends ConsumerWidget {
     }
     
     final maxIndex = counts.indexOf(counts.reduce((a, b) => a > b ? a : b));
-    return 'Больше всего записей в ${weekdays[maxIndex]}';
+    return 'ai.insights.most_records_on'.tr(namedArgs: {'day': weekdays[maxIndex]});
   }
 
   String _getMonthlyPattern(List<dynamic> entries) {
-    if (entries.isEmpty) return 'Недостаточно данных';
+    if (entries.isEmpty) return 'ai.insights.insufficient_data'.tr();
     
     final now = DateTime.now();
     final thisMonth = entries.where((e) => 
@@ -522,11 +523,11 @@ class AIInsightsPageClean extends ConsumerWidget {
         e.createdAt.month == now.month - 1 && e.createdAt.year == now.year).length;
     
     if (thisMonth > lastMonth) {
-      return 'Активность растет (+${thisMonth - lastMonth})';
+      return 'ai.insights.activity_growing'.tr(namedArgs: {'diff': (thisMonth - lastMonth).toString()});
     } else if (thisMonth < lastMonth) {
-      return 'Активность снижается (-${lastMonth - thisMonth})';
+      return 'ai.insights.activity_decreasing'.tr(namedArgs: {'diff': (lastMonth - thisMonth).toString()});
     } else {
-      return 'Стабильная активность';
+      return 'ai.insights.stable_activity'.tr();
     }
   }
 
@@ -535,8 +536,8 @@ class AIInsightsPageClean extends ConsumerWidget {
     
     if (entries.isEmpty) {
       recommendations.add(_Recommendation(
-        title: 'Начните отслеживать настроение',
-        description: 'Добавьте первую запись настроения для получения персональных рекомендаций',
+        title: 'ai.insights.start_tracking_mood'.tr(),
+        description: 'ai.insights.add_first_entry_desc'.tr(),
         icon: Icons.add_circle_outline,
         priority: _Priority.high,
       ));
@@ -547,23 +548,23 @@ class AIInsightsPageClean extends ConsumerWidget {
     
     if (avgMood < 3) {
       recommendations.add(_Recommendation(
-        title: 'Попробуйте медитацию',
-        description: 'Медитация может помочь улучшить ваше настроение',
+        title: 'ai.insights.try_meditation'.tr(),
+        description: 'ai.insights.meditation_help_mood'.tr(),
         icon: Icons.self_improvement,
         priority: _Priority.high,
       ));
     }
     
     recommendations.add(_Recommendation(
-      title: 'Ведите дневник благодарности',
-      description: 'Записывайте 3 вещи, за которые вы благодарны каждый день',
+      title: 'ai.insights.keep_gratitude_journal'.tr(),
+      description: 'ai.insights.gratitude_journal_desc'.tr(),
       icon: Icons.favorite,
       priority: _Priority.medium,
     ));
     
     recommendations.add(_Recommendation(
-      title: 'Регулярно отслеживайте настроение',
-      description: 'Ежедневные записи помогут лучше понять ваши эмоциональные паттерны',
+      title: 'ai.insights.track_mood_regularly'.tr(),
+      description: 'ai.insights.daily_records_help'.tr(),
       icon: Icons.trending_up,
       priority: _Priority.medium,
     ));
@@ -692,12 +693,12 @@ class _MoodDistributionBar extends StatelessWidget {
 
   String _getMoodLabel(int mood) {
     switch (mood) {
-      case 5: return 'Отличное';
-      case 4: return 'Хорошее';
-      case 3: return 'Нормальное';
-      case 2: return 'Плохое';
-      case 1: return 'Ужасное';
-      default: return 'Неизвестно';
+      case 5: return 'mood.moods.very_happy'.tr();
+      case 4: return 'mood.moods.happy'.tr();
+      case 3: return 'mood.moods.neutral'.tr();
+      case 2: return 'mood.moods.sad'.tr();
+      case 1: return 'mood.moods.very_sad'.tr();
+      default: return 'stats.unknown'.tr();
     }
   }
 }
@@ -856,11 +857,11 @@ class _RecommendationCard extends StatelessWidget {
   String _getPriorityLabel(_Priority priority) {
     switch (priority) {
       case _Priority.high:
-        return 'Важно';
+        return 'ai.insights.priority_high'.tr();
       case _Priority.medium:
-        return 'Средне';
+        return 'ai.insights.priority_medium'.tr();
       case _Priority.low:
-        return 'Низко';
+        return 'ai.insights.priority_low'.tr();
     }
   }
 }

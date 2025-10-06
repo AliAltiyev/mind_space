@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mind_space/presentation/widgets/core/glass_surface.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../domain/entities/user_achievements_entity.dart';
 
@@ -122,7 +123,7 @@ class AchievementCardWidget extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            'Получено',
+                            'achievements.unlocked'.tr(),
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                                   color: _getRarityColor(achievement.rarity),
@@ -205,17 +206,17 @@ class AchievementCardWidget extends StatelessWidget {
   String _getRarityLabel(String rarity) {
     switch (rarity) {
       case 'common':
-        return 'Обычное';
+        return 'achievements.rarity.common'.tr();
       case 'uncommon':
-        return 'Необычное';
+        return 'achievements.rarity.uncommon'.tr();
       case 'rare':
-        return 'Редкое';
+        return 'achievements.rarity.rare'.tr();
       case 'epic':
-        return 'Эпическое';
+        return 'achievements.rarity.epic'.tr();
       case 'legendary':
-        return 'Легендарное';
+        return 'achievements.rarity.legendary'.tr();
       default:
-        return 'Обычное';
+        return 'achievements.rarity.common'.tr();
     }
   }
 }

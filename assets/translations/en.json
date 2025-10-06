@@ -20,7 +20,8 @@
         "yes": "Yes",
         "no": "No",
         "try_again": "Try Again",
-        "refresh": "Refresh"
+        "refresh": "Refresh",
+        "clear": "Clear"
     },
     "navigation": {
         "home": "Home",
@@ -223,7 +224,17 @@
         "start_tracking": "Start tracking your mood to see your entries here",
         "filter_by_date": "Filter by Date",
         "filter_by_mood": "Filter by Mood",
-        "search_entries": "Search entries..."
+        "search_entries": "Search entries...",
+        "all": "All",
+        "no_entries_found": "No entries found",
+        "try_other_filter": "Try another filter",
+        "search_notes": "Search notes...",
+        "note": "Note:",
+        "very_bad": "Very Bad",
+        "bad": "Bad",
+        "okay": "Okay",
+        "good": "Good",
+        "excellent": "Excellent"
     },
     "ai": {
         "chat": {
@@ -334,7 +345,17 @@
         "daily_reminder": "Daily reminder",
         "weekly_report": "Weekly report",
         "achievement_unlocked": "Achievement unlocked",
-        "streak_reminder": "Streak reminder"
+        "streak_reminder": "Streak reminder",
+        "daily_reminder_title": "Mind Space Reminder",
+        "monday_message": "How's your mood today? Start your week with positive energy! 🌟",
+        "tuesday_message": "Take a moment to check in with yourself today 💭",
+        "wednesday_message": "Mid-week mood check! How are you feeling? 🤔",
+        "thursday_message": "Thursday vibes! What's your mood today? ✨",
+        "friday_message": "TGIF! How was your mood this Friday? 🎉",
+        "saturday_message": "Weekend mood check! How are you feeling? 😌",
+        "sunday_message": "Sunday reflection time! How's your mood? 🌅",
+        "weekly_reflection_title": "Weekly Reflection Time",
+        "weekly_reflection_body": "Take some time to reflect on your week and track your mood patterns 📊"
     },
     "user_level": {
         "level": "Level",
@@ -370,7 +391,16 @@
             "Calmness meditation",
             "Acceptance meditation",
             "Love meditation"
-        ]
+        ],
+        "ai_insight_prompt": "You are an expert in mood analysis for the MindSpace app. Analyze the following data and provide personalized insights and recommendations.",
+        "ai_pattern_prompt": "You are an expert in mood pattern analysis for the MindSpace app. Analyze the following data and identify key patterns and trends.",
+        "ai_gratitude_prompt": "You are an expert in gratitude practices for the MindSpace app. Generate personalized gratitude prompts and suggestions.",
+        "ai_meditation_prompt": "You are an expert in meditation and relaxation for the MindSpace app. Generate personalized meditation practices and recommendations.",
+        "ai_empty_data_prompt": "Start tracking your mood to get personalized {type}",
+        "ai_insight_format": "Format the response as JSON with title, description, emoji, accentColor, and suggestions fields",
+        "ai_pattern_format": "Format the response as JSON with title, description, emoji, accentColor, patterns, and recommendations fields",
+        "ai_gratitude_format": "Format the response as JSON with title, description, emoji, accentColor, and prompts fields",
+        "ai_meditation_format": "Format the response as JSON with title, description, emoji, accentColor, type, duration, instructions, and tips fields"
     }
 }
 

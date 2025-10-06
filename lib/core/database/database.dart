@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 // Реализация базы данных с локальным сохранением
 
@@ -114,7 +115,7 @@ class AppDatabase {
         final map = jsonDecode(json) as Map<String, dynamic>;
         _moodEntries.add(MoodEntry.fromMap(map));
       } catch (e) {
-        print('Ошибка загрузки записи настроения: $e');
+        print('database.error_loading_mood_entry'.tr(namedArgs: {'error': e.toString()}));
       }
     }
 
@@ -126,7 +127,7 @@ class AppDatabase {
         final map = jsonDecode(json) as Map<String, dynamic>;
         _aiInsights.add(AiInsight.fromMap(map));
       } catch (e) {
-        print('Ошибка загрузки AI инсайта: $e');
+        print('database.error_loading_ai_insight'.tr(namedArgs: {'error': e.toString()}));
       }
     }
 
@@ -137,7 +138,7 @@ class AppDatabase {
         final map = jsonDecode(settingsJson) as Map<String, dynamic>;
         _settings.addAll(Map<String, String>.from(map));
       } catch (e) {
-        print('Ошибка загрузки настроек: $e');
+        print('database.error_loading_settings'.tr(namedArgs: {'error': e.toString()}));
       }
     }
 
@@ -162,7 +163,7 @@ class AppDatabase {
 
       print('💾 Данные сохранены локально');
     } catch (e) {
-      print('Ошибка сохранения данных: $e');
+      print('database.error_saving_data'.tr(namedArgs: {'error': e.toString()}));
     }
   }
 

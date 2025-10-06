@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:easy_localization/easy_localization.dart';
 
 /// Сервис для управления уведомлениями
 class NotificationService {
@@ -212,13 +213,13 @@ class NotificationService {
       // Создать уведомления для каждого дня недели
       final now = DateTime.now();
       final messages = [
-        "How's your mood today? Start your week with positive energy! 🌟",
-        "Take a moment to check in with yourself today 💭",
-        "Mid-week mood check! How are you feeling? 🤔",
-        "Thursday vibes! What's your mood today? ✨",
-        "TGIF! How was your mood this Friday? 🎉",
-        "Weekend mood check! How are you feeling? 😌",
-        "Sunday reflection time! How's your mood? 🌅",
+        "notifications.monday_message".tr(),
+        "notifications.tuesday_message".tr(),
+        "notifications.wednesday_message".tr(),
+        "notifications.thursday_message".tr(),
+        "notifications.friday_message".tr(),
+        "notifications.saturday_message".tr(),
+        "notifications.sunday_message".tr(),
       ];
 
       for (int dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
@@ -226,7 +227,7 @@ class NotificationService {
         
         await scheduleNotification(
           id: dayOfWeek,
-          title: "Mind Space Reminder",
+          title: "notifications.daily_reminder_title".tr(),
           body: messages[dayOfWeek - 1],
           scheduledDate: scheduledDate,
           payload: 'mood_reminder_$dayOfWeek',
@@ -254,8 +255,8 @@ class NotificationService {
 
     await scheduleNotification(
       id: 10,
-      title: "Weekly Reflection Time",
-      body: "Take some time to reflect on your week and track your mood patterns 📊",
+      title: "notifications.weekly_reflection_title".tr(),
+      body: "notifications.weekly_reflection_body".tr(),
       scheduledDate: scheduledDate,
       payload: 'weekly_reflection',
     );

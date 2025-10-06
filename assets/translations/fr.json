@@ -218,5 +218,43 @@
         "filter_by_date": "Filtrer par Date",
         "filter_by_mood": "Filtrer par Humeur",
         "search_entries": "Rechercher des entrées..."
+    },
+    "notifications": {
+        "title": "Notifications",
+        "daily_reminder_title": "Rappel Mind Space",
+        "monday_message": "Comment va votre humeur aujourd'hui ? Commencez la semaine avec une énergie positive ! 🌟",
+        "tuesday_message": "Prenez un moment pour vous connecter avec vous-même aujourd'hui 💭",
+        "wednesday_message": "Vérification d'humeur en milieu de semaine ! Comment vous sentez-vous ? 🤔",
+        "thursday_message": "Vibes du jeudi ! Quelle est votre humeur aujourd'hui ? ✨",
+        "friday_message": "TGIF ! Comment était votre humeur ce vendredi ? 🎉",
+        "saturday_message": "Vérification d'humeur du week-end ! Comment vous sentez-vous ? 😌",
+        "sunday_message": "Temps de réflexion dominical ! Comment va votre humeur ? 🌅",
+        "weekly_reflection_title": "Temps de Réflexion Hebdomadaire",
+        "weekly_reflection_body": "Prenez le temps de réfléchir sur votre semaine et suivre vos modèles d'humeur 📊"
+    },
+    "prompts": {
+        "gratitude_prompts": [
+            "Pourquoi êtes-vous reconnaissant aujourd'hui ?",
+            "Quel acte de gentillesse quelqu'un a-t-il fait pour vous aujourd'hui ?",
+            "Qu'est-ce qui s'est bien passé dans votre vie cette semaine ?",
+            "Quelles qualités en vous appréciez-vous ?",
+            "Qu'est-ce qui dans la nature vous rend reconnaissant ?"
+        ],
+        "meditation_prompts": [
+            "Méditation de respiration",
+            "Méditation de gratitude",
+            "Méditation de calme",
+            "Méditation d'acceptation",
+            "Méditation d'amour"
+        ],
+        "ai_insight_prompt": "Vous êtes un expert en analyse d'humeur pour l'application MindSpace. Analysez les données suivantes et fournissez des insights personnalisés et des recommandations.",
+        "ai_pattern_prompt": "Vous êtes un expert en analyse de modèles d'humeur pour l'application MindSpace. Analysez les données suivantes et identifiez les modèles et tendances clés.",
+        "ai_gratitude_prompt": "Vous êtes un expert en pratiques de gratitude pour l'application MindSpace. Générez des suggestions de gratitude personnalisées et des recommandations.",
+        "ai_meditation_prompt": "Vous êtes un expert en méditation et relaxation pour l'application MindSpace. Générez des pratiques de méditation personnalisées et des recommandations.",
+        "ai_empty_data_prompt": "Commencez à suivre votre humeur pour obtenir des {type} personnalisés",
+        "ai_insight_format": "FORMATEZ LA RÉPONSE EN JSON avec les champs title, description, emoji, accentColor et suggestions",
+        "ai_pattern_format": "FORMATEZ LA RÉPONSE EN JSON avec les champs title, description, emoji, accentColor, patterns et recommendations",
+        "ai_gratitude_format": "FORMATEZ LA RÉPONSE EN JSON avec les champs title, description, emoji, accentColor et prompts",
+        "ai_meditation_format": "FORMATEZ LA RÉPONSE EN JSON avec les champs title, description, emoji, accentColor, type, duration, instructions et tips"
     }
 }

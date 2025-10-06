@@ -664,14 +664,14 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
         final success = await _profileImageService.saveProfileImage(imageFile);
         if (success && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('profile.photo_saved'.tr()),
+             SnackBar(
+              content:  Text('profile.photo_saved'.tr()),
               backgroundColor: AppColors.success,
             ),
           );
         } else if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+             SnackBar(
               content: Text('profile.photo_save_error'.tr()),
               backgroundColor: AppColors.error,
             ),

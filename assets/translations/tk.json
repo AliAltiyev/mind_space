@@ -157,5 +157,43 @@
         "filter_by_date": "Senä Göre Süz",
         "filter_by_mood": "Köwüşe Göre Süz",
         "search_entries": "Ýazgylary gözle..."
+    },
+    "notifications": {
+        "title": "Bildirişler",
+        "daily_reminder_title": "Mind Space Ýatlatma",
+        "monday_message": "Bu gün köwüşiňiz nähili? Haftany pozitiv energiýa bilen başlaň! 🌟",
+        "tuesday_message": "Bu gün özüňiz bilen baglanyşmak üçin bir minut wagt aýryň 💭",
+        "wednesday_message": "Hepde ortasy köwüş barlag! Nähili duýýarsyňyz? 🤔",
+        "thursday_message": "Penşenbe energiýasy! Bu gün köwüşiňiz nähili? ✨",
+        "friday_message": "TGIF! Bu juma köwüşiňiz nähili boldy? 🎉",
+        "saturday_message": "Hepde ahyry köwüş barlag! Nähili duýýarsyňyz? 😌",
+        "sunday_message": "Ýekşenbe oýlanma wagty! Köwüşiňiz nähili? 🌅",
+        "weekly_reflection_title": "Hepdelik Oýlanma Wagty",
+        "weekly_reflection_body": "Hepdeňiz barada oýlanmak we köwüş nusgalaryňyzy yzarlamak üçin wagt aýryň 📊"
+    },
+    "prompts": {
+        "gratitude_prompts": [
+            "Bu gün näme üçin minnetdarlyk duýýarsyňyz?",
+            "Bu gün kimdir siziň üçin näme gowy iş etdi?",
+            "Bu hepde durmuşyňyzda näme gowy bolup geçdi?",
+            "Özüňizde näme aýratynlyklary baha berýärsiňiz?",
+            "Teňriýatda sizi minnetdarlyk duýduran näme?"
+        ],
+        "meditation_prompts": [
+            "Dem almagyň meditasiýasy",
+            "Minnetdarlyk meditasiýasy",
+            "Rahatlyk meditasiýasy",
+            "Kabul etmegiň meditasiýasy",
+            "Söýgü meditasiýasy"
+        ],
+        "ai_insight_prompt": "MindSpace programma üçin köwüş analizi ekspertisiňiz. Aşakdaky maglumatlary analiz ediň we şahsy içgörüler we teklip beriň.",
+        "ai_pattern_prompt": "MindSpace programma üçin köwüş nusgalary analizi ekspertisiňiz. Aşakdaky maglumatlary analiz ediň we esasy nusgalar we ugurlar tapyň.",
+        "ai_gratitude_prompt": "MindSpace programma üçin minnetdarlyk amallary ekspertisiňiz. Şahsy minnetdarlyk teklip we maslahat dörediň.",
+        "ai_meditation_prompt": "MindSpace programma üçin meditasiýa we dynç alyş ekspertisiňiz. Şahsy meditasiýa amallary we maslahat dörediň.",
+        "ai_empty_data_prompt": "Şahsy {type} almak üçin köwüşiňizi yzarlamagy başlaň",
+        "ai_insight_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor we suggestions meýdanlary bilen",
+        "ai_pattern_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor, patterns we recommendations meýdanlary bilen",
+        "ai_gratitude_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor we prompts meýdanlary bilen",
+        "ai_meditation_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor, type, duration, instructions we tips meýdanlary bilen"
     }
 }

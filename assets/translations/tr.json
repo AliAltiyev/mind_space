@@ -213,5 +213,43 @@
         "filter_by_date": "Tarihe Göre Filtrele",
         "filter_by_mood": "Ruh Haline Göre Filtrele",
         "search_entries": "Girişleri ara..."
+    },
+    "notifications": {
+        "title": "Bildirimler",
+        "daily_reminder_title": "Mind Space Hatırlatması",
+        "monday_message": "Bugün ruh haliniz nasıl? Haftaya pozitif enerjiyle başlayın! 🌟",
+        "tuesday_message": "Bugün kendinizle bağlantı kurmak için bir dakika ayırın 💭",
+        "wednesday_message": "Hafta ortası ruh hali kontrolü! Nasıl hissediyorsunuz? 🤔",
+        "thursday_message": "Perşembe enerjisi! Bugün ruh haliniz nasıl? ✨",
+        "friday_message": "TGIF! Bu cuma ruh haliniz nasıldı? 🎉",
+        "saturday_message": "Hafta sonu ruh hali kontrolü! Nasıl hissediyorsunuz? 😌",
+        "sunday_message": "Pazar düşünme zamanı! Ruh haliniz nasıl? 🌅",
+        "weekly_reflection_title": "Haftalık Düşünme Zamanı",
+        "weekly_reflection_body": "Haftanızı düşünmek ve ruh hali kalıplarınızı takip etmek için zaman ayırın 📊"
+    },
+    "prompts": {
+        "gratitude_prompts": [
+            "Bugün neye minnettarsınız?",
+            "Bugün biri sizin için ne gibi bir iyilik yaptı?",
+            "Bu hafta hayatınızda ne güzel şeyler oldu?",
+            "Kendinizde hangi nitelikleri değerli buluyorsunuz?",
+            "Doğada sizi minnettar kılan ne?"
+        ],
+        "meditation_prompts": [
+            "Nefes meditasyonu",
+            "Minnettarlık meditasyonu",
+            "Sakinlik meditasyonu",
+            "Kabul meditasyonu",
+            "Sevgi meditasyonu"
+        ],
+        "ai_insight_prompt": "MindSpace uygulaması için ruh hali analizi uzmanısınız. Aşağıdaki verileri analiz edin ve kişiselleştirilmiş içgörüler ve öneriler sağlayın.",
+        "ai_pattern_prompt": "MindSpace uygulaması için ruh hali kalıp analizi uzmanısınız. Aşağıdaki verileri analiz edin ve anahtar kalıpları ve eğilimleri belirleyin.",
+        "ai_gratitude_prompt": "MindSpace uygulaması için minnettarlık pratikleri uzmanısınız. Kişiselleştirilmiş minnettarlık önerileri ve tavsiyeleri oluşturun.",
+        "ai_meditation_prompt": "MindSpace uygulaması için meditasyon ve rahatlama uzmanısınız. Kişiselleştirilmiş meditasyon pratikleri ve önerileri oluşturun.",
+        "ai_empty_data_prompt": "Kişiselleştirilmiş {type} almak için ruh halinizi takip etmeye başlayın",
+        "ai_insight_format": "Yanıtı JSON olarak formatlayın: title, description, emoji, accentColor ve suggestions alanları ile",
+        "ai_pattern_format": "Yanıtı JSON olarak formatlayın: title, description, emoji, accentColor, patterns ve recommendations alanları ile",
+        "ai_gratitude_format": "Yanıtı JSON olarak formatlayın: title, description, emoji, accentColor ve prompts alanları ile",
+        "ai_meditation_format": "Yanıtı JSON olarak formatlayın: title, description, emoji, accentColor, type, duration, instructions ve tips alanları ile"
     }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
@@ -36,8 +37,8 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
     
     if (!hasPermission && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Разрешения на уведомления не предоставлены'),
+        SnackBar(
+          content: Text('notifications.permission_denied'.tr()),
           backgroundColor: AppColors.warning,
         ),
       );
@@ -49,7 +50,7 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Уведомления'),
+        title: Text('notifications.title'.tr()),
         backgroundColor: AppColors.surface,
         elevation: 1,
         leading: IconButton(

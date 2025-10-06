@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../app/providers/ai_features_provider.dart';
 import '../../../../presentation/widgets/core/glass_surface.dart';
@@ -100,7 +101,7 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    'Персональные практики медитации и релаксации',
+                                    'ai.meditation.personal_practices'.tr(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -161,13 +162,13 @@ class _MeditationLoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GlassSurface(
       child: Container(
-        padding: const EdgeInsets.all(24),
-        child: const Column(
+        padding:   EdgeInsets.all(24),
+        child: Column(
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 16),
             Text(
-              'Подбираем персональные практики медитации...',
+                'ai.meditation.loading_practices'.tr(),
               style: TextStyle(color: Colors.white70),
             ),
           ],
@@ -197,7 +198,7 @@ class _MeditationErrorWidget extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Ошибка загрузки',
+              'common.error'.tr(),
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(color: Colors.white),
@@ -211,7 +212,7 @@ class _MeditationErrorWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(onPressed: onRetry, child: const Text('Повторить')),
+            ElevatedButton(onPressed: onRetry, child: Text('common.retry'.tr())),
           ],
         ),
       ),

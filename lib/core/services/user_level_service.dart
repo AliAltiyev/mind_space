@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Сервис для управления уровнями пользователя
 class UserLevelService {
@@ -44,12 +45,12 @@ class UserLevelService {
 
   /// Получить название уровня
   String getLevelName(int level) {
-    if (level <= 5) return 'Новичок';
-    if (level <= 10) return 'Исследователь';
-    if (level <= 15) return 'Эксперт';
-    if (level <= 20) return 'Мастер';
-    if (level <= 25) return 'Гуру';
-    return 'Легенда';
+    if (level <= 5) return 'user_level.novice'.tr();
+    if (level <= 10) return 'user_level.explorer'.tr();
+    if (level <= 15) return 'user_level.expert'.tr();
+    if (level <= 20) return 'user_level.master'.tr();
+    if (level <= 25) return 'user_level.guru'.tr();
+    return 'user_level.legend'.tr();
   }
 
   /// Получить иконку уровня
@@ -64,12 +65,12 @@ class UserLevelService {
 
   /// Получить описание уровня
   String getLevelDescription(int level) {
-    if (level <= 5) return 'Начало пути к самопознанию';
-    if (level <= 10) return 'Активное изучение своих эмоций';
-    if (level <= 15) return 'Глубокое понимание паттернов настроения';
-    if (level <= 20) return 'Мастерство в управлении эмоциями';
-    if (level <= 25) return 'Эксперт по психическому благополучию';
-    return 'Легендарный мастер эмоций';
+    if (level <= 5) return 'user_level.novice_desc'.tr();
+    if (level <= 10) return 'user_level.explorer_desc'.tr();
+    if (level <= 15) return 'user_level.expert_desc'.tr();
+    if (level <= 20) return 'user_level.master_desc'.tr();
+    if (level <= 25) return 'user_level.guru_desc'.tr();
+    return 'user_level.legend_desc'.tr();
   }
 
   /// Добавить опыт за запись настроения
@@ -227,12 +228,12 @@ class UserLevelStats {
   String get levelDescription => _getLevelDescription(level);
 
   String _getLevelName(int level) {
-    if (level <= 5) return 'Новичок';
-    if (level <= 10) return 'Исследователь';
-    if (level <= 15) return 'Эксперт';
-    if (level <= 20) return 'Мастер';
-    if (level <= 25) return 'Гуру';
-    return 'Легенда';
+    if (level <= 5) return 'user_level.novice'.tr();
+    if (level <= 10) return 'user_level.explorer'.tr();
+    if (level <= 15) return 'user_level.expert'.tr();
+    if (level <= 20) return 'user_level.master'.tr();
+    if (level <= 25) return 'user_level.guru'.tr();
+    return 'user_level.legend'.tr();
   }
 
   String _getLevelIcon(int level) {
@@ -245,11 +246,11 @@ class UserLevelStats {
   }
 
   String _getLevelDescription(int level) {
-    if (level <= 5) return 'Начало пути к самопознанию';
-    if (level <= 10) return 'Активное изучение своих эмоций';
-    if (level <= 15) return 'Глубокое понимание паттернов настроения';
-    if (level <= 20) return 'Мастерство в управлении эмоциями';
-    if (level <= 25) return 'Эксперт по психическому благополучию';
-    return 'Легендарный мастер эмоций';
+    if (level <= 5) return 'user_level.novice_desc'.tr();
+    if (level <= 10) return 'user_level.explorer_desc'.tr();
+    if (level <= 15) return 'user_level.expert_desc'.tr();
+    if (level <= 20) return 'user_level.master_desc'.tr();
+    if (level <= 25) return 'user_level.guru_desc'.tr();
+    return 'user_level.legend_desc'.tr();
   }
 }
