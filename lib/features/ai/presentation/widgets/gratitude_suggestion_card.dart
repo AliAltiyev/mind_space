@@ -468,7 +468,7 @@ class GratitudeSuggestionErrorCard extends StatelessWidget {
                 icon: const Icon(Icons.refresh),
                 label: Text('common.try_again'.tr()),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, 
+                  backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,

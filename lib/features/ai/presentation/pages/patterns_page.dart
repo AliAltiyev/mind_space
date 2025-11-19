@@ -210,7 +210,10 @@ class _PatternsErrorWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(onPressed: onRetry, child: Text('common.try_again'.tr())),
+            ElevatedButton(
+              onPressed: onRetry,
+              child: Text('common.try_again'.tr()),
+            ),
           ],
         ),
       ),
