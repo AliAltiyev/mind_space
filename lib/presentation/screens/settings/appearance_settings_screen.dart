@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Экран настроек внешнего вида
 class AppearanceSettingsScreen extends ConsumerWidget {
@@ -9,7 +10,7 @@ class AppearanceSettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Appearance Settings'),
+        title: Text('settings.appearance_settings'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),

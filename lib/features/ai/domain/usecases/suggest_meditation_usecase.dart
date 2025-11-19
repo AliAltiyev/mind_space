@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 import '../../../../core/database/database.dart';
 import '../entities/meditation_entity.dart';
 import '../repositories/ai_repository.dart';
@@ -66,26 +68,26 @@ class SuggestMeditationUseCase {
       if (hour >= 6 && hour < 12) {
         // Утро
         return meditation.copyWith(
-          title: 'Утренняя медитация',
-          description: 'Начните день с осознанности и намерений',
+          title: 'ai.meditation.morning'.tr(),
+          description: 'ai.meditation.morning_desc'.tr(),
         );
       } else if (hour >= 12 && hour < 18) {
         // День
         return meditation.copyWith(
-          title: 'Дневная пауза',
-          description: 'Восстановите энергию в середине дня',
+          title: 'ai.meditation.day_break'.tr(),
+          description: 'ai.meditation.day_break_desc'.tr(),
         );
       } else if (hour >= 18 && hour < 22) {
         // Вечер
         return meditation.copyWith(
-          title: 'Вечерняя релаксация',
-          description: 'Расслабьтесь после активного дня',
+          title: 'ai.meditation.evening'.tr(),
+          description: 'ai.meditation.evening_desc'.tr(),
         );
       } else {
         // Ночь
         return meditation.copyWith(
-          title: 'Медитация перед сном',
-          description: 'Подготовьтесь к спокойному сну',
+          title: 'ai.meditation.bedtime'.tr(),
+          description: 'ai.meditation.bedtime_desc'.tr(),
         );
       }
     } catch (e) {
@@ -111,22 +113,22 @@ class SuggestMeditationUseCase {
         return meditation.copyWith(
           type: MeditationType.lovingKindness,
           duration: 15,
-          title: 'Исцеляющая медитация',
-          description: 'Поможет справиться с трудными эмоциями',
+          title: 'ai.meditation.healing'.tr(),
+          description: 'ai.meditation.healing_desc'.tr(),
         );
       } else if (currentMood >= 4) {
         return meditation.copyWith(
           type: MeditationType.mindfulness,
           duration: 10,
-          title: 'Медитация благодарности',
-          description: 'Углубите чувство радости и благодарности',
+          title: 'ai.meditation.gratitude'.tr(),
+          description: 'ai.meditation.gratitude_desc'.tr(),
         );
       } else {
         return meditation.copyWith(
           type: MeditationType.breathing,
           duration: 12,
-          title: 'Медитация равновесия',
-          description: 'Найдите баланс и спокойствие',
+          title: 'ai.meditation.balance'.tr(),
+          description: 'ai.meditation.balance_desc'.tr(),
         );
       }
     } catch (e) {
@@ -141,8 +143,8 @@ class SuggestMeditationUseCase {
 
       return meditation.copyWith(
         duration: 5,
-        title: 'Быстрая медитация',
-        description: 'Короткая практика для восстановления энергии',
+        title: 'ai.meditation.quick'.tr(),
+        description: 'ai.meditation.quick_desc'.tr(),
       );
     } catch (e) {
       throw Exception('Failed to suggest short meditation session: $e');
@@ -156,8 +158,8 @@ class SuggestMeditationUseCase {
 
       return meditation.copyWith(
         duration: 30,
-        title: 'Глубокая медитация',
-        description: 'Погрузитесь в глубокое состояние покоя',
+        title: 'ai.meditation.deep'.tr(),
+        description: 'ai.meditation.deep_desc'.tr(),
       );
     } catch (e) {
       throw Exception('Failed to suggest long meditation session: $e');

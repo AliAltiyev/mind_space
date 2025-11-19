@@ -20,7 +20,9 @@
         "yes": "是",
         "no": "否",
         "try_again": "再试一次",
-        "refresh": "刷新"
+        "refresh": "刷新",
+        "unknown_state": "未知状态",
+        "reset": "重置"
     },
     "navigation": {
         "home": "首页",
@@ -256,5 +258,31 @@
         "ai_pattern_format": "将回答格式化为JSON，包含title、description、emoji、accentColor、patterns和recommendations字段",
         "ai_gratitude_format": "将回答格式化为JSON，包含title、description、emoji、accentColor和prompts字段",
         "ai_meditation_format": "将回答格式化为JSON，包含title、description、emoji、accentColor、type、duration、instructions和tips字段"
+    },
+    "settings": {
+        "all_data_deleted": "所有数据已删除",
+        "delete_data_error": "删除数据时出错",
+        "settings_reset_success": "设置已成功重置",
+        "settings_reset_error": "重置设置时出错",
+        "reset_settings_dialog_title": "重置设置？",
+        "reset_settings_warning": "所有设置将恢复为默认值。您的心情数据不会受到影响。",
+        "reminder_time_updated": "提醒时间已更改为{time}"
+    },
+    "ai": {
+        "meditation": {
+            "start_with_duration": "开始冥想（{duration}分钟）"
+        },
+        "error_analysis_title": "分析错误"
+    },
+    "demo": {
+        "performance_list": "• Paint对象缓存\n• 优化的CustomPainter\n• RepaintBoundary用于隔离\n• 基于计时器的波纹效果清理\n• 具有常量的统一设计系统"
+    },
+    "profile": {
+        "updated_successfully": "个人资料更新成功！",
+        "loading_error_full": "加载个人资料时出错"
+    },
+    "stats": {
+        "loading_error_full": "加载统计数据时出错",
+        "error_loading_title": "加载错误"
     }
 }

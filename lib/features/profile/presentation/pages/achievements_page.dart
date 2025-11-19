@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../blocs/achievements_bloc.dart';
 import '../widgets/achievement_card_widget.dart';
@@ -11,7 +12,7 @@ class AchievementsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Достижения'),
+        title: Text('achievements.title'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -190,14 +191,14 @@ class _AchievementsPageContent extends StatelessWidget {
                   onPressed: () {
                     context.read<AchievementsBloc>().add(LoadAchievements());
                   },
-                  child: const Text('Повторить'),
+                  child: Text('common.try_again'.tr()),
                 ),
               ],
             ),
           );
         }
 
-        return const Center(child: Text('Неизвестное состояние'));
+        return Center(child: Text('errors.unknown_state'.tr()));
       },
     );
   }

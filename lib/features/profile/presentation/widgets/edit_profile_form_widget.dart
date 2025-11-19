@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../domain/entities/user_profile_entity.dart';
 
@@ -137,11 +138,11 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
           // Bio Field
           TextFormField(
             controller: _bioController,
-            decoration: const InputDecoration(
-              labelText: 'О себе',
+            decoration: InputDecoration(
+              labelText: 'profile.about'.tr(),
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.info),
-              hintText: 'Расскажите немного о себе...',
+              hintText: 'profile.about_hint'.tr(),
             ),
             maxLines: 3,
             maxLength: 200,
@@ -188,14 +189,14 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
               Expanded(
                 child: OutlinedButton(
                   onPressed: widget.onCancel ?? () => Navigator.pop(context),
-                  child: const Text('Отмена'),
+                  child: Text('common.cancel'.tr()),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: ElevatedButton(
                   onPressed: _saveProfile,
-                  child: const Text('Сохранить'),
+                  child: Text('common.save'.tr()),
                 ),
               ),
             ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Экран быстрого добавления записи
 class QuickAddScreen extends ConsumerWidget {
@@ -10,7 +11,7 @@ class QuickAddScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Quick Add'),
+        title: Text('mood.add_entry'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(

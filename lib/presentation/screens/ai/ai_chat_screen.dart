@@ -36,11 +36,13 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   /// Добавить приветственное сообщение
   void _addWelcomeMessage() {
-    _messages.add(ChatMessage(
-      text: "ai.chat.welcome_message".tr(),
-      isUser: false,
-      timestamp: DateTime.now(),
-    ));
+    _messages.add(
+      ChatMessage(
+        text: "ai.chat.welcome_message".tr(),
+        isUser: false,
+        timestamp: DateTime.now(),
+      ),
+    );
   }
 
   @override
@@ -66,7 +68,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               ),
             ),
             const SizedBox(width: 12),
-            const Text('AI Помощник'),
+            Text('ai.chat.title'.tr()),
           ],
         ),
         backgroundColor: AppColors.surface,
@@ -83,7 +85,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
         children: [
           // Быстрые действия
           _buildQuickActions(),
-          
+
           // Список сообщений
           Expanded(
             child: _messages.isEmpty
@@ -97,7 +99,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                     },
                   ),
           ),
-          
+
           // Поле ввода
           _buildInputArea(),
         ],
@@ -111,9 +113,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        border: Border(
-          bottom: BorderSide(color: AppColors.border),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.border)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,37 +155,57 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   /// Пустое состояние
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.primary, AppColors.secondary],
-              ),
-              borderRadius: BorderRadius.circular(40),
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight:
+              MediaQuery.of(context).size.height -
+              MediaQuery.of(context).padding.top -
+              kToolbarHeight -
+              200, // Высота AppBar + QuickActions + InputArea
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppColors.primary, AppColors.secondary],
+                    ),
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: const Icon(
+                    Icons.psychology,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'ai.chat.ready_to_help'.tr(),
+                  style: AppTypography.h3.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'ai.chat.ask_any_question'.tr(),
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            child: const Icon(
-              Icons.psychology,
-              color: Colors.white,
-              size: 40,
-            ),
           ),
-          const SizedBox(height: 16),
-          Text(
-            'AI Помощник готов помочь!',
-            style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'ai.chat.ask_any_question'.tr(),
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
-            textAlign: TextAlign.center,
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -196,9 +216,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        border: Border(
-          top: BorderSide(color: AppColors.border),
-        ),
+        border: Border(top: BorderSide(color: AppColors.border)),
       ),
       child: Row(
         children: [
@@ -220,7 +238,10 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppColors.primary,
+                    width: 2,
+                  ),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -229,7 +250,13 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               ),
               maxLines: null,
               textInputAction: TextInputAction.send,
-              onSubmitted: (_) => _sendCurrentMessage(),
+              onSubmitted: (_) {
+                final text = _messageController.text.trim();
+                if (text.isNotEmpty && !_isLoading) {
+                  _sendMessage(text);
+                  _messageController.clear();
+                }
+              },
             ),
           ),
           const SizedBox(width: 8),
@@ -241,7 +268,15 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               borderRadius: BorderRadius.circular(24),
             ),
             child: IconButton(
-              onPressed: _isLoading ? null : _sendCurrentMessage(),
+              onPressed: _isLoading
+                  ? null
+                  : () {
+                      final text = _messageController.text.trim();
+                      if (text.isNotEmpty && !_isLoading) {
+                        _sendMessage(text);
+                        _messageController.clear();
+                      }
+                    },
               icon: _isLoading
                   ? const SizedBox(
                       width: 20,
@@ -259,28 +294,15 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     );
   }
 
-  /// Отправка текущего сообщения
-  VoidCallback _sendCurrentMessage() {
-    return () {
-      final text = _messageController.text.trim();
-      if (text.isNotEmpty && !_isLoading) {
-        _sendMessage(text);
-        _messageController.clear();
-      }
-    };
-  }
-
   /// Отправка сообщения
   Future<void> _sendMessage(String text) async {
     if (_isLoading) return;
 
     setState(() {
       _isLoading = true;
-      _messages.add(ChatMessage(
-        text: text,
-        isUser: true,
-        timestamp: DateTime.now(),
-      ));
+      _messages.add(
+        ChatMessage(text: text, isUser: true, timestamp: DateTime.now()),
+      );
     });
 
     // Начисляем опыт за использование AI чата
@@ -294,11 +316,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     final aiResponse = await _generateAiResponse(text);
 
     setState(() {
-      _messages.add(ChatMessage(
-        text: aiResponse,
-        isUser: false,
-        timestamp: DateTime.now(),
-      ));
+      _messages.add(
+        ChatMessage(text: aiResponse, isUser: false, timestamp: DateTime.now()),
+      );
       _isLoading = false;
     });
 
@@ -309,27 +329,42 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   Future<String> _generateAiResponse(String userMessage) async {
     // Простая логика ответов (в реальном приложении здесь будет AI сервис)
     final message = userMessage.toLowerCase();
-    
-    if (message.contains('как дела') || message.contains('привет') || message.contains('hello') || message.contains('hi')) {
+
+    if (message.contains('как дела') ||
+        message.contains('привет') ||
+        message.contains('hello') ||
+        message.contains('hi')) {
       return 'ai.chat.response_greeting'.tr();
     }
-    
-    if (message.contains('настроение') || message.contains('анализ') || message.contains('mood') || message.contains('analysis')) {
+
+    if (message.contains('настроение') ||
+        message.contains('анализ') ||
+        message.contains('mood') ||
+        message.contains('analysis')) {
       return 'ai.chat.response_mood_analysis'.tr();
     }
-    
-    if (message.contains('совет') || message.contains('помощь') || message.contains('advice') || message.contains('help')) {
+
+    if (message.contains('совет') ||
+        message.contains('помощь') ||
+        message.contains('advice') ||
+        message.contains('help')) {
       return 'ai.chat.response_tips'.tr();
     }
-    
-    if (message.contains('медитац') || message.contains('расслабить') || message.contains('meditation') || message.contains('relax')) {
+
+    if (message.contains('медитац') ||
+        message.contains('расслабить') ||
+        message.contains('meditation') ||
+        message.contains('relax')) {
       return 'ai.chat.response_meditation'.tr();
     }
-    
-    if (message.contains('плохо') || message.contains('грустно') || message.contains('bad') || message.contains('sad')) {
+
+    if (message.contains('плохо') ||
+        message.contains('грустно') ||
+        message.contains('bad') ||
+        message.contains('sad')) {
       return 'ai.chat.response_sad'.tr();
     }
-    
+
     // Общий ответ
     return "ai.chat.response_general".tr();
   }
@@ -400,8 +435,8 @@ class _ChatBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
-        mainAxisAlignment: message.isUser 
-            ? MainAxisAlignment.end 
+        mainAxisAlignment: message.isUser
+            ? MainAxisAlignment.end
             : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -427,14 +462,12 @@ class _ChatBubble extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: message.isUser 
-                    ? AppColors.primary
-                    : AppColors.surface,
+                color: message.isUser ? AppColors.primary : AppColors.surface,
                 borderRadius: BorderRadius.circular(16).copyWith(
-                  bottomLeft: message.isUser 
+                  bottomLeft: message.isUser
                       ? const Radius.circular(16)
                       : const Radius.circular(4),
-                  bottomRight: message.isUser 
+                  bottomRight: message.isUser
                       ? const Radius.circular(4)
                       : const Radius.circular(16),
                 ),
@@ -446,7 +479,7 @@ class _ChatBubble extends StatelessWidget {
                   Text(
                     message.text,
                     style: AppTypography.bodyMedium.copyWith(
-                      color: message.isUser 
+                      color: message.isUser
                           ? Colors.white
                           : AppColors.textPrimary,
                     ),
@@ -455,7 +488,7 @@ class _ChatBubble extends StatelessWidget {
                   Text(
                     _formatTime(message.timestamp),
                     style: AppTypography.caption.copyWith(
-                      color: message.isUser 
+                      color: message.isUser
                           ? Colors.white70
                           : AppColors.textHint,
                     ),
@@ -495,10 +528,7 @@ class _QuickActionChip extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  const _QuickActionChip({
-    required this.text,
-    required this.onTap,
-  });
+  const _QuickActionChip({required this.text, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

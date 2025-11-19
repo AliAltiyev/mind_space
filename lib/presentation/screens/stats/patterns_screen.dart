@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Экран обнаруженных паттернов
 class PatternsScreen extends ConsumerWidget {
@@ -9,7 +10,7 @@ class PatternsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Patterns'),
+        title: Text('ai.patterns.title'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -34,4 +35,3 @@ class PatternsScreen extends ConsumerWidget {
     );
   }
 }
-

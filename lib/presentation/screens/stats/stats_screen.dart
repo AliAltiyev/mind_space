@@ -194,25 +194,25 @@ class StatsScreen extends ConsumerWidget {
                         Widget text;
                         switch (value.toInt()) {
                           case 0:
-                            text = const Text('Mon', style: style);
+                            text = Text('notifications.monday'.tr().substring(0, 3), style: style);
                             break;
                           case 1:
-                            text = const Text('Tue', style: style);
+                            text = Text('notifications.tuesday'.tr().substring(0, 3), style: style);
                             break;
                           case 2:
-                            text = const Text('Wed', style: style);
+                            text = Text('notifications.wednesday'.tr().substring(0, 3), style: style);
                             break;
                           case 3:
-                            text = const Text('Thu', style: style);
+                            text = Text('notifications.thursday'.tr().substring(0, 3), style: style);
                             break;
                           case 4:
-                            text = const Text('Fri', style: style);
+                            text = Text('notifications.friday'.tr().substring(0, 3), style: style);
                             break;
                           case 5:
-                            text = const Text('Sat', style: style);
+                            text = Text('notifications.saturday'.tr().substring(0, 3), style: style);
                             break;
                           case 6:
-                            text = const Text('Sun', style: style);
+                            text = Text('notifications.sunday'.tr().substring(0, 3), style: style);
                             break;
                           default:
                             text = const Text('', style: style);
@@ -406,25 +406,25 @@ class StatsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           _DetailStatRow(
-            label: 'Best Mood Streak',
+            label: 'stats.streak'.tr(),
             value: '5 days',
             icon: Icons.trending_up,
           ),
           const SizedBox(height: 12),
           _DetailStatRow(
-            label: 'Most Common Mood',
+            label: 'stats.average_mood'.tr(),
             value: 'Good (4.0)',
             icon: Icons.mood,
           ),
           const SizedBox(height: 12),
           _DetailStatRow(
-            label: 'Total Notes',
+            label: 'stats.total_entries'.tr(),
             value: '23 entries',
             icon: Icons.note,
           ),
           const SizedBox(height: 12),
           _DetailStatRow(
-            label: 'Improvement Trend',
+            label: 'stats.weekly_trends'.tr(),
             value: '+15% this month',
             icon: Icons.arrow_upward,
           ),

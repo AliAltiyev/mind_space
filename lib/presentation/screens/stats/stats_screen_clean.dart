@@ -24,7 +24,13 @@ class StatsScreenClean extends ConsumerWidget {
         elevation: 1,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/home');
+            }
+          },
         ),
       ),
       body: allEntriesAsync.when(
@@ -48,19 +54,19 @@ class StatsScreenClean extends ConsumerWidget {
         children: [
           // Общая статистика
           _buildOverallStats(entries),
-          
+
           const SizedBox(height: 24),
-          
+
           // Статистика по настроениям
           _buildMoodStats(entries),
-          
+
           const SizedBox(height: 24),
-          
+
           // График трендов
           _buildTrendsChart(entries),
-          
+
           const SizedBox(height: 24),
-          
+
           // Последние записи
           _buildRecentEntries(entries, context),
         ],
@@ -71,13 +77,18 @@ class StatsScreenClean extends ConsumerWidget {
   /// Общая статистика
   Widget _buildOverallStats(List<dynamic> entries) {
     final totalEntries = entries.length;
-    final avgMood = entries.isEmpty 
-        ? 0.0 
-        : entries.map((e) => e.moodValue).reduce((a, b) => a + b) / entries.length;
+    final avgMood = entries.isEmpty
+        ? 0.0
+        : entries.map((e) => e.moodValue).reduce((a, b) => a + b) /
+              entries.length;
     final streak = _calculateStreak(entries);
-    final thisWeek = entries.where((e) => 
-        e.createdAt.isAfter(DateTime.now().subtract(const Duration(days: 7)))
-    ).length;
+    final thisWeek = entries
+        .where(
+          (e) => e.createdAt.isAfter(
+            DateTime.now().subtract(const Duration(days: 7)),
+          ),
+        )
+        .length;
 
     return Container(
       width: double.infinity,
@@ -145,8 +156,10 @@ class StatsScreenClean extends ConsumerWidget {
 
   /// Статистика по настроениям
   Widget _buildMoodStats(List<dynamic> entries) {
-    final moodCounts = List.generate(5, (index) => 
-        entries.where((e) => e.moodValue == index + 1).length);
+    final moodCounts = List.generate(
+      5,
+      (index) => entries.where((e) => e.moodValue == index + 1).length,
+    );
 
     return Container(
       width: double.infinity,
@@ -167,8 +180,10 @@ class StatsScreenClean extends ConsumerWidget {
           ...List.generate(5, (index) {
             final moodValue = index + 1;
             final count = moodCounts[index];
-            final percentage = entries.isEmpty ? 0.0 : (count / entries.length) * 100;
-            
+            final percentage = entries.isEmpty
+                ? 0.0
+                : (count / entries.length) * 100;
+
             return _MoodStatBar(
               moodValue: moodValue,
               count: count,
@@ -201,10 +216,7 @@ class StatsScreenClean extends ConsumerWidget {
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            height: 200,
-            child: _buildSimpleChart(weeklyData),
-          ),
+          SizedBox(height: 200, child: _buildSimpleChart(weeklyData)),
         ],
       ),
     );
@@ -251,11 +263,7 @@ class StatsScreenClean extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.analytics_outlined,
-            size: 64,
-            color: AppColors.textHint,
-          ),
+          Icon(Icons.analytics_outlined, size: 64, color: AppColors.textHint),
           const SizedBox(height: 16),
           Text(
             'stats.no_data'.tr(),
@@ -264,7 +272,9 @@ class StatsScreenClean extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             'stats.add_entries_for_stats'.tr(),
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -283,11 +293,7 @@ class StatsScreenClean extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64,
-            color: AppColors.error,
-          ),
+          Icon(Icons.error_outline, size: 64, color: AppColors.error),
           const SizedBox(height: 16),
           Text(
             'common.error'.tr(),
@@ -296,7 +302,9 @@ class StatsScreenClean extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             error.toString(),
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -310,7 +318,9 @@ class StatsScreenClean extends ConsumerWidget {
       return Center(
         child: Text(
           'stats.no_data_display'.tr(),
-          style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+          style: AppTypography.bodyMedium.copyWith(
+            color: AppColors.textSecondary,
+          ),
         ),
       );
     }
@@ -330,11 +340,11 @@ class StatsScreenClean extends ConsumerWidget {
 
     int streak = 0;
     final today = DateTime.now();
-    
+
     for (int i = 0; i < sortedEntries.length; i++) {
       final entryDate = sortedEntries[i].createdAt;
       final daysDiff = today.difference(entryDate).inDays;
-      
+
       if (daysDiff == streak) {
         streak++;
       } else {
@@ -349,23 +359,28 @@ class StatsScreenClean extends ConsumerWidget {
   List<double> _getWeeklyData(List<dynamic> entries) {
     final now = DateTime.now();
     final weekData = <double>[];
-    
+
     for (int i = 6; i >= 0; i--) {
       final date = now.subtract(Duration(days: i));
-      final dayEntries = entries.where((e) => 
-          e.createdAt.year == date.year &&
-          e.createdAt.month == date.month &&
-          e.createdAt.day == date.day
-      ).toList();
-      
+      final dayEntries = entries
+          .where(
+            (e) =>
+                e.createdAt.year == date.year &&
+                e.createdAt.month == date.month &&
+                e.createdAt.day == date.day,
+          )
+          .toList();
+
       if (dayEntries.isEmpty) {
         weekData.add(0.0);
       } else {
-        final avg = dayEntries.map((e) => e.moodValue).reduce((a, b) => a + b) / dayEntries.length;
+        final avg =
+            dayEntries.map((e) => e.moodValue).reduce((a, b) => a + b) /
+            dayEntries.length;
         weekData.add(avg);
       }
     }
-    
+
     return weekData;
   }
 }
@@ -397,10 +412,7 @@ class _StatCard extends StatelessWidget {
         children: [
           Icon(icon, color: color, size: 24),
           const SizedBox(height: 8),
-          Text(
-            value,
-            style: AppTypography.h3.copyWith(color: color),
-          ),
+          Text(value, style: AppTypography.h3.copyWith(color: color)),
           const SizedBox(height: 4),
           Text(
             title,
@@ -441,11 +453,7 @@ class _MoodStatBar extends StatelessWidget {
               gradient: getMoodGradient(moodValue),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(
-              _getMoodIcon(moodValue),
-              color: Colors.white,
-              size: 16,
-            ),
+            child: Icon(_getMoodIcon(moodValue), color: Colors.white, size: 16),
           ),
           const SizedBox(width: 12),
           // Название
@@ -461,7 +469,9 @@ class _MoodStatBar extends StatelessWidget {
             child: LinearProgressIndicator(
               value: total == 0 ? 0.0 : count / total,
               backgroundColor: AppColors.border,
-              valueColor: AlwaysStoppedAnimation<Color>(getMoodColor(moodValue)),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                getMoodColor(moodValue),
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -481,23 +491,35 @@ class _MoodStatBar extends StatelessWidget {
 
   IconData _getMoodIcon(int mood) {
     switch (mood) {
-      case 5: return Icons.sentiment_very_satisfied;
-      case 4: return Icons.sentiment_satisfied;
-      case 3: return Icons.sentiment_neutral;
-      case 2: return Icons.sentiment_dissatisfied;
-      case 1: return Icons.sentiment_very_dissatisfied;
-      default: return Icons.sentiment_neutral;
+      case 5:
+        return Icons.sentiment_very_satisfied;
+      case 4:
+        return Icons.sentiment_satisfied;
+      case 3:
+        return Icons.sentiment_neutral;
+      case 2:
+        return Icons.sentiment_dissatisfied;
+      case 1:
+        return Icons.sentiment_very_dissatisfied;
+      default:
+        return Icons.sentiment_neutral;
     }
   }
 
   String _getMoodLabel(int mood) {
     switch (mood) {
-      case 5: return 'mood.moods.very_happy'.tr();
-      case 4: return 'mood.moods.happy'.tr();
-      case 3: return 'mood.moods.neutral'.tr();
-      case 2: return 'mood.moods.sad'.tr();
-      case 1: return 'mood.moods.very_sad'.tr();
-      default: return 'stats.unknown'.tr();
+      case 5:
+        return 'mood.moods.very_happy'.tr();
+      case 4:
+        return 'mood.moods.happy'.tr();
+      case 3:
+        return 'mood.moods.neutral'.tr();
+      case 2:
+        return 'mood.moods.sad'.tr();
+      case 1:
+        return 'mood.moods.very_sad'.tr();
+      default:
+        return 'stats.unknown'.tr();
     }
   }
 }
@@ -540,12 +562,18 @@ class _RecentEntryItem extends StatelessWidget {
 
   String _getMoodLabel(int mood) {
     switch (mood) {
-      case 5: return 'mood.moods.very_happy'.tr();
-      case 4: return 'mood.moods.happy'.tr();
-      case 3: return 'mood.moods.neutral'.tr();
-      case 2: return 'mood.moods.sad'.tr();
-      case 1: return 'mood.moods.very_sad'.tr();
-      default: return 'stats.unknown'.tr();
+      case 5:
+        return 'mood.moods.very_happy'.tr();
+      case 4:
+        return 'mood.moods.happy'.tr();
+      case 3:
+        return 'mood.moods.neutral'.tr();
+      case 2:
+        return 'mood.moods.sad'.tr();
+      case 1:
+        return 'mood.moods.very_sad'.tr();
+      default:
+        return 'stats.unknown'.tr();
     }
   }
 }

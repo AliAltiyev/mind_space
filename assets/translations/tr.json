@@ -20,7 +20,9 @@
         "yes": "Evet",
         "no": "Hayır",
         "try_again": "Tekrar Dene",
-        "refresh": "Yenile"
+        "refresh": "Yenile",
+        "unknown_state": "Bilinmeyen durum",
+        "reset": "Sıfırla"
     },
     "navigation": {
         "home": "Ana Sayfa",
@@ -251,5 +253,31 @@
         "ai_pattern_format": "Yanıtı JSON olarak formatlayın: title, description, emoji, accentColor, patterns ve recommendations alanları ile",
         "ai_gratitude_format": "Yanıtı JSON olarak formatlayın: title, description, emoji, accentColor ve prompts alanları ile",
         "ai_meditation_format": "Yanıtı JSON olarak formatlayın: title, description, emoji, accentColor, type, duration, instructions ve tips alanları ile"
+    },
+    "settings": {
+        "all_data_deleted": "Tüm veriler silindi",
+        "delete_data_error": "Veri silinirken hata",
+        "settings_reset_success": "Ayarlar başarıyla sıfırlandı",
+        "settings_reset_error": "Ayarları sıfırlarken hata",
+        "reset_settings_dialog_title": "Ayarları sıfırla?",
+        "reset_settings_warning": "Tüm ayarlar varsayılan değerlere döndürülecek. Ruh hali verileriniz etkilenmeyecek.",
+        "reminder_time_updated": "Hatırlatma zamanı {time} olarak değiştirildi"
+    },
+    "ai": {
+        "meditation": {
+            "start_with_duration": "Meditasyona başla ({duration} dk)"
+        },
+        "error_analysis_title": "Analiz Hatası"
+    },
+    "demo": {
+        "performance_list": "• Paint nesneleri önbellekleme\n• Optimize CustomPainter\n• İzolasyon için RepaintBoundary\n• Dalga efektleri için zamanlayıcı tabanlı temizleme\n• Sabitlerle birleşik tasarım sistemi"
+    },
+    "profile": {
+        "updated_successfully": "Profil başarıyla güncellendi!",
+        "loading_error_full": "Profil yüklenirken hata"
+    },
+    "stats": {
+        "loading_error_full": "İstatistikler yüklenirken hata",
+        "error_loading_title": "Yükleme Hatası"
     }
 }

@@ -31,7 +31,7 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
   @override
   Widget build(BuildContext context) {
     final moodEntriesAsync = ref.watch(allMoodEntriesProvider);
-    
+
     return moodEntriesAsync.when(
       data: (moodEntries) {
         final filteredEntries = _getFilteredEntries(moodEntries);
@@ -42,8 +42,10 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
     );
   }
 
-  Widget _buildContent(BuildContext context, List<Map<String, dynamic>> filteredEntries) {
-
+  Widget _buildContent(
+    BuildContext context,
+    List<Map<String, dynamic>> filteredEntries,
+  ) {
     return amazing.AmazingBackground(
       type: amazing.BackgroundType.cosmic,
       child: Scaffold(
@@ -90,7 +92,10 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
                   decoration: InputDecoration(
                     hintText: 'entries.search_entries'.tr(),
                     hintStyle: const TextStyle(color: Colors.white60),
-                    prefixIcon: const Icon(Icons.search, color: Color(0xFFFB9E3A)),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: Color(0xFFFB9E3A),
+                    ),
                     border: InputBorder.none,
                   ),
                   onChanged: (value) => setState(() {}),
@@ -106,13 +111,17 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
                   children: [
                     if (_selectedMoodFilter != null)
                       _FilterChip(
-                        label: 'Mood: ${_moodLabel(_selectedMoodFilter!)}',
-                        onDeleted: () => setState(() => _selectedMoodFilter = null),
+                        label: 'entries.filter_mood'.tr(
+                          namedArgs: {'mood': _moodLabel(_selectedMoodFilter!)},
+                        ),
+                        onDeleted: () =>
+                            setState(() => _selectedMoodFilter = null),
                       ),
                     if (_selectedDateRange != null)
                       _FilterChip(
-                        label: 'Date Range',
-                        onDeleted: () => setState(() => _selectedDateRange = null),
+                        label: 'entries.date_range'.tr(),
+                        onDeleted: () =>
+                            setState(() => _selectedDateRange = null),
                       ),
                   ],
                 ),
@@ -142,14 +151,20 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
 
   List<Map<String, dynamic>> _getFilteredEntries(List<MoodEntry> moodEntries) {
     // Конвертируем MoodEntry в Map для совместимости с существующим кодом
-    final entries = moodEntries.map((entry) => {
-      'id': entry.id?.toString() ?? DateTime.now().millisecondsSinceEpoch.toString(),
-      'mood': entry.moodValue,
-      'note': entry.note ?? '',
-      'date': entry.createdAt,
-      'tags': [], // TODO: Добавить теги в модель MoodEntry
-    }).toList();
-    
+    final entries = moodEntries
+        .map(
+          (entry) => {
+            'id':
+                entry.id?.toString() ??
+                DateTime.now().millisecondsSinceEpoch.toString(),
+            'mood': entry.moodValue,
+            'note': entry.note ?? '',
+            'date': entry.createdAt,
+            'tags': [], // TODO: Добавить теги в модель MoodEntry
+          },
+        )
+        .toList();
+
     var filtered = List<Map<String, dynamic>>.from(entries);
 
     // Поиск
@@ -163,20 +178,28 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
 
     // Фильтр по настроению
     if (_selectedMoodFilter != null) {
-      filtered = filtered.where((entry) => entry['mood'] == _selectedMoodFilter).toList();
+      filtered = filtered
+          .where((entry) => entry['mood'] == _selectedMoodFilter)
+          .toList();
     }
 
     // Фильтр по дате
     if (_selectedDateRange != null) {
       filtered = filtered.where((entry) {
         final entryDate = entry['date'] as DateTime;
-        return entryDate.isAfter(_selectedDateRange!.start.subtract(const Duration(days: 1))) &&
-            entryDate.isBefore(_selectedDateRange!.end.add(const Duration(days: 1)));
+        return entryDate.isAfter(
+              _selectedDateRange!.start.subtract(const Duration(days: 1)),
+            ) &&
+            entryDate.isBefore(
+              _selectedDateRange!.end.add(const Duration(days: 1)),
+            );
       }).toList();
     }
 
     // Сортировка по дате (новые сверху)
-    filtered.sort((a, b) => (b['date'] as DateTime).compareTo(a['date'] as DateTime));
+    filtered.sort(
+      (a, b) => (b['date'] as DateTime).compareTo(a['date'] as DateTime),
+    );
 
     return filtered;
   }
@@ -229,10 +252,7 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
               const SizedBox(height: 8),
               Text(
                 'entries.start_tracking'.tr(),
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.white70,
-                ),
+                style: const TextStyle(fontSize: 16, color: Colors.white70),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -243,7 +263,10 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFB9E3A),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                 ),
               ),
             ],
@@ -367,10 +390,7 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
                   const SizedBox(height: 8),
                   Text(
                     error.toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
+                    style: const TextStyle(fontSize: 16, color: Colors.white70),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
@@ -379,7 +399,7 @@ class _EntriesScreenState extends ConsumerState<EntriesScreen> {
                       ref.invalidate(allMoodEntriesProvider);
                     },
                     icon: const Icon(Icons.refresh),
-                    label: const Text('Try Again'),
+                    label: Text('common.try_again'.tr()),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFEA2F14),
                       foregroundColor: Colors.white,
@@ -399,10 +419,7 @@ class _FilterChip extends StatelessWidget {
   final String label;
   final VoidCallback onDeleted;
 
-  const _FilterChip({
-    required this.label,
-    required this.onDeleted,
-  });
+  const _FilterChip({required this.label, required this.onDeleted});
 
   @override
   Widget build(BuildContext context) {
@@ -411,10 +428,7 @@ class _FilterChip extends StatelessWidget {
       child: Chip(
         label: Text(
           label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-          ),
+          style: const TextStyle(color: Colors.white, fontSize: 12),
         ),
         backgroundColor: const Color(0xFFFB9E3A).withOpacity(0.3),
         deleteIcon: const Icon(Icons.close, size: 16, color: Colors.white),
@@ -429,10 +443,7 @@ class _EntryCard extends StatelessWidget {
   final Map<String, dynamic> entry;
   final VoidCallback onTap;
 
-  const _EntryCard({
-    required this.entry,
-    required this.onTap,
-  });
+  const _EntryCard({required this.entry, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -440,7 +451,7 @@ class _EntryCard extends StatelessWidget {
     final note = entry['note'] as String;
     final date = entry['date'] as DateTime;
     final tags = (entry['tags'] as List<dynamic>).cast<String>();
-    
+
     // Отладочная информация (можно убрать после тестирования)
     // print('🔍 Отображение записи: mood=$mood, date=$date, note=$note');
 
@@ -483,20 +494,14 @@ class _EntryCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Colors.white60,
-                    ),
+                    const Icon(Icons.chevron_right, color: Colors.white60),
                   ],
                 ),
                 if (note.isNotEmpty) ...[
                   const SizedBox(height: 12),
                   Text(
                     note,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
-                    ),
+                    style: const TextStyle(fontSize: 14, color: Colors.white70),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -505,7 +510,10 @@ class _EntryCard extends StatelessWidget {
                   const SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
-                    children: tags.take(3).map((tag) => _TagChip(tag: tag)).toList(),
+                    children: tags
+                        .take(3)
+                        .map((tag) => _TagChip(tag: tag))
+                        .toList(),
                   ),
                 ],
               ],
@@ -519,17 +527,17 @@ class _EntryCard extends StatelessWidget {
   String _moodLabel(int mood) {
     switch (mood) {
       case 1:
-        return 'Very Bad';
+        return 'mood.moods.very_sad'.tr();
       case 2:
-        return 'Bad';
+        return 'mood.moods.sad'.tr();
       case 3:
-        return 'Okay';
+        return 'mood.moods.neutral'.tr();
       case 4:
-        return 'Good';
+        return 'mood.moods.happy'.tr();
       case 5:
-        return 'Excellent';
+        return 'mood.moods.very_happy'.tr();
       default:
-        return 'Unknown';
+        return 'stats.unknown'.tr();
     }
   }
 }
@@ -589,9 +597,7 @@ class _TagChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFFB9E3A).withOpacity(0.2),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFFFB9E3A).withOpacity(0.3),
-        ),
+        border: Border.all(color: const Color(0xFFFB9E3A).withOpacity(0.3)),
       ),
       child: Text(
         tag,
@@ -653,7 +659,7 @@ class _FilterDialogState extends State<_FilterDialog> {
                 ),
               ),
               const SizedBox(height: 20),
-              
+
               // Mood Filter
               Text(
                 'entries.filter_by_mood'.tr(),
@@ -680,9 +686,9 @@ class _FilterDialogState extends State<_FilterDialog> {
                   );
                 }),
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Date Range Filter
               Text(
                 'entries.filter_by_date'.tr(),
@@ -696,18 +702,22 @@ class _FilterDialogState extends State<_FilterDialog> {
               ElevatedButton.icon(
                 onPressed: _selectDateRange,
                 icon: const Icon(Icons.date_range),
-                label: Text(_dateRange != null 
-                    ? '${DateFormat('MMM dd').format(_dateRange!.start)} - ${DateFormat('MMM dd').format(_dateRange!.end)}'
-                    : 'Select Date Range'),
+                label: Text(
+                  _dateRange != null
+                      ? '${DateFormat('MMM dd').format(_dateRange!.start)} - ${DateFormat('MMM dd').format(_dateRange!.end)}'
+                      : 'Select Date Range',
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFB9E3A).withOpacity(0.2),
                   foregroundColor: Colors.white,
-                  side: BorderSide(color: const Color(0xFFFB9E3A).withOpacity(0.3)),
+                  side: BorderSide(
+                    color: const Color(0xFFFB9E3A).withOpacity(0.3),
+                  ),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -729,7 +739,7 @@ class _FilterDialogState extends State<_FilterDialog> {
                       backgroundColor: const Color(0xFFFB9E3A),
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text('Apply'),
+                    child: Text('common.apply'.tr()),
                   ),
                 ],
               ),
@@ -759,7 +769,7 @@ class _FilterDialogState extends State<_FilterDialog> {
         );
       },
     );
-    
+
     if (range != null) {
       setState(() {
         _dateRange = range;
@@ -795,7 +805,9 @@ class _MoodFilterChip extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: isSelected ? colors[mood - 1] : colors[mood - 1].withOpacity(0.3),
+          color: isSelected
+              ? colors[mood - 1]
+              : colors[mood - 1].withOpacity(0.3),
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? Colors.white : colors[mood - 1],
@@ -847,7 +859,7 @@ class _EntryDetailsSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          
+
           // Content
           Expanded(
             child: Padding(
@@ -873,7 +885,9 @@ class _EntryDetailsSheet extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              DateFormat('EEEE, MMMM dd, yyyy • HH:mm').format(date),
+                              DateFormat(
+                                'EEEE, MMMM dd, yyyy • HH:mm',
+                              ).format(date),
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.white60,
@@ -888,9 +902,9 @@ class _EntryDetailsSheet extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Note
                   if (note.isNotEmpty) ...[
                     Text(
@@ -908,7 +922,9 @@ class _EntryDetailsSheet extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.05),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withOpacity(0.1)),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.1),
+                        ),
                       ),
                       child: Text(
                         note,
@@ -921,7 +937,7 @@ class _EntryDetailsSheet extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                   ],
-                  
+
                   // Tags
                   if (tags.isNotEmpty) ...[
                     Text(
@@ -951,17 +967,17 @@ class _EntryDetailsSheet extends StatelessWidget {
   String _moodLabel(int mood) {
     switch (mood) {
       case 1:
-        return 'Very Bad';
+        return 'mood.moods.very_sad'.tr();
       case 2:
-        return 'Bad';
+        return 'mood.moods.sad'.tr();
       case 3:
-        return 'Okay';
+        return 'mood.moods.neutral'.tr();
       case 4:
-        return 'Good';
+        return 'mood.moods.happy'.tr();
       case 5:
-        return 'Excellent';
+        return 'mood.moods.very_happy'.tr();
       default:
-        return 'Unknown';
+        return 'stats.unknown'.tr();
     }
   }
 }

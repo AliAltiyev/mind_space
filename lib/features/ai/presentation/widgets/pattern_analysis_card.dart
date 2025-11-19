@@ -598,7 +598,7 @@ class PatternAnalysisErrorCard extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Попробовать снова'),
+                label: Text('common.try_again'.tr()),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,

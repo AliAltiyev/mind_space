@@ -369,7 +369,7 @@ class HomeScreenClean extends ConsumerWidget {
                 onTap: () => context.go('/home/entries'),
               ),
               _ActionCard(
-                title: 'AI Инсайты',
+                title: 'home.ai_insights'.tr(),
                 icon: Icons.psychology,
                 color: AppColors.info,
                 onTap: () => context.go('/stats/insights'),

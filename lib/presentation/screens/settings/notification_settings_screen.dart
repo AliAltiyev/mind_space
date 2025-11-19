@@ -12,12 +12,14 @@ class NotificationSettingsScreen extends ConsumerStatefulWidget {
   const NotificationSettingsScreen({super.key});
 
   @override
-  ConsumerState<NotificationSettingsScreen> createState() => _NotificationSettingsScreenState();
+  ConsumerState<NotificationSettingsScreen> createState() =>
+      _NotificationSettingsScreenState();
 }
 
-class _NotificationSettingsScreenState extends ConsumerState<NotificationSettingsScreen> {
+class _NotificationSettingsScreenState
+    extends ConsumerState<NotificationSettingsScreen> {
   final NotificationService _notificationService = NotificationService();
-  
+
   bool _dailyRemindersEnabled = false;
   bool _weeklyReflectionEnabled = false;
   TimeOfDay _dailyReminderTime = const TimeOfDay(hour: 20, minute: 0);
@@ -34,24 +36,25 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
 
   Future<void> _initializeSettings() async {
     await _notificationService.initialize();
-    
+
     // Запрашиваем разрешения
     final hasPermissions = await _notificationService.requestPermissions();
-    if (!hasPermissions) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Notification permissions are required for reminders'),
-            backgroundColor: Color(0xFFEA2F14),
-          ),
-        );
-      }
+    if (!hasPermissions && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('notifications.permission_denied'.tr()),
+          backgroundColor: const Color(0xFFEA2F14),
+        ),
+      );
     }
-    
-    final pendingNotifications = await _notificationService.getPendingNotifications();
-    
+
+    final pendingNotifications = await _notificationService
+        .getPendingNotifications();
+
     setState(() {
-      _dailyRemindersEnabled = pendingNotifications.any((n) => n.id >= 1 && n.id <= 7);
+      _dailyRemindersEnabled = pendingNotifications.any(
+        (n) => n.id >= 1 && n.id <= 7,
+      );
       _weeklyReflectionEnabled = pendingNotifications.any((n) => n.id == 10);
     });
   }
@@ -97,27 +100,29 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Daily Mood Reminders',
+                      'notifications.daily_mood_reminders'.tr(),
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
-                        shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 8)],
+                        shadows: [
+                          Shadow(color: Color(0xFFFB9E3A), blurRadius: 8),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     SwitchListTile(
-                      title: const Text(
-                        'Enable Daily Reminders',
-                        style: TextStyle(color: Colors.white),
+                      title: Text(
+                        'notifications.enable_reminders'.tr(),
+                        style: const TextStyle(color: Colors.white),
                       ),
-                      subtitle: const Text(
-                        'Get reminded to track your mood every day',
-                        style: TextStyle(color: Colors.white60),
+                      subtitle: Text(
+                        'notifications.daily_reminders_desc'.tr(),
+                        style: const TextStyle(color: Colors.white60),
                       ),
                       value: _dailyRemindersEnabled,
-                      activeColor: const Color(0xFFFB9E3A),
+                      activeThumbColor: const Color(0xFFFB9E3A),
                       onChanged: (value) async {
                         setState(() {
                           _dailyRemindersEnabled = value;
@@ -125,28 +130,34 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
                         await _updateDailyReminders();
                       },
                     ),
-                    
+
                     if (_dailyRemindersEnabled) ...[
                       ListTile(
-                        leading: const Icon(Icons.access_time, color: Color(0xFFFB9E3A)),
-                        title: const Text(
-                          'Reminder Time',
-                          style: TextStyle(color: Colors.white),
+                        leading: const Icon(
+                          Icons.access_time,
+                          color: Color(0xFFFB9E3A),
+                        ),
+                        title: Text(
+                          'notifications.reminder_time'.tr(),
+                          style: const TextStyle(color: Colors.white),
                         ),
                         subtitle: Text(
                           _dailyReminderTime.format(context),
                           style: const TextStyle(color: Colors.white60),
                         ),
-                        trailing: const Icon(Icons.chevron_right, color: Colors.white60),
+                        trailing: const Icon(
+                          Icons.chevron_right,
+                          color: Colors.white60,
+                        ),
                         onTap: _selectDailyReminderTime,
                       ),
                     ],
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Weekly Reflection
               amazing.AmazingGlassSurface(
                 effectType: amazing.GlassEffectType.cyber,
@@ -155,27 +166,29 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Weekly Reflection',
+                      'notifications.weekly_reflection_reminders'.tr(),
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
-                        shadows: [Shadow(color: Color(0xFFFCEF91), blurRadius: 8)],
+                        shadows: [
+                          Shadow(color: Color(0xFFFCEF91), blurRadius: 8),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     SwitchListTile(
-                      title: const Text(
-                        'Enable Weekly Reflection',
-                        style: TextStyle(color: Colors.white),
+                      title: Text(
+                        'notifications.weekly_reflection_reminders'.tr(),
+                        style: const TextStyle(color: Colors.white),
                       ),
-                      subtitle: const Text(
-                        'Get reminded to reflect on your week',
-                        style: TextStyle(color: Colors.white60),
+                      subtitle: Text(
+                        'notifications.weekly_reflection_desc'.tr(),
+                        style: const TextStyle(color: Colors.white60),
                       ),
                       value: _weeklyReflectionEnabled,
-                      activeColor: const Color(0xFFFB9E3A),
+                      activeThumbColor: const Color(0xFFFB9E3A),
                       onChanged: (value) async {
                         setState(() {
                           _weeklyReflectionEnabled = value;
@@ -183,42 +196,54 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
                         await _updateWeeklyReflection();
                       },
                     ),
-                    
+
                     if (_weeklyReflectionEnabled) ...[
                       ListTile(
-                        leading: const Icon(Icons.calendar_today, color: Color(0xFFFB9E3A)),
-                        title: const Text(
-                          'Reminder Day',
-                          style: TextStyle(color: Colors.white),
+                        leading: const Icon(
+                          Icons.calendar_today,
+                          color: Color(0xFFFB9E3A),
+                        ),
+                        title: Text(
+                          'notifications.reminder_day'.tr(),
+                          style: const TextStyle(color: Colors.white),
                         ),
                         subtitle: Text(
                           _getDayName(_weeklyReminderDay),
                           style: const TextStyle(color: Colors.white60),
                         ),
-                        trailing: const Icon(Icons.chevron_right, color: Colors.white60),
+                        trailing: const Icon(
+                          Icons.chevron_right,
+                          color: Colors.white60,
+                        ),
                         onTap: _selectWeeklyReminderDay,
                       ),
-                      
+
                       ListTile(
-                        leading: const Icon(Icons.access_time, color: Color(0xFFFB9E3A)),
-                        title: const Text(
-                          'Reminder Time',
-                          style: TextStyle(color: Colors.white),
+                        leading: const Icon(
+                          Icons.access_time,
+                          color: Color(0xFFFB9E3A),
+                        ),
+                        title: Text(
+                          'notifications.reminder_time'.tr(),
+                          style: const TextStyle(color: Colors.white),
                         ),
                         subtitle: Text(
                           _weeklyReminderTime.format(context),
                           style: const TextStyle(color: Colors.white60),
                         ),
-                        trailing: const Icon(Icons.chevron_right, color: Colors.white60),
+                        trailing: const Icon(
+                          Icons.chevron_right,
+                          color: Colors.white60,
+                        ),
                         onTap: _selectWeeklyReminderTime,
                       ),
                     ],
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Other Notifications
               amazing.AmazingGlassSurface(
                 effectType: amazing.GlassEffectType.rainbow,
@@ -227,45 +252,47 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Other Notifications',
+                      'notifications.other_notifications'.tr(),
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
-                        shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 8)],
+                        shadows: [
+                          Shadow(color: Color(0xFFFB9E3A), blurRadius: 8),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     SwitchListTile(
-                      title: const Text(
-                        'Achievement Notifications',
-                        style: TextStyle(color: Colors.white),
+                      title: Text(
+                        'notifications.achievement_notifications'.tr(),
+                        style: const TextStyle(color: Colors.white),
                       ),
-                      subtitle: const Text(
-                        'Get notified when you unlock achievements',
-                        style: TextStyle(color: Colors.white60),
+                      subtitle: Text(
+                        'notifications.achievement_notifications_desc'.tr(),
+                        style: const TextStyle(color: Colors.white60),
                       ),
                       value: _achievementNotifications,
-                      activeColor: const Color(0xFFFB9E3A),
+                      activeThumbColor: const Color(0xFFFB9E3A),
                       onChanged: (value) {
                         setState(() {
                           _achievementNotifications = value;
                         });
                       },
                     ),
-                    
+
                     SwitchListTile(
-                      title: const Text(
-                        'Trend Notifications',
-                        style: TextStyle(color: Colors.white),
+                      title: Text(
+                        'notifications.trend_notifications'.tr(),
+                        style: const TextStyle(color: Colors.white),
                       ),
-                      subtitle: const Text(
-                        'Get notified about mood trends and insights',
-                        style: TextStyle(color: Colors.white60),
+                      subtitle: Text(
+                        'notifications.trend_notifications_desc'.tr(),
+                        style: const TextStyle(color: Colors.white60),
                       ),
                       value: _trendNotifications,
-                      activeColor: const Color(0xFFFB9E3A),
+                      activeThumbColor: const Color(0xFFFB9E3A),
                       onChanged: (value) {
                         setState(() {
                           _trendNotifications = value;
@@ -275,45 +302,54 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Test Notification Button
               amazing.AmazingGlassSurface(
                 effectType: amazing.GlassEffectType.cosmic,
                 colorScheme: amazing.ColorScheme.cosmic,
                 child: ListTile(
-                  leading: const Icon(Icons.notifications_active, color: Color(0xFFFB9E3A)),
-                  title: const Text(
-                    'Test Notification',
-                    style: TextStyle(color: Colors.white),
+                  leading: const Icon(
+                    Icons.notifications_active,
+                    color: Color(0xFFFB9E3A),
                   ),
-                  subtitle: const Text(
-                    'Send a test notification to verify settings',
-                    style: TextStyle(color: Colors.white60),
+                  title: Text(
+                    'notifications.test_notification'.tr(),
+                    style: const TextStyle(color: Colors.white),
                   ),
-                  trailing: const Icon(Icons.chevron_right, color: Colors.white60),
+                  subtitle: Text(
+                    'notifications.send_test_notification_desc'.tr(),
+                    style: const TextStyle(color: Colors.white60),
+                  ),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: Colors.white60,
+                  ),
                   onTap: _sendTestNotification,
                 ),
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // App Settings
               amazing.AmazingGlassSurface(
                 effectType: amazing.GlassEffectType.neon,
                 colorScheme: amazing.ColorScheme.neon,
                 child: ListTile(
                   leading: const Icon(Icons.settings, color: Color(0xFFFB9E3A)),
-                  title: const Text(
-                    'App Notification Settings',
-                    style: TextStyle(color: Colors.white),
+                  title: Text(
+                    'notifications.app_notification_settings'.tr(),
+                    style: const TextStyle(color: Colors.white),
                   ),
-                  subtitle: const Text(
-                    'Open system notification settings',
-                    style: TextStyle(color: Colors.white60),
+                  subtitle: Text(
+                    'notifications.open_system_settings'.tr(),
+                    style: const TextStyle(color: Colors.white60),
                   ),
-                  trailing: const Icon(Icons.chevron_right, color: Colors.white60),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: Colors.white60,
+                  ),
                   onTap: () => _notificationService.openNotificationSettings(),
                 ),
               ),
@@ -334,7 +370,7 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error setting up daily reminders: $e'),
+            content: Text('${'notifications.error_daily_reminders'.tr()}: $e'),
             backgroundColor: const Color(0xFFEA2F14),
           ),
         );
@@ -353,7 +389,7 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error setting up weekly reminders: $e'),
+            content: Text('${'notifications.error_weekly_reminders'.tr()}: $e'),
             backgroundColor: const Color(0xFFEA2F14),
           ),
         );
@@ -379,7 +415,7 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
         );
       },
     );
-    
+
     if (time != null) {
       setState(() {
         _dailyReminderTime = time;
@@ -406,7 +442,7 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
         );
       },
     );
-    
+
     if (time != null) {
       setState(() {
         _weeklyReminderTime = time;
@@ -420,9 +456,9 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF121212),
-        title: const Text(
-          'Select Day',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          'notifications.select_day'.tr(),
+          style: const TextStyle(color: Colors.white),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -453,40 +489,39 @@ class _NotificationSettingsScreenState extends ConsumerState<NotificationSetting
   String _getDayName(int dayOfWeek) {
     switch (dayOfWeek) {
       case 1:
-        return 'Monday';
+        return 'notifications.monday'.tr();
       case 2:
-        return 'Tuesday';
+        return 'notifications.tuesday'.tr();
       case 3:
-        return 'Wednesday';
+        return 'notifications.wednesday'.tr();
       case 4:
-        return 'Thursday';
+        return 'notifications.thursday'.tr();
       case 5:
-        return 'Friday';
+        return 'notifications.friday'.tr();
       case 6:
-        return 'Saturday';
+        return 'notifications.saturday'.tr();
       case 7:
-        return 'Sunday';
+        return 'notifications.sunday'.tr();
       default:
-        return 'Unknown';
+        return 'notifications.unknown_day'.tr();
     }
   }
 
   Future<void> _sendTestNotification() async {
     await _notificationService.showInstantNotification(
       id: 999,
-      title: 'Test Notification',
-      body: 'Your notification settings are working correctly! 🎉',
+      title: 'notifications.test_notification_title'.tr(),
+      body: 'notifications.test_notification_success'.tr(),
       payload: 'test_notification',
     );
-    
+
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Test notification sent!'),
-          backgroundColor: Color(0xFFFB9E3A),
+        SnackBar(
+          content: Text('notifications.test_notification_sent'.tr()),
+          backgroundColor: const Color(0xFFFB9E3A),
         ),
       );
     }
   }
 }
-

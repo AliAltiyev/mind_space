@@ -12,17 +12,17 @@ class PerfectedDemoScreen extends ConsumerStatefulWidget {
   const PerfectedDemoScreen({super.key});
 
   @override
-  ConsumerState<PerfectedDemoScreen> createState() => _PerfectedDemoScreenState();
+  ConsumerState<PerfectedDemoScreen> createState() =>
+      _PerfectedDemoScreenState();
 }
 
 class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
     with TickerProviderStateMixin {
-  
   int _currentMood = 3;
   late AnimationController _themeTransitionController;
-  
+
   late Animation<double> _themeScaleAnimation;
-  
+
   bool _enableAnimations = true;
   bool _enableParallax = true;
 
@@ -54,7 +54,7 @@ class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
     setState(() {
       _currentMood = newMood;
     });
-    
+
     // Запускаем анимацию перехода темы
     _themeTransitionController.forward().then((_) {
       _themeTransitionController.reverse();
@@ -65,12 +65,14 @@ class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Perfected MoodBlob Demo'),
+        title: Text('demo.moodblob_title'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(_enableAnimations ? Icons.animation : Icons.animation_outlined),
+            icon: Icon(
+              _enableAnimations ? Icons.animation : Icons.animation_outlined,
+            ),
             onPressed: () {
               setState(() {
                 _enableAnimations = !_enableAnimations;
@@ -115,10 +117,7 @@ class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
                 const SizedBox(height: 8),
                 Text(
                   'demo.description'.tr(),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white70,
-                  ),
+                  style: const TextStyle(fontSize: 16, color: Colors.white70),
                 ),
                 const SizedBox(height: 32),
 
@@ -163,7 +162,7 @@ class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
                   children: List.generate(5, (index) {
                     final rating = index + 1;
                     final isSelected = rating == _currentMood;
-                    
+
                     return GestureDetector(
                       onTap: () => _changeMood(rating),
                       child: AnimatedContainer(
@@ -171,7 +170,7 @@ class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: isSelected 
+                          color: isSelected
                               ? Colors.white.withOpacity(0.3)
                               : Colors.white.withOpacity(0.1),
                           border: Border.all(
@@ -239,15 +238,16 @@ class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
                 ),
                 const SizedBox(height: 8),
                 Center(
-                  child: PerfectedMoodBlob(
-                    moodRating: _currentMood,
-                    size: 120.0,
-                    onTap: () {},
-                  ).withGlow(
-                    color: Colors.white,
-                    blurRadius: 20.0,
-                    spreadRadius: 5.0,
-                  ),
+                  child:
+                      PerfectedMoodBlob(
+                        moodRating: _currentMood,
+                        size: 120.0,
+                        onTap: () {},
+                      ).withGlow(
+                        color: Colors.white,
+                        blurRadius: 20.0,
+                        spreadRadius: 5.0,
+                      ),
                 ),
 
                 const SizedBox(height: 24),
@@ -269,10 +269,7 @@ class _PerfectedDemoScreenState extends ConsumerState<PerfectedDemoScreen>
                       moodRating: _currentMood,
                       size: 120.0,
                       onTap: () {},
-                    ).withBackdropBlur(
-                      sigmaX: 15.0,
-                      sigmaY: 15.0,
-                    ),
+                    ).withBackdropBlur(sigmaX: 15.0, sigmaY: 15.0),
                   ),
                 ),
 

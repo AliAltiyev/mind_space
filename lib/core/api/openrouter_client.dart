@@ -44,17 +44,36 @@ class OpenRouterClient {
 
       return OpenRouterResponse.fromJson(response.data);
     } on DioException catch (e) {
+      final statusCode = e.response?.statusCode;
+      final errorMessage = e.response?.data?['error']?['message'] ?? e.message;
+
       print('❌ Ошибка OpenRouter API: ${e.message}');
+      if (statusCode != null) {
+        print('📊 Код статуса: $statusCode');
+      }
+      if (errorMessage != null && errorMessage != e.message) {
+        print('📝 Сообщение об ошибке: $errorMessage');
+      }
 
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout) {
-        throw Exception('Превышено время ожидания ответа от AI');
-      } else if (e.response?.statusCode == 401) {
-        throw Exception('Неверный API ключ');
-      } else if (e.response?.statusCode == 429) {
-        throw Exception('Превышен лимит запросов');
+        throw Exception(
+          'Превышено время ожидания ответа от AI. Проверьте подключение к интернету.',
+        );
+      } else if (statusCode == 401) {
+        throw Exception('Неверный API ключ. Проверьте настройки API.');
+      } else if (statusCode == 402) {
+        throw Exception(
+          'Недостаточно средств на балансе OpenRouter. Пополните баланс на openrouter.ai',
+        );
+      } else if (statusCode == 403) {
+        throw Exception('Доступ запрещен. Проверьте права доступа API ключа.');
+      } else if (statusCode == 429) {
+        throw Exception('Превышен лимит запросов. Попробуйте позже.');
+      } else if (statusCode != null && statusCode >= 500) {
+        throw Exception('Ошибка сервера OpenRouter. Попробуйте позже.');
       } else {
-        throw Exception('Ошибка API: ${e.message}');
+        throw Exception('Ошибка API: ${errorMessage ?? e.message}');
       }
     } catch (e) {
       print('❌ Неожиданная ошибка: $e');
@@ -79,6 +98,22 @@ class OpenRouterClient {
           maxTokens: maxTokens,
         );
       } catch (e) {
+        final errorMessage = e.toString();
+
+        // Не делаем повторные попытки для ошибок, которые не могут быть исправлены
+        final isNonRetryableError =
+            errorMessage.contains('Неверный API ключ') ||
+            errorMessage.contains('Недостаточно средств') ||
+            errorMessage.contains('Доступ запрещен') ||
+            errorMessage.contains('402') ||
+            errorMessage.contains('401') ||
+            errorMessage.contains('403');
+
+        if (isNonRetryableError) {
+          print('⚠️ Ошибка не может быть исправлена повторной попыткой: $e');
+          rethrow;
+        }
+
         print('🔄 Попытка $attempt/$maxRetries неудачна: $e');
 
         if (attempt == maxRetries) {

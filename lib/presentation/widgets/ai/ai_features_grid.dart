@@ -31,7 +31,7 @@ class AIFeaturesGrid extends ConsumerWidget {
         _buildAIFeatureCard(
           context: context,
           ref: ref,
-          title: 'AI Insights',
+          title: 'home.ai_insights'.tr(),
           icon: Icons.psychology,
           routeName: 'ai-insights',
           effectType: amazing.GlassEffectType.neon,
@@ -48,7 +48,7 @@ class AIFeaturesGrid extends ConsumerWidget {
         _buildAIFeatureCard(
           context: context,
           ref: ref,
-          title: 'Patterns',
+          title: 'ai.patterns.title'.tr(),
           icon: Icons.analytics,
           routeName: 'ai-patterns',
           effectType: amazing.GlassEffectType.cyber,
@@ -68,7 +68,7 @@ class AIFeaturesGrid extends ConsumerWidget {
               child: _buildAIFeatureCard(
                 context: context,
                 ref: ref,
-                title: 'Gratitude',
+                title: 'ai.gratitude.title'.tr(),
                 icon: Icons.favorite,
                 routeName: 'ai-gratitude',
                 effectType: amazing.GlassEffectType.cosmic,
@@ -86,7 +86,7 @@ class AIFeaturesGrid extends ConsumerWidget {
               child: _buildAIFeatureCard(
                 context: context,
                 ref: ref,
-                title: 'Meditation',
+                title: 'ai.meditation.title'.tr(),
                 icon: Icons.self_improvement,
                 routeName: 'ai-meditation',
                 effectType: amazing.GlassEffectType.rainbow,

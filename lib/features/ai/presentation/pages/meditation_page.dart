@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../app/providers/ai_features_provider.dart';
-import '../../../../presentation/widgets/core/glass_surface.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_typography.dart';
 import '../blocs/meditation_bloc.dart';
-import '../widgets/meditation_suggestion_card.dart';
 
 /// Страница медитации и релаксации
 class MeditationPage extends ConsumerStatefulWidget {
@@ -31,10 +32,21 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Meditation'),
-        backgroundColor: Colors.transparent,
+        title: Text('ai.meditation.title'.tr()),
+        backgroundColor: AppColors.surface,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/home');
+            }
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -43,6 +55,7 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
                 context.read<MeditationBloc>().add(LoadMeditationSession([]));
               }
             },
+            tooltip: 'common.refresh'.tr(),
           ),
         ],
       ),
@@ -56,81 +69,22 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Заголовок
-                GlassSurface(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: Theme.of(
-                                  context,
-                                ).primaryColor.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Icon(
-                                Icons.self_improvement,
-                                color: Theme.of(context).primaryColor,
-                                size: 24,
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Meditation',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall
-                                        ?.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'ai.meditation.personal_practices'.tr(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(color: Colors.white70),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // Приветственный заголовок
+                _buildWelcomeSection(),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
 
-                // Meditation Content
+                // Контент медитации
                 BlocBuilder<MeditationBloc, MeditationState>(
                   builder: (context, state) {
                     if (state is MeditationLoading) {
                       return const _MeditationLoadingWidget();
                     } else if (state is MeditationLoaded) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: MeditationSuggestionCard(
-                          meditation: state.meditation,
-                        ),
-                      );
+                      return _buildMeditationContent(state.meditation);
                     } else if (state is MeditationError) {
                       return _MeditationErrorWidget(
                         message: state.message,
@@ -153,31 +107,296 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
       ),
     );
   }
+
+  /// Приветственная секция
+  Widget _buildWelcomeSection() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColors.primary.withOpacity(0.1),
+            AppColors.secondary.withOpacity(0.05),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primary.withOpacity(0.2), width: 1),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              gradient: AppColors.primaryGradient,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: AppColors.cardShadow,
+            ),
+            child: const Icon(
+              Icons.self_improvement,
+              color: Colors.white,
+              size: 32,
+            ),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'ai.meditation.title'.tr(),
+                  style: AppTypography.h2.copyWith(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'ai.meditation.personal_practices'.tr(),
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Контент медитации
+  Widget _buildMeditationContent(meditation) {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: AppColors.cardShadow,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Заголовок медитации
+              Row(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColors.primary, AppColors.primaryLight],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Center(
+                      child: Text(
+                        meditation.emoji,
+                        style: const TextStyle(fontSize: 28),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          meditation.title,
+                          style: AppTypography.h3.copyWith(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.access_time,
+                              size: 14,
+                              color: AppColors.textSecondary,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${meditation.duration} ${'common.minutes'.tr()}',
+                              style: AppTypography.caption.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              // Описание
+              Text(
+                meditation.description,
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.textSecondary,
+                  height: 1.6,
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // Инструкции
+              if (meditation.instructions.isNotEmpty)
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppColors.primary.withOpacity(0.1),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.psychology,
+                            size: 18,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'ai.meditation.instructions'.tr(),
+                            style: AppTypography.bodyLarge.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      ...meditation.instructions.map(
+                        (instruction) => Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 6,
+                                height: 6,
+                                margin: const EdgeInsets.only(
+                                  top: 6,
+                                  right: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  instruction,
+                                  style: AppTypography.bodyMedium.copyWith(
+                                    color: AppColors.textPrimary,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+              const SizedBox(height: 24),
+
+              // Кнопка начала медитации
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // TODO: Start meditation session
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.play_arrow, size: 24),
+                      const SizedBox(width: 8),
+                      Text(
+                        'ai.meditation.start_meditation'.tr(
+                          namedArgs: {
+                            'duration': meditation.duration.toString(),
+                          },
+                        ),
+                        style: AppTypography.button.copyWith(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
+/// Виджет загрузки
 class _MeditationLoadingWidget extends StatelessWidget {
   const _MeditationLoadingWidget();
 
   @override
   Widget build(BuildContext context) {
-    return GlassSurface(
-      child: Container(
-        padding:   EdgeInsets.all(24),
-        child: Column(
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text(
-                'ai.meditation.loading_practices'.tr(),
-              style: TextStyle(color: Colors.white70),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(48),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'ai.meditation.loading_practices'.tr(),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
             ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
 }
 
+/// Виджет ошибки
 class _MeditationErrorWidget extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
@@ -186,35 +405,54 @@ class _MeditationErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlassSurface(
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            Icon(
-              Icons.error_outline,
-              color: Colors.red.withOpacity(0.7),
-              size: 48,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: AppColors.error.withOpacity(0.1),
+              shape: BoxShape.circle,
             ),
-            const SizedBox(height: 16),
-            Text(
-              'common.error'.tr(),
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(color: Colors.white),
+            child: Icon(Icons.error_outline, color: AppColors.error, size: 32),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'common.error'.tr(),
+            style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            message,
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
             ),
-            const SizedBox(height: 8),
-            Text(
-              message,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-              textAlign: TextAlign.center,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            onPressed: onRetry,
+            icon: const Icon(Icons.refresh, size: 20),
+            label: Text('common.retry'.tr()),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(onPressed: onRetry, child: Text('common.retry'.tr())),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -27,7 +27,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
   int _selectedMood = 3;
   final TextEditingController _noteController = TextEditingController();
   final List<String> _moodEmojis = ['😢', '😔', '😐', '😊', '🤩'];
-  final List<String> _moodLabels = [
+  List<String> _getMoodLabels() => [
     'mood.moods.very_sad'.tr(),
     'mood.moods.sad'.tr(),
     'mood.moods.neutral'.tr(),
@@ -118,9 +118,9 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
           },
         ),
       ),
-      title: const Text(
-        'Добавить запись',
-        style: TextStyle(
+      title: Text(
+        'mood.add_entry'.tr(),
+        style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
           shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 10)],
@@ -144,9 +144,9 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
           ),
           child: TextButton(
             onPressed: _saveEntry,
-            child: const Text(
-              'Сохранить',
-              style: TextStyle(
+            child: Text(
+              'common.save'.tr(),
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -355,6 +355,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
   }
 
   Widget _buildCurrentMood() {
+    final moodLabels = _getMoodLabels();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
@@ -371,7 +372,7 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
         ),
       ),
       child: Text(
-        _moodLabels[_selectedMood],
+        moodLabels[_selectedMood],
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
@@ -422,11 +423,11 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen>
               controller: _noteController,
               maxLines: 4,
               style: const TextStyle(color: Colors.white, fontSize: 16),
-              decoration: const InputDecoration(
-                hintText: 'Расскажите, что повлияло на ваше настроение...',
-                hintStyle: TextStyle(color: Colors.white54, fontSize: 16),
+              decoration: InputDecoration(
+                hintText: 'mood.note_placeholder'.tr(),
+                hintStyle: const TextStyle(color: Colors.white54, fontSize: 16),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.all(16),
+                contentPadding: const EdgeInsets.all(16),
               ),
             ),
           ),

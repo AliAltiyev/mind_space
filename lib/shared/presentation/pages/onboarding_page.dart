@@ -17,26 +17,29 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final List<OnboardingStep> _steps = [
-    OnboardingStep(
-      title: 'onboarding.welcome.title'.tr(),
-      description: 'onboarding.welcome.description'.tr(),
-      icon: Icons.psychology,
-    ),
-    OnboardingStep(
-      title: 'onboarding.mood_tracking.title'.tr(),
-      description: 'onboarding.mood_tracking.description'.tr(),
-      icon: Icons.mood,
-    ),
-    OnboardingStep(
-      title: 'onboarding.ai_insights.title'.tr(),
-      description: 'onboarding.ai_insights.description'.tr(),
-      icon: Icons.auto_awesome,
-    ),
-  ];
+  List<OnboardingStep> _getSteps(BuildContext context) {
+    return [
+      OnboardingStep(
+        title: 'onboarding.welcome.title'.tr(),
+        description: 'onboarding.welcome.description'.tr(),
+        icon: Icons.psychology,
+      ),
+      OnboardingStep(
+        title: 'onboarding.mood_tracking.title'.tr(),
+        description: 'onboarding.mood_tracking.description'.tr(),
+        icon: Icons.mood,
+      ),
+      OnboardingStep(
+        title: 'onboarding.ai_insights.title'.tr(),
+        description: 'onboarding.ai_insights.description'.tr(),
+        icon: Icons.auto_awesome,
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final steps = _getSteps(context);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -49,9 +52,9 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                     _currentPage = index;
                   });
                 },
-                itemCount: _steps.length,
+                itemCount: steps.length,
                 itemBuilder: (context, index) {
-                  return OnboardingStepWidget(step: _steps[index]);
+                  return OnboardingStepWidget(step: steps[index]);
                 },
               ),
             ),
@@ -62,7 +65,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
-                      _steps.length,
+                      steps.length,
                       (index) => Container(
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         width: _currentPage == index ? 24 : 8,
@@ -88,14 +91,14 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                                 curve: Curves.easeInOut,
                               );
                             },
-                            child: const Text('Back'),
+                            child: Text('common.back'.tr()),
                           ),
                         ),
                       if (_currentPage > 0) const SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_currentPage < _steps.length - 1) {
+                            if (_currentPage < steps.length - 1) {
                               _pageController.nextPage(
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOut,
@@ -105,7 +108,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                             }
                           },
                           child: Text(
-                            _currentPage < _steps.length - 1
+                            _currentPage < steps.length - 1
                                 ? 'Next'
                                 : 'Get Started',
                           ),

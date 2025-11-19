@@ -83,12 +83,12 @@ class SettingsScreen extends ConsumerWidget {
 
           // Управление данными
           _SettingsSection(
-            title: 'Управление данными',
+            title: 'settings.data'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.delete_forever,
-                title: 'Очистить все данные',
-                subtitle: 'Удалить все записи настроения и AI инсайты',
+                title: 'settings.delete_all_data'.tr(),
+                subtitle: 'settings.delete_all_data_desc'.tr(),
                 onTap: () => _showClearDataDialog(context, ref),
               ),
             ],
@@ -116,14 +116,12 @@ class SettingsScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Очистить данные'),
-        content: const Text(
-          'Вы уверены, что хотите удалить все записи настроения и AI инсайты? Это действие нельзя отменить.',
-        ),
+        title: Text('settings.delete_all_data_dialog'.tr()),
+        content: Text('settings.delete_all_data_warning'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Отмена'),
+            child: Text('common.cancel'.tr()),
           ),
           TextButton(
             onPressed: () async {
@@ -131,15 +129,15 @@ class SettingsScreen extends ConsumerWidget {
               await _clearAllData(ref);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Все данные очищены'),
+                  SnackBar(
+                    content: Text('settings.all_data_deleted'.tr()),
                     backgroundColor: Colors.green,
                   ),
                 );
               }
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Удалить'),
+            child: Text('common.delete'.tr()),
           ),
         ],
       ),
@@ -209,4 +207,3 @@ class _SettingsTile extends StatelessWidget {
     );
   }
 }
-

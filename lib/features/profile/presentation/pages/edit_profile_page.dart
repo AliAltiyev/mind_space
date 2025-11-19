@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../blocs/profile_bloc.dart';
 import '../widgets/edit_profile_form_widget.dart';
@@ -11,7 +12,7 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Редактировать профиль'),
+        title: Text('profile.edit'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -48,7 +49,7 @@ class _EditProfilePageContent extends StatelessWidget {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pop(context);
           });
-          return const Center(child: Text('Профиль обновлен!'));
+          return Center(child: Text('profile.updated'.tr()));
         } else if (state is ProfileError) {
           return Center(
             child: Column(
@@ -69,14 +70,14 @@ class _EditProfilePageContent extends StatelessWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Назад'),
+                  child: Text('common.back'.tr()),
                 ),
               ],
             ),
           );
         }
 
-        return const Center(child: Text('Неизвестное состояние'));
+        return Center(child: Text('errors.unknown_state'.tr()));
       },
     );
   }

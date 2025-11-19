@@ -20,7 +20,9 @@
         "yes": "Hawa",
         "no": "Ýok",
         "try_again": "Gaýtadan synanyşmak",
-        "refresh": "Täzelemek"
+        "refresh": "Täzelemek",
+        "unknown_state": "Näbelli ýagdaý",
+        "reset": "Täzeden başla"
     },
     "navigation": {
         "home": "Baş sahypa",
@@ -195,5 +197,31 @@
         "ai_pattern_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor, patterns we recommendations meýdanlary bilen",
         "ai_gratitude_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor we prompts meýdanlary bilen",
         "ai_meditation_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor, type, duration, instructions we tips meýdanlary bilen"
+    },
+    "settings": {
+        "all_data_deleted": "Ähli maglumatlar öçürildi",
+        "delete_data_error": "Maglumatlary öçürmekde ýalňyşlyk",
+        "settings_reset_success": "Sazlamalar üstünlikli täzeden düzüldi",
+        "settings_reset_error": "Sazlamalary täzeden düzmekde ýalňyşlyk",
+        "reset_settings_dialog_title": "Sazlamalary täzeden düz?",
+        "reset_settings_warning": "Ähli sazlamalar deslapky bahalara gaýtarylar. Siziň keýpiňiz maglumatlary täsir etmez.",
+        "reminder_time_updated": "Ýatlatma wagty {time} üýtgedildi"
+    },
+    "ai": {
+        "meditation": {
+            "start_with_duration": "Meditasiýa başla ({duration} min)"
+        },
+        "error_analysis_title": "Derňew ýalňyşlygy"
+    },
+    "demo": {
+        "performance_list": "• Paint obýektlerini keşlemek\n• Optimizasiýa edilen CustomPainter\n• Izolýasiýa üçin RepaintBoundary\n• Tolkun effektleri üçin Timer esasly arassalama\n• Hemişelikler bilen birleşen dizaýn ulgamy"
+    },
+    "profile": {
+        "updated_successfully": "Profil üstünlikli täzelendi!",
+        "loading_error_full": "Profili ýüklemekde ýalňyşlyk"
+    },
+    "stats": {
+        "loading_error_full": "Statistikany ýüklemekde ýalňyşlyk",
+        "error_loading_title": "Ýüklemek ýalňyşlygy"
     }
 }

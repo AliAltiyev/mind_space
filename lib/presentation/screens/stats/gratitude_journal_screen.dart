@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Экран журнала благодарности
 class GratitudeJournalScreen extends ConsumerWidget {
@@ -9,7 +10,7 @@ class GratitudeJournalScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gratitude Journal'),
+        title: Text('ai.gratitude.title'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),

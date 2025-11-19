@@ -15,7 +15,8 @@ class AddEntryScreenClean extends ConsumerStatefulWidget {
   const AddEntryScreenClean({super.key});
 
   @override
-  ConsumerState<AddEntryScreenClean> createState() => _AddEntryScreenCleanState();
+  ConsumerState<AddEntryScreenClean> createState() =>
+      _AddEntryScreenCleanState();
 }
 
 class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
@@ -23,12 +24,12 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
   int _selectedMood = 2; // По умолчанию "Нормальное" (3)
   bool _isLoading = false;
 
-  final List<String> _moodLabels = [
-    'mood.moods.very_sad',
-    'mood.moods.sad', 
-    'mood.moods.neutral',
-    'mood.moods.happy',
-    'mood.moods.very_happy',
+  List<String> _getMoodLabels() => [
+    'mood.moods.very_sad'.tr(),
+    'mood.moods.sad'.tr(),
+    'mood.moods.neutral'.tr(),
+    'mood.moods.happy'.tr(),
+    'mood.moods.very_happy'.tr(),
   ];
 
   @override
@@ -53,7 +54,7 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
           TextButton(
             onPressed: _isLoading ? null : _saveEntry,
             child: Text(
-              'Сохранить',
+              'common.save'.tr(),
               style: AppTypography.buttonSecondary.copyWith(
                 color: _isLoading ? AppColors.textHint : AppColors.primary,
               ),
@@ -68,19 +69,19 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
           children: [
             // Заголовок
             _buildHeader(),
-            
+
             const SizedBox(height: 32),
-            
+
             // Выбор настроения
             _buildMoodSelector(),
-            
+
             const SizedBox(height: 32),
-            
+
             // Заметка
             _buildNoteSection(),
-            
+
             const SizedBox(height: 32),
-            
+
             // Кнопка сохранения
             _buildSaveButton(),
           ],
@@ -103,13 +104,15 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Как вы себя чувствуете?',
+            'mood.title'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 8),
           Text(
-            'Выберите свое текущее настроение и добавьте заметку, если хотите.',
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+            'mood.note_hint'.tr(),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
         ],
       ),
@@ -130,7 +133,7 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Настроение',
+            'mood.select_mood'.tr(),
             style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 16),
@@ -144,7 +147,7 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
           const SizedBox(height: 16),
           Center(
             child: Text(
-              _moodLabels[_selectedMood].tr(),
+              _getMoodLabels()[_selectedMood],
               style: AppTypography.bodyLarge.copyWith(
                 color: getMoodColor(_selectedMood + 1),
                 fontWeight: FontWeight.w600,
@@ -160,7 +163,7 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
   Widget _buildMoodButton(int index, bool isSelected) {
     final moodValue = index + 1;
     final color = getMoodColor(moodValue);
-    
+
     return GestureDetector(
       onTap: () => setState(() => _selectedMood = index),
       child: Container(
@@ -195,7 +198,7 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Заметка (необязательно)',
+            'mood.note_optional'.tr(),
             style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 16),
@@ -203,8 +206,10 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
             controller: _noteController,
             maxLines: 4,
             decoration: InputDecoration(
-              hintText: 'Опишите, что влияет на ваше настроение...',
-              hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.textHint),
+              hintText: 'mood.note_placeholder'.tr(),
+              hintStyle: AppTypography.bodyMedium.copyWith(
+                color: AppColors.textHint,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: AppColors.border),
@@ -215,7 +220,10 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                borderSide: const BorderSide(
+                  color: AppColors.primary,
+                  width: 2,
+                ),
               ),
             ),
             style: AppTypography.bodyMedium,
@@ -235,9 +243,7 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           disabledBackgroundColor: AppColors.textHint,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: _isLoading
             ? const SizedBox(
@@ -248,10 +254,7 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               )
-            : Text(
-                'Сохранить настроение',
-                style: AppTypography.button,
-              ),
+            : Text('mood.add_mood'.tr(), style: AppTypography.button),
       ),
     );
   }
@@ -264,10 +267,12 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
 
     try {
       final database = ref.read(appDatabaseProvider);
-      
+
       final entry = MoodEntry(
         moodValue: _selectedMood + 1,
-        note: _noteController.text.trim().isNotEmpty ? _noteController.text.trim() : null,
+        note: _noteController.text.trim().isNotEmpty
+            ? _noteController.text.trim()
+            : null,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
@@ -285,13 +290,15 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
       ref.invalidate(lastMoodProvider);
 
       if (mounted) {
+        final successText = 'common.success'.tr();
+        final moodText = _getMoodLabels()[_selectedMood];
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${'common.success'.tr()}: ${_moodLabels[_selectedMood].tr()}'),
+            content: Text('$successText: $moodText'),
             backgroundColor: AppColors.success,
           ),
         );
-        
+
         // Возвращаемся назад
         _handleBack();
       }
@@ -299,7 +306,9 @@ class _AddEntryScreenCleanState extends ConsumerState<AddEntryScreenClean> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка сохранения: $e'),
+            content: Text(
+              'errors.save_error'.tr(namedArgs: {'error': e.toString()}),
+            ),
             backgroundColor: AppColors.error,
           ),
         );

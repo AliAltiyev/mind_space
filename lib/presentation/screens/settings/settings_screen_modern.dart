@@ -2,23 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/services/app_settings_service.dart' as settings;
 import '../../../core/services/user_level_service.dart';
-import 'package:easy_localization/easy_localization.dart';
+import '../../../main.dart';
 
 /// Современный экран настроек для iOS и Android
 class SettingsScreenModern extends ConsumerStatefulWidget {
   const SettingsScreenModern({super.key});
 
   @override
-  ConsumerState<SettingsScreenModern> createState() => _SettingsScreenModernState();
+  ConsumerState<SettingsScreenModern> createState() =>
+      _SettingsScreenModernState();
 }
 
 class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
-  final settings.AppSettingsService _settingsService = settings.AppSettingsService();
+  final settings.AppSettingsService _settingsService =
+      settings.AppSettingsService();
   final UserLevelService _levelService = UserLevelService();
   settings.AppSettings? _settings;
   bool _isLoading = true;
@@ -48,19 +51,13 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppColors.error,
-      ),
+      SnackBar(content: Text(message), backgroundColor: AppColors.error),
     );
   }
 
   void _showSuccessSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppColors.success,
-      ),
+      SnackBar(content: Text(message), backgroundColor: AppColors.success),
     );
   }
 
@@ -70,9 +67,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       return Scaffold(
         backgroundColor: AppColors.background,
         appBar: _buildAppBar(),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -87,37 +82,37 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
             // Персональные настройки
             _buildSectionHeader('settings.personal_settings'.tr()),
             _buildPersonalSettings(),
-            
+
             const SizedBox(height: 24),
-            
+
             // Внешний вид
             _buildSectionHeader('settings.appearance'.tr()),
             _buildAppearanceSettings(),
-            
+
             const SizedBox(height: 24),
-            
+
             // Уведомления
             _buildSectionHeader('settings.notifications'.tr()),
             _buildNotificationSettings(),
-            
+
             const SizedBox(height: 24),
-            
+
             // Приватность и данные
             _buildSectionHeader('settings.privacy_security'.tr()),
             _buildPrivacySettings(),
-            
+
             const SizedBox(height: 24),
-            
+
             // Дополнительно
             _buildSectionHeader('settings.additional'.tr()),
             _buildAdditionalSettings(),
-            
+
             const SizedBox(height: 24),
-            
+
             // О приложении
             _buildSectionHeader('settings.about_app'.tr()),
             _buildAboutSection(),
-            
+
             const SizedBox(height: 32),
           ],
         ),
@@ -139,10 +134,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       scrolledUnderElevation: 1,
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: AppColors.textPrimary,
-        ),
+        icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
         onPressed: () {
           if (context.canPop()) {
             context.pop();
@@ -187,7 +179,10 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           _buildSettingTile(
             icon: Icons.language,
             title: 'settings.language'.tr(),
-            subtitle: _settings?.language.displayName ?? settings.AppLanguage.russian.displayName,
+            subtitle: _getLanguageName(
+              context,
+              _settings?.language ?? settings.AppLanguage.russian,
+            ),
             onTap: _showLanguageDialog,
             trailing: const Icon(Icons.chevron_right),
           ),
@@ -195,7 +190,8 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           _buildSettingTile(
             icon: Icons.emoji_emotions_outlined,
             title: 'settings.mood_tracking_goal'.tr(),
-            subtitle: '${_settings?.moodTrackingGoal ?? 7} ${'settings.days_per_week'.tr()}',
+            subtitle:
+                '${_settings?.moodTrackingGoal ?? 7} ${'settings.days_per_week'.tr()}',
             onTap: _showMoodGoalDialog,
             trailing: const Icon(Icons.chevron_right),
           ),
@@ -204,7 +200,34 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     );
   }
 
+  String _getLanguageName(BuildContext context, settings.AppLanguage language) {
+    switch (language.code) {
+      case 'ru':
+        return 'settings.languages.russian'.tr();
+      case 'en':
+        return 'settings.languages.english'.tr();
+      case 'zh':
+        return 'settings.languages.chinese'.tr();
+      case 'hi':
+        return 'settings.languages.hindi'.tr();
+      case 'es':
+        return 'settings.languages.spanish'.tr();
+      case 'fr':
+        return 'settings.languages.french'.tr();
+      case 'tr':
+        return 'settings.languages.turkish'.tr();
+      case 'tk':
+        return 'settings.languages.turkmen'.tr();
+      default:
+        return language.code;
+    }
+  }
+
   Widget _buildAppearanceSettings() {
+    final themeName = _getThemeName(
+      context,
+      _settings?.theme ?? settings.AppTheme.system,
+    );
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -216,7 +239,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           _buildSettingTile(
             icon: Icons.palette_outlined,
             title: 'settings.theme'.tr(),
-            subtitle: _settings?.theme.displayName ?? 'Системная',
+            subtitle: themeName,
             onTap: _showThemeDialog,
             trailing: const Icon(Icons.chevron_right),
           ),
@@ -226,25 +249,41 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
             title: 'settings.sounds'.tr(),
             subtitle: 'settings.sound_effects'.tr(),
             value: _settings?.soundEnabled ?? true,
-            onChanged: (value) => _updateSetting(
-              () => _settingsService.setSoundEnabled(value),
-              '${'settings.sounds'.tr()} ${value ? 'settings.enabled'.tr() : 'settings.disabled'.tr()}',
-            ),
+            onChanged: (value) {
+              final enabledText = value
+                  ? 'settings.enabled'.tr()
+                  : 'settings.disabled'.tr();
+              _updateSetting(
+                () => _settingsService.setSoundEnabled(value),
+                '${'settings.sounds'.tr()} $enabledText',
+              );
+            },
           ),
           _buildDivider(),
           _buildSwitchTile(
             icon: Icons.vibration,
-            title: 'Тактильная обратная связь',
-            subtitle: 'Вибрация при нажатиях',
+            title: 'settings.haptic_feedback'.tr(),
+            subtitle: 'settings.haptic_feedback_desc'.tr(),
             value: _settings?.hapticFeedbackEnabled ?? true,
             onChanged: (value) => _updateSetting(
               () => _settingsService.setHapticFeedbackEnabled(value),
-              'Тактильная обратная связь ${value ? 'включена' : 'выключена'}',
+              '${'settings.haptic_feedback'.tr()} ${value ? 'settings.enabled_single'.tr() : 'settings.disabled_single'.tr()}',
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _getThemeName(BuildContext context, settings.AppTheme theme) {
+    switch (theme) {
+      case settings.AppTheme.light:
+        return 'settings.themes.light'.tr();
+      case settings.AppTheme.dark:
+        return 'settings.themes.dark'.tr();
+      case settings.AppTheme.system:
+        return 'settings.themes.system'.tr();
+    }
   }
 
   Widget _buildNotificationSettings() {
@@ -258,32 +297,35 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
         children: [
           _buildSwitchTile(
             icon: Icons.notifications_outlined,
-            title: 'Уведомления',
-            subtitle: 'Разрешить уведомления от приложения',
+            title: 'settings.notifications'.tr(),
+            subtitle: 'settings.notifications_desc'.tr(),
             value: _settings?.notificationsEnabled ?? true,
             onChanged: (value) => _updateSetting(
               () => _settingsService.setNotificationsEnabled(value),
-              'Уведомления ${value ? 'включены' : 'выключены'}',
+              '${'settings.notifications'.tr()} ${value ? 'settings.enabled'.tr() : 'settings.disabled'.tr()}',
             ),
           ),
           if (_settings?.notificationsEnabled == true) ...[
             _buildDivider(),
             _buildSwitchTile(
               icon: Icons.schedule,
-              title: 'Ежедневные напоминания',
-              subtitle: 'Напоминание о записи настроения',
+              title: 'settings.daily_reminders'.tr(),
+              subtitle: 'settings.daily_reminders_desc'.tr(),
               value: _settings?.dailyReminderEnabled ?? true,
               onChanged: (value) => _updateSetting(
                 () => _settingsService.setDailyReminderEnabled(value),
-                'Ежедневные напоминания ${value ? 'включены' : 'выключены'}',
+                '${'settings.daily_reminders'.tr()} ${value ? 'settings.enabled'.tr() : 'settings.disabled'.tr()}',
               ),
             ),
             if (_settings?.dailyReminderEnabled == true) ...[
               _buildDivider(),
               _buildSettingTile(
                 icon: Icons.access_time,
-                title: 'Время напоминания',
-                subtitle: _formatTime(_settings?.reminderTime ?? const TimeOfDay(hour: 20, minute: 0)),
+                title: 'settings.reminder_time'.tr(),
+                subtitle: _formatTime(
+                  _settings?.reminderTime ??
+                      const TimeOfDay(hour: 20, minute: 0),
+                ),
                 onTap: _showTimePicker,
                 trailing: const Icon(Icons.chevron_right),
               ),
@@ -291,12 +333,12 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
             _buildDivider(),
             _buildSwitchTile(
               icon: Icons.analytics_outlined,
-              title: 'Еженедельные отчеты',
-              subtitle: 'Отчеты о вашем прогрессе',
+              title: 'settings.weekly_reports'.tr(),
+              subtitle: 'settings.weekly_reports_desc'.tr(),
               value: _settings?.weeklyReportEnabled ?? true,
               onChanged: (value) => _updateSetting(
                 () => _settingsService.setWeeklyReportEnabled(value),
-                'Еженедельные отчеты ${value ? 'включены' : 'выключены'}',
+                '${'settings.weekly_reports'.tr()} ${value ? 'settings.enabled'.tr() : 'settings.disabled'.tr()}',
               ),
             ),
           ],
@@ -316,38 +358,38 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
         children: [
           _buildSwitchTile(
             icon: Icons.analytics_outlined,
-            title: 'Аналитика',
-            subtitle: 'Помочь улучшить приложение',
+            title: 'settings.analytics'.tr(),
+            subtitle: 'settings.analytics_desc'.tr(),
             value: _settings?.analyticsEnabled ?? true,
             onChanged: (value) => _updateSetting(
               () => _settingsService.setAnalyticsEnabled(value),
-              'Аналитика ${value ? 'включена' : 'выключена'}',
+              '${'settings.analytics'.tr()} ${value ? 'settings.enabled_single'.tr() : 'settings.disabled_single'.tr()}',
             ),
           ),
           _buildDivider(),
           _buildSwitchTile(
             icon: Icons.backup_outlined,
-            title: 'Экспорт данных',
-            subtitle: 'Возможность экспорта ваших данных',
+            title: 'settings.export_data'.tr(),
+            subtitle: 'settings.export_data_desc'.tr(),
             value: _settings?.dataExportEnabled ?? true,
             onChanged: (value) => _updateSetting(
               () => _settingsService.setDataExportEnabled(value),
-              'Экспорт данных ${value ? 'включен' : 'выключен'}',
+              '${'settings.export_data'.tr()} ${value ? 'settings.enabled_export'.tr() : 'settings.disabled_export'.tr()}',
             ),
           ),
           _buildDivider(),
           _buildSettingTile(
             icon: Icons.download_outlined,
-            title: 'Экспорт данных',
-            subtitle: 'Скачать ваши данные',
+            title: 'settings.download_data'.tr(),
+            subtitle: 'settings.download_data'.tr(),
             onTap: _exportData,
             trailing: const Icon(Icons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
             icon: Icons.delete_outline,
-            title: 'Удалить все данные',
-            subtitle: 'Очистить все данные приложения',
+            title: 'settings.delete_all_data'.tr(),
+            subtitle: 'settings.delete_all_data_desc'.tr(),
             onTap: _showDeleteDataDialog,
             trailing: const Icon(Icons.chevron_right),
             textColor: AppColors.error,
@@ -368,24 +410,24 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
         children: [
           _buildSettingTile(
             icon: Icons.help_outline,
-            title: 'Помощь и поддержка',
-            subtitle: 'Часто задаваемые вопросы',
+            title: 'settings.help_support'.tr(),
+            subtitle: 'settings.help_support_desc'.tr(),
             onTap: () => _showHelpDialog(),
             trailing: const Icon(Icons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
             icon: Icons.feedback_outlined,
-            title: 'Обратная связь',
-            subtitle: 'Сообщить о проблеме или предложении',
+            title: 'settings.feedback'.tr(),
+            subtitle: 'settings.feedback_desc'.tr(),
             onTap: () => _showFeedbackDialog(),
             trailing: const Icon(Icons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
             icon: Icons.star_outline,
-            title: 'Оценить приложение',
-            subtitle: 'Оценить в App Store / Google Play',
+            title: 'settings.rate_app'.tr(),
+            subtitle: 'settings.rate_app_desc'.tr(),
             onTap: _rateApp,
             trailing: const Icon(Icons.chevron_right),
           ),
@@ -405,31 +447,31 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
         children: [
           _buildSettingTile(
             icon: Icons.info_outline,
-            title: 'Версия приложения',
+            title: 'settings.app_version'.tr(),
             subtitle: '1.0.0',
             onTap: null,
           ),
           _buildDivider(),
           _buildSettingTile(
             icon: Icons.privacy_tip_outlined,
-            title: 'Политика конфиденциальности',
-            subtitle: 'Как мы используем ваши данные',
+            title: 'settings.privacy_policy'.tr(),
+            subtitle: 'settings.privacy_policy_desc'.tr(),
             onTap: () => _showPrivacyPolicy(),
             trailing: const Icon(Icons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
             icon: Icons.description_outlined,
-            title: 'Условия использования',
-            subtitle: 'Правила использования приложения',
+            title: 'settings.terms_of_service'.tr(),
+            subtitle: 'settings.terms_of_service_desc'.tr(),
             onTap: () => _showTermsOfService(),
             trailing: const Icon(Icons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
             icon: Icons.refresh,
-            title: 'Сбросить настройки',
-            subtitle: 'Вернуть настройки по умолчанию',
+            title: 'settings.reset_settings'.tr(),
+            subtitle: 'settings.reset_settings_desc'.tr(),
             onTap: _showResetSettingsDialog,
             trailing: const Icon(Icons.chevron_right),
             textColor: AppColors.warning,
@@ -454,11 +496,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           color: AppColors.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(
-          icon,
-          color: AppColors.primary,
-          size: 20,
-        ),
+        child: Icon(icon, color: AppColors.primary, size: 20),
       ),
       title: Text(
         title,
@@ -469,9 +507,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       ),
       subtitle: Text(
         subtitle,
-        style: AppTypography.bodySmall.copyWith(
-          color: AppColors.textSecondary,
-        ),
+        style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
       ),
       trailing: trailing,
       onTap: onTap,
@@ -493,11 +529,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           color: AppColors.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(
-          icon,
-          color: AppColors.primary,
-          size: 20,
-        ),
+        child: Icon(icon, color: AppColors.primary, size: 20),
       ),
       title: Text(
         title,
@@ -508,9 +540,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       ),
       subtitle: Text(
         subtitle,
-        style: AppTypography.bodySmall.copyWith(
-          color: AppColors.textSecondary,
-        ),
+        style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
       ),
       trailing: Switch.adaptive(
         value: value,
@@ -522,24 +552,23 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
   }
 
   Widget _buildDivider() {
-    return Divider(
-      height: 1,
-      color: AppColors.border,
-      indent: 56,
-    );
+    return Divider(height: 1, color: AppColors.border, indent: 56);
   }
 
   String _formatTime(TimeOfDay time) {
     return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
   }
 
-  Future<void> _updateSetting(Future<void> Function() updateFunction, String successMessage) async {
+  Future<void> _updateSetting(
+    Future<void> Function() updateFunction,
+    String successMessage,
+  ) async {
     try {
       await updateFunction();
       await _loadSettings();
       _showSuccessSnackBar(successMessage);
     } catch (e) {
-      _showErrorSnackBar('Ошибка обновления настройки');
+      _showErrorSnackBar('settings.settings_update_error'.tr());
     }
   }
 
@@ -547,20 +576,23 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Выберите тему'),
+        title: Text('settings.select_theme'.tr()),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: settings.AppTheme.values.map((theme) {
             return RadioListTile<settings.AppTheme>(
-              title: Text(theme.displayName),
+              title: Text(_getThemeName(context, theme)),
               value: theme,
               groupValue: _settings?.theme,
               onChanged: (value) async {
                 if (value != null) {
                   Navigator.of(context).pop();
+                  final themeName = _getThemeName(context, value);
                   await _updateSetting(
                     () => _settingsService.setTheme(value),
-                    'Тема изменена на ${value.displayName}',
+                    'settings.theme_changed'.tr(
+                      namedArgs: {'theme': themeName},
+                    ),
                   );
                 }
               },
@@ -580,16 +612,39 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           mainAxisSize: MainAxisSize.min,
           children: settings.AppLanguage.values.map((language) {
             return RadioListTile<settings.AppLanguage>(
-              title: Text(language.displayName),
+              title: Text(_getLanguageName(context, language)),
               value: language,
               groupValue: _settings?.language,
               onChanged: (value) async {
                 if (value != null) {
                   Navigator.of(context).pop();
-                  await _updateSetting(
-                    () => _settingsService.setLanguage(value),
-                    'Язык изменен на ${value.displayName}',
+                  final langName = _getLanguageName(context, value);
+
+                  // Сохраняем язык
+                  await _settingsService.setLanguage(value);
+
+                  // Обновляем локаль в EasyLocalization
+                  final newLocale = Locale(
+                    value.code == 'tk' ? 'tr' : value.code,
                   );
+                  if (context.mounted) {
+                    context.setLocale(newLocale);
+                  }
+
+                  // Инвалидируем провайдер для обновления локали в main.dart
+                  ref.invalidate(savedLocaleProvider);
+
+                  // Показываем сообщение об успехе
+                  if (mounted) {
+                    _showSuccessSnackBar(
+                      'settings.language_changed'.tr(
+                        namedArgs: {'language': langName},
+                      ),
+                    );
+                  }
+
+                  // Перезагружаем настройки
+                  await _loadSettings();
                 }
               },
             );
@@ -603,13 +658,18 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Цель отслеживания настроения'),
+        title: Text('settings.mood_tracking_goal_dialog'.tr()),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(7, (index) {
             final days = index + 1;
+            final dayText = days == 1
+                ? 'settings.day'.tr()
+                : days < 5
+                ? 'settings.days'.tr()
+                : 'settings.days_many'.tr();
             return RadioListTile<int>(
-              title: Text('$days ${days == 1 ? 'день' : days < 5 ? 'дня' : 'дней'} в неделю'),
+              title: Text('$days $dayText ${'settings.days_per_week'.tr()}'),
               value: days,
               groupValue: _settings?.moodTrackingGoal,
               onChanged: (value) async {
@@ -617,7 +677,9 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
                   Navigator.of(context).pop();
                   await _updateSetting(
                     () => _settingsService.setMoodTrackingGoal(value),
-                    'Цель установлена: $value дней в неделю',
+                    'settings.goal_set'.tr(
+                      namedArgs: {'goal': value.toString()},
+                    ),
                   );
                 }
               },
@@ -631,32 +693,35 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
   void _showTimePicker() async {
     final time = await showTimePicker(
       context: context,
-      initialTime: _settings?.reminderTime ?? const TimeOfDay(hour: 20, minute: 0),
+      initialTime:
+          _settings?.reminderTime ?? const TimeOfDay(hour: 20, minute: 0),
     );
-    
+
     if (time != null) {
       await _updateSetting(
         () => _settingsService.setReminderTime(time),
-        'Время напоминания изменено на ${_formatTime(time)}',
+        'settings.reminder_time_updated'.tr(
+          namedArgs: {'time': _formatTime(time)},
+        ),
       );
     }
   }
 
   void _exportData() {
     // TODO: Реализовать экспорт данных
-    _showSuccessSnackBar('Экспорт данных будет реализован в следующей версии');
+    _showSuccessSnackBar('settings.export_data_message'.tr());
   }
 
   void _showDeleteDataDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Удалить все данные?'),
-        content: const Text('Это действие нельзя отменить. Все ваши записи настроения и настройки будут удалены.'),
+        title: Text('settings.delete_all_data_dialog'.tr()),
+        content: Text('settings.delete_all_data_warning'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Отмена'),
+            child: Text('common.cancel'.tr()),
           ),
           TextButton(
             onPressed: () async {
@@ -664,7 +729,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
               await _deleteAllData();
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: const Text('Удалить'),
+            child: Text('common.delete'.tr()),
           ),
         ],
       ),
@@ -675,9 +740,9 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     try {
       await _levelService.resetLevelData();
       // TODO: Удалить все данные из базы данных
-      _showSuccessSnackBar('Все данные удалены');
+      _showSuccessSnackBar('settings.all_data_deleted'.tr());
     } catch (e) {
-      _showErrorSnackBar('Ошибка удаления данных');
+      _showErrorSnackBar('settings.delete_data_error'.tr());
     }
   }
 
@@ -685,12 +750,12 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Помощь и поддержка'),
-        content: const Text('Здесь будет раздел помощи с часто задаваемыми вопросами и инструкциями по использованию приложения.'),
+        title: Text('settings.help_support'.tr()),
+        content: Text('settings.help_support_desc'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Закрыть'),
+            child: Text('common.close'.tr()),
           ),
         ],
       ),
@@ -701,12 +766,12 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Обратная связь'),
-        content: const Text('Спасибо за использование Mind Space! Ваше мнение очень важно для нас. Вы можете отправить отзыв через App Store или Google Play.'),
+        title: Text('settings.feedback_dialog'.tr()),
+        content: Text('settings.feedback_message'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Закрыть'),
+            child: Text('common.close'.tr()),
           ),
         ],
       ),
@@ -715,19 +780,19 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
 
   void _rateApp() {
     // TODO: Реализовать переход в магазин приложений
-    _showSuccessSnackBar('Спасибо за оценку!');
+    _showSuccessSnackBar('settings.thank_you_rating'.tr());
   }
 
   void _showPrivacyPolicy() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Политика конфиденциальности'),
-        content: const Text('Здесь будет текст политики конфиденциальности, описывающий как мы собираем, используем и защищаем ваши данные.'),
+        title: Text('settings.privacy_policy'.tr()),
+        content: Text('settings.privacy_policy_content'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Закрыть'),
+            child: Text('common.close'.tr()),
           ),
         ],
       ),
@@ -738,12 +803,12 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Условия использования'),
-        content: const Text('Здесь будут условия использования приложения, правила и ограничения.'),
+        title: Text('settings.terms_of_service'.tr()),
+        content: Text('settings.terms_of_service_content'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Закрыть'),
+            child: Text('common.close'.tr()),
           ),
         ],
       ),
@@ -754,12 +819,12 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Сбросить настройки?'),
-        content: const Text('Все настройки будут возвращены к значениям по умолчанию. Ваши данные настроения не будут затронуты.'),
+        title: Text('settings.reset_settings_dialog_title'.tr()),
+        content: Text('settings.reset_settings_warning'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Отмена'),
+            child: Text('common.cancel'.tr()),
           ),
           TextButton(
             onPressed: () async {
@@ -767,7 +832,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
               await _resetSettings();
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.warning),
-            child: const Text('Сбросить'),
+            child: Text('common.reset'.tr()),
           ),
         ],
       ),
@@ -778,9 +843,9 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     try {
       await _settingsService.resetAllSettings();
       await _loadSettings();
-      _showSuccessSnackBar('Настройки сброшены');
+      _showSuccessSnackBar('settings.settings_reset_success'.tr());
     } catch (e) {
-      _showErrorSnackBar('Ошибка сброса настроек');
+      _showErrorSnackBar('settings.settings_reset_error'.tr());
     }
   }
 }

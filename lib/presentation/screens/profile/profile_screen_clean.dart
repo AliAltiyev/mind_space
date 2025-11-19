@@ -97,22 +97,22 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           children: [
             // Информация о пользователе
             _buildUserInfo(context),
-            
+
             const SizedBox(height: 24),
-            
+
             // Статистика
             _buildStatsSection(context, allEntriesAsync),
-            
+
             const SizedBox(height: 24),
-            
+
             // Быстрые действия
             _buildQuickActions(context),
-            
+
             const SizedBox(height: 24),
-            
+
             // Дополнительные функции
             _buildAdditionalFeatures(context),
-            
+
             const SizedBox(height: 32),
           ],
         ),
@@ -141,32 +141,34 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    gradient: _profileImage == null 
+                    gradient: _profileImage == null
                         ? LinearGradient(
                             colors: [AppColors.primary, AppColors.secondary],
                           )
                         : null,
                     borderRadius: BorderRadius.circular(40),
-                    border: _profileImage != null 
+                    border: _profileImage != null
                         ? Border.all(color: AppColors.primary, width: 3)
                         : null,
-                    image: _profileImage != null 
+                    image: _profileImage != null
                         ? DecorationImage(
                             image: FileImage(_profileImage!),
                             fit: BoxFit.cover,
                           )
                         : null,
                   ),
-                  child: _profileImage == null 
+                  child: _profileImage == null
                       ? _isLoadingImage
-                          ? const CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            )
-                          : const Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 40,
-                            )
+                            ? const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 40,
+                              )
                       : null,
                 ),
                 Positioned(
@@ -190,25 +192,31 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Имя пользователя
           Text(
             'profile.user'.tr(),
             style: AppTypography.h2.copyWith(color: AppColors.textPrimary),
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           // Дата регистрации
           Text(
-            'profile.member_since'.tr(namedArgs: {'date': DateFormat('MMMM yyyy').format(DateTime.now())}),
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+            'profile.member_since'.tr(
+              namedArgs: {
+                'date': DateFormat('MMMM yyyy').format(DateTime.now()),
+              },
+            ),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Уровень прогресса
           _buildProgressLevel(),
         ],
@@ -256,13 +264,15 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            _userStats!.levelIcon,
-            style: const TextStyle(fontSize: 16),
-          ),
+          Text(_userStats!.levelIcon, style: const TextStyle(fontSize: 16)),
           const SizedBox(width: 8),
           Text(
-            'user_level.level'.tr(namedArgs: {'level': _userStats!.level.toString(), 'name': _userStats!.levelName}),
+            'user_level.level'.tr(
+              namedArgs: {
+                'level': _userStats!.level.toString(),
+                'name': _userStats!.levelName,
+              },
+            ),
             style: AppTypography.bodySmall.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w600,
@@ -274,7 +284,10 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
   }
 
   /// Секция статистики
-  Widget _buildStatsSection(BuildContext context, AsyncValue<List<dynamic>> allEntriesAsync) {
+  Widget _buildStatsSection(
+    BuildContext context,
+    AsyncValue<List<dynamic>> allEntriesAsync,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -290,9 +303,9 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             'stats.title'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           allEntriesAsync.when(
             data: (entries) => _buildStatsGrid(entries),
             loading: () => const Center(child: CircularProgressIndicator()),
@@ -307,12 +320,17 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
   Widget _buildStatsGrid(List<dynamic> entries) {
     final totalEntries = entries.length;
     final streak = _calculateStreak(entries);
-    final thisWeek = entries.where((e) => 
-        e.createdAt.isAfter(DateTime.now().subtract(const Duration(days: 7)))
-    ).length;
-    final avgMood = entries.isEmpty 
-        ? 0.0 
-        : entries.map((e) => e.moodValue).reduce((a, b) => a + b) / entries.length;
+    final thisWeek = entries
+        .where(
+          (e) => e.createdAt.isAfter(
+            DateTime.now().subtract(const Duration(days: 7)),
+          ),
+        )
+        .length;
+    final avgMood = entries.isEmpty
+        ? 0.0
+        : entries.map((e) => e.moodValue).reduce((a, b) => a + b) /
+              entries.length;
 
     return Column(
       children: [
@@ -337,9 +355,9 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             ),
           ],
         ),
-        
+
         const SizedBox(height: 12),
-        
+
         Row(
           children: [
             Expanded(
@@ -361,7 +379,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             ),
           ],
         ),
-        
+
         // Дополнительная информация об уровне, если есть
         if (_userStats != null) ...[
           const SizedBox(height: 12),
@@ -386,17 +404,19 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
         children: [
           Row(
             children: [
-              Text(
-                _userStats!.levelIcon,
-                style: const TextStyle(fontSize: 20),
-              ),
+              Text(_userStats!.levelIcon, style: const TextStyle(fontSize: 20)),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'user_level.level'.tr(namedArgs: {'level': _userStats!.level.toString(), 'name': _userStats!.levelName}),
+                      'user_level.level'.tr(
+                        namedArgs: {
+                          'level': _userStats!.level.toString(),
+                          'name': _userStats!.levelName,
+                        },
+                      ),
                       style: AppTypography.bodyLarge.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
@@ -439,9 +459,9 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             'home.quick_actions'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           _ActionTile(
             icon: Icons.add_circle_outline,
             title: 'mood.add_mood'.tr(),
@@ -449,7 +469,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             onTap: () => context.push('/add-entry'),
             color: AppColors.primary,
           ),
-          
+
           _ActionTile(
             icon: Icons.analytics_outlined,
             title: 'stats.title'.tr(),
@@ -457,7 +477,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             onTap: () => context.go('/stats'),
             color: AppColors.secondary,
           ),
-          
+
           _ActionTile(
             icon: Icons.psychology_outlined,
             title: 'ai.chat.title'.tr(),
@@ -487,30 +507,30 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
             'settings.additional'.tr(),
             style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           _ActionTile(
             icon: Icons.settings_outlined,
             title: 'settings.title'.tr(),
             subtitle: 'profile.app_configuration'.tr(),
             onTap: () => context.go('/settings'),
           ),
-          
+
           _ActionTile(
             icon: Icons.share_outlined,
             title: 'profile.share'.tr(),
             subtitle: 'profile.tell_friends'.tr(),
             onTap: _shareApp,
           ),
-          
+
           _ActionTile(
             icon: Icons.help_outline,
             title: 'profile.help'.tr(),
             subtitle: 'profile.support_faq'.tr(),
             onTap: _showHelp,
           ),
-          
+
           _ActionTile(
             icon: Icons.info_outline,
             title: 'settings.about_app'.tr(),
@@ -528,15 +548,13 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 48,
-            color: AppColors.error,
-          ),
+          Icon(Icons.error_outline, size: 48, color: AppColors.error),
           const SizedBox(height: 8),
           Text(
             'database.error_loading'.tr(),
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
         ],
       ),
@@ -552,11 +570,11 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
 
     int streak = 0;
     final today = DateTime.now();
-    
+
     for (int i = 0; i < sortedEntries.length; i++) {
       final entryDate = sortedEntries[i].createdAt;
       final daysDiff = today.difference(entryDate).inDays;
-      
+
       if (daysDiff == streak) {
         streak++;
       } else {
@@ -664,14 +682,14 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
         final success = await _profileImageService.saveProfileImage(imageFile);
         if (success && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-             SnackBar(
-              content:  Text('profile.photo_saved'.tr()),
+            SnackBar(
+              content: Text('profile.photo_saved'.tr()),
               backgroundColor: AppColors.success,
             ),
           );
         } else if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-             SnackBar(
+            SnackBar(
               content: Text('profile.photo_save_error'.tr()),
               backgroundColor: AppColors.error,
             ),
@@ -682,7 +700,11 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('profile.image_selection_error'.tr(namedArgs: {'error': e.toString()})),
+            content: Text(
+              'profile.image_selection_error'.tr(
+                namedArgs: {'error': e.toString()},
+              ),
+            ),
             backgroundColor: AppColors.error,
           ),
         );
@@ -702,7 +724,11 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(success ? 'profile.photo_deleted'.tr() : 'profile.photo_delete_error'.tr()),
+          content: Text(
+            success
+                ? 'profile.photo_deleted'.tr()
+                : 'profile.photo_delete_error'.tr(),
+          ),
           backgroundColor: success ? AppColors.success : AppColors.error,
         ),
       );
@@ -737,10 +763,7 @@ class _StatCard extends StatelessWidget {
         children: [
           Icon(icon, color: color, size: 24),
           const SizedBox(height: 8),
-          Text(
-            value,
-            style: AppTypography.h3.copyWith(color: color),
-          ),
+          Text(value, style: AppTypography.h3.copyWith(color: color)),
           const SizedBox(height: 4),
           Text(
             title,
@@ -785,11 +808,7 @@ class _ActionTile extends StatelessWidget {
                 color: (color ?? AppColors.primary).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
-                icon,
-                color: color ?? AppColors.primary,
-                size: 20,
-              ),
+              child: Icon(icon, color: color ?? AppColors.primary, size: 20),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -803,17 +822,11 @@ class _ActionTile extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: AppTypography.caption,
-                  ),
+                  Text(subtitle, style: AppTypography.caption),
                 ],
               ),
             ),
-            Icon(
-              Icons.chevron_right,
-              color: AppColors.textHint,
-            ),
+            Icon(Icons.chevron_right, color: AppColors.textHint),
           ],
         ),
       ),
@@ -842,12 +855,12 @@ class _ImagePickerOption extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isDestructive 
+          color: isDestructive
               ? AppColors.error.withOpacity(0.1)
               : AppColors.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isDestructive 
+            color: isDestructive
                 ? AppColors.error.withOpacity(0.3)
                 : AppColors.primary.withOpacity(0.3),
           ),

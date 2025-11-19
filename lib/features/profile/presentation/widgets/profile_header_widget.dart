@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mind_space/presentation/widgets/core/glass_surface.dart';
 
 import '../../domain/entities/user_profile_entity.dart';
@@ -128,7 +129,7 @@ class ProfileHeaderWidget extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onEditTap,
                 icon: const Icon(Icons.edit),
-                label: const Text('Редактировать профиль'),
+                label: Text('profile.edit'.tr()),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(
                     context,

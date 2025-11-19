@@ -20,7 +20,9 @@
         "yes": "Sí",
         "no": "No",
         "try_again": "Intentar de nuevo",
-        "refresh": "Actualizar"
+        "refresh": "Actualizar",
+        "unknown_state": "Estado desconocido",
+        "reset": "Restablecer"
     },
     "navigation": {
         "home": "Inicio",
@@ -230,7 +232,39 @@
         "saturday_message": "¡Verificación de estado de ánimo del fin de semana! ¿Cómo te sientes? 😌",
         "sunday_message": "¡Hora de reflexión dominical! ¿Cómo está tu estado de ánimo? 🌅",
         "weekly_reflection_title": "Hora de Reflexión Semanal",
-        "weekly_reflection_body": "Tómate tiempo para reflexionar sobre tu semana y rastrear tus patrones de estado de ánimo 📊"
+        "weekly_reflection_body": "Tómate tiempo para reflexionar sobre tu semana y rastrear tus patrones de estado de ánimo 📊",
+        "daily_mood_reminders_title": "Recordatorios Diarios de Estado de Ánimo",
+        "enable_daily_reminders": "Activar Recordatorios Diarios",
+        "daily_reminders_desc": "Recibe recordatorios para rastrear tu estado de ánimo todos los días",
+        "weekly_reflection_title_settings": "Reflexión Semanal",
+        "enable_weekly_reflection": "Activar Reflexión Semanal",
+        "weekly_reflection_desc": "Recibe recordatorios para reflexionar sobre tu semana",
+        "reminder_day": "Día del Recordatorio",
+        "reminder_time": "Hora del Recordatorio",
+        "other_notifications": "Otras Notificaciones",
+        "achievement_notifications": "Notificaciones de Logros",
+        "achievement_notifications_desc": "Recibe notificaciones cuando desbloqueas logros",
+        "trend_notifications": "Notificaciones de Tendencias",
+        "trend_notifications_desc": "Recibe notificaciones sobre tendencias de estado de ánimo e insights",
+        "send_test_notification_desc": "Enviar una notificación de prueba para verificar la configuración",
+        "app_notification_settings": "Configuración de Notificaciones de la App",
+        "open_system_settings": "Abrir configuración de notificaciones del sistema",
+        "select_day": "Seleccionar Día",
+        "test_notification": "Notificación de Prueba",
+        "test_notification_title": "Notificación de Prueba",
+        "test_notification_success": "¡Tu configuración de notificaciones funciona correctamente! 🎉",
+        "test_notification_sent": "¡Notificación de prueba enviada!",
+        "permission_denied": "Se requieren permisos de notificación para los recordatorios",
+        "error_daily_reminders": "Error al configurar recordatorios diarios",
+        "error_weekly_reminders": "Error al configurar recordatorios semanales",
+        "monday": "Lunes",
+        "tuesday": "Martes",
+        "wednesday": "Miércoles",
+        "thursday": "Jueves",
+        "friday": "Viernes",
+        "saturday": "Sábado",
+        "sunday": "Domingo",
+        "unknown_day": "Desconocido"
     },
     "prompts": {
         "gratitude_prompts": [
@@ -335,6 +369,30 @@
         "no_data": "No hay datos para estadísticas",
         "add_entries_for_stats": "Agrega entradas de estado de ánimo para ver estadísticas",
         "no_data_display": "No hay datos para mostrar",
-        "unknown": "Desconocido"
+        "unknown": "Desconocido",
+        "loading_error_full": "Error al cargar estadísticas",
+        "error_loading_title": "Error de carga"
+    },
+    "settings": {
+        "all_data_deleted": "Todos los datos eliminados",
+        "delete_data_error": "Error al eliminar datos",
+        "settings_reset_success": "Configuración restablecida con éxito",
+        "settings_reset_error": "Error al restablecer configuración",
+        "reset_settings_dialog_title": "¿Restablecer configuración?",
+        "reset_settings_warning": "Toda la configuración volverá a los valores predeterminados. Tus datos de estado de ánimo no se verán afectados.",
+        "reminder_time_updated": "Hora del recordatorio cambiada a {time}"
+    },
+    "ai": {
+        "meditation": {
+            "start_with_duration": "Iniciar meditación ({duration} min)"
+        },
+        "error_analysis_title": "Error de análisis"
+    },
+    "demo": {
+        "performance_list": "• Almacenamiento en caché de objetos Paint\n• CustomPainter optimizado\n• RepaintBoundary para aislamiento\n• Limpieza basada en temporizador para efectos de ondulación\n• Sistema de diseño unificado con constantes"
+    },
+    "profile": {
+        "updated_successfully": "¡Perfil actualizado con éxito!",
+        "loading_error_full": "Error al cargar perfil"
     }
 }

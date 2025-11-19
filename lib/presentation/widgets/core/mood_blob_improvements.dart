@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Дополнительные улучшения для MoodBlob
 class MoodBlobImprovements {
@@ -178,8 +179,10 @@ class MoodBlobImprovements {
     required VoidCallback onTap,
   }) {
     return Semantics(
-      label: 'Mood rating: $moodRating out of 5',
-      hint: 'Tap to change mood rating',
+      label: 'mood.rating_label'.tr(
+        namedArgs: {'rating': moodRating.toString()},
+      ),
+      hint: 'mood.rating_hint'.tr(),
       onTap: onTap,
       child: child,
     );
