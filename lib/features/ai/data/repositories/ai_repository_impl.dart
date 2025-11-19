@@ -7,7 +7,7 @@ import '../../domain/entities/meditation_entity.dart';
 import '../../domain/entities/mood_pattern_entity.dart';
 import '../../domain/repositories/ai_repository.dart';
 import '../datasources/ai_local_datasource.dart';
-import '../datasources/openrouter_datasource.dart';
+import '../datasources/groq_datasource.dart';
 import '../models/ai_insight_model.dart';
 import '../models/gratitude_suggestion_model.dart';
 import '../models/meditation_session_model.dart';
@@ -15,11 +15,11 @@ import '../models/mood_pattern_model.dart';
 
 /// Реализация AI репозитория
 class AIRepositoryImpl implements AIRepository {
-  final OpenRouterDataSource _remoteDataSource;
+  final GroqDataSource _remoteDataSource;
   final AILocalDataSource _localDataSource;
 
   AIRepositoryImpl({
-    required OpenRouterDataSource remoteDataSource,
+    required GroqDataSource remoteDataSource,
     required AILocalDataSource localDataSource,
   }) : _remoteDataSource = remoteDataSource,
        _localDataSource = localDataSource;

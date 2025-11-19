@@ -1,14 +1,14 @@
 import 'dart:convert';
 
-import '../../../../core/api/openrouter_client.dart';
+import '../../../../core/api/groq_client.dart';
 import '../../../../core/database/database.dart';
 import '../../../../core/utils/prompt_generator.dart';
 
-/// DataSource для работы с OpenRouter API
-class OpenRouterDataSource {
-  final OpenRouterClient _client;
+/// DataSource для работы с Groq API
+class GroqDataSource {
+  final GroqClient _client;
 
-  OpenRouterDataSource(this._client);
+  GroqDataSource(this._client);
 
   /// Получение AI инсайтов
   Future<Map<String, dynamic>> getMoodInsights(List<MoodEntry> entries) async {
@@ -19,7 +19,12 @@ class OpenRouterDataSource {
         {'role': 'user', 'content': prompt},
       ];
 
-      final response = await _client.generateMoodInsights(messages: messages);
+      final response = await _client.generateContentWithRetry(
+        model: GroqApiConstants.defaultModel,
+        messages: messages,
+        temperature: 0.7,
+        maxTokens: 800,
+      );
 
       if (!response.isValid) {
         throw Exception('Invalid response from AI');
@@ -27,7 +32,7 @@ class OpenRouterDataSource {
 
       return _parseJsonResponse(response.content);
     } catch (e) {
-      print('❌ Ошибка в OpenRouterDataSource.getMoodInsights: $e');
+      print('❌ Ошибка в GroqDataSource.getMoodInsights: $e');
       rethrow;
     }
   }
@@ -43,8 +48,11 @@ class OpenRouterDataSource {
         {'role': 'user', 'content': prompt},
       ];
 
-      final response = await _client.generatePatternAnalysis(
+      final response = await _client.generateContentWithRetry(
+        model: GroqApiConstants.defaultModel,
         messages: messages,
+        temperature: 0.6,
+        maxTokens: 1000,
       );
 
       if (!response.isValid) {
@@ -53,7 +61,7 @@ class OpenRouterDataSource {
 
       return _parseJsonResponse(response.content);
     } catch (e) {
-      print('❌ Ошибка в OpenRouterDataSource.analyzeMoodPatterns: $e');
+      print('❌ Ошибка в GroqDataSource.analyzeMoodPatterns: $e');
       rethrow;
     }
   }
@@ -69,8 +77,11 @@ class OpenRouterDataSource {
         {'role': 'user', 'content': prompt},
       ];
 
-      final response = await _client.generateGratitudePrompts(
+      final response = await _client.generateContentWithRetry(
+        model: GroqApiConstants.defaultModel,
         messages: messages,
+        temperature: 0.8,
+        maxTokens: 600,
       );
 
       if (!response.isValid) {
@@ -79,7 +90,7 @@ class OpenRouterDataSource {
 
       return _parseJsonResponse(response.content);
     } catch (e) {
-      print('❌ Ошибка в OpenRouterDataSource.generateGratitudePrompts: $e');
+      print('❌ Ошибка в GroqDataSource.generateGratitudePrompts: $e');
       rethrow;
     }
   }
@@ -95,8 +106,11 @@ class OpenRouterDataSource {
         {'role': 'user', 'content': prompt},
       ];
 
-      final response = await _client.generateMeditationSessions(
+      final response = await _client.generateContentWithRetry(
+        model: GroqApiConstants.defaultModel,
         messages: messages,
+        temperature: 0.7,
+        maxTokens: 700,
       );
 
       if (!response.isValid) {
@@ -105,7 +119,7 @@ class OpenRouterDataSource {
 
       return _parseJsonResponse(response.content);
     } catch (e) {
-      print('❌ Ошибка в OpenRouterDataSource.suggestMeditationSession: $e');
+      print('❌ Ошибка в GroqDataSource.suggestMeditationSession: $e');
       rethrow;
     }
   }
@@ -151,7 +165,7 @@ class OpenRouterDataSource {
       ];
 
       await _client.generateContent(
-        model: 'anthropic/claude-3.5-sonnet',
+        model: GroqApiConstants.defaultModel,
         messages: testMessages,
         maxTokens: 10,
       );

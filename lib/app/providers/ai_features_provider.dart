@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/api/openrouter_client.dart';
+import '../../core/api/groq_client.dart';
 import '../../core/database/database.dart';
 import '../../features/ai/data/datasources/ai_local_datasource.dart';
-import '../../features/ai/data/datasources/openrouter_datasource.dart';
+import '../../features/ai/data/datasources/groq_datasource.dart';
 import '../../features/ai/data/repositories/ai_repository_impl.dart';
 import '../../features/ai/domain/repositories/ai_repository.dart';
 import '../../features/ai/domain/usecases/analyze_mood_patterns_usecase.dart';
@@ -16,9 +16,9 @@ import '../../features/ai/presentation/blocs/meditation_bloc.dart';
 import '../../features/ai/presentation/blocs/patterns_bloc.dart';
 import 'app_providers.dart';
 
-/// Провайдер для OpenRouter клиента
-final openRouterClientProvider = Provider<OpenRouterClient>((ref) {
-  return OpenRouterClient();
+/// Провайдер для Groq клиента
+final groqClientProvider = Provider<GroqClient>((ref) {
+  return GroqClient();
 });
 
 /// Провайдер для локального хранилища AI
@@ -26,15 +26,15 @@ final aiLocalDataSourceProvider = Provider<AILocalDataSource>((ref) {
   return AILocalDataSource();
 });
 
-/// Провайдер для OpenRouter DataSource
-final openRouterDataSourceProvider = Provider<OpenRouterDataSource>((ref) {
-  final client = ref.watch(openRouterClientProvider);
-  return OpenRouterDataSource(client);
+/// Провайдер для Groq DataSource
+final groqDataSourceProvider = Provider<GroqDataSource>((ref) {
+  final client = ref.watch(groqClientProvider);
+  return GroqDataSource(client);
 });
 
 /// Провайдер для AI репозитория
 final aiRepositoryProvider = Provider<AIRepository>((ref) {
-  final remoteDataSource = ref.watch(openRouterDataSourceProvider);
+  final remoteDataSource = ref.watch(groqDataSourceProvider);
   final localDataSource = ref.watch(aiLocalDataSourceProvider);
 
   return AIRepositoryImpl(

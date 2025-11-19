@@ -1,4 +1,4 @@
-/// Модель ответа от OpenRouter API
+/// Модель ответа от AI API (совместима с OpenAI/Groq форматом)
 class OpenRouterResponse {
   /// ID ответа
   final String id;
@@ -101,4 +101,3 @@ class OpenRouterResponse {
     return Object.hash(id, model, content, usageTokens, createdAt);
   }
 }
-

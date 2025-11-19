@@ -9,6 +9,7 @@ import 'dart:io';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../app/providers/ai_features_provider.dart';
+import '../../../app/providers/profile_providers.dart';
 import '../../../core/services/profile_image_service.dart';
 import '../../../core/services/user_level_service.dart';
 
@@ -75,6 +76,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
   @override
   Widget build(BuildContext context) {
     final allEntriesAsync = ref.watch(allMoodEntriesProvider);
+    final userProfileAsync = ref.watch(userProfileProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -96,7 +98,11 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Информация о пользователе
-            _buildUserInfo(context),
+            userProfileAsync.when(
+              data: (profile) => _buildUserInfo(context, profile),
+              loading: () => _buildUserInfoLoading(context),
+              error: (error, stack) => _buildUserInfo(context, null),
+            ),
             
             const SizedBox(height: 24),
             
@@ -120,8 +126,24 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
     );
   }
 
+  /// Информация о пользователе (загрузка)
+  Widget _buildUserInfoLoading(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
   /// Информация о пользователе
-  Widget _buildUserInfo(BuildContext context) {
+  Widget _buildUserInfo(BuildContext context, dynamic profile) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -193,19 +215,72 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           
           const SizedBox(height: 16),
           
-          // Имя пользователя
-          Text(
-            'profile.user'.tr(),
-            style: AppTypography.h2.copyWith(color: AppColors.textPrimary),
+          // Имя пользователя с кнопкой редактирования
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  profile?.name ?? 'profile.user'.tr(),
+                  style: AppTypography.h2.copyWith(color: AppColors.textPrimary),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.edit_outlined),
+                color: AppColors.primary,
+                onPressed: () => context.push('/profile/edit'),
+                tooltip: 'profile.edit'.tr(),
+              ),
+            ],
           ),
           
           const SizedBox(height: 8),
           
           // Дата регистрации
           Text(
-            'profile.member_since'.tr(namedArgs: {'date': DateFormat('MMMM yyyy').format(DateTime.now())}),
+            'profile.member_since'.tr(namedArgs: {
+              'date': profile != null
+                  ? DateFormat('MMMM yyyy').format(profile.joinedDate)
+                  : DateFormat('MMMM yyyy').format(DateTime.now())
+            }),
             style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
           ),
+          
+          // Email, если есть
+          if (profile?.email != null && profile!.email!.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              profile.email!,
+              style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
+            ),
+          ],
+          
+          // Возраст, если указана дата рождения
+          if (profile?.dateOfBirth != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              'profile.age'.tr(namedArgs: {'age': profile!.age.toString()}),
+              style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
+            ),
+          ],
+          
+          // Описание, если есть
+          if (profile?.bio != null && profile!.bio!.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceVariant,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                profile.bio!,
+                style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
           
           const SizedBox(height: 16),
           

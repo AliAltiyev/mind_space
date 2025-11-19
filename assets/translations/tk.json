@@ -1,4 +1,4 @@
-{
+﻿{
     "app": {
         "name": "Akyl Meken",
         "description": "AI elementleri bilen akylly köwüş we pikir gündelik"
@@ -21,7 +21,8 @@
         "no": "Ýok",
         "try_again": "Gaýtadan synanyşmak",
         "refresh": "Täzelemek",
-        "clear": "Arassalamak"
+        "clear": "Arassalamak",
+        "saving": "Saving..."
     },
     "navigation": {
         "home": "Baş sahypa",
@@ -135,20 +136,72 @@
         "validation_error": "Girişiňizi barlaň.",
         "permission_error": "Rugsat berilmedi.",
         "save_error": "Saklamakda ýalňyşlyk: {error}",
-        "save_success": "Ýazgy üstünlikli saklandy! 🎉"
+        "save_success": "Ýazgy üstünlikli saklandy! 🎉",
+        "unknown_state": "Unknown state",
+        "load_profile": "Error loading profile",
+        "load_stats": "Error loading statistics",
+        "load_achievements": "Error loading achievements",
+        "load_insights": "Error loading insights: {error}"
     },
     "onboarding": {
-        "welcome": "Akyl Mekene Hoş geldiňiz",
-        "get_started": "Başlamak",
-        "skip": "Geçmek"
+        "welcome": {
+            "title": "Akyl Mekene Hoş geldiňiz",
+            "description": "AI bilen işleýän düşünjeler bilen köwüşiňizi we pikirleriňizi yzarlaň"
+        },
+        "mood_tracking": {
+            "title": "Köwüş Yzarlama",
+            "description": "Günlük köwüşiňizi ýazyň we wagtyň geçmegi bilen nusgalary açyň"
+        },
+        "ai_insights": {
+            "title": "AI Düşünjeleri",
+            "description": "Maglumatlaryňyza görä şahsy maslahatlar alyň"
+        }
     },
     "profile": {
-        "recent_achievements": "Soňky Üstünlikler",
-        "error_loading": "Profil Ýükleme Ýalňyşlygy",
-        "stats": "Statistika",
+        "title": "Profil",
+        "user": "Ulanyjy",
+        "member_since": "{date} ýylyndan agza",
+        "edit": "Profili redaktirlemek",
+        "level": "Seýp",
+        "experience": "Täjribe",
         "achievements": "Üstünlikler",
-        "no_achievements": "Heniz üstünlik ýok",
-        "keep_tracking": "Ilkinji üstünlikleriňizi gazanmak üçin köwüşiňizi yzarlamagy dowam ediň!"
+        "statistics": "Statistika",
+        "settings": "Sazlamalar",
+        "logout": "Çykmak",
+        "record_current_state": "Häzirki ýagdaýy ýazmak",
+        "view_analytics": "Analitikany görmek",
+        "chat_with_ai": "AI bilen çat",
+        "app_configuration": "Programma konfigurasiýasy",
+        "share": "Paýlaşmak",
+        "tell_friends": "Dostlara programma hakda aýtmak",
+        "help": "Kömek",
+        "support_faq": "Goldaw we FAQ",
+        "version_1_0_0": "Wersiýa 1.0.0",
+        "select_photo": "Profil suratyny saýlaň",
+        "camera": "Kamera",
+        "gallery": "Galereýa",
+        "photo_saved": "Profil suraty saklandy",
+        "photo_save_error": "Surat saklamakda ýalňyşlyk",
+        "image_selection_error": "Surat saýlamakda ýalňyşlyk: {error}",
+        "photo_deleted": "Profil suraty pozuldy",
+        "photo_delete_error": "Surat pozmakda ýalňyşlyk",
+        "name": "Name",
+        "name_hint": "Enter your name",
+        "name_required": "Name is required",
+        "name_min_length": "Name must be at least 2 characters",
+        "email": "Email",
+        "email_hint": "Enter your email",
+        "email_invalid": "Please enter a valid email",
+        "date_of_birth": "Date of Birth",
+        "select_date": "Select date",
+        "age": "Age: {age} years",
+        "about": "Hakynda",
+        "about_hint": "Özüňiz hakda aýdyň...",
+        "interests": "Interests",
+        "change_photo": "Change Photo",
+        "updated": "Profile updated successfully!",
+        "default_user_name": "User",
+        "hobbies": {}
     },
     "statistics": {
         "title": "Statistika",
@@ -166,20 +219,92 @@
         "start_tracking": "Ýazgylaryňyzy bu ýerde görmek üçin köwüşiňizi yzarlamagy başlaň",
         "filter_by_date": "Senä Göre Süz",
         "filter_by_mood": "Köwüşe Göre Süz",
-        "search_entries": "Ýazgylary gözle..."
+        "search_entries": "Ýazgylary gözle...",
+        "all": "Hemmeleri",
+        "no_entries_found": "Ýazgy tapylmady",
+        "try_other_filter": "Başga süzgüç synanyşyň",
+        "search_notes": "Belliklerde gözle...",
+        "note": "Bellik:",
+        "very_bad": "Örän Erbet",
+        "bad": "Erbet",
+        "okay": "Gowy",
+        "good": "Gowy",
+        "excellent": "Ajaýyp"
     },
     "notifications": {
-        "title": "Bildirişler",
-        "daily_reminder_title": "Mind Space Ýatlatma",
-        "monday_message": "Bu gün köwüşiňiz nähili? Haftany pozitiv energiýa bilen başlaň! 🌟",
-        "tuesday_message": "Bu gün özüňiz bilen baglanyşmak üçin bir minut wagt aýryň 💭",
-        "wednesday_message": "Hepde ortasy köwüş barlag! Nähili duýýarsyňyz? 🤔",
-        "thursday_message": "Penşenbe energiýasy! Bu gün köwüşiňiz nähili? ✨",
-        "friday_message": "TGIF! Bu juma köwüşiňiz nähili boldy? 🎉",
-        "saturday_message": "Hepde ahyry köwüş barlag! Nähili duýýarsyňyz? 😌",
-        "sunday_message": "Ýekşenbe oýlanma wagty! Köwüşiňiz nähili? 🌅",
-        "weekly_reflection_title": "Hepdelik Oýlanma Wagty",
-        "weekly_reflection_body": "Hepdeňiz barada oýlanmak we köwüş nusgalaryňyzy yzarlamak üçin wagt aýryň 📊"
+        "daily_reminders": "Günlük ýatlatmalar",
+        "enable_reminders": "Ýatlatmalary işletmek",
+        "daily_mood_reminders": "Günlük köwüş yzarlama ýatlatmalary",
+        "reminder_time": "Ýatlatma wagty",
+        "test_notification": "Test bildirişi",
+        "send_test_notification": "Test bildirişini ibermek",
+        "weekly_reminders": "Hepdelik ýatlatmalar",
+        "enable_weekly_reminders": "Hepdelik ýatlatmalary işletmek",
+        "weekly_reflection_reminders": "Oýlanma ýatlatmalary",
+        "day_of_week": "Hepdäniň güni",
+        "additional_settings": "Goşmaça sazlamalar",
+        "permissions": "Rugsatlar",
+        "manage_permissions": "Programma rugsatlaryny dolandyrmak",
+        "cancel_all_notifications": "Hemme bildirişleri ýatyrmak"
+    },
+    "ai": {
+        "chat": {
+            "title": "AI Çat",
+            "placeholder": "Habarlaşyk ýazyň...",
+            "send": "Ibermek",
+            "thinking": "Oýlanýar...",
+            "error": "Habarlaşyk ibermekde ýalňyşlyk",
+            "welcome_message": "Salam! Men köwüş yzarlamak üçin siziň AI kömekçiňiz. Nähili? Men duýgularyňyzy analiz etmekde, köwüşi gowulaşdyrmak üçin maslahat bermekde ýa-da diňe söhbetdeşlikde kömek edip bilerin! 😊",
+            "clear_chat": "Çaty arassalamak",
+            "clear_chat_confirm": "Çatyňyzyň tutuş geçmişini arassalamak isleýändigiňize ynanýarsyňyzmy?",
+            "quick_questions": "Çalt soraglar",
+            "how_are_you": "Nähili?",
+            "mood_analysis": "Köwüş analizi",
+            "analyze_my_mood": "Köwüşimi analiz et",
+            "tips": "Maslahatlar",
+            "give_tips_for_mood": "Köwüşi gowulaşdyrmak üçin maslahat ber",
+            "recommend_meditation": "Meditasiýa maslahat ber",
+            "ask_any_question": "Köwüş ýa-da maslahat hakda islendik sorag beriň",
+            "response_greeting": "Salam! Men örän gowy, sag boluň! 😊 Siz nähili? Bu gün köwüşiňiz nähili?",
+            "response_mood_analysis": "Men ýazgylaryňyza görä köwüşiňizi analiz edip bilerin! 📊 Aýdyň, bu gün nähili duýýarsyňyz? Ýa-da köwüş ýazgysy goşuň, men siziň duýguly nusgalaryňyzyň jikme-jik analizini bererin.",
+            "response_tips": "Elbetde kömek ederin! 💡 Köwüşi gowulaşdyrmak üçin käbir maslahatlar:\n\n• Çuň dem alyň we çykaryň\n• Täze howada ýöremek\n• Halaýan sazlaňyzy diňläň\n• 3 zat ýazyň, olar üçin minnetdarlyk duýýarsyňyz\n• Özüňiz üçin gowy zat ediň\n\nSiziň üçin näme iň gowy işleýär?",
+            "response_meditation": "Meditasiýa köwüşi gowulaşdyrmagyň ajaýyp usulydyr! 🧘‍♀️\n\nSynanyşyň:\n• 5 minutlyk düşünjeli meditasiýa\n• Dem almagyň çyzyndylary\n• Ösýän myşsa relaksasiýasy\n• Minnetdarlyk meditasiýasy\n\nBu usullaryň haýsysy barada has giňişleýin aýtmak isleýärsiňizmi?",
+            "response_sad": "Men siziň kyn döwürden geçýändigiňizi düşünýärin. 💙 Ýatda saklaň, erbet günler adaty we geçýär. Synanyşyň:\n\n• Ýakyn adama gürleşiň\n• Özüňiz üçin gowy zat ediň\n• Duýgularyňyzy ýazyň\n• Zerur bolsa, hünärmen kömek soraň\n\nSiz bunda ýeke-täk dälsiňiz. Muny has giňişleýin gürlemek isleýärsiňizmi?",
+            "response_general": "Gyzykly sorag! 🤔 Men bu ýerde köwüş, duýgular we akyl saglygy baradaky soraglarda kömek etmek üçin. Men köwüş ýazgylaryňyzy analiz edip bilerin, maslahat bilerin ýa-da diňe söhbetdeşlikde goldaw berip bilerin. Näme hakda gürlemek isleýärsiňiz?",
+            "ready_to_help": "AI Kömekçi kömek etmäge taýýar!",
+            "error_payment_required": "⚠️ AI serwisi wagtlaýyn elýeterli däl. openrouter.ai-da balansyňyzy barlaň",
+            "error_invalid_key": "⚠️ Nädogry Groq API açary. API açaryňyzy düzüň.",
+            "error_access_denied": "⚠️ AI serwisine giriş ýatyryldy. API açaryňyzy barlaň.",
+            "error_rate_limit": "⚠️ Gaty köp haýyş. Birnäçe minutdan gaýtadan synanyşyň.",
+            "error_timeout": "⚠️ Haýyş wagty gutardy. Internet baglanyşygyňyzy barlaň we gaýtadan synanyşyň.",
+            "error_server": "⚠️ AI serwisi wagtlaýyn elýeterli däl. Soňra gaýtadan synanyşyň.",
+            "error_general": "⚠️ AI serwisine birikmek mümkin bolmady. Yedekleme jogaplary ulanýarlar.",
+            "get_groq_key": "Mugt API açary alyň: https://console.groq.com/keys"
+        },
+        "insights": {
+            "title": "AI Düşünjeleri",
+            "loading": "Düşünjeler ýüklenýär...",
+            "error": "Düşünjeleri ýüklemekde ýalňyşlyk",
+            "no_insights": "Heniz düşünje ýok",
+            "generate": "Düşünjeler döretmek"
+        },
+        "gratitude": {
+            "title": "Minnetdarlyk Gündeligi",
+            "suggestion": "Minnetdarlyk teklibi",
+            "write": "Minnetdarlyk ýazmak",
+            "prompts": "Minnetdarlyk teklip"
+        },
+        "meditation": {
+            "title": "Meditasiýa",
+            "suggestion": "Meditasiýa teklibi",
+            "start": "Meditasiýa başlamak",
+            "duration": "Dowamlylygy"
+        },
+        "patterns": {
+            "title": "Nusgalar",
+            "analysis": "Nusga analizi",
+            "insights": "Nusga düşünjeleri"
+        }
     },
     "prompts": {
         "gratitude_prompts": [
@@ -205,5 +330,75 @@
         "ai_pattern_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor, patterns we recommendations meýdanlary bilen",
         "ai_gratitude_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor we prompts meýdanlary bilen",
         "ai_meditation_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor, type, duration, instructions we tips meýdanlary bilen"
+    },
+    "stats": {
+        "title": "Statistika",
+        "overall_stats": "Jemi statistika",
+        "mood_trends": "Köwüş ugurlary",
+        "weekly_overview": "Hepdelik gözden geçirme",
+        "monthly_overview": "Aýlyk gözden geçirme",
+        "average_mood": "Ortaça köwüş",
+        "total_entries": "Jemi ýazgylar",
+        "streak": "Häzirki seriýa",
+        "best_day": "Iň gowy gün",
+        "this_week": "Bu hepde",
+        "mood_distribution": "Köwüş paýlanyşy",
+        "weekly_trends": "Hepdelik ugurlar",
+        "no_data": "Statistika üçin maglumat ýok",
+        "add_entries_for_stats": "Statistikany görmek üçin köwüş ýazgylary goşuň",
+        "no_data_display": "Görkezmek üçin maglumat ýok",
+        "unknown": "Näbelli"
+    },
+    "achievements": {
+        "title": "Üstünlikler",
+        "first_entry": "Ilkinji ýazgy",
+        "week_streak": "Hepdelik seriýa",
+        "month_streak": "Aýlyk seriýa",
+        "hundred_entries": "100 ýazgy",
+        "five_hundred_entries": "500 ýazgy"
+    },
+    "user_level": {
+        "level": "Seýp",
+        "experience": "Täjribe",
+        "next_level": "Indiki seýpe",
+        "level_up": "Seýp ýokarlandy!",
+        "achievement_unlocked": "Üstünlik açyldy",
+        "points_earned": "Hasaplar gazanyldy",
+        "novice": "Başlangyç",
+        "explorer": "Açyjy",
+        "expert": "Hünärmen",
+        "master": "Ustaz",
+        "guru": "Guru",
+        "legend": "Legenda",
+        "novice_desc": "Özüňi bilmek ýolunyň başlangyjy",
+        "explorer_desc": "Duýgularyňyzyň işjeň öwrenilmegi",
+        "expert_desc": "Köwüş nusgalarynyň çuň düşünmegi",
+        "master_desc": "Duýgulary dolandyrmakda ussatlyk",
+        "guru_desc": "Akyl saglygy boýunça hünärmen",
+        "legend_desc": "Duýgularyň legenda ustazy"
+    },
+    "api": {
+        "connection_error": "Birikme ýalňyşlygy",
+        "timeout_error": "Wagt ýalňyşlygy",
+        "server_error": "Serwer ýalňyşlygy",
+        "invalid_response": "Nädogry serwer jogaby"
+    },
+    "demo": {
+        "title": "Gowulaşdyrylan MoodBlob görkezmesi",
+        "description": "Hemme üýtgeşmeleriň we optimizasiýalaryň görkezmegi",
+        "select_mood": "Köwüş bahasy saýlaň",
+        "performance_optimizations": "Öndürijilik optimizasiýalary"
+    },
+    "analytics": {
+        "title": "Analitika",
+        "page": "Analitika sahypasy"
+    },
+    "database": {
+        "error_saving": "Saklamakda ýalňyşlyk",
+        "error_loading": "Ýüklemekde ýalňyşlyk",
+        "data_cleared": "Maglumatlar arassalandy",
+        "backup_created": "Yedek nusga döredildi",
+        "mood_entry_added": "✅ Köwüş ýazgysy goşuldy: {mood} - {note} - Senesi: {date}",
+        "no_note": "bellik ýok"
     }
 }
