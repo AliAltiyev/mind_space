@@ -22,6 +22,7 @@
         "try_again": "Essayer à nouveau",
         "refresh": "Actualiser",
         "clear": "Effacer",
+        "minutes": "min",
         "saving": "Saving..."
     },
     "navigation": {
@@ -339,7 +340,16 @@
             "title": "Méditation",
             "suggestion": "Suggestion de méditation",
             "start": "Commencer la méditation",
-            "duration": "Durée"
+            "duration": "Durée",
+            "personal_practices": "Pratiques de méditation personnalisées",
+            "loading_practices": "Chargement des pratiques de méditation...",
+            "instructions": "Instructions",
+            "quick": "Rapide (5-10 min)",
+            "deep": "Profonde (20+ min)",
+            "no_meditation": "Méditation non disponible",
+            "tap_to_load": "Appuyez sur actualiser pour charger une session de méditation",
+            "starting": "Démarrage d'une méditation de {duration} minutes...",
+            "start_meditation": "Commencer une méditation de {duration} minutes"
         },
         "patterns": {
             "title": "Modèles",

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../app/providers/profile_providers.dart';
 import '../blocs/profile_bloc.dart';
 import '../widgets/edit_profile_form_widget.dart';
 
-class EditProfilePage extends StatelessWidget {
+class EditProfilePage extends ConsumerWidget {
   const EditProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -49,30 +51,35 @@ class EditProfilePage extends StatelessWidget {
   }
 }
 
-class _EditProfilePageContent extends StatelessWidget {
+class _EditProfilePageContent extends ConsumerWidget {
   const _EditProfilePageContent();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     return BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state is ProfileUpdated) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('profile.updated'.tr()),
-              backgroundColor: AppColors.success,
-            ),
-          );
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go('/profile');
-            }
-          });
+        if (state is ProfileUpdated || state is ProfileLoaded) {
+          // Invalidate Riverpod provider to refresh profile data
+          ref.invalidate(userProfileProvider);
+
+          if (state is ProfileUpdated) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('profile.updated'.tr()),
+                backgroundColor: AppColors.success,
+              ),
+            );
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/profile');
+              }
+            });
+          }
         } else if (state is ProfileError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

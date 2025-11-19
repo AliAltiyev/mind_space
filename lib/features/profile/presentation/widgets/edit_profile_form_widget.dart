@@ -107,9 +107,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Profile Photo Section
-          Center(
-            child: _buildProfilePhotoSection(isDark),
-          ),
+          Center(child: _buildProfilePhotoSection(isDark)),
 
           const SizedBox(height: 32),
 
@@ -193,12 +191,10 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                     : 'profile.select_date'.tr(),
                 style: AppTypography.bodyLarge.copyWith(
                   color: isDark
-                      ? (_selectedDate != null
-                          ? Colors.white
-                          : Colors.white70)
+                      ? (_selectedDate != null ? Colors.white : Colors.white70)
                       : (_selectedDate != null
-                          ? AppColors.textPrimary
-                          : AppColors.textHint),
+                            ? AppColors.textPrimary
+                            : AppColors.textHint),
                 ),
               ),
             ),
@@ -207,12 +203,14 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
           if (_selectedDate != null) ...[
             const SizedBox(height: 8),
             Text(
-              'profile.age'.tr(namedArgs: {
-                'age': widget.initialProfile
-                    .copyWith(dateOfBirth: _selectedDate)
-                    .age
-                    .toString(),
-              }),
+              'profile.age'.tr(
+                namedArgs: {
+                  'age': widget.initialProfile
+                      .copyWith(dateOfBirth: _selectedDate)
+                      .age
+                      .toString(),
+                },
+              ),
               style: AppTypography.caption.copyWith(
                 color: isDark ? Colors.white70 : AppColors.textSecondary,
               ),
@@ -325,10 +323,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                     ),
                     elevation: 0,
                   ),
-                  child: Text(
-                    'common.save'.tr(),
-                    style: AppTypography.button,
-                  ),
+                  child: Text('common.save'.tr(), style: AppTypography.button),
                 ),
               ),
             ],
@@ -355,10 +350,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                         )
                       : null,
                   borderRadius: BorderRadius.circular(60),
-                  border: Border.all(
-                    color: AppColors.primary,
-                    width: 3,
-                  ),
+                  border: Border.all(color: AppColors.primary, width: 3),
                   image: _profileImage != null
                       ? DecorationImage(
                           image: FileImage(_profileImage!),
@@ -368,16 +360,16 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                 ),
                 child: _profileImage == null
                     ? _isLoadingImage
-                        ? const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          )
-                        : const Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 60,
-                          )
+                          ? const CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            )
+                          : const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 60,
+                            )
                     : null,
               ),
               Positioned(
@@ -406,9 +398,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
           onPressed: _showImagePicker,
           icon: const Icon(Icons.edit_outlined, size: 18),
           label: Text('profile.change_photo'.tr()),
-          style: TextButton.styleFrom(
-            foregroundColor: AppColors.primary,
-          ),
+          style: TextButton.styleFrom(foregroundColor: AppColors.primary),
         ),
       ],
     );
@@ -417,7 +407,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
   void _showImagePicker() {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     showModalBottomSheet(
       context: context,
       backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
@@ -427,7 +417,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
       builder: (context) {
         final sheetTheme = Theme.of(context);
         final sheetIsDark = sheetTheme.brightness == Brightness.dark;
-        
+
         return Container(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -560,7 +550,8 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
   Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ??
+      initialDate:
+          _selectedDate ??
           DateTime.now().subtract(const Duration(days: 365 * 25)),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
@@ -575,15 +566,15 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
 
   void _saveProfile() {
     if (_formKey.currentState!.validate()) {
+      final bioText = _bioController.text.trim();
       final updatedProfile = widget.initialProfile.copyWith(
         name: _nameController.text.trim(),
         email: _emailController.text.trim().isEmpty
             ? null
             : _emailController.text.trim(),
         dateOfBirth: _selectedDate,
-        bio: _bioController.text.trim().isEmpty
-            ? null
-            : _bioController.text.trim(),
+        bio: bioText.isEmpty ? '' : bioText,
+        clearBio: bioText.isEmpty,
         interests: _selectedInterests,
       );
 

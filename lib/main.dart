@@ -17,9 +17,9 @@ import 'features/profile/presentation/blocs/achievements_bloc.dart';
 import 'features/profile/presentation/blocs/preferences_bloc.dart';
 import 'features/profile/presentation/blocs/profile_bloc.dart';
 import 'features/profile/presentation/blocs/stats_bloc.dart';
-import 'core/constants/app_typography.dart';
-import 'core/constants/navigation.dart';
-import 'core/services/app_settings_service.dart' hide AppTheme;
+import 'app/providers/theme_provider.dart';
+import 'core/services/app_settings_service.dart';
+import 'shared/presentation/theme/app_theme.dart' as app_theme;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +51,9 @@ void main() async {
       ],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      startLocale: savedLanguage.code == 'tk' ? const Locale('tr') : Locale(savedLanguage.code),
+      startLocale: savedLanguage.code == 'tk'
+          ? const Locale('tr')
+          : Locale(savedLanguage.code),
       child: const ProviderScope(child: MindSpaceApp()),
     ),
   );
@@ -64,6 +66,7 @@ class MindSpaceApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
+    final themeMode = ref.watch(appThemeProvider);
 
     return MultiBlocProvider(
       providers: [
@@ -116,10 +119,14 @@ class MindSpaceApp extends ConsumerWidget {
           Locale('tr'), // Turkish - поддерживается MaterialLocalizations
           // Locale('tk'), // Turkmen - НЕ поддерживается MaterialLocalizations
         ],
-        locale: context.locale.languageCode == 'tk' ? const Locale('tr') : context.locale,
+        locale: context.locale.languageCode == 'tk'
+            ? const Locale('tr')
+            : context.locale,
 
         // Тема
-        theme: AppTheme.lightTheme,
+        theme: app_theme.AppTheme.lightTheme,
+        darkTheme: app_theme.AppTheme.darkTheme,
+        themeMode: themeMode,
 
         // Роутинг
         routerConfig: router,

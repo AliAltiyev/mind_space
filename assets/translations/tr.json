@@ -22,6 +22,7 @@
         "try_again": "Tekrar Dene",
         "refresh": "Yenile",
         "clear": "Temizle",
+        "minutes": "dk",
         "saving": "Saving..."
     },
     "navigation": {
@@ -354,7 +355,16 @@
             "title": "Meditasyon",
             "suggestion": "Meditasyon önerisi",
             "start": "Meditasyona başla",
-            "duration": "Süre"
+            "duration": "Süre",
+            "personal_practices": "Kişiselleştirilmiş meditasyon uygulamaları",
+            "loading_practices": "Meditasyon uygulamaları yükleniyor...",
+            "instructions": "Talimatlar",
+            "quick": "Hızlı (5-10 dk)",
+            "deep": "Derin (20+ dk)",
+            "no_meditation": "Meditasyon mevcut değil",
+            "tap_to_load": "Meditasyon oturumu yüklemek için yenile'ye dokunun",
+            "starting": "{duration} dakikalık meditasyon başlatılıyor...",
+            "start_meditation": "{duration} dakikalık meditasyon başlat"
         },
         "patterns": {
             "title": "Desenler",

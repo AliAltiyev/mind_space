@@ -120,25 +120,6 @@ class ProfileHeaderWidget extends StatelessWidget {
                 ),
               ],
             ),
-
-            const SizedBox(height: 16),
-
-            // Edit Button
-            if (onEditTap != null)
-              ElevatedButton.icon(
-                onPressed: onEditTap,
-                icon: const Icon(Icons.edit),
-                label: const Text('Редактировать профиль'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(
-                    context,
-                  ).primaryColor.withOpacity(0.2),
-                  foregroundColor: Colors.white,
-                  side: BorderSide(
-                    color: Theme.of(context).primaryColor.withOpacity(0.5),
-                  ),
-                ),
-              ),
           ],
         ),
       ),

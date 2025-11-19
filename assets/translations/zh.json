@@ -22,6 +22,7 @@
         "try_again": "再试一次",
         "refresh": "刷新",
         "clear": "清除",
+        "minutes": "分钟",
         "saving": "Saving..."
     },
     "navigation": {
@@ -355,7 +356,16 @@
             "title": "冥想",
             "suggestion": "冥想建议",
             "start": "开始冥想",
-            "duration": "时长"
+            "duration": "时长",
+            "personal_practices": "个性化冥想练习",
+            "loading_practices": "正在加载冥想练习...",
+            "instructions": "说明",
+            "quick": "快速 (5-10分钟)",
+            "deep": "深度 (20+分钟)",
+            "no_meditation": "冥想不可用",
+            "tap_to_load": "点击刷新以加载冥想课程",
+            "starting": "正在启动{duration}分钟冥想...",
+            "start_meditation": "开始{duration}分钟冥想"
         },
         "patterns": {
             "title": "模式",

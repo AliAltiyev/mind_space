@@ -22,7 +22,8 @@
         "no": "No",
         "try_again": "Try Again",
         "refresh": "Refresh",
-        "clear": "Clear"
+        "clear": "Clear",
+        "minutes": "min"
     },
     "navigation": {
         "home": "Home",
@@ -279,6 +280,15 @@
             "title": "Meditation",
             "suggestion": "Meditation suggestion",
             "start": "Start meditation",
+            "personal_practices": "Personalized meditation practices",
+            "loading_practices": "Loading meditation practices...",
+            "instructions": "Instructions",
+            "quick": "Quick (5-10 min)",
+            "deep": "Deep (20+ min)",
+            "no_meditation": "No meditation available",
+            "tap_to_load": "Tap refresh to load a meditation session",
+            "starting": "Starting {duration}-minute meditation...",
+            "start_meditation": "Start {duration}-minute meditation",
             "duration": "Duration"
         },
         "patterns": {

@@ -112,17 +112,19 @@ class MeditationBloc extends Bloc<MeditationEvent, MeditationState> {
     } catch (e) {
       print('❌ Ошибка загрузки медитационной сессии: $e');
 
+      // Use case должен вернуть fallback медитацию, но если этого не произошло,
+      // показываем ошибку
       String suggestion;
       if (e.toString().contains('No mood data')) {
         suggestion =
             'Добавьте записи настроения для персонализированных медитаций';
       } else {
-        suggestion = 'Попробуйте обновить данные или обратитесь в поддержку';
+        suggestion = 'AI временно недоступен. Используется базовая медитация.';
       }
 
       emit(
         MeditationError(
-          'Не удалось загрузить медитационную сессию: ${e.toString()}',
+          'Не удалось загрузить медитационную сессию. Попробуйте позже.',
           suggestion: suggestion,
         ),
       );
@@ -360,4 +362,3 @@ class MeditationBloc extends Bloc<MeditationEvent, MeditationState> {
     return meditation?.isLongSession == true;
   }
 }
-

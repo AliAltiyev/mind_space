@@ -22,7 +22,7 @@
         "try_again": "फिर से कोशिश करें",
         "refresh": "रिफ्रेश करें",
         "clear": "साफ करें",
-        "saving": "Saving..."
+        "minutes": "मिनट"
     },
     "navigation": {
         "home": "होम",
@@ -318,7 +318,16 @@
             "title": "ध्यान",
             "suggestion": "ध्यान सुझाव",
             "start": "ध्यान शुरू करें",
-            "duration": "अवधि"
+            "duration": "अवधि",
+            "personal_practices": "व्यक्तिगत ध्यान अभ्यास",
+            "loading_practices": "ध्यान अभ्यास लोड हो रहे हैं...",
+            "instructions": "निर्देश",
+            "quick": "त्वरित (5-10 मिनट)",
+            "deep": "गहरा (20+ मिनट)",
+            "no_meditation": "ध्यान उपलब्ध नहीं है",
+            "tap_to_load": "ध्यान सत्र लोड करने के लिए रीफ्रेश टैप करें",
+            "starting": "{duration}-मिनट का ध्यान शुरू हो रहा है...",
+            "start_meditation": "{duration}-मिनट का ध्यान शुरू करें"
         },
         "patterns": {
             "title": "पैटर्न",

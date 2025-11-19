@@ -22,6 +22,7 @@
         "try_again": "Gaýtadan synanyşmak",
         "refresh": "Täzelemek",
         "clear": "Arassalamak",
+        "minutes": "min",
         "saving": "Saving..."
     },
     "navigation": {
@@ -298,7 +299,16 @@
             "title": "Meditasiýa",
             "suggestion": "Meditasiýa teklibi",
             "start": "Meditasiýa başlamak",
-            "duration": "Dowamlylygy"
+            "duration": "Dowamlylygy",
+            "personal_practices": "Şahsy meditasiýa amallary",
+            "loading_practices": "Meditasiýa amallary ýüklenýär...",
+            "instructions": "Gollanmalar",
+            "quick": "Çalt (5-10 min)",
+            "deep": "Çuň (20+ min)",
+            "no_meditation": "Meditasiýa elýeterli däl",
+            "tap_to_load": "Meditasiýa sessiyasyny ýüklemek üçin täzelemäge basyň",
+            "starting": "{duration} minutlyk meditasiýa başlanýar...",
+            "start_meditation": "{duration} minutlyk meditasiýa başla"
         },
         "patterns": {
             "title": "Nusgalar",

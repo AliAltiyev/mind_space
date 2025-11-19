@@ -12,8 +12,9 @@ import '../widgets/stats_grid_widget.dart';
 import 'achievements_page.dart';
 import 'edit_profile_page.dart';
 import 'statistics_page.dart';
-import '../../../../presentation/widgets/core/amazing_background.dart' as amazing;
-    
+import '../../../../presentation/widgets/core/amazing_background.dart'
+    as amazing;
+
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
@@ -45,25 +46,10 @@ class ProfilePage extends StatelessWidget {
             },
           ),
           actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFFB9E3A), Color(0xFFE6521F)],
-                ),
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFFB9E3A).withOpacity(0.5),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: IconButton(
-                onPressed: () => _navigateToEditProfile(context),
-                icon: const Icon(Icons.edit, color: Colors.white),
-              ),
+            IconButton(
+              onPressed: () => _navigateToEditProfile(context),
+              icon: const Icon(Icons.edit_outlined, color: Colors.white),
+              tooltip: 'profile.edit'.tr(),
             ),
           ],
         ),
@@ -122,9 +108,12 @@ class _ProfilePageContent extends StatelessWidget {
               builder: (context, state) {
                 if (state is ProfileLoading) {
                   return const _ProfileLoadingWidget();
-                } else if (state is ProfileLoaded) {
+                } else if (state is ProfileLoaded || state is ProfileUpdated) {
+                  final profile = state is ProfileLoaded
+                      ? state.profile
+                      : (state as ProfileUpdated).profile;
                   return ProfileHeaderWidget(
-                    profile: state.profile,
+                    profile: profile,
                     onEditTap: () => _navigateToEditProfile(context),
                   );
                 } else if (state is ProfileError) {
@@ -197,7 +186,9 @@ class _ProfilePageContent extends StatelessWidget {
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              shadows: [Shadow(color: Color(0xFFFB9E3A), blurRadius: 8)],
+                              shadows: [
+                                Shadow(color: Color(0xFFFB9E3A), blurRadius: 8),
+                              ],
                             ),
                           ),
                           TextButton(
@@ -277,9 +268,7 @@ class _ProfileLoadingWidget extends StatelessWidget {
         border: Border.all(color: const Color(0xFFFB9E3A).withOpacity(0.3)),
       ),
       child: const Center(
-        child: CircularProgressIndicator(
-          color: Color(0xFFFB9E3A),
-        ),
+        child: CircularProgressIndicator(color: Color(0xFFFB9E3A)),
       ),
     );
   }
@@ -315,10 +304,7 @@ class _ProfileErrorWidget extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             message,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.white60,
-            ),
+            style: const TextStyle(fontSize: 14, color: Colors.white60),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),

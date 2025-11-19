@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../../../core/database/database.dart';
 import '../entities/meditation_entity.dart';
 import '../repositories/ai_repository.dart';
@@ -13,8 +15,83 @@ class SuggestMeditationUseCase {
     try {
       return await repository.suggestMeditationSession(recentMoods);
     } catch (e) {
-      throw Exception('Failed to suggest meditation session: $e');
+      print('⚠️ AI недоступен, используем fallback медитацию: $e');
+      // Repository уже должен вернуть fallback, но на всякий случай
+      // возвращаем базовую медитацию
+      return _createBasicMeditation(recentMoods);
     }
+  }
+
+  /// Создание базовой медитации при недоступности AI
+  MeditationEntity _createBasicMeditation(List<MoodEntry> recentMoods) {
+    final hour = DateTime.now().hour;
+    final averageMood = recentMoods.isNotEmpty
+        ? recentMoods.map((e) => e.moodValue).reduce((a, b) => a + b) /
+              recentMoods.length
+        : 3.0;
+
+    String title;
+    String description;
+    MeditationType type;
+    int duration;
+
+    if (hour >= 6 && hour < 12) {
+      title = 'Утренняя медитация';
+      description = 'Начните день с осознанности и намерений';
+      type = MeditationType.mindfulness;
+      duration = 10;
+    } else if (hour >= 12 && hour < 18) {
+      title = 'Дневная пауза';
+      description = 'Восстановите энергию в середине дня';
+      type = MeditationType.breathing;
+      duration = 8;
+    } else if (hour >= 18 && hour < 22) {
+      title = 'Вечерняя релаксация';
+      description = 'Расслабьтесь после активного дня';
+      type = MeditationType.progressiveRelaxation;
+      duration = 15;
+    } else {
+      title = 'Медитация перед сном';
+      description = 'Подготовьтесь к спокойному сну';
+      type = MeditationType.bodyScan;
+      duration = 12;
+    }
+
+    // Адаптируем под настроение
+    if (averageMood <= 2) {
+      title = 'Исцеляющая медитация';
+      description = 'Поможет справиться с трудными эмоциями';
+      type = MeditationType.lovingKindness;
+      duration = 15;
+    } else if (averageMood >= 4) {
+      title = 'Медитация благодарности';
+      description = 'Углубите чувство радости и благодарности';
+      type = MeditationType.mindfulness;
+      duration = 10;
+    }
+
+    return MeditationEntity(
+      title: title,
+      description: description,
+      emoji: '🧘',
+      accentColor: const Color(0xFF6366F1),
+      type: type,
+      duration: duration,
+      instructions: [
+        'Сядьте удобно и закройте глаза',
+        'Сосредоточьтесь на дыхании',
+        'Наблюдайте за мыслями без суждения',
+        'Верните внимание к дыханию, если отвлеклись',
+        'Медленно откройте глаза и вернитесь в настоящий момент',
+      ],
+      tips: [
+        'Начните с 5 минут и постепенно увеличивайте время',
+        'Не расстраивайтесь, если мысли отвлекают - это нормально',
+        'Практикуйте регулярно для лучших результатов',
+      ],
+      createdAt: DateTime.now(),
+      difficulty: MeditationDifficulty.beginner,
+    );
   }
 
   /// Предложение медитации для конкретного типа
@@ -24,11 +101,13 @@ class SuggestMeditationUseCase {
   ) async {
     try {
       final meditation = await call(recentMoods);
-
       // Адаптируем под выбранный тип
       return meditation.copyWith(type: type);
     } catch (e) {
-      throw Exception('Failed to suggest meditation for type: $e');
+      print(
+        '⚠️ Ошибка при получении медитации для типа, используем fallback: $e',
+      );
+      return _createBasicMeditation(recentMoods).copyWith(type: type);
     }
   }
 
@@ -138,14 +217,20 @@ class SuggestMeditationUseCase {
   Future<MeditationEntity> callShortSession(List<MoodEntry> recentMoods) async {
     try {
       final meditation = await call(recentMoods);
-
       return meditation.copyWith(
         duration: 5,
         title: 'Быстрая медитация',
         description: 'Короткая практика для восстановления энергии',
       );
     } catch (e) {
-      throw Exception('Failed to suggest short meditation session: $e');
+      print(
+        '⚠️ Ошибка при получении короткой медитации, используем fallback: $e',
+      );
+      return _createBasicMeditation(recentMoods).copyWith(
+        duration: 5,
+        title: 'Быстрая медитация',
+        description: 'Короткая практика для восстановления энергии',
+      );
     }
   }
 
@@ -153,14 +238,20 @@ class SuggestMeditationUseCase {
   Future<MeditationEntity> callLongSession(List<MoodEntry> recentMoods) async {
     try {
       final meditation = await call(recentMoods);
-
       return meditation.copyWith(
         duration: 30,
         title: 'Глубокая медитация',
         description: 'Погрузитесь в глубокое состояние покоя',
       );
     } catch (e) {
-      throw Exception('Failed to suggest long meditation session: $e');
+      print(
+        '⚠️ Ошибка при получении длинной медитации, используем fallback: $e',
+      );
+      return _createBasicMeditation(recentMoods).copyWith(
+        duration: 30,
+        title: 'Глубокая медитация',
+        description: 'Погрузитесь в глубокое состояние покоя',
+      );
     }
   }
 }

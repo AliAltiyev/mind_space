@@ -22,7 +22,8 @@
         "no": "No",
         "try_again": "Intentar de nuevo",
         "refresh": "Actualizar",
-        "clear": "Limpiar"
+        "clear": "Limpiar",
+        "minutes": "min"
     },
     "navigation": {
         "home": "Inicio",
@@ -460,7 +461,16 @@
             "title": "Meditación",
             "suggestion": "Sugerencia de meditación",
             "start": "Comenzar meditación",
-            "duration": "Duración"
+            "duration": "Duración",
+            "personal_practices": "Prácticas de meditación personalizadas",
+            "loading_practices": "Cargando prácticas de meditación...",
+            "instructions": "Instrucciones",
+            "quick": "Rápida (5-10 min)",
+            "deep": "Profunda (20+ min)",
+            "no_meditation": "Meditación no disponible",
+            "tap_to_load": "Toca actualizar para cargar una sesión de meditación",
+            "starting": "Iniciando meditación de {duration} minutos...",
+            "start_meditation": "Iniciar meditación de {duration} minutos"
         },
         "patterns": {
             "title": "Patrones",

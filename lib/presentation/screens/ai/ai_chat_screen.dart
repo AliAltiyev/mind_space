@@ -49,8 +49,11 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : AppColors.background,
       appBar: AppBar(
         title: Row(
           children: [
@@ -73,7 +76,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             Text('ai.chat.title'.tr()),
           ],
         ),
-        backgroundColor: AppColors.surface,
+        backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
         elevation: 1,
         actions: [
           IconButton(
@@ -111,11 +114,18 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   /// Быстрые действия
   Widget _buildQuickActions() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border(bottom: BorderSide(color: AppColors.border)),
+        color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+        border: Border(
+          bottom: BorderSide(
+            color: isDark ? Colors.white.withOpacity(0.1) : AppColors.border,
+          ),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +133,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           Text(
             'ai.chat.quick_questions'.tr(),
             style: AppTypography.bodySmall.copyWith(
-              color: AppColors.textSecondary,
+              color: isDark ? Colors.white70 : AppColors.textSecondary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -173,17 +183,29 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             child: const Icon(Icons.psychology, color: Colors.white, size: 40),
           ),
           const SizedBox(height: 16),
-          Text(
-            'ai.chat.ready_to_help'.tr(),
-            style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'ai.chat.ask_any_question'.tr(),
-            style: AppTypography.bodyMedium.copyWith(
-              color: AppColors.textSecondary,
-            ),
-            textAlign: TextAlign.center,
+          Builder(
+            builder: (context) {
+              final theme = Theme.of(context);
+              final isDark = theme.brightness == Brightness.dark;
+              return Column(
+                children: [
+                  Text(
+                    'ai.chat.ready_to_help'.tr(),
+                    style: AppTypography.h3.copyWith(
+                      color: isDark ? Colors.white : AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'ai.chat.ask_any_question'.tr(),
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: isDark ? Colors.white70 : AppColors.textSecondary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),
@@ -192,11 +214,18 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   /// Область ввода
   Widget _buildInputArea() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border(top: BorderSide(color: AppColors.border)),
+        color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+        border: Border(
+          top: BorderSide(
+            color: isDark ? Colors.white.withOpacity(0.1) : AppColors.border,
+          ),
+        ),
       ),
       child: Row(
         children: [
@@ -206,15 +235,27 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               decoration: InputDecoration(
                 hintText: 'ai.chat.placeholder'.tr(),
                 hintStyle: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.textHint,
+                  color: isDark ? Colors.white70 : AppColors.textHint,
                 ),
+                filled: true,
+                fillColor: isDark
+                    ? Colors.white.withOpacity(0.05)
+                    : Colors.transparent,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(color: AppColors.border),
+                  borderSide: BorderSide(
+                    color: isDark
+                        ? Colors.white.withOpacity(0.1)
+                        : AppColors.border,
+                  ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(color: AppColors.border),
+                  borderSide: BorderSide(
+                    color: isDark
+                        ? Colors.white.withOpacity(0.1)
+                        : AppColors.border,
+                  ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -530,6 +571,9 @@ class _ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -560,7 +604,11 @@ class _ChatBubble extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: message.isUser ? AppColors.primary : AppColors.surface,
+                color: message.isUser
+                    ? AppColors.primary
+                    : (isDark
+                          ? Colors.white.withOpacity(0.05)
+                          : AppColors.surface),
                 borderRadius: BorderRadius.circular(16).copyWith(
                   bottomLeft: message.isUser
                       ? const Radius.circular(16)
@@ -569,7 +617,10 @@ class _ChatBubble extends StatelessWidget {
                       ? const Radius.circular(4)
                       : const Radius.circular(16),
                 ),
-                boxShadow: AppColors.cardShadow,
+                boxShadow: isDark ? null : AppColors.cardShadow,
+                border: isDark && !message.isUser
+                    ? Border.all(color: Colors.white.withOpacity(0.1))
+                    : null,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -579,7 +630,7 @@ class _ChatBubble extends StatelessWidget {
                     style: AppTypography.bodyMedium.copyWith(
                       color: message.isUser
                           ? Colors.white
-                          : AppColors.textPrimary,
+                          : (isDark ? Colors.white : AppColors.textPrimary),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -588,7 +639,7 @@ class _ChatBubble extends StatelessWidget {
                     style: AppTypography.caption.copyWith(
                       color: message.isUser
                           ? Colors.white70
-                          : AppColors.textHint,
+                          : (isDark ? Colors.white70 : AppColors.textHint),
                     ),
                   ),
                 ],
@@ -630,14 +681,23 @@ class _QuickActionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.1),
+          color: isDark
+              ? AppColors.primary.withOpacity(0.2)
+              : AppColors.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+          border: Border.all(
+            color: isDark
+                ? AppColors.primary.withOpacity(0.5)
+                : AppColors.primary.withOpacity(0.3),
+          ),
         ),
         child: Text(
           text,
