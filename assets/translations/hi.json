@@ -20,7 +20,8 @@
         "yes": "हां",
         "no": "नहीं",
         "try_again": "फिर से कोशिश करें",
-        "refresh": "रिफ्रेश करें"
+        "refresh": "रिफ्रेश करें",
+        "clear": "साफ करें"
     },
     "navigation": {
         "home": "होम",
@@ -37,6 +38,10 @@
     },
     "home": {
         "title": "मन का स्थान",
+        "welcome": "स्वागत है!",
+        "how_are_you_today": "आज आप कैसे हैं? अपना मूड साझा करें।",
+        "current_mood": "वर्तमान मूड",
+        "today": "आज",
         "quick_actions": "त्वरित क्रियाएं",
         "ai_features": "AI सुविधाएं",
         "view_stats": "आंकड़े देखें",
@@ -48,8 +53,12 @@
         "meditation": "ध्यान",
         "find_peace": "शांति खोजें",
         "add_mood_entries": "AI सुविधाओं के लिए मूड प्रविष्टियां जोड़ें",
+        "last_mood": "अंतिम मूड",
+        "tap_to_add_mood": "अपना मूड जोड़ने के लिए टैप करें",
         "loading_ai_features": "AI सुविधाएं लोड हो रही हैं...",
-        "error_loading_ai": "AI सुविधाएं लोड करने में त्रुटि"
+        "error_loading_ai": "AI सुविधाएं लोड करने में त्रुटि",
+        "recent_entries": "हाल की प्रविष्टियां",
+        "add_first_entry": "अपनी पहली मूड प्रविष्टि जोड़ें"
     },
     "mood": {
         "title": "आप कैसा महसूस कर रहे हैं?",

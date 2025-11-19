@@ -20,7 +20,8 @@
         "yes": "Evet",
         "no": "Hayır",
         "try_again": "Tekrar Dene",
-        "refresh": "Yenile"
+        "refresh": "Yenile",
+        "clear": "Temizle"
     },
     "navigation": {
         "home": "Ana Sayfa",

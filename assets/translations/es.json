@@ -20,7 +20,8 @@
         "yes": "Sí",
         "no": "No",
         "try_again": "Intentar de nuevo",
-        "refresh": "Actualizar"
+        "refresh": "Actualizar",
+        "clear": "Limpiar"
     },
     "navigation": {
         "home": "Inicio",
@@ -37,6 +38,10 @@
     },
     "home": {
         "title": "Espacio Mental",
+        "welcome": "¡Bienvenido!",
+        "how_are_you_today": "¿Cómo estás hoy? Comparte tu estado de ánimo.",
+        "current_mood": "Estado de ánimo actual",
+        "today": "Hoy",
         "quick_actions": "Acciones Rápidas",
         "ai_features": "Características de IA",
         "view_stats": "Ver Estadísticas",
@@ -48,8 +53,12 @@
         "meditation": "Meditación",
         "find_peace": "Encontrar paz",
         "add_mood_entries": "Agregar entradas de estado de ánimo para características de IA",
+        "last_mood": "Último estado de ánimo",
+        "tap_to_add_mood": "Toca para agregar tu estado de ánimo",
         "loading_ai_features": "Cargando características de IA...",
-        "error_loading_ai": "Error al cargar características de IA"
+        "error_loading_ai": "Error al cargar características de IA",
+        "recent_entries": "Entradas recientes",
+        "add_first_entry": "Agrega tu primera entrada de estado de ánimo"
     },
     "mood": {
         "title": "¿Cómo te sientes?",

@@ -20,7 +20,8 @@
         "yes": "Oui",
         "no": "Non",
         "try_again": "Essayer à nouveau",
-        "refresh": "Actualiser"
+        "refresh": "Actualiser",
+        "clear": "Effacer"
     },
     "navigation": {
         "home": "Accueil",
@@ -37,6 +38,10 @@
     },
     "home": {
         "title": "Espace Mental",
+        "welcome": "Bienvenue !",
+        "how_are_you_today": "Comment allez-vous aujourd'hui ? Partagez votre humeur.",
+        "current_mood": "Humeur actuelle",
+        "today": "Aujourd'hui",
         "quick_actions": "Actions Rapides",
         "ai_features": "Fonctionnalités IA",
         "view_stats": "Voir les Statistiques",
@@ -48,8 +53,12 @@
         "meditation": "Méditation",
         "find_peace": "Trouver la paix",
         "add_mood_entries": "Ajouter des entrées d'humeur pour les fonctionnalités IA",
+        "last_mood": "Dernière humeur",
+        "tap_to_add_mood": "Appuyez pour ajouter votre humeur",
         "loading_ai_features": "Chargement des fonctionnalités IA...",
-        "error_loading_ai": "Erreur lors du chargement des fonctionnalités IA"
+        "error_loading_ai": "Erreur lors du chargement des fonctionnalités IA",
+        "recent_entries": "Entrées récentes",
+        "add_first_entry": "Ajoutez votre première entrée d'humeur"
     },
     "mood": {
         "title": "Comment vous sentez-vous ?",

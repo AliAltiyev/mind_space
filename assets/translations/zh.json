@@ -20,7 +20,8 @@
         "yes": "是",
         "no": "否",
         "try_again": "再试一次",
-        "refresh": "刷新"
+        "refresh": "刷新",
+        "clear": "清除"
     },
     "navigation": {
         "home": "首页",

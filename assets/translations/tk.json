@@ -20,7 +20,8 @@
         "yes": "Hawa",
         "no": "Ýok",
         "try_again": "Gaýtadan synanyşmak",
-        "refresh": "Täzelemek"
+        "refresh": "Täzelemek",
+        "clear": "Arassalamak"
     },
     "navigation": {
         "home": "Baş sahypa",
@@ -37,6 +38,10 @@
     },
     "home": {
         "title": "Akyl Meken",
+        "welcome": "Hoş geldiňiz!",
+        "how_are_you_today": "Bu gün nähili? Köwüşiňizi paýlaşyň.",
+        "current_mood": "Häzirki köwüş",
+        "today": "Bu gün",
         "quick_actions": "Çalt Amallar",
         "ai_features": "AI Aýratynlyklary",
         "view_stats": "Statistikany Gör",
@@ -48,8 +53,12 @@
         "meditation": "Meditasiýa",
         "find_peace": "Rahatlyk tapmak",
         "add_mood_entries": "AI aýratynlyklary üçin köwüş ýazgylary goşuň",
+        "last_mood": "Soňky köwüş",
+        "tap_to_add_mood": "Köwüşiňizi goşmak üçin basyň",
         "loading_ai_features": "AI aýratynlyklary ýüklenýär...",
-        "error_loading_ai": "AI aýratynlyklary ýükleýärkä ýalňyşlyk"
+        "error_loading_ai": "AI aýratynlyklary ýükleýärkä ýalňyşlyk",
+        "recent_entries": "Soňky ýazgylar",
+        "add_first_entry": "Ilkinji köwüş ýazgysyňyzy goşuň"
     },
     "mood": {
         "title": "Nähili duýýarsyňyz?",
