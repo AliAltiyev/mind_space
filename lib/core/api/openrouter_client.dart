@@ -51,10 +51,19 @@ class OpenRouterClient {
         throw Exception('Превышено время ожидания ответа от AI');
       } else if (e.response?.statusCode == 401) {
         throw Exception('Неверный API ключ');
+      } else if (e.response?.statusCode == 402) {
+        throw Exception(
+          'Недостаточно средств на балансе OpenRouter. Пополните баланс на openrouter.ai',
+        );
+      } else if (e.response?.statusCode == 403) {
+        throw Exception('Доступ запрещен. Проверьте API ключ');
       } else if (e.response?.statusCode == 429) {
-        throw Exception('Превышен лимит запросов');
+        throw Exception('Превышен лимит запросов. Попробуйте позже');
+      } else if (e.response?.statusCode != null &&
+          e.response!.statusCode! >= 500) {
+        throw Exception('Ошибка сервера. Попробуйте позже');
       } else {
-        throw Exception('Ошибка API: ${e.message}');
+        throw Exception('Ошибка подключения к AI сервису');
       }
     } catch (e) {
       print('❌ Неожиданная ошибка: $e');
@@ -79,6 +88,20 @@ class OpenRouterClient {
           maxTokens: maxTokens,
         );
       } catch (e) {
+        final errorMessage = e.toString();
+
+        // Не делаем повторные попытки для клиентских ошибок (401, 402, 403)
+        // Эти ошибки не исправятся повторными попытками
+        if (errorMessage.contains('401') ||
+            errorMessage.contains('402') ||
+            errorMessage.contains('403') ||
+            errorMessage.contains('Неверный API ключ') ||
+            errorMessage.contains('Недостаточно средств') ||
+            errorMessage.contains('Доступ запрещен')) {
+          print('❌ Клиентская ошибка, повторные попытки не помогут: $e');
+          rethrow;
+        }
+
         print('🔄 Попытка $attempt/$maxRetries неудачна: $e');
 
         if (attempt == maxRetries) {

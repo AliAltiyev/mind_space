@@ -93,15 +93,13 @@
     },
     "settings": {
         "title": "Settings",
+        "profile": "Profile",
         "theme": "Theme",
         "language": "Language",
-        "notifications": "Notifications",
         "privacy": "Privacy",
         "about": "About",
         "appearance": "Appearance",
         "data": "Data",
-        "export_data": "Export Data",
-        "download_data": "Download your data as PDF or CSV",
         "privacy_security": "Privacy & Security",
         "privacy_settings": "Privacy Settings",
         "manage_privacy": "Manage your privacy preferences",
@@ -110,7 +108,6 @@
         "appearance_settings": "Appearance Settings",
         "customize_theme": "Customize theme and colors",
         "about_app": "About",
-        "app_version": "App version, terms, and contact",
         "personal_settings": "Personal Settings",
         "additional": "Additional",
         "profile_management": "Manage profile and level",
@@ -197,19 +194,6 @@
         "save_error": "Error saving: {error}",
         "save_success": "Entry saved successfully! 🎉"
     },
-    "onboarding": {
-        "welcome": "Welcome to Mind Space",
-        "get_started": "Get Started",
-        "skip": "Skip"
-    },
-    "profile": {
-        "recent_achievements": "Recent Achievements",
-        "error_loading": "Error Loading Profile",
-        "stats": "Statistics",
-        "achievements": "Achievements",
-        "no_achievements": "No achievements yet",
-        "keep_tracking": "Keep tracking your mood to get first achievements!"
-    },
     "statistics": {
         "title": "Statistics",
         "mood_trends": "Mood Trends",
@@ -261,7 +245,16 @@
             "response_tips": "Of course I'll help! 💡 Here are some tips for improving mood:\n\n• Take a deep breath and exhale\n• Take a walk in fresh air\n• Listen to your favorite music\n• Write down 3 things you're grateful for\n• Do something nice for yourself\n\nWhat works best for you?",
             "response_meditation": "Meditation is a great way to improve mood! 🧘‍♀️\n\nTry:\n• 5-minute mindfulness meditation\n• Breathing exercises\n• Progressive muscle relaxation\n• Gratitude meditation\n\nWould you like me to tell you more about any of these methods?",
             "response_sad": "I understand you're going through a tough time. 💙 Remember that bad days are normal and they pass. Try:\n\n• Talking to a loved one\n• Doing something nice for yourself\n• Writing down your feelings\n• Seeking professional help if needed\n\nYou're not alone in this. Would you like to talk about it in more detail?",
-            "response_general": "Interesting question! 🤔 I'm here to help you with questions about mood, emotions, and mental wellness. I can analyze your mood entries, give advice, or just support you in conversation. What would you like to talk about?"
+            "response_general": "Interesting question! 🤔 I'm here to help you with questions about mood, emotions, and mental wellness. I can analyze your mood entries, give advice, or just support you in conversation. What would you like to talk about?",
+            "ready_to_help": "AI Assistant is ready to help!",
+            "error_payment_required": "⚠️ AI service is temporarily unavailable. Please check your OpenRouter account balance at openrouter.ai",
+            "error_invalid_key": "⚠️ Invalid Groq API key. Please configure your API key.",
+            "error_access_denied": "⚠️ Access to AI service denied. Please check your API key.",
+            "error_rate_limit": "⚠️ Too many requests. Please try again in a few moments.",
+            "error_timeout": "⚠️ Request timeout. Please check your internet connection and try again.",
+            "error_server": "⚠️ AI service is temporarily unavailable. Please try again later.",
+            "error_general": "⚠️ Unable to connect to AI service. Using fallback responses.",
+            "get_groq_key": "Get a free API key at: https://console.groq.com/keys"
         },
         "insights": {
             "title": "AI Insights",
@@ -343,36 +336,25 @@
         "hundred_entries": "100 Entries",
         "five_hundred_entries": "500 Entries"
     },
-    "notifications": {
-        "title": "Notifications",
-        "daily_reminder": "Daily reminder",
-        "weekly_report": "Weekly report",
-        "achievement_unlocked": "Achievement unlocked",
-        "streak_reminder": "Streak reminder",
-        "daily_reminder_title": "Mind Space Reminder",
-        "monday_message": "How's your mood today? Start your week with positive energy! 🌟",
-        "tuesday_message": "Take a moment to check in with yourself today 💭",
-        "wednesday_message": "Mid-week mood check! How are you feeling? 🤔",
-        "thursday_message": "Thursday vibes! What's your mood today? ✨",
-        "friday_message": "TGIF! How was your mood this Friday? 🎉",
-        "saturday_message": "Weekend mood check! How are you feeling? 😌",
-        "sunday_message": "Sunday reflection time! How's your mood? 🌅",
-        "weekly_reflection_title": "Weekly Reflection Time",
-        "weekly_reflection_body": "Take some time to reflect on your week and track your mood patterns 📊"
-    },
     "user_level": {
         "level": "Level",
         "experience": "Experience",
         "next_level": "To next level",
         "level_up": "Level up!",
         "achievement_unlocked": "Achievement unlocked",
-        "points_earned": "Points earned"
-    },
-    "database": {
-        "error_saving": "Error saving",
-        "error_loading": "Error loading",
-        "data_cleared": "Data cleared",
-        "backup_created": "Backup created"
+        "points_earned": "Points earned",
+        "novice": "Novice",
+        "explorer": "Explorer",
+        "expert": "Expert",
+        "master": "Master",
+        "guru": "Guru",
+        "legend": "Legend",
+        "novice_desc": "Beginning of the path to self-knowledge",
+        "explorer_desc": "Active exploration of your emotions",
+        "expert_desc": "Deep understanding of mood patterns",
+        "master_desc": "Mastery in emotion management",
+        "guru_desc": "Expert in mental wellbeing",
+        "legend_desc": "Legendary master of emotions"
     },
     "api": {
         "connection_error": "Connection error",
@@ -419,36 +401,6 @@
             "description": "Get personalized recommendations based on your data"
         }
     },
-    "splash": {
-        "title": "Mind Space",
-        "subtitle": "Your mental wellness companion"
-    },
-    "error": {
-        "title": "Error",
-        "occurred": "An error occurred",
-        "unknown_error": "Unknown error",
-        "go_home": "Go Home"
-    },
-    "common": {
-        "loading": "Loading...",
-        "unknown": "Unknown"
-    },
-    "ai": {
-        "error_analysis": "Analysis Error",
-        "error_loading": "Loading Error",
-        "fallback_unavailable": "AI temporarily unavailable",
-        "fallback_try_later": "Try later or contact a specialist",
-        "fallback_suggestions": ["Try later", "Contact a specialist"],
-        "fallback_great_mood": "Great mood!",
-        "fallback_positive_attitude": "You maintain a positive attitude. Keep it up!",
-        "fallback_stable_state": "Stable state",
-        "fallback_good_balance": "Your mood is in good balance. This is a great foundation!",
-        "fallback_self_care": "Self-care",
-        "fallback_emotional_wellbeing": "It's important to take care of your emotional wellbeing. Small steps every day.",
-        "fallback_start_tracking": "Start tracking your mood",
-        "fallback_add_entries": "Add several entries to get personalized insights",
-        "fallback_suggestions_list": ["Add your first mood entry", "Try tracking your mood every day"]
-    },
     "notifications": {
         "daily_reminders": "Daily Reminders",
         "enable_reminders": "Enable Reminders",
@@ -465,13 +417,6 @@
         "manage_permissions": "Manage app permissions",
         "cancel_all_notifications": "Cancel all notifications"
     },
-    "settings": {
-        "themes": {
-            "light": "Light",
-            "dark": "Dark",
-            "system": "System"
-        }
-    },
     "demo": {
         "title": "Perfected MoodBlob Showcase",
         "description": "Demonstration of all improvements and optimizations",
@@ -483,8 +428,11 @@
         "page": "Analytics Page"
     },
     "database": {
+        "error_saving": "Error saving",
+        "error_loading": "Error loading",
+        "data_cleared": "Data cleared",
+        "backup_created": "Backup created",
         "mood_entry_added": "✅ Mood entry added: {mood} - {note} - Date: {date}",
         "no_note": "no note"
     }
 }
-

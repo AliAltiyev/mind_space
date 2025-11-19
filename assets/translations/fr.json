@@ -84,6 +84,7 @@
     },
     "settings": {
         "title": "Paramètres",
+        "profile": "Profil",
         "theme": "Thème",
         "language": "Langue",
         "notifications": "Notifications",

@@ -84,6 +84,7 @@
     },
     "settings": {
         "title": "Ayarlar",
+        "profile": "Profil",
         "theme": "Tema",
         "language": "Dil",
         "notifications": "Bildirimler",

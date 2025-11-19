@@ -84,6 +84,7 @@
     },
     "settings": {
         "title": "设置",
+        "profile": "个人资料",
         "theme": "主题",
         "language": "语言",
         "notifications": "通知",

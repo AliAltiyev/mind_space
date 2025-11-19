@@ -89,8 +89,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/home',
             name: 'home',
-            pageBuilder: (context, state) =>
-                NoTransitionPage(key: state.pageKey, child: const HomeScreenClean()),
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const HomeScreenClean(),
+            ),
             routes: [
               // Quick Add Modal
               GoRoute(
@@ -406,6 +408,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
     // Перенаправления и защищенные маршруты
     redirect: (context, state) {
+      // Перенаправляем корневой путь на /home
+      if (state.uri.path == '/') {
+        return '/home';
+      }
       // TODO: Добавить логику перенаправления на основе состояния приложения
       return null;
     },
