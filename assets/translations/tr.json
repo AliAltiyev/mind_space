@@ -38,6 +38,10 @@
     },
     "home": {
         "title": "Zihin Alanı",
+        "welcome": "Hoş geldiniz!",
+        "how_are_you_today": "Bugün nasılsınız? Ruh halinizi paylaşın.",
+        "current_mood": "Mevcut ruh hali",
+        "today": "Bugün",
         "quick_actions": "Hızlı İşlemler",
         "ai_features": "AI Özellikleri",
         "view_stats": "İstatistikleri Gör",
@@ -49,8 +53,12 @@
         "meditation": "Meditasyon",
         "find_peace": "Huzur bul",
         "add_mood_entries": "AI özellikleri için ruh hali girişleri ekle",
+        "last_mood": "Son ruh hali",
+        "tap_to_add_mood": "Ruh halinizi eklemek için dokunun",
         "loading_ai_features": "AI özellikleri yükleniyor...",
-        "error_loading_ai": "AI özelliklerini yüklerken hata"
+        "error_loading_ai": "AI özelliklerini yüklerken hata",
+        "recent_entries": "Son girişler",
+        "add_first_entry": "İlk ruh hali girişinizi ekleyin"
     },
     "mood": {
         "title": "Nasıl hissediyorsunuz?",

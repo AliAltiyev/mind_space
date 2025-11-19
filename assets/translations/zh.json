@@ -38,6 +38,10 @@
     },
     "home": {
         "title": "心灵空间",
+        "welcome": "欢迎！",
+        "how_are_you_today": "你今天怎么样？分享你的心情。",
+        "current_mood": "当前心情",
+        "today": "今天",
         "quick_actions": "快速操作",
         "ai_features": "AI功能",
         "view_stats": "查看统计",
@@ -49,8 +53,12 @@
         "meditation": "冥想",
         "find_peace": "寻找平静",
         "add_mood_entries": "添加情绪条目以使用AI功能",
+        "last_mood": "最后的心情",
+        "tap_to_add_mood": "点击添加你的心情",
         "loading_ai_features": "加载AI功能中...",
-        "error_loading_ai": "加载AI功能时出错"
+        "error_loading_ai": "加载AI功能时出错",
+        "recent_entries": "最近的条目",
+        "add_first_entry": "添加你的第一条心情条目"
     },
     "mood": {
         "title": "您感觉如何？",
