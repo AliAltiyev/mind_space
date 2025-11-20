@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:go_router/go_router.dart';
+import 'dart:io';
 
 import '../../../../app/providers/ai_features_provider.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -23,14 +25,43 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
     super.initState();
     // Загружаем предложения медитации при открытии страницы
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.read<MeditationBloc>().isClosed) {
-        context.read<MeditationBloc>().add(LoadMeditationSession([]));
-      }
+      _loadMeditation();
     });
+  }
+
+  void _loadMeditation() {
+    final bloc = context.read<MeditationBloc>();
+    if (!bloc.isClosed) {
+      // Получаем реальные данные настроений из provider
+      final moodEntriesAsync = ref.read(recentMoodEntriesProvider);
+      moodEntriesAsync.when(
+        data: (moodEntries) {
+          if (!bloc.isClosed) {
+            bloc.add(LoadMeditationSession(moodEntries));
+          }
+        },
+        loading: () {
+          // Данные загружаются, используем пустой список (fallback медитация будет создана)
+          if (!bloc.isClosed) {
+            bloc.add(LoadMeditationSession([]));
+          }
+        },
+        error: (_, __) {
+          // Ошибка загрузки, используем пустой список
+          if (!bloc.isClosed) {
+            bloc.add(LoadMeditationSession([]));
+          }
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -59,13 +90,13 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
           ),
         ],
       ),
-      body: BlocProvider<MeditationBloc>(
-        create: (context) => ref.read(meditationBlocProvider),
+      body: BlocProvider<MeditationBloc>.value(
+        value: ref.read(meditationBlocProvider),
         child: RefreshIndicator(
           onRefresh: () async {
-            if (!context.read<MeditationBloc>().isClosed) {
-              context.read<MeditationBloc>().add(LoadMeditationSession([]));
-            }
+            _loadMeditation();
+            // Ждем немного для анимации
+            await Future.delayed(const Duration(milliseconds: 500));
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -82,22 +113,21 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
                 BlocBuilder<MeditationBloc, MeditationState>(
                   builder: (context, state) {
                     if (state is MeditationLoading) {
-                      return const _MeditationLoadingWidget();
+                      return _MeditationLoadingWidget(
+                        theme: theme,
+                        colorScheme: colorScheme,
+                      );
                     } else if (state is MeditationLoaded) {
                       return _buildMeditationContent(state.meditation);
                     } else if (state is MeditationError) {
                       return _MeditationErrorWidget(
                         message: state.message,
-                        onRetry: () {
-                          if (!context.read<MeditationBloc>().isClosed) {
-                            context.read<MeditationBloc>().add(
-                              LoadMeditationSession([]),
-                            );
-                          }
-                        },
+                        theme: theme,
+                        colorScheme: colorScheme,
+                        onRetry: _loadMeditation,
                       );
                     }
-                    return const SizedBox.shrink();
+                    return _buildEmptyState(context, theme, colorScheme);
                   },
                 ),
               ],
@@ -364,7 +394,13 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
 
 /// Виджет загрузки
 class _MeditationLoadingWidget extends StatelessWidget {
-  const _MeditationLoadingWidget();
+  final ThemeData theme;
+  final ColorScheme colorScheme;
+
+  const _MeditationLoadingWidget({
+    required this.theme,
+    required this.colorScheme,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -399,9 +435,16 @@ class _MeditationLoadingWidget extends StatelessWidget {
 /// Виджет ошибки
 class _MeditationErrorWidget extends StatelessWidget {
   final String message;
+  final ThemeData theme;
+  final ColorScheme colorScheme;
   final VoidCallback onRetry;
 
-  const _MeditationErrorWidget({required this.message, required this.onRetry});
+  const _MeditationErrorWidget({
+    required this.message,
+    required this.theme,
+    required this.colorScheme,
+    required this.onRetry,
+  });
 
   @override
   Widget build(BuildContext context) {

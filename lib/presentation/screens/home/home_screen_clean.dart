@@ -16,37 +16,39 @@ class HomeScreenClean extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lastMoodAsync = ref.watch(lastMoodProvider);
-    
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : AppColors.background,
       appBar: AppBar(
         title: Text(
           'home.title'.tr(),
           style: AppTypography.h3.copyWith(
-            color: AppColors.textPrimary,
+            color: isDark ? Colors.white : AppColors.textPrimary,
             fontWeight: FontWeight.w700,
           ),
         ),
-        backgroundColor: AppColors.surface,
+        backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
         elevation: 0,
         scrolledUnderElevation: 1,
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: AppColors.surface,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+          statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+          statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
         ),
         actions: [
           IconButton(
             icon: Icon(
               Icons.notifications_outlined,
-              color: AppColors.textSecondary,
+              color: isDark ? Colors.white70 : AppColors.textSecondary,
             ),
             onPressed: () => context.go('/settings/notifications'),
           ),
           IconButton(
             icon: Icon(
               Icons.settings_outlined,
-              color: AppColors.textSecondary,
+              color: isDark ? Colors.white70 : AppColors.textSecondary,
             ),
             onPressed: () => context.go('/settings'),
           ),
@@ -59,24 +61,24 @@ class HomeScreenClean extends ConsumerWidget {
           children: [
             // Приветствие
             _buildWelcomeSection(),
-            
+
             const SizedBox(height: 24),
-            
+
             // Текущее настроение
             _buildCurrentMoodSection(context, lastMoodAsync),
-            
+
             const SizedBox(height: 24),
-            
+
             // Быстрая статистика
             _buildQuickStats(),
-            
+
             const SizedBox(height: 24),
-            
+
             // Быстрые действия
             _buildQuickActions(context),
-            
+
             const SizedBox(height: 24),
-            
+
             // Последние записи
             _buildRecentEntries(context, ref),
           ],
@@ -92,62 +94,91 @@ class HomeScreenClean extends ConsumerWidget {
 
   /// Секция приветствия
   Widget _buildWelcomeSection() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.cardShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'home.welcome'.tr(),
-            style: AppTypography.h2.copyWith(color: AppColors.textPrimary),
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: isDark ? null : AppColors.cardShadow,
+            border: isDark
+                ? Border.all(color: Colors.white.withOpacity(0.1))
+                : null,
           ),
-          const SizedBox(height: 8),
-          Text(
-            'home.how_are_you_today'.tr(),
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'home.welcome'.tr(),
+                style: AppTypography.h2.copyWith(
+                  color: isDark ? Colors.white : AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'home.how_are_you_today'.tr(),
+                style: AppTypography.bodyMedium.copyWith(
+                  color: isDark ? Colors.white70 : AppColors.textSecondary,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
   /// Секция текущего настроения
-  Widget _buildCurrentMoodSection(BuildContext context, AsyncValue lastMoodAsync) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.cardShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'home.current_mood'.tr(),
-            style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
+  Widget _buildCurrentMoodSection(
+    BuildContext context,
+    AsyncValue lastMoodAsync,
+  ) {
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: isDark ? null : AppColors.cardShadow,
+            border: isDark
+                ? Border.all(color: Colors.white.withOpacity(0.1))
+                : null,
           ),
-          const SizedBox(height: 16),
-          lastMoodAsync.when(
-            data: (lastMood) {
-              if (lastMood != null) {
-                return _buildMoodDisplay(lastMood);
-              } else {
-                return _buildNoMoodState(context);
-              }
-            },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (_, __) => _buildErrorState(context),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'home.current_mood'.tr(),
+                style: AppTypography.h4.copyWith(
+                  color: isDark ? Colors.white : AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 16),
+              lastMoodAsync.when(
+                data: (lastMood) {
+                  if (lastMood != null) {
+                    return _buildMoodDisplay(lastMood);
+                  } else {
+                    return _buildNoMoodState(context);
+                  }
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (_, __) => _buildErrorState(context),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -155,7 +186,7 @@ class HomeScreenClean extends ConsumerWidget {
   Widget _buildMoodDisplay(dynamic lastMood) {
     final moodValue = lastMood.moodValue;
     final date = lastMood.createdAt;
-    
+
     return Row(
       children: [
         // Иконка настроения
@@ -166,11 +197,7 @@ class HomeScreenClean extends ConsumerWidget {
             gradient: getMoodGradient(moodValue),
             borderRadius: BorderRadius.circular(30),
           ),
-          child: Icon(
-            _getMoodIcon(moodValue),
-            color: Colors.white,
-            size: 30,
-          ),
+          child: Icon(_getMoodIcon(moodValue), color: Colors.white, size: 30),
         ),
         const SizedBox(width: 16),
         // Информация о настроении
@@ -178,14 +205,31 @@ class HomeScreenClean extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                _getMoodLabel(moodValue),
-                style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                DateFormat('dd MMMM, HH:mm').format(date),
-                style: AppTypography.caption,
+              Builder(
+                builder: (context) {
+                  final theme = Theme.of(context);
+                  final isDark = theme.brightness == Brightness.dark;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _getMoodLabel(moodValue),
+                        style: AppTypography.h4.copyWith(
+                          color: isDark ? Colors.white : AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        DateFormat('dd MMMM, HH:mm').format(date),
+                        style: AppTypography.caption.copyWith(
+                          color: isDark
+                              ? Colors.white70
+                              : AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),
@@ -202,64 +246,74 @@ class HomeScreenClean extends ConsumerWidget {
 
   /// Состояние без настроения
   Widget _buildNoMoodState(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-            color: AppColors.border,
-            borderRadius: BorderRadius.circular(40),
-          ),
-          child: const Icon(
-            Icons.mood_outlined,
-            size: 40,
-            color: AppColors.textHint,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          'entries.no_entries'.tr(),
-          style: AppTypography.bodyLarge.copyWith(color: AppColors.textSecondary),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            gradient: AppColors.primaryGradient,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: AppColors.cardShadow,
-          ),
-          child: ElevatedButton(
-            onPressed: () => context.push('/add-entry'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              shadowColor: Colors.transparent,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+
+        return Column(
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: isDark
+                    ? Colors.white.withOpacity(0.1)
+                    : AppColors.border,
+                borderRadius: BorderRadius.circular(40),
+              ),
+              child: Icon(
+                Icons.mood_outlined,
+                size: 40,
+                color: isDark ? Colors.white70 : AppColors.textHint,
               ),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'mood.add_mood'.tr(),
-                  style: AppTypography.button.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
+            const SizedBox(height: 16),
+            Text(
+              'entries.no_entries'.tr(),
+              style: AppTypography.bodyLarge.copyWith(
+                color: isDark ? Colors.white70 : AppColors.textSecondary,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              decoration: BoxDecoration(
+                gradient: AppColors.primaryGradient,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: AppColors.cardShadow,
+              ),
+              child: ElevatedButton(
+                onPressed: () => context.push('/add-entry'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-              ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.add, color: Colors.white, size: 20),
+                    const SizedBox(width: 8),
+                    Text(
+                      'mood.add_mood'.tr(),
+                      style: AppTypography.button.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 
@@ -267,66 +321,71 @@ class HomeScreenClean extends ConsumerWidget {
   Widget _buildErrorState(BuildContext context) {
     return Column(
       children: [
-        const Icon(
-          Icons.error_outline,
-          size: 40,
-          color: AppColors.error,
-        ),
+        const Icon(Icons.error_outline, size: 40, color: AppColors.error),
         const SizedBox(height: 8),
         Text(
           'common.error'.tr(),
           style: AppTypography.bodyMedium.copyWith(color: AppColors.error),
         ),
         const SizedBox(height: 8),
-        OutlinedButton(
-          onPressed: () {},
-          child: Text('common.try_again'.tr()),
-        ),
+        OutlinedButton(onPressed: () {}, child: Text('common.try_again'.tr())),
       ],
     );
   }
 
   /// Быстрая статистика
   Widget _buildQuickStats() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.cardShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'stats.title'.tr(),
-            style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: isDark ? null : AppColors.cardShadow,
+            border: isDark
+                ? Border.all(color: Colors.white.withOpacity(0.1))
+                : null,
           ),
-          const SizedBox(height: 16),
-          Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: _StatCard(
-                  title: 'stats.total_entries'.tr(),
-                  value: '12',
-                  icon: Icons.list_alt,
-                  color: AppColors.primary,
+              Text(
+                'stats.title'.tr(),
+                style: AppTypography.h4.copyWith(
+                  color: isDark ? Colors.white : AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _StatCard(
-                  title: 'home.today'.tr(),
-                  value: '1',
-                  icon: Icons.today,
-                  color: AppColors.secondary,
-                ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: _StatCard(
+                      title: 'stats.total_entries'.tr(),
+                      value: '12',
+                      icon: Icons.list_alt,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _StatCard(
+                      title: 'home.today'.tr(),
+                      value: '1',
+                      icon: Icons.today,
+                      color: AppColors.secondary,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -384,72 +443,169 @@ class HomeScreenClean extends ConsumerWidget {
           ),
         ],
       ),
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: isDark ? null : AppColors.cardShadow,
+            border: isDark
+                ? Border.all(color: Colors.white.withOpacity(0.1))
+                : null,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'home.quick_actions'.tr(),
+                style: AppTypography.h4.copyWith(
+                  color: isDark ? Colors.white : AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 16),
+              GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 1.5,
+                children: [
+                  _ActionCard(
+                    title: 'stats.title'.tr(),
+                    icon: Icons.analytics,
+                    color: AppColors.primary,
+                    onTap: () => context.go('/stats'),
+                  ),
+                  _ActionCard(
+                    title: 'entries.title'.tr(),
+                    icon: Icons.list,
+                    color: AppColors.secondary,
+                    onTap: () => context.go('/home/entries'),
+                  ),
+                  _ActionCard(
+                    title: 'AI Инсайты',
+                    icon: Icons.psychology,
+                    color: AppColors.info,
+                    onTap: () => context.go('/stats/insights'),
+                  ),
+                  _ActionCard(
+                    title: 'ai.meditation.title'.tr(),
+                    icon: Icons.self_improvement,
+                    color: AppColors.success,
+                    onTap: () => context.go('/stats/meditation'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   /// Последние записи
   Widget _buildRecentEntries(BuildContext context, WidgetRef ref) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.cardShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: isDark ? null : AppColors.cardShadow,
+            border: isDark
+                ? Border.all(color: Colors.white.withOpacity(0.1))
+                : null,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'home.recent_entries'.tr(),
-                style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Builder(
+                    builder: (context) {
+                      final theme = Theme.of(context);
+                      final isDark = theme.brightness == Brightness.dark;
+                      return Text(
+                        'home.recent_entries'.tr(),
+                        style: AppTypography.h4.copyWith(
+                          color: isDark ? Colors.white : AppColors.textPrimary,
+                        ),
+                      );
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () => context.go('/home/entries'),
+                    child: Text('entries.title'.tr()),
+                  ),
+                ],
               ),
-              TextButton(
-                onPressed: () => context.go('/home/entries'),
-                child: Text('entries.title'.tr()),
-              ),
+              const SizedBox(height: 16),
+              // Здесь будут последние записи
+              _buildEmptyState(),
             ],
           ),
-          const SizedBox(height: 16),
-          // Здесь будут последние записи
-          _buildEmptyState(),
-        ],
-      ),
+        );
+      },
     );
   }
 
   /// Пустое состояние для последних записей
   Widget _buildEmptyState() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(32),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            Icons.mood_outlined,
-            size: 48,
-            color: AppColors.textHint,
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(32),
+          decoration: BoxDecoration(
+            color: isDark
+                ? Colors.white.withOpacity(0.05)
+                : AppColors.background,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isDark ? Colors.white.withOpacity(0.1) : AppColors.border,
+            ),
           ),
-          const SizedBox(height: 16),
-          Text(
-            'entries.no_entries'.tr(),
-            style: AppTypography.bodyLarge.copyWith(color: AppColors.textSecondary),
+          child: Column(
+            children: [
+              Icon(
+                Icons.mood_outlined,
+                size: 48,
+                color: isDark ? Colors.white70 : AppColors.textHint,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'entries.no_entries'.tr(),
+                style: AppTypography.bodyLarge.copyWith(
+                  color: isDark ? Colors.white70 : AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'home.add_first_entry'.tr(),
+                style: AppTypography.caption.copyWith(
+                  color: isDark ? Colors.white70 : AppColors.textSecondary,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            'home.add_first_entry'.tr(),
-            style: AppTypography.caption,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -517,15 +673,20 @@ class _StatCard extends StatelessWidget {
         children: [
           Icon(icon, color: color, size: 24),
           const SizedBox(height: 8),
-          Text(
-            value,
-            style: AppTypography.h3.copyWith(color: color),
-          ),
+          Text(value, style: AppTypography.h3.copyWith(color: color)),
           const SizedBox(height: 4),
-          Text(
-            title,
-            style: AppTypography.caption,
-            textAlign: TextAlign.center,
+          Builder(
+            builder: (context) {
+              final theme = Theme.of(context);
+              final isDark = theme.brightness == Brightness.dark;
+              return Text(
+                title,
+                style: AppTypography.caption.copyWith(
+                  color: isDark ? Colors.white70 : AppColors.textSecondary,
+                ),
+                textAlign: TextAlign.center,
+              );
+            },
           ),
         ],
       ),
@@ -549,8 +710,18 @@ class _ActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Card(
-      elevation: 2,
+      elevation: isDark ? 0 : 2,
+      color: isDark ? const Color(0xFF1E293B) : null,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: isDark
+            ? BorderSide(color: Colors.white.withOpacity(0.1))
+            : BorderSide.none,
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -558,13 +729,20 @@ class _ActionCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, color: color, size: 32),
               const SizedBox(height: 8),
-              Text(
-                title,
-                style: AppTypography.bodyMedium.copyWith(color: AppColors.textPrimary),
-                textAlign: TextAlign.center,
+              Flexible(
+                child: Text(
+                  title,
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: isDark ? Colors.white : AppColors.textPrimary,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),

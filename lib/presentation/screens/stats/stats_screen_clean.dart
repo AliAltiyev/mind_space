@@ -15,12 +15,14 @@ class StatsScreenClean extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final allEntriesAsync = ref.watch(allMoodEntriesProvider);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : AppColors.background,
       appBar: AppBar(
         title: Text('stats.title'.tr()),
-        backgroundColor: AppColors.surface,
+        backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
         elevation: 1,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -90,67 +92,74 @@ class StatsScreenClean extends ConsumerWidget {
         )
         .length;
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.cardShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'stats.overall_stats'.tr(),
-            style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? theme.colorScheme.surface : AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: isDark ? null : AppColors.cardShadow,
+            border: isDark
+                ? Border.all(color: Colors.white.withOpacity(0.1))
+                : null,
           ),
-          const SizedBox(height: 16),
-          Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: _StatCard(
-                  title: 'stats.total_entries'.tr(),
-                  value: totalEntries.toString(),
-                  icon: Icons.list_alt,
-                  color: AppColors.primary,
+              Text(
+                'stats.overall_stats'.tr(),
+                style: AppTypography.h3.copyWith(
+                  color: isDark ? Colors.white : AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _StatCard(
-                  title: 'stats.average_mood'.tr(),
-                  value: avgMood.toStringAsFixed(1),
-                  icon: Icons.trending_up,
-                  color: AppColors.secondary,
-                ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: _StatCard(
+                      title: 'stats.total_entries'.tr(),
+                      value: totalEntries.toString(),
+                      icon: Icons.list_alt,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _StatCard(
+                      title: 'stats.average_mood'.tr(),
+                      value: avgMood.toStringAsFixed(1),
+                      icon: Icons.trending_up,
+                      color: AppColors.secondary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: _StatCard(
+                      title: 'stats.streak'.tr(),
+                      value: streak.toString(),
+                      icon: Icons.local_fire_department,
+                      color: AppColors.warning,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _StatCard(
+                      title: 'stats.this_week'.tr(),
+                      value: thisWeek.toString(),
+                      icon: Icons.calendar_today,
+                      color: AppColors.info,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _StatCard(
-                  title: 'stats.streak'.tr(),
-                  value: streak.toString(),
-                  icon: Icons.local_fire_department,
-                  color: AppColors.warning,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _StatCard(
-                  title: 'stats.this_week'.tr(),
-                  value: thisWeek.toString(),
-                  icon: Icons.calendar_today,
-                  color: AppColors.info,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -225,14 +234,19 @@ class StatsScreenClean extends ConsumerWidget {
   /// Последние записи
   Widget _buildRecentEntries(List<dynamic> entries, BuildContext context) {
     final recentEntries = entries.take(5).toList();
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: isDark ? theme.colorScheme.surface : AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.cardShadow,
+        boxShadow: isDark ? null : AppColors.cardShadow,
+        border: isDark
+            ? Border.all(color: Colors.white.withOpacity(0.1))
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,7 +256,9 @@ class StatsScreenClean extends ConsumerWidget {
             children: [
               Text(
                 'home.recent_entries'.tr(),
-                style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+                style: AppTypography.h3.copyWith(
+                  color: isDark ? Colors.white : AppColors.textPrimary,
+                ),
               ),
               TextButton(
                 onPressed: () => context.go('/home/entries'),
@@ -289,6 +305,9 @@ class StatsScreenClean extends ConsumerWidget {
 
   /// Состояние ошибки
   Widget _buildErrorState(BuildContext context, Object error) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -325,9 +344,11 @@ class StatsScreenClean extends ConsumerWidget {
       );
     }
 
-    return CustomPaint(
-      size: const Size(double.infinity, 200),
-      painter: _SimpleChartPainter(data),
+        return CustomPaint(
+          size: const Size(double.infinity, 200),
+          painter: _SimpleChartPainter(data),
+        );
+      },
     );
   }
 
@@ -414,10 +435,18 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(value, style: AppTypography.h3.copyWith(color: color)),
           const SizedBox(height: 4),
-          Text(
-            title,
-            style: AppTypography.caption,
-            textAlign: TextAlign.center,
+          Builder(
+            builder: (context) {
+              final theme = Theme.of(context);
+              final isDark = theme.brightness == Brightness.dark;
+              return Text(
+                title,
+                style: AppTypography.caption.copyWith(
+                  color: isDark ? Colors.white70 : AppColors.textSecondary,
+                ),
+                textAlign: TextAlign.center,
+              );
+            },
           ),
         ],
       ),
@@ -459,9 +488,17 @@ class _MoodStatBar extends StatelessWidget {
           // Название
           SizedBox(
             width: 80,
-            child: Text(
-              _getMoodLabel(moodValue),
-              style: AppTypography.bodyMedium,
+            child: Builder(
+              builder: (context) {
+                final theme = Theme.of(context);
+                final isDark = theme.brightness == Brightness.dark;
+                return Text(
+                  getMoodLabel(moodValue),
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: isDark ? Colors.white : AppColors.textPrimary,
+                  ),
+                );
+              },
             ),
           ),
           // Прогресс-бар
@@ -478,10 +515,18 @@ class _MoodStatBar extends StatelessWidget {
           // Процент
           SizedBox(
             width: 40,
-            child: Text(
-              '${percentage.toStringAsFixed(0)}%',
-              style: AppTypography.caption,
-              textAlign: TextAlign.right,
+            child: Builder(
+              builder: (context) {
+                final theme = Theme.of(context);
+                final isDark = theme.brightness == Brightness.dark;
+                return Text(
+                  '${percentage.toStringAsFixed(0)}%',
+                  style: AppTypography.caption.copyWith(
+                    color: isDark ? Colors.white70 : AppColors.textSecondary,
+                  ),
+                  textAlign: TextAlign.right,
+                );
+              },
             ),
           ),
         ],
@@ -489,7 +534,7 @@ class _MoodStatBar extends StatelessWidget {
     );
   }
 
-  IconData _getMoodIcon(int mood) {
+  IconData getMoodIcon(int mood) {
     switch (mood) {
       case 5:
         return Icons.sentiment_very_satisfied;
@@ -506,7 +551,7 @@ class _MoodStatBar extends StatelessWidget {
     }
   }
 
-  String _getMoodLabel(int mood) {
+  String getMoodLabel(int mood) {
     switch (mood) {
       case 5:
         return 'mood.moods.very_happy'.tr();
@@ -546,21 +591,37 @@ class _RecentEntryItem extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              _getMoodLabel(entry.moodValue),
-              style: AppTypography.bodyMedium,
+            child: Builder(
+              builder: (context) {
+                final theme = Theme.of(context);
+                final isDark = theme.brightness == Brightness.dark;
+                return Text(
+                  getMoodLabel(entry.moodValue),
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: isDark ? Colors.white : AppColors.textPrimary,
+                  ),
+                );
+              },
             ),
           ),
-          Text(
-            DateFormat('dd.MM').format(entry.createdAt),
-            style: AppTypography.caption,
+          Builder(
+            builder: (context) {
+              final theme = Theme.of(context);
+              final isDark = theme.brightness == Brightness.dark;
+              return Text(
+                DateFormat('dd.MM').format(entry.createdAt),
+                style: AppTypography.caption.copyWith(
+                  color: isDark ? Colors.white70 : AppColors.textSecondary,
+                ),
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  String _getMoodLabel(int mood) {
+  String getMoodLabel(int mood) {
     switch (mood) {
       case 5:
         return 'mood.moods.very_happy'.tr();
@@ -639,5 +700,5 @@ class _SimpleChartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

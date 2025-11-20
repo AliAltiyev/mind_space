@@ -9,6 +9,7 @@ import 'dart:io';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../app/providers/ai_features_provider.dart';
+import '../../../app/providers/profile_providers.dart';
 import '../../../core/services/profile_image_service.dart';
 import '../../../core/services/user_level_service.dart';
 
@@ -75,14 +76,28 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
   @override
   Widget build(BuildContext context) {
     final allEntriesAsync = ref.watch(allMoodEntriesProvider);
+    final userProfileAsync = ref.watch(userProfileProvider);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : AppColors.background,
       appBar: AppBar(
         title: Text('profile.title'.tr()),
-        backgroundColor: AppColors.surface,
+        backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
         elevation: 1,
+        iconTheme: IconThemeData(
+          color: isDark ? Colors.white : AppColors.textPrimary,
+        ),
+        titleTextStyle: TextStyle(
+          color: isDark ? Colors.white : AppColors.textPrimary,
+        ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_outlined),
+            onPressed: () => context.push('/profile/edit'),
+            tooltip: 'profile.edit'.tr(),
+          ),
           IconButton(
             icon: const Icon(Icons.settings_outlined),
             onPressed: () => context.go('/settings'),
@@ -120,15 +135,41 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
     );
   }
 
-  /// Информация о пользователе
-  Widget _buildUserInfo(BuildContext context) {
+  /// Информация о пользователе (загрузка)
+  Widget _buildUserInfoLoading(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.cardShadow,
+        boxShadow: isDark ? null : AppColors.cardShadow,
+        border: isDark
+            ? Border.all(color: Colors.white.withOpacity(0.1))
+            : null,
+      ),
+      child: const Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  /// Информация о пользователе
+  Widget _buildUserInfo(BuildContext context, dynamic profile) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: isDark ? null : AppColors.cardShadow,
+        border: isDark
+            ? Border.all(color: Colors.white.withOpacity(0.1))
+            : null,
       ),
       child: Column(
         children: [
@@ -197,8 +238,11 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
 
           // Имя пользователя
           Text(
-            'profile.user'.tr(),
-            style: AppTypography.h2.copyWith(color: AppColors.textPrimary),
+            profile?.name ?? 'profile.user'.tr(),
+            style: AppTypography.h2.copyWith(
+              color: isDark ? Colors.white : AppColors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
           ),
 
           const SizedBox(height: 8),
@@ -292,16 +336,21 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.cardShadow,
+        boxShadow: isDark ? null : AppColors.cardShadow,
+        border: isDark
+            ? Border.all(color: Colors.white.withOpacity(0.1))
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'stats.title'.tr(),
-            style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+            style: AppTypography.h3.copyWith(
+              color: isDark ? Colors.white : AppColors.textPrimary,
+            ),
           ),
 
           const SizedBox(height: 16),
@@ -383,21 +432,30 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
         // Дополнительная информация об уровне, если есть
         if (_userStats != null) ...[
           const SizedBox(height: 12),
-          _buildLevelProgressCard(),
+          Builder(builder: (context) => _buildLevelProgressCard(context)),
         ],
       ],
     );
   }
 
   /// Карточка прогресса уровня
-  Widget _buildLevelProgressCard() {
+  Widget _buildLevelProgressCard(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.1),
+        color: isDark
+            ? AppColors.primary.withOpacity(0.2)
+            : AppColors.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+        border: Border.all(
+          color: isDark
+              ? AppColors.primary.withOpacity(0.5)
+              : AppColors.primary.withOpacity(0.3),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -424,7 +482,9 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
                     ),
                     Text(
                       '${_userStats!.experienceToNext} опыта до следующего уровня',
-                      style: AppTypography.caption,
+                      style: AppTypography.caption.copyWith(
+                        color: isDark ? Colors.white70 : null,
+                      ),
                     ),
                   ],
                 ),
@@ -444,20 +504,28 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
 
   /// Быстрые действия
   Widget _buildQuickActions(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.cardShadow,
+        boxShadow: isDark ? null : AppColors.cardShadow,
+        border: isDark
+            ? Border.all(color: Colors.white.withOpacity(0.1))
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'home.quick_actions'.tr(),
-            style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+            style: AppTypography.h3.copyWith(
+              color: isDark ? Colors.white : AppColors.textPrimary,
+            ),
           ),
 
           const SizedBox(height: 16),
@@ -492,20 +560,28 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
 
   /// Дополнительные функции
   Widget _buildAdditionalFeatures(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.cardShadow,
+        boxShadow: isDark ? null : AppColors.cardShadow,
+        border: isDark
+            ? Border.all(color: Colors.white.withOpacity(0.1))
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'settings.additional'.tr(),
-            style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+            style: AppTypography.h3.copyWith(
+              color: isDark ? Colors.white : AppColors.textPrimary,
+            ),
           ),
 
           const SizedBox(height: 16),
@@ -544,6 +620,9 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
 
   /// Состояние ошибки
   Widget _buildErrorState() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -752,12 +831,17 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: isDark ? color.withOpacity(0.2) : color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(
+          color: isDark ? color.withOpacity(0.5) : color.withOpacity(0.3),
+        ),
       ),
       child: Column(
         children: [
@@ -767,7 +851,9 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             title,
-            style: AppTypography.caption,
+            style: AppTypography.caption.copyWith(
+              color: isDark ? Colors.white70 : null,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -794,6 +880,9 @@ class _ActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
@@ -818,7 +907,7 @@ class _ActionTile extends StatelessWidget {
                   Text(
                     title,
                     style: AppTypography.bodyLarge.copyWith(
-                      color: AppColors.textPrimary,
+                      color: isDark ? Colors.white : AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),

@@ -63,16 +63,21 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     if (_isLoading) {
       return Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: isDark
+            ? const Color(0xFF0F172A)
+            : AppColors.background,
         appBar: _buildAppBar(),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : AppColors.background,
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -121,18 +126,25 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
   }
 
   PreferredSizeWidget _buildAppBar() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return AppBar(
       title: Text(
         'settings.title'.tr(),
         style: AppTypography.h4.copyWith(
-          color: AppColors.textPrimary,
+          color: isDark ? Colors.white : AppColors.textPrimary,
           fontWeight: FontWeight.w600,
         ),
       ),
-      backgroundColor: AppColors.surface,
+      backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
       elevation: 0,
       scrolledUnderElevation: 1,
-      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
         onPressed: () {
@@ -147,15 +159,22 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
   }
 
   Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Text(
-        title,
-        style: AppTypography.bodyLarge.copyWith(
-          color: AppColors.textPrimary,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Text(
+            title,
+            style: AppTypography.bodyLarge.copyWith(
+              color: isDark ? Colors.white : AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -594,6 +613,10 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
                       namedArgs: {'theme': themeName},
                     ),
                   );
+                  // Обновляем провайдер темы
+                  if (mounted) {
+                    ref.read(appThemeProvider.notifier).setTheme(value);
+                  }
                 }
               },
             );

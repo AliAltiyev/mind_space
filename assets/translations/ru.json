@@ -1,4 +1,4 @@
-{
+﻿{
     "app": {
         "name": "Ментальное Пространство",
         "description": "Умный дневник настроения и мыслей с элементами ИИ"
@@ -10,6 +10,7 @@
         "edit": "Редактировать",
         "add": "Добавить",
         "loading": "Загрузка...",
+        "saving": "Сохранение...",
         "error": "Ошибка",
         "success": "Успешно",
         "retry": "Повторить",
@@ -33,7 +34,8 @@
         "settings": "Настройки",
         "profile": "Профиль",
         "stats": "Статистика",
-        "entries": "Записи"
+        "entries": "Записи",
+        "sleep": "Сон"
     },
     "splash": {
         "title": "Ментальное Пространство",
@@ -98,15 +100,13 @@
     },
     "settings": {
         "title": "Настройки",
+        "profile": "Профиль",
         "theme": "Тема",
         "language": "Язык",
-        "notifications": "Уведомления",
         "privacy": "Конфиденциальность",
         "about": "О приложении",
         "appearance": "Внешний вид",
         "data": "Данные",
-        "export_data": "Экспорт данных",
-        "download_data": "Скачать ваши данные в формате PDF или CSV",
         "privacy_security": "Конфиденциальность и Безопасность",
         "privacy_settings": "Настройки конфиденциальности",
         "manage_privacy": "Управляйте настройками конфиденциальности",
@@ -115,7 +115,6 @@
         "appearance_settings": "Настройки внешнего вида",
         "customize_theme": "Настройте тему и цвета",
         "about_app": "О приложении",
-        "app_version": "Версия приложения, условия и контакты",
         "personal_settings": "Персональные настройки",
         "additional": "Дополнительно",
         "profile_management": "Управление профилем и уровнем",
@@ -577,16 +576,6 @@
         "guru_desc": "Эксперт по психическому благополучию",
         "legend_desc": "Легендарный мастер эмоций"
     },
-    "database": {
-        "error_saving": "Ошибка сохранения",
-        "error_loading": "Ошибка загрузки",
-        "error_loading_mood_entry": "Ошибка загрузки записи настроения: {error}",
-        "error_loading_ai_insight": "Ошибка загрузки AI инсайта: {error}",
-        "error_loading_settings": "Ошибка загрузки настроек: {error}",
-        "error_saving_data": "Ошибка сохранения данных: {error}",
-        "data_cleared": "Данные очищены",
-        "backup_created": "Резервная копия создана"
-    },
     "api": {
         "connection_error": "Ошибка соединения",
         "timeout_error": "Превышено время ожидания",
@@ -721,6 +710,14 @@
         "page": "Страница аналитики"
     },
     "database": {
+        "error_saving": "Ошибка сохранения",
+        "error_loading": "Ошибка загрузки",
+        "error_loading_mood_entry": "Ошибка загрузки записи настроения: {error}",
+        "error_loading_ai_insight": "Ошибка загрузки AI инсайта: {error}",
+        "error_loading_settings": "Ошибка загрузки настроек: {error}",
+        "error_saving_data": "Ошибка сохранения данных: {error}",
+        "data_cleared": "Данные очищены",
+        "backup_created": "Резервная копия создана",
         "mood_entry_added": "✅ Запись настроения добавлена: {mood} - {note} - Дата: {date}",
         "no_note": "без заметки"
     },

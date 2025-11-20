@@ -6,7 +6,7 @@ allprojects {
 }
 
 buildscript {
-    val kotlinVersion = "1.9.10"
+    val kotlinVersion = "2.1.0"
     repositories {
         google()
         mavenCentral()

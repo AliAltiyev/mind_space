@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../core/database/database.dart';
 import '../../domain/entities/meditation_entity.dart';
@@ -111,22 +112,94 @@ class MeditationBloc extends Bloc<MeditationEvent, MeditationState> {
       emit(MeditationLoaded(meditation, DateTime.now()));
     } catch (e) {
       print('❌ Ошибка загрузки медитационной сессии: $e');
-
-      String suggestion;
-      if (e.toString().contains('No mood data')) {
-        suggestion =
-            'Добавьте записи настроения для персонализированных медитаций';
-      } else {
-        suggestion = 'Попробуйте обновить данные или обратитесь в поддержку';
+      // Use case должен вернуть fallback медитацию, но если этого не произошло,
+      // пытаемся создать базовую медитацию напрямую
+      try {
+        final fallbackMeditation = await _suggestMeditationUseCase.call(
+          event.recentMoods,
+        );
+        print('✅ Используем fallback медитацию');
+        emit(MeditationLoaded(fallbackMeditation, DateTime.now()));
+      } catch (fallbackError) {
+        print('❌ Fallback медитация также не сработала: $fallbackError');
+        // Даже если все не сработало, создаем базовую медитацию синхронно
+        // чтобы пользователь всегда видел медитацию
+        final basicMeditation = _createBasicMeditation(event.recentMoods);
+        emit(MeditationLoaded(basicMeditation, DateTime.now()));
       }
-
-      emit(
-        MeditationError(
-          'Не удалось загрузить медитационную сессию: ${e.toString()}',
-          suggestion: suggestion,
-        ),
-      );
     }
+  }
+
+  /// Создание базовой медитации при полном сбое
+  MeditationEntity _createBasicMeditation(List<MoodEntry> recentMoods) {
+    final hour = DateTime.now().hour;
+    final averageMood = recentMoods.isNotEmpty
+        ? recentMoods.map((e) => e.moodValue).reduce((a, b) => a + b) /
+              recentMoods.length
+        : 3.0;
+
+    String title;
+    String description;
+    MeditationType type;
+    int duration;
+
+    if (hour >= 6 && hour < 12) {
+      title = 'Утренняя медитация';
+      description = 'Начните день с осознанности и намерений';
+      type = MeditationType.mindfulness;
+      duration = 10;
+    } else if (hour >= 12 && hour < 18) {
+      title = 'Дневная пауза';
+      description = 'Восстановите энергию в середине дня';
+      type = MeditationType.breathing;
+      duration = 8;
+    } else if (hour >= 18 && hour < 22) {
+      title = 'Вечерняя релаксация';
+      description = 'Расслабьтесь после активного дня';
+      type = MeditationType.progressiveRelaxation;
+      duration = 15;
+    } else {
+      title = 'Медитация перед сном';
+      description = 'Подготовьтесь к спокойному сну';
+      type = MeditationType.bodyScan;
+      duration = 12;
+    }
+
+    // Адаптируем под настроение
+    if (averageMood <= 2) {
+      title = 'Исцеляющая медитация';
+      description = 'Поможет справиться с трудными эмоциями';
+      type = MeditationType.lovingKindness;
+      duration = 15;
+    } else if (averageMood >= 4) {
+      title = 'Медитация благодарности';
+      description = 'Углубите чувство радости и благодарности';
+      type = MeditationType.mindfulness;
+      duration = 10;
+    }
+
+    return MeditationEntity(
+      title: title,
+      description: description,
+      emoji: '🧘',
+      accentColor: const Color(0xFF6366F1),
+      type: type,
+      duration: duration,
+      instructions: [
+        'Сядьте удобно и закройте глаза',
+        'Сосредоточьтесь на дыхании',
+        'Наблюдайте за мыслями без суждения',
+        'Верните внимание к дыханию, если отвлеклись',
+        'Медленно откройте глаза и вернитесь в настоящий момент',
+      ],
+      tips: [
+        'Начните с 5 минут и постепенно увеличивайте время',
+        'Не расстраивайтесь, если мысли отвлекают - это нормально',
+        'Практикуйте регулярно для лучших результатов',
+      ],
+      createdAt: DateTime.now(),
+      difficulty: MeditationDifficulty.beginner,
+    );
   }
 
   /// Обновление медитационной сессии
@@ -275,43 +348,19 @@ class MeditationBloc extends Bloc<MeditationEvent, MeditationState> {
     }
   }
 
-  /// Загрузка медитации с кэшированием
+  /// Загрузка медитации с кэшированием (используйте событие LoadMeditationSession)
+  @Deprecated('Используйте событие LoadMeditationSession')
   Future<void> loadSessionWithCache(List<MoodEntry> recentMoods) async {
-    try {
-      emit(MeditationLoading());
-
-      final meditation = await _suggestMeditationUseCase.callWithCache(
-        recentMoods,
-      );
-      emit(MeditationLoaded(meditation, DateTime.now()));
-    } catch (e) {
-      print('❌ Ошибка загрузки с кэшем: $e');
-      emit(
-        MeditationError(
-          'Не удалось загрузить медитацию с кэшем: ${e.toString()}',
-        ),
-      );
-    }
+    add(LoadMeditationSession(recentMoods));
   }
 
-  /// Загрузка медитации для типа
+  /// Загрузка медитации для типа (используйте событие LoadMeditationSession с type)
+  @Deprecated('Используйте событие LoadMeditationSession с type')
   Future<void> loadSessionForType(
     List<MoodEntry> recentMoods,
     MeditationType type,
   ) async {
-    try {
-      emit(MeditationLoading());
-
-      final meditation = await _suggestMeditationUseCase.callForType(
-        recentMoods,
-        type,
-      );
-
-      emit(MeditationLoaded(meditation, DateTime.now()));
-    } catch (e) {
-      print('❌ Ошибка загрузки для типа: $e');
-      emit(MeditationError('Не удалось загрузить медитацию для типа'));
-    }
+    add(LoadMeditationSession(recentMoods, type: type));
   }
 
   /// Проверка, является ли текущее состояние загруженным
@@ -360,4 +409,3 @@ class MeditationBloc extends Bloc<MeditationEvent, MeditationState> {
     return meditation?.isLongSession == true;
   }
 }
-

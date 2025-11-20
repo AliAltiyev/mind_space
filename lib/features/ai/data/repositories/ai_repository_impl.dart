@@ -7,7 +7,7 @@ import '../../domain/entities/meditation_entity.dart';
 import '../../domain/entities/mood_pattern_entity.dart';
 import '../../domain/repositories/ai_repository.dart';
 import '../datasources/ai_local_datasource.dart';
-import '../datasources/openrouter_datasource.dart';
+import '../datasources/groq_datasource.dart';
 import '../models/ai_insight_model.dart';
 import '../models/gratitude_suggestion_model.dart';
 import '../models/meditation_session_model.dart';
@@ -15,11 +15,11 @@ import '../models/mood_pattern_model.dart';
 
 /// Реализация AI репозитория
 class AIRepositoryImpl implements AIRepository {
-  final OpenRouterDataSource _remoteDataSource;
+  final GroqDataSource _remoteDataSource;
   final AILocalDataSource _localDataSource;
 
   AIRepositoryImpl({
-    required OpenRouterDataSource remoteDataSource,
+    required GroqDataSource remoteDataSource,
     required AILocalDataSource localDataSource,
   }) : _remoteDataSource = remoteDataSource,
        _localDataSource = localDataSource;
@@ -133,22 +133,48 @@ class AIRepositoryImpl implements AIRepository {
       // Проверяем кэш (обновляем каждый час)
       final cached = await _localDataSource.getCachedResponse(cacheKey);
       if (cached != null) {
-        print('📦 Используем кэшированную медитацию');
-        return MeditationSessionModel.fromJson(cached).toEntity();
+        try {
+          final cachedMeditation = MeditationSessionModel.fromJson(
+            cached,
+          ).toEntity();
+          // Проверяем, что кэшированная медитация не содержит ошибку
+          if (cachedMeditation.title.contains('AI временно недоступен') ||
+              cachedMeditation.title.contains('временно недоступен')) {
+            print('⚠️ Кэш содержит ошибку, создаем новую медитацию');
+            throw Exception('Cached meditation contains error');
+          }
+          print('📦 Используем кэшированную медитацию');
+          return cachedMeditation;
+        } catch (e) {
+          print('⚠️ Ошибка при использовании кэша: $e');
+          // Продолжаем загрузку новой медитации
+        }
       }
 
       // Получаем данные от API
       print('🌐 Запрашиваем медитацию от AI');
-      final response = await _remoteDataSource.suggestMeditationSession(
-        recentMoods,
-      );
+      try {
+        final response = await _remoteDataSource.suggestMeditationSession(
+          recentMoods,
+        );
 
-      final meditation = MeditationSessionModel.fromJson(response);
+        final meditation = MeditationSessionModel.fromJson(response);
 
-      // Кэшируем результат
-      await _localDataSource.cacheAIResponse(cacheKey, meditation.toMap());
+        // Проверяем, что медитация не содержит ошибку
+        if (meditation.title.contains('AI временно недоступен') ||
+            meditation.title.contains('временно недоступен')) {
+          throw Exception('Response contains error message');
+        }
 
-      return meditation.toEntity();
+        // Кэшируем результат
+        await _localDataSource.cacheAIResponse(cacheKey, meditation.toMap());
+
+        return meditation.toEntity();
+      } catch (apiError) {
+        print('⚠️ Ошибка API, используем fallback: $apiError');
+        // Не кэшируем ошибку, сразу возвращаем fallback
+        rethrow;
+      }
     } catch (e) {
       print('❌ Ошибка предложения медитации: $e');
 

@@ -1,4 +1,4 @@
-/// Модель запроса к OpenRouter API
+/// Модель запроса к AI API (совместима с OpenAI/Groq форматом)
 class OpenRouterRequest {
   /// Модель AI для использования
   final String model;
@@ -79,4 +79,3 @@ class OpenRouterRequest {
     return Object.hash(model, messages, temperature, maxTokens);
   }
 }
-

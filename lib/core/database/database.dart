@@ -92,11 +92,13 @@ class AppDatabase {
   final Map<String, String> _settings = {};
   final List<MoodEntry> _moodEntries = [];
   final List<AiInsight> _aiInsights = [];
+  final List<Map<String, dynamic>> _sleepEntries = [];
 
   // Ключи для SharedPreferences
   static const String _moodEntriesKey = 'mood_entries';
   static const String _aiInsightsKey = 'ai_insights';
   static const String _settingsKey = 'settings';
+  static const String _sleepEntriesKey = 'sleep_entries';
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
@@ -115,7 +117,11 @@ class AppDatabase {
         final map = jsonDecode(json) as Map<String, dynamic>;
         _moodEntries.add(MoodEntry.fromMap(map));
       } catch (e) {
-        print('database.error_loading_mood_entry'.tr(namedArgs: {'error': e.toString()}));
+        print(
+          'database.error_loading_mood_entry'.tr(
+            namedArgs: {'error': e.toString()},
+          ),
+        );
       }
     }
 
@@ -127,7 +133,27 @@ class AppDatabase {
         final map = jsonDecode(json) as Map<String, dynamic>;
         _aiInsights.add(AiInsight.fromMap(map));
       } catch (e) {
-        print('database.error_loading_ai_insight'.tr(namedArgs: {'error': e.toString()}));
+        print(
+          'database.error_loading_ai_insight'.tr(
+            namedArgs: {'error': e.toString()},
+          ),
+        );
+      }
+    }
+
+    // Загружаем записи сна
+    final sleepEntriesJson = _prefs!.getStringList(_sleepEntriesKey) ?? [];
+    _sleepEntries.clear();
+    for (final json in sleepEntriesJson) {
+      try {
+        final map = jsonDecode(json) as Map<String, dynamic>;
+        _sleepEntries.add(map);
+      } catch (e) {
+        print(
+          'database.error_loading_sleep_entry'.tr(
+            namedArgs: {'error': e.toString()},
+          ),
+        );
       }
     }
 
@@ -138,11 +164,17 @@ class AppDatabase {
         final map = jsonDecode(settingsJson) as Map<String, dynamic>;
         _settings.addAll(Map<String, String>.from(map));
       } catch (e) {
-        print('database.error_loading_settings'.tr(namedArgs: {'error': e.toString()}));
+        print(
+          'database.error_loading_settings'.tr(
+            namedArgs: {'error': e.toString()},
+          ),
+        );
       }
     }
 
-    print('✅ Данные загружены: ${_moodEntries.length} записей настроения, ${_aiInsights.length} AI инсайтов');
+    print(
+      '✅ Данные загружены: ${_moodEntries.length} записей настроения, ${_aiInsights.length} AI инсайтов, ${_sleepEntries.length} записей сна',
+    );
   }
 
   /// Сохранение данных в локальное хранилище
@@ -151,19 +183,31 @@ class AppDatabase {
 
     try {
       // Сохраняем записи настроения
-      final moodEntriesJson = _moodEntries.map((entry) => jsonEncode(entry.toMap())).toList();
+      final moodEntriesJson = _moodEntries
+          .map((entry) => jsonEncode(entry.toMap()))
+          .toList();
       await _prefs!.setStringList(_moodEntriesKey, moodEntriesJson);
 
       // Сохраняем AI инсайты
-      final aiInsightsJson = _aiInsights.map((insight) => jsonEncode(insight.toMap())).toList();
+      final aiInsightsJson = _aiInsights
+          .map((insight) => jsonEncode(insight.toMap()))
+          .toList();
       await _prefs!.setStringList(_aiInsightsKey, aiInsightsJson);
+
+      // Сохраняем записи сна
+      final sleepEntriesJson = _sleepEntries
+          .map((entry) => jsonEncode(entry))
+          .toList();
+      await _prefs!.setStringList(_sleepEntriesKey, sleepEntriesJson);
 
       // Сохраняем настройки
       await _prefs!.setString(_settingsKey, jsonEncode(_settings));
 
       print('💾 Данные сохранены локально');
     } catch (e) {
-      print('database.error_saving_data'.tr(namedArgs: {'error': e.toString()}));
+      print(
+        'database.error_saving_data'.tr(namedArgs: {'error': e.toString()}),
+      );
     }
   }
 
@@ -211,7 +255,11 @@ class AppDatabase {
     _moodEntries.add(entry);
     await _saveData(); // Сохраняем данные локально
     print(
-      'database.mood_entry_added'.tr().replaceAll('{mood}', '${entry.moodValue}/5').replaceAll('{note}', entry.note ?? 'database.no_note'.tr()).replaceAll('{date}', '${entry.createdAt}'),
+      'database.mood_entry_added'
+          .tr()
+          .replaceAll('{mood}', '${entry.moodValue}/5')
+          .replaceAll('{note}', entry.note ?? 'database.no_note'.tr())
+          .replaceAll('{date}', '${entry.createdAt}'),
     );
   }
 
@@ -225,9 +273,7 @@ class AppDatabase {
   Future<void> addAiInsight(AiInsight insight) async {
     _aiInsights.add(insight);
     await _saveData(); // Сохраняем данные локально
-    print(
-      '✅ AI инсайт добавлен: ${insight.title} - ${insight.type}',
-    );
+    print('✅ AI инсайт добавлен: ${insight.title} - ${insight.type}');
   }
 
   /// Получение всех AI инсайтов
@@ -236,10 +282,52 @@ class AppDatabase {
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
+  /// Добавление новой записи сна
+  Future<void> addSleepEntry(Map<String, dynamic> entry) async {
+    _sleepEntries.add(entry);
+    await _saveData();
+    print('✅ Запись сна добавлена');
+  }
+
+  /// Получение всех записей сна
+  Future<List<Map<String, dynamic>>> getAllSleepEntries() async {
+    return List.from(_sleepEntries)..sort((a, b) {
+      final aDate = DateTime.parse(a['createdAt'] ?? a['sleepStart']);
+      final bDate = DateTime.parse(b['createdAt'] ?? b['sleepStart']);
+      return bDate.compareTo(aDate);
+    });
+  }
+
+  /// Получение записей сна за период
+  Future<List<Map<String, dynamic>>> getSleepEntriesForPeriod(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    return _sleepEntries.where((entry) {
+      final entryDate = DateTime.parse(
+        entry['sleepStart'] ?? entry['createdAt'],
+      );
+      return entryDate.isAfter(startDate.subtract(const Duration(days: 1))) &&
+          entryDate.isBefore(endDate.add(const Duration(days: 1)));
+    }).toList()..sort((a, b) {
+      final aDate = DateTime.parse(a['sleepStart'] ?? a['createdAt']);
+      final bDate = DateTime.parse(b['sleepStart'] ?? b['createdAt']);
+      return bDate.compareTo(aDate);
+    });
+  }
+
+  /// Получение последней записи сна
+  Future<Map<String, dynamic>?> getLastSleepEntry() async {
+    if (_sleepEntries.isEmpty) return null;
+    final sorted = await getAllSleepEntries();
+    return sorted.isNotEmpty ? sorted.first : null;
+  }
+
   /// Очистка всех данных (для отладки)
   Future<void> clearAllData() async {
     _moodEntries.clear();
     _aiInsights.clear();
+    _sleepEntries.clear();
     _settings.clear();
     await _saveData();
     print('🗑️ Все данные очищены');

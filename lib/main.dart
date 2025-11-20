@@ -114,7 +114,9 @@ class MindSpaceApp extends ConsumerWidget {
         locale: savedLocale.valueOrNull ?? context.locale,
 
         // Тема
-        theme: AppTheme.lightTheme,
+        theme: app_theme.AppTheme.lightTheme,
+        darkTheme: app_theme.AppTheme.darkTheme,
+        themeMode: themeMode,
 
         // Роутинг
         routerConfig: router,

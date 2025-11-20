@@ -85,6 +85,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       await updateUserProfile.execute(event.profile);
       final updatedProfile = await getUserProfile.execute();
       emit(ProfileUpdated(updatedProfile));
+      emit(ProfileLoaded(updatedProfile));
     } catch (e) {
       emit(ProfileError('Failed to update profile: $e'));
     }

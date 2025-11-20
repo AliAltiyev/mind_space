@@ -2,29 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_typography.dart';
+import '../../../../app/providers/profile_providers.dart';
 import '../blocs/profile_bloc.dart';
 import '../widgets/edit_profile_form_widget.dart';
 
-class EditProfilePage extends StatelessWidget {
+class EditProfilePage extends ConsumerWidget {
   const EditProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
+      backgroundColor: isDark ? const Color(0xFF0F172A) : AppColors.background,
       appBar: AppBar(
         title: Text('profile.edit'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: isDark ? Colors.white : AppColors.textPrimary,
+          ),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/profile');
+            }
+          },
+        ),
       ),
-      body: BlocProvider(
-        create: (context) => context.read<ProfileBloc>(),
+      body: BlocProvider.value(
+        value: context.read<ProfileBloc>()..add(LoadProfile()),
         child: const _EditProfilePageContent(),
       ),
     );
   }
 }
 
-class _EditProfilePageContent extends StatelessWidget {
+class _EditProfilePageContent extends ConsumerWidget {
   const _EditProfilePageContent();
 
   @override

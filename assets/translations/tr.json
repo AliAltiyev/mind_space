@@ -1,4 +1,4 @@
-{
+﻿{
     "app": {
         "name": "Zihin Alanı",
         "description": "AI öğeleri ile akıllı ruh hali ve düşünce günlüğü"
@@ -39,6 +39,10 @@
     },
     "home": {
         "title": "Zihin Alanı",
+        "welcome": "Hoş geldiniz!",
+        "how_are_you_today": "Bugün nasılsınız? Ruh halinizi paylaşın.",
+        "current_mood": "Mevcut ruh hali",
+        "today": "Bugün",
         "quick_actions": "Hızlı İşlemler",
         "ai_features": "AI Özellikleri",
         "view_stats": "İstatistikleri Gör",
@@ -50,8 +54,12 @@
         "meditation": "Meditasyon",
         "find_peace": "Huzur bul",
         "add_mood_entries": "AI özellikleri için ruh hali girişleri ekle",
+        "last_mood": "Son ruh hali",
+        "tap_to_add_mood": "Ruh halinizi eklemek için dokunun",
         "loading_ai_features": "AI özellikleri yükleniyor...",
-        "error_loading_ai": "AI özelliklerini yüklerken hata"
+        "error_loading_ai": "AI özelliklerini yüklerken hata",
+        "recent_entries": "Son girişler",
+        "add_first_entry": "İlk ruh hali girişinizi ekleyin"
     },
     "mood": {
         "title": "Nasıl hissediyorsunuz?",
@@ -86,6 +94,7 @@
     },
     "settings": {
         "title": "Ayarlar",
+        "profile": "Profil",
         "theme": "Tema",
         "language": "Dil",
         "notifications": "Bildirimler",
@@ -130,7 +139,7 @@
         "feedback": "Geri bildirim",
         "feedback_desc": "Sorun veya öneri bildir",
         "rate_app": "Uygulamayı değerlendir",
-        "rate_app_desc": "App Store / Google Play'de değerlendir",
+        "rate_app_desc": "App Store / Google Play\u0027de değerlendir",
         "app_version": "Uygulama sürümü",
         "privacy_policy": "Gizlilik politikası",
         "privacy_policy_desc": "Verilerinizi nasıl kullandığımız",
@@ -150,7 +159,7 @@
         "delete_all_data_dialog": "Tüm verileri sil?",
         "delete_all_data_warning": "Bu işlem geri alınamaz. Tüm ruh hali girişleriniz ve ayarlarınız silinecek.",
         "feedback_dialog": "Geri bildirim",
-        "feedback_message": "Mind Space'i kullandığınız için teşekkürler! Görüşleriniz bizim için çok önemli. App Store veya Google Play üzerinden geri bildirim gönderebilirsiniz.",
+        "feedback_message": "Mind Space\u0027i kullandığınız için teşekkürler! Görüşleriniz bizim için çok önemli. App Store veya Google Play üzerinden geri bildirim gönderebilirsiniz.",
         "thank_you_rating": "Değerlendirme için teşekkürler!",
         "privacy_policy_content": "Burada verilerinizi nasıl topladığımızı, kullandığımızı ve koruduğumuzu açıklayan gizlilik politikası metni olacak.",
         "terms_of_service_content": "Burada uygulama hizmet şartları, kurallar ve kısıtlamalar olacak.",
@@ -183,20 +192,72 @@
         "validation_error": "Lütfen girişinizi kontrol edin.",
         "permission_error": "İzin reddedildi.",
         "save_error": "Kaydetme hatası: {error}",
-        "save_success": "Giriş başarıyla kaydedildi! 🎉"
+        "save_success": "Giriş başarıyla kaydedildi! 🎉",
+        "unknown_state": "Unknown state",
+        "load_profile": "Error loading profile",
+        "load_stats": "Error loading statistics",
+        "load_achievements": "Error loading achievements",
+        "load_insights": "Error loading insights: {error}"
     },
     "onboarding": {
-        "welcome": "Zihin Alanı'na Hoş Geldiniz",
-        "get_started": "Başlayın",
-        "skip": "Atla"
+        "welcome": {
+            "title": "Zihin Alanı\u0027na Hoş Geldiniz",
+            "description": "AI destekli içgörülerle ruh halinizi ve düşüncelerinizi takip edin"
+        },
+        "mood_tracking": {
+            "title": "Ruh Hali Takibi",
+            "description": "Günlük ruh halinizi kaydedin ve zamanla kalıpları keşfedin"
+        },
+        "ai_insights": {
+            "title": "AI İçgörüleri",
+            "description": "Verilerinize göre kişiselleştirilmiş öneriler alın"
+        }
     },
     "profile": {
-        "recent_achievements": "Son Başarılar",
-        "error_loading": "Profil Yükleme Hatası",
-        "stats": "İstatistikler",
+        "title": "Profil",
+        "user": "Kullanıcı",
+        "member_since": "{date} tarihinden beri üye",
+        "edit": "Profili Düzenle",
+        "level": "Seviye",
+        "experience": "Deneyim",
         "achievements": "Başarılar",
-        "no_achievements": "Henüz başarı yok",
-        "keep_tracking": "İlk başarılarınızı elde etmek için ruh halinizi takip etmeye devam edin!"
+        "statistics": "İstatistikler",
+        "settings": "Ayarlar",
+        "logout": "Çıkış",
+        "record_current_state": "Mevcut durumu kaydet",
+        "view_analytics": "Analitikleri görüntüle",
+        "chat_with_ai": "AI ile sohbet et",
+        "app_configuration": "Uygulama yapılandırması",
+        "share": "Paylaş",
+        "tell_friends": "Arkadaşlara uygulamadan bahset",
+        "help": "Yardım",
+        "support_faq": "Destek ve SSS",
+        "version_1_0_0": "Sürüm 1.0.0",
+        "select_photo": "Profil fotoğrafı seç",
+        "camera": "Kamera",
+        "gallery": "Galeri",
+        "photo_saved": "Profil fotoğrafı kaydedildi",
+        "photo_save_error": "Fotoğraf kaydetme hatası",
+        "image_selection_error": "Görüntü seçme hatası: {error}",
+        "photo_deleted": "Profil fotoğrafı silindi",
+        "photo_delete_error": "Fotoğraf silme hatası",
+        "name": "Name",
+        "name_hint": "Enter your name",
+        "name_required": "Name is required",
+        "name_min_length": "Name must be at least 2 characters",
+        "email": "Email",
+        "email_hint": "Enter your email",
+        "email_invalid": "Please enter a valid email",
+        "date_of_birth": "Date of Birth",
+        "select_date": "Select date",
+        "age": "Age: {age} years",
+        "about": "Hakkında",
+        "about_hint": "Kendiniz hakkında bize anlatın...",
+        "interests": "Interests",
+        "change_photo": "Change Photo",
+        "updated": "Profile updated successfully!",
+        "default_user_name": "User",
+        "hobbies": {}
     },
     "statistics": {
         "title": "İstatistikler",
@@ -214,20 +275,147 @@
         "start_tracking": "Girişlerinizi burada görmek için ruh halinizi takip etmeye başlayın",
         "filter_by_date": "Tarihe Göre Filtrele",
         "filter_by_mood": "Ruh Haline Göre Filtrele",
-        "search_entries": "Girişleri ara..."
+        "search_entries": "Girişleri ara...",
+        "all": "Tümü",
+        "no_entries_found": "Giriş bulunamadı",
+        "try_other_filter": "Başka bir filtre deneyin",
+        "search_notes": "Notlarda ara...",
+        "note": "Not:",
+        "very_bad": "Çok Kötü",
+        "bad": "Kötü",
+        "okay": "Tamam",
+        "good": "İyi",
+        "excellent": "Mükemmel"
     },
     "notifications": {
-        "title": "Bildirimler",
-        "daily_reminder_title": "Mind Space Hatırlatması",
-        "monday_message": "Bugün ruh haliniz nasıl? Haftaya pozitif enerjiyle başlayın! 🌟",
-        "tuesday_message": "Bugün kendinizle bağlantı kurmak için bir dakika ayırın 💭",
-        "wednesday_message": "Hafta ortası ruh hali kontrolü! Nasıl hissediyorsunuz? 🤔",
-        "thursday_message": "Perşembe enerjisi! Bugün ruh haliniz nasıl? ✨",
-        "friday_message": "TGIF! Bu cuma ruh haliniz nasıldı? 🎉",
-        "saturday_message": "Hafta sonu ruh hali kontrolü! Nasıl hissediyorsunuz? 😌",
-        "sunday_message": "Pazar düşünme zamanı! Ruh haliniz nasıl? 🌅",
-        "weekly_reflection_title": "Haftalık Düşünme Zamanı",
-        "weekly_reflection_body": "Haftanızı düşünmek ve ruh hali kalıplarınızı takip etmek için zaman ayırın 📊"
+        "daily_reminders": "Günlük Hatırlatıcılar",
+        "enable_reminders": "Hatırlatıcıları Etkinleştir",
+        "daily_mood_reminders": "Günlük ruh hali takibi hatırlatıcıları",
+        "reminder_time": "Hatırlatıcı Saati",
+        "test_notification": "Test Bildirimi",
+        "send_test_notification": "Test bildirimi gönder",
+        "weekly_reminders": "Haftalık Hatırlatıcılar",
+        "enable_weekly_reminders": "Haftalık hatırlatıcıları etkinleştir",
+        "weekly_reflection_reminders": "Yansıma hatırlatıcıları",
+        "day_of_week": "Haftanın Günü",
+        "additional_settings": "Ek Ayarlar",
+        "permissions": "İzinler",
+        "manage_permissions": "Uygulama izinlerini yönet",
+        "cancel_all_notifications": "Tüm bildirimleri iptal et"
+    },
+    "ai": {
+        "chat": {
+            "title": "AI Sohbet",
+            "placeholder": "Mesaj yazın...",
+            "send": "Gönder",
+            "thinking": "Düşünüyor...",
+            "error": "Mesaj gönderme hatası",
+            "welcome_message": "Merhaba! Ruh hali takibi için AI asistanınızım. Nasılsınız? Duygularınızı analiz etmek, ruh halini iyileştirmek için ipuçları vermek veya sadece sohbet etmek için yardımcı olabilirim! 😊",
+            "clear_chat": "Sohbeti temizle",
+            "clear_chat_confirm": "Tüm sohbet geçmişini temizlemek istediğinizden emin misiniz?",
+            "quick_questions": "Hızlı sorular",
+            "how_are_you": "Nasılsınız?",
+            "mood_analysis": "Ruh hali analizi",
+            "analyze_my_mood": "Ruh halimi analiz et",
+            "tips": "İpuçları",
+            "give_tips_for_mood": "Ruh halini iyileştirmek için ipuçları ver",
+            "recommend_meditation": "Meditasyon öner",
+            "ask_any_question": "Ruh hali veya tavsiye hakkında herhangi bir soru sorun",
+            "response_greeting": "Merhaba! Çok iyiyim, teşekkürler! 😊 Siz nasılsınız? Bugün ruh haliniz nasıl?",
+            "response_mood_analysis": "Girişlerinize göre ruh halinizi analiz edebilirim! 📊 Söyleyin, bugün nasıl hissediyorsunuz? Veya bir ruh hali girişi ekleyin, size duygusal kalıplarınızın detaylı bir analizini vereceğim.",
+            "response_tips": "Tabii ki yardımcı olacağım! 💡 İşte ruh halini iyileştirmek için bazı ipuçları:\n\n• Derin bir nefes alın ve verin\n• Temiz havada yürüyüş yapın\n• Favori müziğinizi dinleyin\n• Minnettar olduğunuz 3 şeyi yazın\n• Kendiniz için güzel bir şey yapın\n\nSizin için en iyi ne işe yarıyor?",
+            "response_meditation": "Meditasyon ruh halini iyileştirmenin harika bir yoludur! 🧘‍♀️\n\nDeneyin:\n• 5 dakikalık farkındalık meditasyonu\n• Nefes egzersizleri\n• Aşamalı kas gevşemesi\n• Minnettarlık meditasyonu\n\nBu yöntemlerden herhangi biri hakkında daha fazla bilgi vermemi ister misiniz?",
+            "response_sad": "Zor bir dönemden geçtiğinizi anlıyorum. 💙 Kötü günlerin normal olduğunu ve geçeceğini unutmayın. Deneyin:\n\n• Sevilen biriyle konuşun\n• Kendiniz için güzel bir şey yapın\n• Duygularınızı yazın\n• Gerekirse profesyonel yardım alın\n\nBu konuda yalnız değilsiniz. Bunun hakkında daha detaylı konuşmak ister misiniz?",
+            "response_general": "İlginç bir soru! 🤔 Ruh hali, duygular ve zihinsel sağlık hakkındaki sorularda size yardımcı olmak için buradayım. Ruh hali girişlerinizi analiz edebilir, tavsiyeler verebilir veya sadece sohbette destek olabilirim. Ne hakkında konuşmak istersiniz?",
+            "ready_to_help": "AI Asistan yardımcı olmaya hazır!",
+            "error_payment_required": "⚠️ AI hizmeti geçici olarak kullanılamıyor. openrouter.ai\u0027de bakiyenizi kontrol edin",
+            "error_invalid_key": "⚠️ Geçersiz Groq API anahtarı. API anahtarınızı yapılandırın.",
+            "error_access_denied": "⚠️ AI hizmetine erişim reddedildi. API anahtarınızı kontrol edin.",
+            "error_rate_limit": "⚠️ Çok fazla istek. Lütfen birkaç dakika sonra tekrar deneyin.",
+            "error_timeout": "⚠️ İstek zaman aşımına uğradı. İnternet bağlantınızı kontrol edin ve tekrar deneyin.",
+            "error_server": "⚠️ AI hizmeti geçici olarak kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
+            "error_general": "⚠️ AI hizmetine bağlanılamadı. Yedek yanıtlar kullanılıyor.",
+            "get_groq_key": "Ücretsiz API anahtarı alın: https://console.groq.com/keys"
+        },
+        "insights": {
+            "title": "AI İçgörüleri",
+            "loading": "İçgörüler yükleniyor...",
+            "error": "İçgörüleri yükleme hatası",
+            "no_insights": "Henüz içgörü yok",
+            "generate": "İçgörü oluştur"
+        },
+        "gratitude": {
+            "title": "Şükran Günlüğü",
+            "suggestion": "Şükran önerisi",
+            "write": "Şükran yaz",
+            "prompts": "Şükran önerileri"
+        },
+        "meditation": {
+            "title": "Meditasyon",
+            "suggestion": "Meditasyon önerisi",
+            "start": "Meditasyona başla",
+            "duration": "Süre",
+            "personal_practices": "Kişiselleştirilmiş meditasyon uygulamaları",
+            "loading_practices": "Meditasyon uygulamaları yükleniyor...",
+            "instructions": "Talimatlar",
+            "quick": "Hızlı (5-10 dk)",
+            "deep": "Derin (20+ dk)",
+            "no_meditation": "Meditasyon mevcut değil",
+            "tap_to_load": "Meditasyon oturumu yüklemek için yenile'ye dokunun",
+            "starting": "{duration} dakikalık meditasyon başlatılıyor...",
+            "start_meditation": "{duration} dakikalık meditasyon başlat",
+            "start": "Başlat",
+            "completed": "Meditasyon Tamamlandı",
+            "completed_message": "Harika iş! Meditasyon seansınızı tamamladınız.",
+            "current_step": "Mevcut Adım",
+            "stop_title": "Meditasyonu Durdur?",
+            "stop_message": "Meditasyon seansını durdurmak istediğinizden emin misiniz?",
+            "sound": {
+                "silence": "Sessizlik",
+                "nature": "Doğa Sesleri",
+                "ocean": "Okyanus Dalgaları",
+                "rain": "Yağmur",
+                "forest": "Orman"
+            },
+            "phase": {
+                "preparation": {
+                    "title": "Hazırlık",
+                    "1": "Rahat bir pozisyon bulun. Rahat hissediyorsanız gözlerinizi kapatın.",
+                    "2": "Bu alana yerleşmek için bir an ayırın.",
+                    "3": "Herhangi bir beklentiyi bırakın ve şimdiki zamanda olun."
+                },
+                "breathing": {
+                    "title": "Nefes",
+                    "1": "Burnunuzdan derin bir nefes alın.",
+                    "2": "Bir an tutun, sonra yavaşça ağzınızdan nefes verin.",
+                    "3": "Doğal ve derin nefes almaya devam edin.",
+                    "4": "Dikkatinizi nefesinize odaklayın."
+                },
+                "body_scan": {
+                    "title": "Vücut Taraması",
+                    "1": "Vücudunuzu baştan ayağa kadar yavaşça tarayın.",
+                    "2": "Yargılamadan herhangi bir gerginlik veya rahatsızlığı fark edin.",
+                    "3": "Vücudunuzun gevşemesine ve serbest kalmasına izin verin."
+                },
+                "visualization": {
+                    "title": "Görselleştirme",
+                    "1": "Kendinizi güvende ve sakin hissettiğiniz huzurlu bir yer hayal edin.",
+                    "2": "Kendinizi bu yerde, tamamen mevcut olarak görselleştirin.",
+                    "3": "Bu huzurlu alanın tüm detaylarını içselleştirin."
+                },
+                "completion": {
+                    "title": "Tamamlama",
+                    "1": "Yavaşça farkındalığınızı şimdiki ana geri getirin.",
+                    "2": "Parmaklarınızı ve ayak parmaklarınızı nazikçe hareket ettirin.",
+                    "3": "Hazır olduğunuzda gözlerinizi açın."
+                }
+            }
+        },
+        "patterns": {
+            "title": "Desenler",
+            "analysis": "Desen analizi",
+            "insights": "Desen içgörüleri"
+        }
     },
     "prompts": {
         "gratitude_prompts": [

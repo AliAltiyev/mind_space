@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/services/user_level_service.dart';
+import '../../../core/api/groq_client.dart';
 
 /// Экран чата с AI - простой и понятный дизайн
 class AiChatScreen extends ConsumerStatefulWidget {
@@ -20,6 +21,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   final List<ChatMessage> _messages = [];
   bool _isLoading = false;
   final UserLevelService _levelService = UserLevelService();
+  final GroqClient _aiClient = GroqClient();
 
   @override
   void initState() {
@@ -47,8 +49,11 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : AppColors.background,
       appBar: AppBar(
         title: Row(
           children: [
@@ -71,7 +76,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             Text('ai.chat.title'.tr()),
           ],
         ),
-        backgroundColor: AppColors.surface,
+        backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
         elevation: 1,
         actions: [
           IconButton(
@@ -109,6 +114,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   /// Быстрые действия
   Widget _buildQuickActions() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -121,7 +129,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           Text(
             'ai.chat.quick_questions'.tr(),
             style: AppTypography.bodySmall.copyWith(
-              color: AppColors.textSecondary,
+              color: isDark ? Colors.white70 : AppColors.textSecondary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -212,6 +220,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   /// Область ввода
   Widget _buildInputArea() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -226,15 +237,27 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               decoration: InputDecoration(
                 hintText: 'ai.chat.placeholder'.tr(),
                 hintStyle: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.textHint,
+                  color: isDark ? Colors.white70 : AppColors.textHint,
                 ),
+                filled: true,
+                fillColor: isDark
+                    ? Colors.white.withOpacity(0.05)
+                    : Colors.transparent,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(color: AppColors.border),
+                  borderSide: BorderSide(
+                    color: isDark
+                        ? Colors.white.withOpacity(0.1)
+                        : AppColors.border,
+                  ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(color: AppColors.border),
+                  borderSide: BorderSide(
+                    color: isDark
+                        ? Colors.white.withOpacity(0.1)
+                        : AppColors.border,
+                  ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -310,10 +333,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
     _scrollToBottom();
 
-    // Имитация ответа AI (в реальном приложении здесь будет вызов AI сервиса)
-    await Future.delayed(const Duration(seconds: 1));
-
-    final aiResponse = await _generateAiResponse(text);
+    try {
+      // Генерация ответа AI через Groq API
+      final aiResponse = await _generateAiResponse(text);
 
     setState(() {
       _messages.add(
@@ -325,9 +347,114 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     _scrollToBottom();
   }
 
-  /// Генерация ответа AI (заглушка)
+  /// Генерация ответа AI через Groq API
   Future<String> _generateAiResponse(String userMessage) async {
-    // Простая логика ответов (в реальном приложении здесь будет AI сервис)
+    try {
+      // Получаем текущий язык приложения из локализации
+      final currentLocale =
+          EasyLocalization.of(context)?.locale ?? const Locale('en');
+      final languageCode = currentLocale.languageCode;
+
+      // Маппинг языков для AI промпта (названия языков на английском для лучшего понимания AI)
+      final languageMap = {
+        'en': 'English',
+        'ru': 'Russian',
+        'es': 'Spanish',
+        'fr': 'French',
+        'hi': 'Hindi',
+        'tk': 'Turkmen',
+        'tr': 'Turkish',
+        'zh': 'Chinese',
+      };
+
+      final targetLanguage = languageMap[languageCode] ?? 'English';
+
+      // Формируем системный промпт для AI с явным указанием языка
+      // Используем английский для промпта, чтобы AI лучше понимал инструкции
+      final systemPrompt =
+          '''You are a friendly AI assistant for the Mind Space mood tracking app.
+Your task is to help users with questions about mood, emotions, and mental well-being.
+Answer briefly, friendly, and supportively. Use emojis for expressiveness.
+
+CRITICAL LANGUAGE REQUIREMENT:
+- You MUST respond ONLY in $targetLanguage language.
+- Always use $targetLanguage, regardless of the language the user writes in.
+- If the user writes in a different language, still respond in $targetLanguage.
+- Never switch to another language, even if the user asks you to.
+- Your responses must be 100% in $targetLanguage.''';
+
+      // Формируем историю сообщений
+      final messages = [
+        {'role': 'system', 'content': systemPrompt},
+        {'role': 'user', 'content': userMessage},
+      ];
+
+      // Отправляем запрос к Groq API (бесплатный и быстрый)
+      final response = await _aiClient.generateContentWithRetry(
+        model: GroqApiConstants.defaultModel,
+        messages: messages,
+        temperature: 0.7,
+        maxTokens: 500,
+      );
+
+      if (response.content.isNotEmpty) {
+        return response.content;
+      } else {
+        // Fallback на простые ответы, если API не вернул контент
+        return _getFallbackResponse(userMessage);
+      }
+    } catch (e) {
+      print('❌ Ошибка генерации AI ответа: $e');
+      // Пробрасываем ошибку выше для обработки
+      rethrow;
+    }
+  }
+
+  /// Получить понятное сообщение об ошибке для пользователя
+  String _getUserFriendlyErrorMessage(dynamic error) {
+    final errorString = error.toString();
+
+    if (errorString.contains('400') ||
+        errorString.contains('Неверный формат запроса') ||
+        errorString.contains('API ключ Groq не настроен')) {
+      return '${'ai.chat.error_invalid_key'.tr()}\n\n${'ai.chat.get_groq_key'.tr()}';
+    }
+
+    if (errorString.contains('402') ||
+        errorString.contains('Недостаточно средств')) {
+      return 'ai.chat.error_payment_required'.tr();
+    }
+
+    if (errorString.contains('401') ||
+        errorString.contains('Неверный API ключ') ||
+        errorString.contains('Groq')) {
+      return '${'ai.chat.error_invalid_key'.tr()}\n\n${'ai.chat.get_groq_key'.tr()}';
+    }
+
+    if (errorString.contains('403') ||
+        errorString.contains('Доступ запрещен')) {
+      return 'ai.chat.error_access_denied'.tr();
+    }
+
+    if (errorString.contains('429') || errorString.contains('лимит')) {
+      return 'ai.chat.error_rate_limit'.tr();
+    }
+
+    if (errorString.contains('время ожидания') ||
+        errorString.contains('timeout')) {
+      return 'ai.chat.error_timeout'.tr();
+    }
+
+    if (errorString.contains('сервер') || errorString.contains('server')) {
+      return 'ai.chat.error_server'.tr();
+    }
+
+    // Общая ошибка
+    return 'ai.chat.error_general'.tr();
+  }
+
+  /// Fallback ответы при ошибке API
+  String _getFallbackResponse(String userMessage) {
     final message = userMessage.toLowerCase();
 
     if (message.contains('как дела') ||
@@ -366,7 +493,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     }
 
     // Общий ответ
-    return "ai.chat.response_general".tr();
+    return 'ai.chat.response_general'.tr();
   }
 
   /// Прокрутка вниз
@@ -432,6 +559,9 @@ class _ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -471,7 +601,10 @@ class _ChatBubble extends StatelessWidget {
                       ? const Radius.circular(4)
                       : const Radius.circular(16),
                 ),
-                boxShadow: AppColors.cardShadow,
+                boxShadow: isDark ? null : AppColors.cardShadow,
+                border: isDark && !message.isUser
+                    ? Border.all(color: Colors.white.withOpacity(0.1))
+                    : null,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,7 +614,7 @@ class _ChatBubble extends StatelessWidget {
                     style: AppTypography.bodyMedium.copyWith(
                       color: message.isUser
                           ? Colors.white
-                          : AppColors.textPrimary,
+                          : (isDark ? Colors.white : AppColors.textPrimary),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -490,7 +623,7 @@ class _ChatBubble extends StatelessWidget {
                     style: AppTypography.caption.copyWith(
                       color: message.isUser
                           ? Colors.white70
-                          : AppColors.textHint,
+                          : (isDark ? Colors.white70 : AppColors.textHint),
                     ),
                   ),
                 ],
@@ -532,14 +665,23 @@ class _QuickActionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.1),
+          color: isDark
+              ? AppColors.primary.withOpacity(0.2)
+              : AppColors.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+          border: Border.all(
+            color: isDark
+                ? AppColors.primary.withOpacity(0.5)
+                : AppColors.primary.withOpacity(0.3),
+          ),
         ),
         child: Text(
           text,

@@ -54,6 +54,7 @@ class UserProfileEntity {
     Map<String, dynamic>? moodStatistics,
     int? totalEntries,
     double? averageMood,
+    bool clearBio = false,
   }) {
     return UserProfileEntity(
       id: id ?? this.id,
@@ -61,7 +62,9 @@ class UserProfileEntity {
       email: email ?? this.email,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
-      bio: bio ?? this.bio,
+      bio: clearBio
+          ? null
+          : (bio != null ? (bio.isEmpty ? null : bio) : this.bio),
       interests: interests ?? this.interests,
       mentalHealthGoals: mentalHealthGoals ?? this.mentalHealthGoals,
       joinedDate: joinedDate ?? this.joinedDate,

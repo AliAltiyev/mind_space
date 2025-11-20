@@ -10,6 +10,7 @@
         "edit": "Edit",
         "add": "Add",
         "loading": "Loading...",
+        "saving": "Saving...",
         "error": "Error",
         "success": "Success",
         "retry": "Retry",
@@ -33,7 +34,8 @@
         "settings": "Settings",
         "profile": "Profile",
         "stats": "Statistics",
-        "entries": "Entries"
+        "entries": "Entries",
+        "sleep": "Sleep"
     },
     "splash": {
         "title": "Mind Space",
@@ -98,15 +100,13 @@
     },
     "settings": {
         "title": "Settings",
+        "profile": "Profile",
         "theme": "Theme",
         "language": "Language",
-        "notifications": "Notifications",
         "privacy": "Privacy",
         "about": "About",
         "appearance": "Appearance",
         "data": "Data",
-        "export_data": "Export Data",
-        "download_data": "Download your data as PDF or CSV",
         "privacy_security": "Privacy & Security",
         "privacy_settings": "Privacy Settings",
         "manage_privacy": "Manage your privacy preferences",
@@ -115,7 +115,6 @@
         "appearance_settings": "Appearance Settings",
         "customize_theme": "Customize theme and colors",
         "about_app": "About",
-        "app_version": "App version, terms, and contact",
         "personal_settings": "Personal Settings",
         "additional": "Additional",
         "profile_management": "Manage profile and level",
@@ -197,6 +196,7 @@
         "network_error": "Network error. Please check your connection.",
         "server_error": "Server error. Please try again later.",
         "unknown_error": "An unknown error occurred.",
+        "unknown_state": "Unknown state",
         "validation_error": "Please check your input.",
         "permission_error": "Permission denied.",
         "save_error": "Error saving: {error}",
@@ -448,13 +448,19 @@
         "next_level": "To next level",
         "level_up": "Level up!",
         "achievement_unlocked": "Achievement unlocked",
-        "points_earned": "Points earned"
-    },
-    "database": {
-        "error_saving": "Error saving",
-        "error_loading": "Error loading",
-        "data_cleared": "Data cleared",
-        "backup_created": "Backup created"
+        "points_earned": "Points earned",
+        "novice": "Novice",
+        "explorer": "Explorer",
+        "expert": "Expert",
+        "master": "Master",
+        "guru": "Guru",
+        "legend": "Legend",
+        "novice_desc": "Beginning of the path to self-knowledge",
+        "explorer_desc": "Active exploration of your emotions",
+        "expert_desc": "Deep understanding of mood patterns",
+        "master_desc": "Mastery in emotion management",
+        "guru_desc": "Expert in mental wellbeing",
+        "legend_desc": "Legendary master of emotions"
     },
     "api": {
         "connection_error": "Connection error",
@@ -590,6 +596,10 @@
         "page": "Analytics Page"
     },
     "database": {
+        "error_saving": "Error saving",
+        "error_loading": "Error loading",
+        "data_cleared": "Data cleared",
+        "backup_created": "Backup created",
         "mood_entry_added": "✅ Mood entry added: {mood} - {note} - Date: {date}",
         "no_note": "no note"
     },
