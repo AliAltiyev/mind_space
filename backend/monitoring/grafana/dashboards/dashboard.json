@@ -1,0 +1,84 @@
+{
+    "dashboard": {
+        "title": "Mind Space Backend Dashboard",
+        "tags": [
+            "mind-space",
+            "backend"
+        ],
+        "timezone": "browser",
+        "panels": [
+            {
+                "title": "HTTP Request Rate",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "rate(http_requests_total[5m])",
+                        "legendFormat": "{{method}} {{route}}"
+                    }
+                ]
+            },
+            {
+                "title": "HTTP Request Duration",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "histogram_quantile(0.95, http_request_duration_seconds_bucket)",
+                        "legendFormat": "p95"
+                    },
+                    {
+                        "expr": "histogram_quantile(0.99, http_request_duration_seconds_bucket)",
+                        "legendFormat": "p99"
+                    }
+                ]
+            },
+            {
+                "title": "Active WebSocket Connections",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "websocket_connections_active",
+                        "legendFormat": "Connections"
+                    }
+                ]
+            },
+            {
+                "title": "Database Connections",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "db_connections_active",
+                        "legendFormat": "Active"
+                    },
+                    {
+                        "expr": "db_connections_idle",
+                        "legendFormat": "Idle"
+                    }
+                ]
+            },
+            {
+                "title": "Cache Hit Rate",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "rate(cache_hits_total[5m]) / (rate(cache_hits_total[5m]) + rate(cache_misses_total[5m]))",
+                        "legendFormat": "Hit Rate"
+                    }
+                ]
+            },
+            {
+                "title": "Meditation Sessions",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "rate(meditation_sessions_started_total[5m])",
+                        "legendFormat": "Started"
+                    },
+                    {
+                        "expr": "rate(meditation_sessions_completed_total[5m])",
+                        "legendFormat": "Completed"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -10,7 +10,6 @@ import '../../../../core/constants/app_typography.dart';
 import '../../../../shared/presentation/theme/platform_utils.dart';
 import '../blocs/meditation_bloc.dart';
 import '../../domain/entities/meditation_entity.dart';
-import 'meditation_timer_page.dart';
 
 /// Страница медитации и релаксации
 class MeditationPage extends ConsumerStatefulWidget {
@@ -461,12 +460,7 @@ class _MeditationCard extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          MeditationTimerPage(meditation: meditation),
-                    ),
-                  );
+                  context.push('/stats/meditation/timer', extra: meditation);
                 },
                 icon: const Icon(Icons.play_arrow),
                 label: Text(

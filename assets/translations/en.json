@@ -297,6 +297,50 @@
             "completed_message": "Great job! You've completed your meditation session.",
             "current_step": "Current Step",
             "stop_title": "Stop Meditation?",
+            "audio": {
+                "music_volume": "Music Volume",
+                "voice_volume": "Voice Volume",
+                "voice_style": "Voice Style",
+                "calm": "Calm",
+                "soothing": "Soothing",
+                "guiding": "Guiding",
+                "energetic": "Energetic",
+                "tts_unavailable": "Voice guidance unavailable",
+                "tts_fallback": "Text instructions will be shown instead"
+            },
+            "phase": {
+                "preparation": {
+                    "title": "Preparation",
+                    "1": "Find a comfortable position. Close your eyes if you feel comfortable.",
+                    "2": "Take a moment to settle into this space.",
+                    "3": "Let go of any expectations and be present."
+                },
+                "breathing": {
+                    "title": "Breathing",
+                    "1": "Take a deep breath in through your nose.",
+                    "2": "Hold for a moment, then slowly exhale through your mouth.",
+                    "3": "Continue breathing naturally and deeply.",
+                    "4": "Focus your attention on your breath."
+                },
+                "body_scan": {
+                    "title": "Body Scan",
+                    "1": "Slowly scan your body from head to toe.",
+                    "2": "Notice any tension or discomfort without judgment.",
+                    "3": "Allow your body to relax and release."
+                },
+                "visualization": {
+                    "title": "Visualization",
+                    "1": "Imagine a peaceful place where you feel safe and calm.",
+                    "2": "Visualize yourself in this place, fully present.",
+                    "3": "Take in all the details of this peaceful space."
+                },
+                "completion": {
+                    "title": "Completion",
+                    "1": "Slowly bring your awareness back to the present moment.",
+                    "2": "Wiggle your fingers and toes gently.",
+                    "3": "When you're ready, open your eyes."
+                }
+            },
             "stop_message": "Are you sure you want to stop the meditation session?",
             "sound": {
                 "silence": "Silence",

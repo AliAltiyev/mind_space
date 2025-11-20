@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mind_space/features/ai/presentation/pages/gratitude_journal_page.dart';
 import 'package:mind_space/features/ai/presentation/pages/meditation_page.dart';
-import 'package:mind_space/features/ai/presentation/pages/meditation_timer_page.dart';
+import 'package:mind_space/features/ai/presentation/pages/meditation_timer_page_tts.dart';
 import 'package:mind_space/features/ai/domain/entities/meditation_entity.dart';
 import 'package:mind_space/features/ai/presentation/pages/patterns_page.dart';
 
@@ -169,7 +169,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       final meditation = state.extra as MeditationEntity;
                       return CustomTransitionPage(
                         key: state.pageKey,
-                        child: MeditationTimerPage(meditation: meditation),
+                        child: MeditationTimerPageTTS(meditation: meditation),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) {
                               return FadeTransition(

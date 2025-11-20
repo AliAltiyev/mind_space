@@ -362,6 +362,39 @@
                 "ocean": "Vagues de l'Océan",
                 "rain": "Pluie",
                 "forest": "Forêt"
+            },
+            "phase": {
+                "preparation": {
+                    "title": "Préparation",
+                    "1": "Trouvez une position confortable. Fermez les yeux si vous vous sentez à l'aise.",
+                    "2": "Prenez un moment pour vous installer dans cet espace.",
+                    "3": "Laissez aller toute attente et soyez présent."
+                },
+                "breathing": {
+                    "title": "Respiration",
+                    "1": "Prenez une profonde inspiration par le nez.",
+                    "2": "Retenez un moment, puis expirez lentement par la bouche.",
+                    "3": "Continuez à respirer naturellement et profondément.",
+                    "4": "Concentrez votre attention sur votre respiration."
+                },
+                "body_scan": {
+                    "title": "Balayage Corporel",
+                    "1": "Scannez lentement votre corps de la tête aux pieds.",
+                    "2": "Remarquez toute tension ou inconfort sans jugement.",
+                    "3": "Permettez à votre corps de se détendre et de se libérer."
+                },
+                "visualization": {
+                    "title": "Visualisation",
+                    "1": "Imaginez un endroit paisible où vous vous sentez en sécurité et calme.",
+                    "2": "Visualisez-vous dans cet endroit, pleinement présent.",
+                    "3": "Absorbez tous les détails de cet espace paisible."
+                },
+                "completion": {
+                    "title": "Achèvement",
+                    "1": "Ramenez lentement votre conscience au moment présent.",
+                    "2": "Remuez doucement vos doigts et vos orteils.",
+                    "3": "Quand vous êtes prêt, ouvrez les yeux."
+                }
             }
         },
         "patterns": {

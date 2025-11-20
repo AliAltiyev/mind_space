@@ -549,6 +549,50 @@
             "current_step": "Paso Actual",
             "stop_title": "¿Detener la meditación?",
             "stop_message": "¿Estás seguro de que quieres detener la sesión de meditación?",
+            "audio": {
+                "music_volume": "Volumen de Música",
+                "voice_volume": "Volumen de Voz",
+                "voice_style": "Estilo de Voz",
+                "calm": "Calmado",
+                "soothing": "Tranquilizador",
+                "guiding": "Guía",
+                "energetic": "Enérgico",
+                "tts_unavailable": "Guía de voz no disponible",
+                "tts_fallback": "Se mostrarán instrucciones de texto en su lugar"
+            },
+            "phase": {
+                "preparation": {
+                    "title": "Preparación",
+                    "1": "Encuentra una posición cómoda. Cierra los ojos si te sientes cómodo.",
+                    "2": "Tómate un momento para asentarte en este espacio.",
+                    "3": "Deja ir cualquier expectativa y permanece presente."
+                },
+                "breathing": {
+                    "title": "Respiración",
+                    "1": "Toma una respiración profunda por la nariz.",
+                    "2": "Mantén por un momento, luego exhala lentamente por la boca.",
+                    "3": "Continúa respirando natural y profundamente.",
+                    "4": "Enfoca tu atención en tu respiración."
+                },
+                "body_scan": {
+                    "title": "Escaneo Corporal",
+                    "1": "Escanea lentamente tu cuerpo de la cabeza a los pies.",
+                    "2": "Observa cualquier tensión o incomodidad sin juzgar.",
+                    "3": "Permite que tu cuerpo se relaje y se libere."
+                },
+                "visualization": {
+                    "title": "Visualización",
+                    "1": "Imagina un lugar pacífico donde te sientas seguro y tranquilo.",
+                    "2": "Visualízate en este lugar, completamente presente.",
+                    "3": "Absorbe todos los detalles de este espacio pacífico."
+                },
+                "completion": {
+                    "title": "Finalización",
+                    "1": "Lentamente trae tu conciencia de vuelta al momento presente.",
+                    "2": "Mueve suavemente los dedos de las manos y los pies.",
+                    "3": "Cuando estés listo, abre los ojos."
+                }
+            },
             "sound": {
                 "silence": "Silencio",
                 "nature": "Sonidos de la naturaleza",
