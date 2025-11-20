@@ -12,12 +12,14 @@ class NotificationSettingsScreenClean extends ConsumerStatefulWidget {
   const NotificationSettingsScreenClean({super.key});
 
   @override
-  ConsumerState<NotificationSettingsScreenClean> createState() => _NotificationSettingsScreenCleanState();
+  ConsumerState<NotificationSettingsScreenClean> createState() =>
+      _NotificationSettingsScreenCleanState();
 }
 
-class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSettingsScreenClean> {
+class _NotificationSettingsScreenCleanState
+    extends ConsumerState<NotificationSettingsScreenClean> {
   final _notificationService = NotificationService();
-  
+
   bool _dailyReminders = false;
   bool _weeklyReminders = false;
   TimeOfDay _dailyTime = const TimeOfDay(hour: 20, minute: 0);
@@ -34,7 +36,7 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
   Future<void> _initializeSettings() async {
     await _notificationService.initialize();
     final hasPermission = await _notificationService.requestPermissions();
-    
+
     if (!hasPermission && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -55,7 +57,13 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
         elevation: 1,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/settings');
+            }
+          },
         ),
       ),
       body: ListView(
@@ -63,56 +71,58 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
         children: [
           // Ежедневные напоминания
           _SettingsSection(
-            title: 'Ежедневные напоминания',
+            title: 'notifications.daily_reminders'.tr(),
             children: [
               SwitchListTile(
-                title: const Text('Включить напоминания'),
-                subtitle: const Text('Ежедневные напоминания о записи настроения'),
+                title: Text('notifications.enable_reminders'.tr()),
+                subtitle: Text('notifications.daily_mood_reminders'.tr()),
                 value: _dailyReminders,
                 onChanged: (value) => _updateDailyReminders(value),
-                activeColor: AppColors.primary,
+                activeThumbColor: AppColors.primary,
               ),
               if (_dailyReminders) ...[
                 const Divider(height: 1),
                 ListTile(
-                  title: const Text('Время напоминания'),
+                  title: Text('notifications.reminder_time'.tr()),
                   subtitle: Text(_formatTime(_dailyTime)),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => _selectTime(context, true),
                 ),
                 ListTile(
-                  title: const Text('Тестовое уведомление'),
-                  subtitle: const Text('Отправить тестовое уведомление'),
+                  title: Text('notifications.test_notification'.tr()),
+                  subtitle: Text('notifications.send_test_notification'.tr()),
                   trailing: const Icon(Icons.send),
                   onTap: _sendTestNotification,
                 ),
               ],
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Еженедельные напоминания
           _SettingsSection(
-            title: 'Еженедельные напоминания',
+            title: 'notifications.weekly_reminders'.tr(),
             children: [
               SwitchListTile(
-                title: const Text('Включить еженедельные напоминания'),
-                subtitle: const Text('Напоминания для рефлексии'),
+                title: Text('notifications.enable_weekly_reminders'.tr()),
+                subtitle: Text(
+                  'notifications.weekly_reflection_reminders'.tr(),
+                ),
                 value: _weeklyReminders,
                 onChanged: (value) => _updateWeeklyReminders(value),
-                activeColor: AppColors.primary,
+                activeThumbColor: AppColors.primary,
               ),
               if (_weeklyReminders) ...[
                 const Divider(height: 1),
                 ListTile(
-                  title: const Text('День недели'),
+                  title: Text('notifications.day_of_week'.tr()),
                   subtitle: Text(_getDayName(_weeklyDay)),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => _selectDay(context),
                 ),
                 ListTile(
-                  title: const Text('Время напоминания'),
+                  title: Text('notifications.reminder_time'.tr()),
                   subtitle: Text(_formatTime(_weeklyTime)),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => _selectTime(context, false),
@@ -120,28 +130,30 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
               ],
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Дополнительные настройки
           _SettingsSection(
-            title: 'Дополнительные настройки',
+            title: 'notifications.additional_settings'.tr(),
             children: [
               ListTile(
-                title: const Text('Разрешения'),
-                subtitle: const Text('Управление разрешениями приложения'),
+                title: Text('notifications.permissions'.tr()),
+                subtitle: Text('notifications.manage_permissions'.tr()),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: _openAppSettings,
               ),
               ListTile(
-                title: const Text('Отменить все уведомления'),
-                subtitle: const Text('Очистить все запланированные уведомления'),
+                title: Text('notifications.cancel_all_notifications'.tr()),
+                subtitle: Text(
+                  'notifications.clear_scheduled_notifications'.tr(),
+                ),
                 trailing: const Icon(Icons.clear_all),
                 onTap: _cancelAllNotifications,
               ),
             ],
           ),
-          
+
           const SizedBox(height: 32),
         ],
       ),
@@ -151,17 +163,21 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
   /// Обновление ежедневных напоминаний
   Future<void> _updateDailyReminders(bool enabled) async {
     setState(() => _dailyReminders = enabled);
-    
+
     try {
       await _notificationService.setupDailyMoodReminders(
         enabled: enabled,
         reminderTime: _dailyTime,
       );
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(enabled ? 'Ежедневные напоминания включены' : 'Ежедневные напоминания отключены'),
+            content: Text(
+              enabled
+                  ? 'notifications.daily_reminders_enabled'.tr()
+                  : 'notifications.daily_reminders_disabled'.tr(),
+            ),
             backgroundColor: AppColors.success,
           ),
         );
@@ -170,7 +186,7 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка: $e'),
+            content: Text('errors.unknown_error'.tr()),
             backgroundColor: AppColors.error,
           ),
         );
@@ -181,18 +197,22 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
   /// Обновление еженедельных напоминаний
   Future<void> _updateWeeklyReminders(bool enabled) async {
     setState(() => _weeklyReminders = enabled);
-    
+
     try {
       await _notificationService.setupWeeklyReflectionReminders(
         enabled: enabled,
         reminderTime: _weeklyTime,
         dayOfWeek: _weeklyDay,
       );
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(enabled ? 'Еженедельные напоминания включены' : 'Еженедельные напоминания отключены'),
+            content: Text(
+              enabled
+                  ? 'notifications.weekly_reminders_enabled'.tr()
+                  : 'notifications.weekly_reminders_disabled'.tr(),
+            ),
             backgroundColor: AppColors.success,
           ),
         );
@@ -201,7 +221,7 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка: $e'),
+            content: Text('errors.unknown_error'.tr()),
             backgroundColor: AppColors.error,
           ),
         );
@@ -237,19 +257,19 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
   /// Выбор дня недели
   Future<void> _selectDay(BuildContext context) async {
     final days = [
-      'Понедельник',
-      'Вторник', 
-      'Среда',
-      'Четверг',
-      'Пятница',
-      'Суббота',
-      'Воскресенье',
+      'notifications.monday'.tr(),
+      'notifications.tuesday'.tr(),
+      'notifications.wednesday'.tr(),
+      'notifications.thursday'.tr(),
+      'notifications.friday'.tr(),
+      'notifications.saturday'.tr(),
+      'notifications.sunday'.tr(),
     ];
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Выберите день недели'),
+        title: Text('notifications.select_day'.tr()),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(7, (index) {
@@ -277,14 +297,14 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
       await _notificationService.showInstantNotification(
         id: 999,
         title: 'Mind Space',
-        body: 'Это тестовое уведомление!',
+        body: 'notifications.test_notification_body'.tr(),
         payload: 'test',
       );
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Тестовое уведомление отправлено'),
+          SnackBar(
+            content: Text('notifications.test_notification_sent'.tr()),
             backgroundColor: AppColors.success,
           ),
         );
@@ -293,7 +313,7 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка: $e'),
+            content: Text('errors.unknown_error'.tr()),
             backgroundColor: AppColors.error,
           ),
         );
@@ -310,11 +330,11 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
   Future<void> _cancelAllNotifications() async {
     try {
       await _notificationService.cancelAllNotifications();
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Все уведомления отменены'),
+          SnackBar(
+            content: Text('notifications.all_notifications_cancelled'.tr()),
             backgroundColor: AppColors.success,
           ),
         );
@@ -323,7 +343,7 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка: $e'),
+            content: Text('errors.unknown_error'.tr()),
             backgroundColor: AppColors.error,
           ),
         );
@@ -338,14 +358,14 @@ class _NotificationSettingsScreenCleanState extends ConsumerState<NotificationSe
 
   /// Получение названия дня недели
   String _getDayName(int dayOfWeek) {
-    const days = [
-      'Понедельник',
-      'Вторник',
-      'Среда', 
-      'Четверг',
-      'Пятница',
-      'Суббота',
-      'Воскресенье',
+    final days = [
+      'notifications.monday'.tr(),
+      'notifications.tuesday'.tr(),
+      'notifications.wednesday'.tr(),
+      'notifications.thursday'.tr(),
+      'notifications.friday'.tr(),
+      'notifications.saturday'.tr(),
+      'notifications.sunday'.tr(),
     ];
     return days[dayOfWeek - 1];
   }
@@ -356,10 +376,7 @@ class _SettingsSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
 
-  const _SettingsSection({
-    required this.title,
-    required this.children,
-  });
+  const _SettingsSection({required this.title, required this.children});
 
   @override
   Widget build(BuildContext context) {

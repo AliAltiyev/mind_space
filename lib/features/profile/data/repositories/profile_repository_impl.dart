@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 import '../../domain/entities/user_achievements_entity.dart';
 import '../../domain/entities/user_preferences_entity.dart';
 import '../../domain/entities/user_profile_entity.dart';
@@ -470,8 +472,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
     return [
       AchievementModel(
         id: 'first_entry',
-        title: 'Первая запись',
-        description: 'Создайте свою первую запись о настроении',
+        title: 'achievements.first_entry'.tr(),
+        description: 'achievements.first_entry_desc'.tr(),
         icon: '📝',
         target: 1,
         category: 'basic',
@@ -479,8 +481,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
       ),
       AchievementModel(
         id: 'week_streak',
-        title: 'Неделя подряд',
-        description: 'Ведите дневник настроения 7 дней подряд',
+        title: 'achievements.week_streak'.tr(),
+        description: 'achievements.week_streak_desc'.tr(),
         icon: '🔥',
         target: 7,
         category: 'streak',
@@ -488,8 +490,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
       ),
       AchievementModel(
         id: 'month_streak',
-        title: 'Месяц подряд',
-        description: 'Ведите дневник настроения 30 дней подряд',
+        title: 'achievements.month_streak'.tr(),
+        description: 'achievements.month_streak_desc'.tr(),
         icon: '🏆',
         target: 30,
         category: 'streak',
@@ -497,8 +499,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
       ),
       AchievementModel(
         id: 'hundred_entries',
-        title: 'Сотня записей',
-        description: 'Создайте 100 записей о настроении',
+        title: 'achievements.hundred_entries'.tr(),
+        description: 'achievements.hundred_entries_desc'.tr(),
         icon: '💯',
         target: 100,
         category: 'milestone',

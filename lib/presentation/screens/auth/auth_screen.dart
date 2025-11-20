@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Экран аутентификации
 class AuthScreen extends StatelessWidget {
@@ -8,7 +9,7 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign In'),
+        title: Text('auth.sign_in'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),

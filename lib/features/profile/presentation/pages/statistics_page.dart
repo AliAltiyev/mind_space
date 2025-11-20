@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../blocs/stats_bloc.dart';
 import '../widgets/stats_grid_widget.dart';
@@ -11,7 +12,7 @@ class StatisticsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Статистика'),
+        title: Text('stats.title'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -65,14 +66,14 @@ class _StatisticsPageContent extends StatelessWidget {
                   onPressed: () {
                     context.read<StatsBloc>().add(LoadStats());
                   },
-                  child: const Text('Повторить'),
+                  child: Text('common.try_again'.tr()),
                 ),
               ],
             ),
           );
         }
 
-        return const Center(child: Text('Неизвестное состояние'));
+        return Center(child: Text('errors.unknown_state'.tr()));
       },
     );
   }

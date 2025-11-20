@@ -23,8 +23,9 @@
         "try_again": "Try Again",
         "refresh": "Refresh",
         "clear": "Clear",
-        "minutes": "min",
-        "stop": "Stop"
+        "apply": "Apply",
+        "search": "Search",
+        "minutes": "min"
     },
     "navigation": {
         "home": "Home",
@@ -84,7 +85,9 @@
             "neutral": "Neutral",
             "sad": "Sad",
             "very_sad": "Very Sad"
-        }
+        },
+        "rating_label": "Mood rating: {rating} out of 5",
+        "rating_hint": "Tap to change mood rating"
     },
     "ai_insights": {
         "title": "AI Insights",
@@ -198,10 +201,28 @@
         "permission_error": "Permission denied.",
         "save_error": "Error saving: {error}",
         "save_success": "Entry saved successfully! 🎉",
-        "load_profile": "Error loading profile",
+        "unknown_state": "Unknown state",
+        "load_insights": "Error loading insights: {error}",
         "load_stats": "Error loading statistics",
-        "load_achievements": "Error loading achievements",
-        "load_insights": "Error loading insights: {error}"
+        "load_achievements": "Error loading achievements"
+    },
+    "onboarding": {
+        "welcome": "Welcome to Mind Space",
+        "get_started": "Get Started",
+        "skip": "Skip"
+    },
+    "auth": {
+        "sign_in": "Sign In",
+        "sign_out": "Sign Out",
+        "sign_out_desc": "Sign out of your account"
+    },
+    "profile": {
+        "recent_achievements": "Recent Achievements",
+        "error_loading": "Error Loading Profile",
+        "stats": "Statistics",
+        "achievements": "Achievements",
+        "no_achievements": "No achievements yet",
+        "keep_tracking": "Keep tracking your mood to get first achievements!"
     },
     "statistics": {
         "title": "Statistics",
@@ -229,7 +250,12 @@
         "bad": "Bad",
         "okay": "Okay",
         "good": "Good",
-        "excellent": "Excellent"
+        "excellent": "Excellent",
+        "detail_title": "Entry #{id}",
+        "detail_screen": "Entry Detail Screen",
+        "detail_description": "Detailed view of mood entry with analysis",
+        "filter_mood": "Mood: {mood}",
+        "date_range": "Date Range"
     },
     "ai": {
         "chat": {
@@ -255,15 +281,7 @@
             "response_meditation": "Meditation is a great way to improve mood! 🧘‍♀️\n\nTry:\n• 5-minute mindfulness meditation\n• Breathing exercises\n• Progressive muscle relaxation\n• Gratitude meditation\n\nWould you like me to tell you more about any of these methods?",
             "response_sad": "I understand you're going through a tough time. 💙 Remember that bad days are normal and they pass. Try:\n\n• Talking to a loved one\n• Doing something nice for yourself\n• Writing down your feelings\n• Seeking professional help if needed\n\nYou're not alone in this. Would you like to talk about it in more detail?",
             "response_general": "Interesting question! 🤔 I'm here to help you with questions about mood, emotions, and mental wellness. I can analyze your mood entries, give advice, or just support you in conversation. What would you like to talk about?",
-            "ready_to_help": "AI Assistant is ready to help!",
-            "error_payment_required": "⚠️ AI service is temporarily unavailable. Please check your OpenRouter account balance at openrouter.ai",
-            "error_invalid_key": "⚠️ Invalid Groq API key. Please configure your API key.",
-            "error_access_denied": "⚠️ Access to AI service denied. Please check your API key.",
-            "error_rate_limit": "⚠️ Too many requests. Please try again in a few moments.",
-            "error_timeout": "⚠️ Request timeout. Please check your internet connection and try again.",
-            "error_server": "⚠️ AI service is temporarily unavailable. Please try again later.",
-            "error_general": "⚠️ Unable to connect to AI service. Using fallback responses.",
-            "get_groq_key": "Get a free API key at: https://console.groq.com/keys"
+            "ready_to_help": "AI Assistant is ready to help!"
         },
         "insights": {
             "title": "AI Insights",
@@ -282,79 +300,57 @@
             "title": "Meditation",
             "suggestion": "Meditation suggestion",
             "start": "Start meditation",
-            "personal_practices": "Personalized meditation practices",
+            "duration": "Duration",
+            "start_meditation": "Start meditation ({duration} min)",
+            "morning": "Morning Meditation",
+            "morning_desc": "Start your day with mindfulness and intentions",
+            "day_break": "Day Break",
+            "day_break_desc": "Recharge your energy in the middle of the day",
+            "evening": "Evening Relaxation",
+            "evening_desc": "Relax after an active day",
+            "bedtime": "Bedtime Meditation",
+            "bedtime_desc": "Prepare for peaceful sleep",
+            "healing": "Healing Meditation",
+            "healing_desc": "Help cope with difficult emotions",
+            "gratitude": "Gratitude Meditation",
+            "gratitude_desc": "Deepen feelings of joy and gratitude",
+            "balance": "Balance Meditation",
+            "balance_desc": "Find balance and calm",
+            "quick": "Quick Meditation",
+            "quick_desc": "Short practice to restore energy",
+            "deep": "Deep Meditation",
+            "deep_desc": "Immerse yourself in deep peace",
+            "personal_practices": "Personalized meditation practices for your wellbeing",
             "loading_practices": "Loading meditation practices...",
             "instructions": "Instructions",
-            "quick": "Quick (5-10 min)",
-            "deep": "Deep (20+ min)",
-            "no_meditation": "No meditation available",
-            "tap_to_load": "Tap refresh to load a meditation session",
-            "starting": "Starting {duration}-minute meditation...",
-            "start_meditation": "Start {duration}-minute meditation",
-            "duration": "Duration",
-            "start": "Start",
-            "completed": "Meditation Completed",
-            "completed_message": "Great job! You've completed your meditation session.",
-            "current_step": "Current Step",
-            "stop_title": "Stop Meditation?",
-            "audio": {
-                "music_volume": "Music Volume",
-                "voice_volume": "Voice Volume",
-                "voice_style": "Voice Style",
-                "calm": "Calm",
-                "soothing": "Soothing",
-                "guiding": "Guiding",
-                "energetic": "Energetic",
-                "tts_unavailable": "Voice guidance unavailable",
-                "tts_fallback": "Text instructions will be shown instead"
-            },
-            "phase": {
-                "preparation": {
-                    "title": "Preparation",
-                    "1": "Find a comfortable position. Close your eyes if you feel comfortable.",
-                    "2": "Take a moment to settle into this space.",
-                    "3": "Let go of any expectations and be present."
-                },
-                "breathing": {
-                    "title": "Breathing",
-                    "1": "Take a deep breath in through your nose.",
-                    "2": "Hold for a moment, then slowly exhale through your mouth.",
-                    "3": "Continue breathing naturally and deeply.",
-                    "4": "Focus your attention on your breath."
-                },
-                "body_scan": {
-                    "title": "Body Scan",
-                    "1": "Slowly scan your body from head to toe.",
-                    "2": "Notice any tension or discomfort without judgment.",
-                    "3": "Allow your body to relax and release."
-                },
-                "visualization": {
-                    "title": "Visualization",
-                    "1": "Imagine a peaceful place where you feel safe and calm.",
-                    "2": "Visualize yourself in this place, fully present.",
-                    "3": "Take in all the details of this peaceful space."
-                },
-                "completion": {
-                    "title": "Completion",
-                    "1": "Slowly bring your awareness back to the present moment.",
-                    "2": "Wiggle your fingers and toes gently.",
-                    "3": "When you're ready, open your eyes."
-                }
-            },
-            "stop_message": "Are you sure you want to stop the meditation session?",
-            "sound": {
-                "silence": "Silence",
-                "nature": "Nature Sounds",
-                "ocean": "Ocean Waves",
-                "rain": "Rain",
-                "forest": "Forest"
-            }
+            "start_with_duration": "Start meditation ({duration} min)"
         },
         "patterns": {
             "title": "Patterns",
             "analysis": "Pattern analysis",
             "insights": "Pattern insights"
-        }
+        },
+        "error_analysis": "Analysis Error",
+        "error_loading": "Loading Error",
+        "error_analysis_title": "Analysis Error",
+        "fallback_unavailable": "AI temporarily unavailable",
+        "fallback_try_later": "Try later or contact a specialist",
+        "fallback_suggestions": [
+            "Try later",
+            "Contact a specialist"
+        ],
+        "fallback_great_mood": "Great mood!",
+        "fallback_positive_attitude": "You maintain a positive attitude. Keep it up!",
+        "fallback_stable_state": "Stable state",
+        "fallback_good_balance": "Your mood is in good balance. This is a great foundation!",
+        "fallback_self_care": "Self-care",
+        "fallback_emotional_wellbeing": "It's important to take care of your emotional wellbeing. Small steps every day.",
+        "fallback_start_tracking": "Start tracking your mood",
+        "fallback_add_entries": "Add several entries to get personalized insights",
+        "fallback_suggestions_list": [
+            "Add your first mood entry",
+            "Try tracking your mood every day"
+        ]
     },
     "profile": {
         "title": "Profile",
@@ -384,36 +380,14 @@
         "image_selection_error": "Error selecting image: {error}",
         "photo_deleted": "Profile photo deleted",
         "photo_delete_error": "Error deleting photo",
-        "name": "Name",
-        "name_hint": "Enter your name",
-        "name_required": "Name is required",
-        "name_min_length": "Name must be at least 2 characters",
-        "email": "Email",
-        "email_hint": "Enter your email",
-        "email_invalid": "Please enter a valid email",
-        "date_of_birth": "Date of Birth",
-        "select_date": "Select date",
-        "age": "Age: {age} years",
+        "your_name": "Your Name",
+        "member_since_placeholder": "Member since January 2024",
+        "your_stats": "Your Stats",
+        "goals": "Goals",
+        "actions": "Actions",
         "about": "About",
-        "about_hint": "Tell us about yourself...",
-        "interests": "Interests",
-        "change_photo": "Change Photo",
-        "updated": "Profile updated successfully!",
-        "default_user_name": "User",
-        "hobbies": {
-            "meditation": "Meditation",
-            "yoga": "Yoga",
-            "sports": "Sports",
-            "reading": "Reading",
-            "music": "Music",
-            "art": "Art",
-            "nature": "Nature",
-            "travel": "Travel",
-            "cooking": "Cooking",
-            "technology": "Technology",
-            "science": "Science",
-            "psychology": "Psychology"
-        }
+        "about_hint": "Tell us a little about yourself...",
+        "updated": "Profile updated!"
     },
     "stats": {
         "title": "Statistics",
@@ -423,6 +397,8 @@
         "monthly_overview": "Monthly Overview",
         "average_mood": "Average Mood",
         "total_entries": "Total Entries",
+        "entry": "entry",
+        "entries": "entries",
         "streak": "Current Streak",
         "best_day": "Best Day",
         "this_week": "This Week",
@@ -431,15 +407,40 @@
         "no_data": "No data for statistics",
         "add_entries_for_stats": "Add mood entries to view statistics",
         "no_data_display": "No data to display",
-        "unknown": "Unknown"
+        "unknown": "Unknown",
+        "loading_error_full": "Error loading statistics",
+        "error_loading_title": "Loading Error"
     },
     "achievements": {
         "title": "Achievements",
         "first_entry": "First Entry",
+        "first_entry_desc": "Create your first mood entry",
         "week_streak": "Week Streak",
+        "week_streak_desc": "Track your mood for 7 days in a row",
         "month_streak": "Month Streak",
+        "month_streak_desc": "Track your mood for 30 days in a row",
         "hundred_entries": "100 Entries",
-        "five_hundred_entries": "500 Entries"
+        "hundred_entries_desc": "Create 100 mood entries",
+        "five_hundred_entries": "500 Entries",
+        "empty": "No achievements yet",
+        "empty_hint": "Keep tracking your mood to get your first achievements!"
+    },
+    "notifications": {
+        "title": "Notifications",
+        "daily_reminder": "Daily reminder",
+        "weekly_report": "Weekly report",
+        "achievement_unlocked": "Achievement unlocked",
+        "streak_reminder": "Streak reminder",
+        "daily_reminder_title": "Mind Space Reminder",
+        "monday_message": "How's your mood today? Start your week with positive energy! 🌟",
+        "tuesday_message": "Take a moment to check in with yourself today 💭",
+        "wednesday_message": "Mid-week mood check! How are you feeling? 🤔",
+        "thursday_message": "Thursday vibes! What's your mood today? ✨",
+        "friday_message": "TGIF! How was your mood this Friday? 🎉",
+        "saturday_message": "Weekend mood check! How are you feeling? 😌",
+        "sunday_message": "Sunday reflection time! How's your mood? 🌅",
+        "weekly_reflection_title": "Weekly Reflection Time",
+        "weekly_reflection_body": "Take some time to reflect on your week and track your mood patterns 📊"
     },
     "user_level": {
         "level": "Level",
@@ -506,6 +507,22 @@
             "description": "Get personalized recommendations based on your data"
         }
     },
+    "splash": {
+        "title": "Mind Space",
+        "subtitle": "Your mental wellness companion"
+    },
+    "error": {
+        "title": "Error",
+        "occurred": "An error occurred",
+        "unknown_error": "Unknown error",
+        "go_home": "Go Home"
+    },
+    "common": {
+        "loading": "Loading...",
+        "unknown": "Unknown",
+        "unknown_state": "Unknown state",
+        "reset": "Reset"
+    },
     "notifications": {
         "daily_reminders": "Daily Reminders",
         "enable_reminders": "Enable Reminders",
@@ -520,13 +537,59 @@
         "additional_settings": "Additional Settings",
         "permissions": "Permissions",
         "manage_permissions": "Manage app permissions",
-        "cancel_all_notifications": "Cancel all notifications"
+        "cancel_all_notifications": "Cancel all notifications",
+        "daily_mood_reminders_title": "Daily Mood Reminders",
+        "enable_daily_reminders": "Enable Daily Reminders",
+        "daily_reminders_desc": "Get reminded to track your mood every day",
+        "weekly_reflection_title": "Weekly Reflection",
+        "enable_weekly_reflection": "Enable Weekly Reflection",
+        "weekly_reflection_desc": "Get reminded to reflect on your week",
+        "reminder_day": "Reminder Day",
+        "other_notifications": "Other Notifications",
+        "achievement_notifications": "Achievement Notifications",
+        "achievement_notifications_desc": "Get notified when you unlock achievements",
+        "trend_notifications": "Trend Notifications",
+        "trend_notifications_desc": "Get notified about mood trends and insights",
+        "send_test_notification_desc": "Send a test notification to verify settings",
+        "app_notification_settings": "App Notification Settings",
+        "open_system_settings": "Open system notification settings",
+        "select_day": "Select Day",
+        "test_notification_title": "Test Notification",
+        "test_notification_success": "Your notification settings are working correctly! 🎉",
+        "test_notification_sent": "Test notification sent!",
+        "permission_denied": "Notification permissions are required for reminders",
+        "error_daily_reminders": "Error setting up daily reminders",
+        "error_weekly_reminders": "Error setting up weekly reminders",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday",
+        "unknown_day": "Unknown"
+    },
+    "settings": {
+        "all_data_deleted": "All data deleted",
+        "delete_data_error": "Error deleting data",
+        "settings_reset_success": "Settings reset successfully",
+        "settings_reset_error": "Error resetting settings",
+        "reset_settings_dialog_title": "Reset settings?",
+        "reset_settings_warning": "All settings will be returned to default values. Your mood data will not be affected.",
+        "reminder_time_updated": "Reminder time changed to {time}",
+        "themes": {
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System"
+        }
     },
     "demo": {
         "title": "Perfected MoodBlob Showcase",
         "description": "Demonstration of all improvements and optimizations",
         "select_mood": "Select Mood Rating",
-        "performance_optimizations": "Performance Optimizations"
+        "performance_optimizations": "Performance Optimizations",
+        "performance_list": "• Paint objects caching\n• Optimized CustomPainter\n• RepaintBoundary for isolation\n• Timer-based cleanup for ripple effects\n• Unified design system with constants",
+        "moodblob_title": "Perfected MoodBlob Demo"
     },
     "analytics": {
         "title": "Analytics",
@@ -538,77 +601,10 @@
         "data_cleared": "Data cleared",
         "backup_created": "Backup created",
         "mood_entry_added": "✅ Mood entry added: {mood} - {note} - Date: {date}",
-        "no_note": "no note",
-        "error_loading_sleep_entry": "Error loading sleep entry: {error}"
+        "no_note": "no note"
     },
-    "sleep": {
-        "title": "Sleep Tracking",
-        "add_entry": "Add Sleep Entry",
-        "last_sleep": "Last Sleep",
-        "duration": "Duration",
-        "quality": "Quality",
-        "sleep_start": "Sleep Start",
-        "sleep_end": "Sleep End",
-        "select_time": "Select time",
-        "factors": "Factors",
-        "notes": "Notes",
-        "notes_hint": "How did you sleep? Any thoughts?",
-        "save_entry": "Save Entry",
-        "entry_saved": "Sleep entry saved successfully",
-        "enter_sleep_times": "Please enter sleep start and end times",
-        "invalid_times": "Wake time must be after sleep time",
-        "no_entries": "No sleep entries yet",
-        "hours": "hours",
-        "minutes_short": "min",
-        "view_stats": "View Statistics",
-        "stats": {
-            "title": "Sleep Statistics",
-            "overview": "Overview",
-            "avg_duration": "Avg Duration",
-            "avg_quality": "Avg Quality",
-            "total_entries": "Total Entries",
-            "duration_chart": "Sleep Duration (Last 14 Days)",
-            "quality_chart": "Sleep Quality (Last 14 Days)",
-            "ai_insights": "AI Insights",
-            "recommendations": "Recommendations",
-            "mood_correlation": "Sleep & Mood Correlation",
-            "strong_correlation": "Strong correlation between sleep quality and mood detected",
-            "moderate_correlation": "Moderate correlation between sleep and mood",
-            "weak_correlation": "Weak correlation. More data needed",
-            "error": "Error loading statistics",
-            "no_data": "No sleep data",
-            "no_data_description": "Start tracking your sleep to see statistics and insights",
-            "insights": {
-                "no_data_title": "Not enough data",
-                "no_data_description": "Add more sleep entries to generate insights.",
-                "loading_title": "Loading...",
-                "loading_description": "Analyzing your sleep patterns",
-                "error_title": "Error",
-                "error_description": "Couldn't analyze your sleep."
-            }
-        },
-        "reminder": {
-            "title": "Time to log your sleep",
-            "body": "Don't forget to record your sleep for today",
-            "settings": "Sleep Reminder",
-            "enabled": "Reminder enabled",
-            "disabled": "Reminder disabled",
-            "scheduled": "Sleep reminder scheduled successfully",
-            "scheduled_at": "Reminder scheduled for {hour}:{minute}",
-            "select_time": "Select reminder time",
-            "cancelled": "Sleep reminder cancelled",
-            "error": "Failed to schedule reminder. Please grant notification permissions in settings.",
-            "test_title": "Test: Time to log your sleep",
-            "test_body": "This is a test notification. If you see this, reminders are working!",
-            "debug_title": "Testing (debug only)",
-            "debug_description": "Trigger a reminder in 10 seconds to verify notifications.",
-            "test_button": "Test (10 sec)",
-            "test_cancel_button": "Cancel test",
-            "test_success": "Test reminder scheduled! Check again in 10 seconds.",
-            "test_cancelled": "Test reminder cancelled.",
-            "test_error": "Test reminder failed: {error}",
-            "open_settings": "Open system settings",
-            "permission_required": "Please enable “Alarms & reminders” in system settings to allow precise sleep reminders."
-        }
-    }
+    "profile": {
+        "updated_successfully": "Profile updated successfully!",
+        "loading_error_full": "Error loading profile"
+    },
 }

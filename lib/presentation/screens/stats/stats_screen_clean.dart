@@ -92,11 +92,6 @@ class StatsScreenClean extends ConsumerWidget {
         )
         .length;
 
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
         return Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
@@ -175,50 +170,38 @@ class StatsScreenClean extends ConsumerWidget {
       (index) => entries.where((e) => e.moodValue == index + 1).length,
     );
 
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: isDark ? theme.colorScheme.surface : AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: isDark ? null : AppColors.cardShadow,
-            border: isDark
-                ? Border.all(color: Colors.white.withOpacity(0.1))
-                : null,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'stats.mood_distribution'.tr(),
+            style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'stats.mood_distribution'.tr(),
-                style: AppTypography.h3.copyWith(
-                  color: isDark ? Colors.white : AppColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 16),
-              ...List.generate(5, (index) {
-                final moodValue = index + 1;
-                final count = moodCounts[index];
-                final percentage = entries.isEmpty
-                    ? 0.0
-                    : (count / entries.length) * 100;
+          const SizedBox(height: 16),
+          ...List.generate(5, (index) {
+            final moodValue = index + 1;
+            final count = moodCounts[index];
+            final percentage = entries.isEmpty
+                ? 0.0
+                : (count / entries.length) * 100;
 
-                return _MoodStatBar(
-                  moodValue: moodValue,
-                  count: count,
-                  percentage: percentage,
-                  total: entries.length,
-                );
-              }),
-            ],
-          ),
-        );
-      },
+            return _MoodStatBar(
+              moodValue: moodValue,
+              count: count,
+              percentage: percentage,
+              total: entries.length,
+            );
+          }),
+        ],
+      ),
     );
   }
 
@@ -226,37 +209,25 @@ class StatsScreenClean extends ConsumerWidget {
   Widget _buildTrendsChart(List<dynamic> entries) {
     final weeklyData = _getWeeklyData(entries);
 
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: isDark ? theme.colorScheme.surface : AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: isDark ? null : AppColors.cardShadow,
-            border: isDark
-                ? Border.all(color: Colors.white.withOpacity(0.1))
-                : null,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'stats.weekly_trends'.tr(),
+            style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'stats.weekly_trends'.tr(),
-                style: AppTypography.h3.copyWith(
-                  color: isDark ? Colors.white : AppColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(height: 200, child: _buildSimpleChart(weeklyData)),
-            ],
-          ),
-        );
-      },
+          const SizedBox(height: 16),
+          SizedBox(height: 200, child: _buildSimpleChart(weeklyData)),
+        ],
+      ),
     );
   }
 
@@ -308,40 +279,24 @@ class StatsScreenClean extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Builder(
-            builder: (context) {
-              final theme = Theme.of(context);
-              final isDark = theme.brightness == Brightness.dark;
-              return Column(
-                children: [
-                  Icon(
-                    Icons.analytics_outlined,
-                    size: 64,
-                    color: isDark ? Colors.white70 : AppColors.textHint,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'stats.no_data'.tr(),
-                    style: AppTypography.h3.copyWith(
-                      color: isDark ? Colors.white : AppColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'stats.add_entries_for_stats'.tr(),
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: isDark ? Colors.white70 : AppColors.textSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => context.push('/add-entry'),
-                    child: Text('mood.add_mood'.tr()),
-                  ),
-                ],
-              );
-            },
+          Icon(Icons.analytics_outlined, size: 64, color: AppColors.textHint),
+          const SizedBox(height: 16),
+          Text(
+            'stats.no_data'.tr(),
+            style: AppTypography.h3.copyWith(color: AppColors.textSecondary),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'stats.add_entries_for_stats'.tr(),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => context.push('/add-entry'),
+            child: Text('mood.add_mood'.tr()),
           ),
         ],
       ),
@@ -367,7 +322,7 @@ class StatsScreenClean extends ConsumerWidget {
           Text(
             error.toString(),
             style: AppTypography.bodyMedium.copyWith(
-              color: isDark ? Colors.white70 : AppColors.textSecondary,
+              color: AppColors.textSecondary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -378,21 +333,16 @@ class StatsScreenClean extends ConsumerWidget {
 
   /// Простой график
   Widget _buildSimpleChart(List<double> data) {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        if (data.isEmpty) {
-          return Center(
-            child: Text(
-              'stats.no_data_display'.tr(),
-              style: AppTypography.bodyMedium.copyWith(
-                color: isDark ? Colors.white70 : AppColors.textSecondary,
-              ),
-            ),
-          );
-        }
+    if (data.isEmpty) {
+      return Center(
+        child: Text(
+          'stats.no_data_display'.tr(),
+          style: AppTypography.bodyMedium.copyWith(
+            color: AppColors.textSecondary,
+          ),
+        ),
+      );
+    }
 
         return CustomPaint(
           size: const Size(double.infinity, 200),
@@ -532,7 +482,7 @@ class _MoodStatBar extends StatelessWidget {
               gradient: getMoodGradient(moodValue),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(getMoodIcon(moodValue), color: Colors.white, size: 16),
+            child: Icon(_getMoodIcon(moodValue), color: Colors.white, size: 16),
           ),
           const SizedBox(width: 12),
           // Название
@@ -555,9 +505,7 @@ class _MoodStatBar extends StatelessWidget {
           Expanded(
             child: LinearProgressIndicator(
               value: total == 0 ? 0.0 : count / total,
-              backgroundColor: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white.withOpacity(0.1)
-                  : AppColors.border,
+              backgroundColor: AppColors.border,
               valueColor: AlwaysStoppedAnimation<Color>(
                 getMoodColor(moodValue),
               ),

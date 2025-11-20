@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'dart:io';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
@@ -224,16 +222,9 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
             controller: _bioController,
             decoration: InputDecoration(
               labelText: 'profile.about'.tr(),
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.info),
               hintText: 'profile.about_hint'.tr(),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              prefixIcon: const Icon(Icons.info_outline),
-              filled: true,
-              fillColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
-            ),
-            style: AppTypography.bodyLarge.copyWith(
-              color: isDark ? Colors.white : AppColors.textPrimary,
             ),
             maxLines: 4,
             maxLength: 200,
@@ -290,23 +281,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
               Expanded(
                 child: OutlinedButton(
                   onPressed: widget.onCancel ?? () => Navigator.pop(context),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    side: BorderSide(
-                      color: isDark
-                          ? Colors.white.withOpacity(0.3)
-                          : AppColors.border,
-                    ),
-                  ),
-                  child: Text(
-                    'common.cancel'.tr(),
-                    style: AppTypography.button.copyWith(
-                      color: isDark ? Colors.white : AppColors.textPrimary,
-                    ),
-                  ),
+                  child: Text('common.cancel'.tr()),
                 ),
               ),
               const SizedBox(width: 16),
@@ -314,16 +289,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                 flex: 2,
                 child: ElevatedButton(
                   onPressed: _saveProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text('common.save'.tr(), style: AppTypography.button),
+                  child: Text('common.save'.tr()),
                 ),
               ),
             ],

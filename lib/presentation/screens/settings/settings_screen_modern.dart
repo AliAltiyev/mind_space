@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/services/app_settings_service.dart' as settings;
 import '../../../core/services/user_level_service.dart';
-import '../../../app/providers/theme_provider.dart';
-import 'package:easy_localization/easy_localization.dart';
+import '../../../main.dart';
 
 /// Современный экран настроек для iOS и Android
 class SettingsScreenModern extends ConsumerStatefulWidget {
@@ -146,10 +146,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
         statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
       ),
       leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: isDark ? Colors.white : AppColors.textPrimary,
-        ),
+        icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
         onPressed: () {
           if (context.canPop()) {
             context.pop();
@@ -182,340 +179,324 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
   }
 
   Widget _buildPersonalSettings() {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        return Container(
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: isDark ? null : AppColors.cardShadow,
-            border: isDark
-                ? Border.all(color: Colors.white.withOpacity(0.1))
-                : null,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        children: [
+          _buildSettingTile(
+            icon: Icons.person_outline,
+            title: 'settings.profile'.tr(),
+            subtitle: 'settings.profile_management'.tr(),
+            onTap: () => context.go('/profile'),
+            trailing: const Icon(Icons.chevron_right),
           ),
-          child: Column(
-            children: [
-              _buildSettingTile(
-                icon: Icons.person_outline,
-                title: 'settings.profile'.tr(),
-                subtitle: 'settings.profile_management'.tr(),
-                onTap: () => context.go('/profile'),
-                trailing: const Icon(Icons.chevron_right),
-              ),
-              _buildDivider(),
-              _buildSettingTile(
-                icon: Icons.language,
-                title: 'settings.language'.tr(),
-                subtitle:
-                    _settings?.language.displayName ??
-                    settings.AppLanguage.russian.displayName,
-                onTap: _showLanguageDialog,
-                trailing: const Icon(Icons.chevron_right),
-              ),
-              _buildDivider(),
-              _buildSettingTile(
-                icon: Icons.emoji_emotions_outlined,
-                title: 'settings.mood_tracking_goal'.tr(),
-                subtitle:
-                    '${_settings?.moodTrackingGoal ?? 7} ${'settings.days_per_week'.tr()}',
-                onTap: _showMoodGoalDialog,
-                trailing: const Icon(Icons.chevron_right),
-              ),
-            ],
+          _buildDivider(),
+          _buildSettingTile(
+            icon: Icons.language,
+            title: 'settings.language'.tr(),
+            subtitle: _getLanguageName(
+              context,
+              _settings?.language ?? settings.AppLanguage.russian,
+            ),
+            onTap: _showLanguageDialog,
+            trailing: const Icon(Icons.chevron_right),
           ),
-        );
-      },
+          _buildDivider(),
+          _buildSettingTile(
+            icon: Icons.emoji_emotions_outlined,
+            title: 'settings.mood_tracking_goal'.tr(),
+            subtitle:
+                '${_settings?.moodTrackingGoal ?? 7} ${'settings.days_per_week'.tr()}',
+            onTap: _showMoodGoalDialog,
+            trailing: const Icon(Icons.chevron_right),
+          ),
+        ],
+      ),
     );
+  }
+
+  String _getLanguageName(BuildContext context, settings.AppLanguage language) {
+    switch (language.code) {
+      case 'ru':
+        return 'settings.languages.russian'.tr();
+      case 'en':
+        return 'settings.languages.english'.tr();
+      case 'zh':
+        return 'settings.languages.chinese'.tr();
+      case 'hi':
+        return 'settings.languages.hindi'.tr();
+      case 'es':
+        return 'settings.languages.spanish'.tr();
+      case 'fr':
+        return 'settings.languages.french'.tr();
+      case 'tr':
+        return 'settings.languages.turkish'.tr();
+      case 'tk':
+        return 'settings.languages.turkmen'.tr();
+      default:
+        return language.code;
+    }
   }
 
   Widget _buildAppearanceSettings() {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        return Container(
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: isDark ? null : AppColors.cardShadow,
-            border: isDark
-                ? Border.all(color: Colors.white.withOpacity(0.1))
-                : null,
+    final themeName = _getThemeName(
+      context,
+      _settings?.theme ?? settings.AppTheme.system,
+    );
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        children: [
+          _buildSettingTile(
+            icon: Icons.palette_outlined,
+            title: 'settings.theme'.tr(),
+            subtitle: themeName,
+            onTap: _showThemeDialog,
+            trailing: const Icon(Icons.chevron_right),
           ),
-          child: Column(
-            children: [
-              _buildSettingTile(
-                icon: Icons.palette_outlined,
-                title: 'settings.theme'.tr(),
-                subtitle: _settings?.theme.displayName ?? 'Системная',
-                onTap: _showThemeDialog,
-                trailing: const Icon(Icons.chevron_right),
-              ),
-              _buildDivider(),
-              _buildSwitchTile(
-                icon: Icons.volume_up_outlined,
-                title: 'settings.sounds'.tr(),
-                subtitle: 'settings.sound_effects'.tr(),
-                value: _settings?.soundEnabled ?? true,
-                onChanged: (value) => _updateSetting(
-                  () => _settingsService.setSoundEnabled(value),
-                  '${'settings.sounds'.tr()} ${value ? 'settings.enabled'.tr() : 'settings.disabled'.tr()}',
-                ),
-              ),
-              _buildDivider(),
-              _buildSwitchTile(
-                icon: Icons.vibration,
-                title: 'Тактильная обратная связь',
-                subtitle: 'Вибрация при нажатиях',
-                value: _settings?.hapticFeedbackEnabled ?? true,
-                onChanged: (value) => _updateSetting(
-                  () => _settingsService.setHapticFeedbackEnabled(value),
-                  'Тактильная обратная связь ${value ? 'включена' : 'выключена'}',
-                ),
-              ),
-            ],
+          _buildDivider(),
+          _buildSwitchTile(
+            icon: Icons.volume_up_outlined,
+            title: 'settings.sounds'.tr(),
+            subtitle: 'settings.sound_effects'.tr(),
+            value: _settings?.soundEnabled ?? true,
+            onChanged: (value) {
+              final enabledText = value
+                  ? 'settings.enabled'.tr()
+                  : 'settings.disabled'.tr();
+              _updateSetting(
+                () => _settingsService.setSoundEnabled(value),
+                '${'settings.sounds'.tr()} $enabledText',
+              );
+            },
           ),
-        );
-      },
+          _buildDivider(),
+          _buildSwitchTile(
+            icon: Icons.vibration,
+            title: 'settings.haptic_feedback'.tr(),
+            subtitle: 'settings.haptic_feedback_desc'.tr(),
+            value: _settings?.hapticFeedbackEnabled ?? true,
+            onChanged: (value) => _updateSetting(
+              () => _settingsService.setHapticFeedbackEnabled(value),
+              '${'settings.haptic_feedback'.tr()} ${value ? 'settings.enabled_single'.tr() : 'settings.disabled_single'.tr()}',
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildNotificationSettings() {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
+  String _getThemeName(BuildContext context, settings.AppTheme theme) {
+    switch (theme) {
+      case settings.AppTheme.light:
+        return 'settings.themes.light'.tr();
+      case settings.AppTheme.dark:
+        return 'settings.themes.dark'.tr();
+      case settings.AppTheme.system:
+        return 'settings.themes.system'.tr();
+    }
+  }
 
-        return Container(
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: isDark ? null : AppColors.cardShadow,
-            border: isDark
-                ? Border.all(color: Colors.white.withOpacity(0.1))
-                : null,
+  Widget _buildNotificationSettings() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        children: [
+          _buildSwitchTile(
+            icon: Icons.notifications_outlined,
+            title: 'settings.notifications'.tr(),
+            subtitle: 'settings.notifications_desc'.tr(),
+            value: _settings?.notificationsEnabled ?? true,
+            onChanged: (value) => _updateSetting(
+              () => _settingsService.setNotificationsEnabled(value),
+              '${'settings.notifications'.tr()} ${value ? 'settings.enabled'.tr() : 'settings.disabled'.tr()}',
+            ),
           ),
-          child: Column(
-            children: [
-              _buildSwitchTile(
-                icon: Icons.notifications_outlined,
-                title: 'Уведомления',
-                subtitle: 'Разрешить уведомления от приложения',
-                value: _settings?.notificationsEnabled ?? true,
-                onChanged: (value) => _updateSetting(
-                  () => _settingsService.setNotificationsEnabled(value),
-                  'Уведомления ${value ? 'включены' : 'выключены'}',
-                ),
+          if (_settings?.notificationsEnabled == true) ...[
+            _buildDivider(),
+            _buildSwitchTile(
+              icon: Icons.schedule,
+              title: 'settings.daily_reminders'.tr(),
+              subtitle: 'settings.daily_reminders_desc'.tr(),
+              value: _settings?.dailyReminderEnabled ?? true,
+              onChanged: (value) => _updateSetting(
+                () => _settingsService.setDailyReminderEnabled(value),
+                '${'settings.daily_reminders'.tr()} ${value ? 'settings.enabled'.tr() : 'settings.disabled'.tr()}',
               ),
-              if (_settings?.notificationsEnabled == true) ...[
-                _buildDivider(),
-                _buildSwitchTile(
-                  icon: Icons.schedule,
-                  title: 'Ежедневные напоминания',
-                  subtitle: 'Напоминание о записи настроения',
-                  value: _settings?.dailyReminderEnabled ?? true,
-                  onChanged: (value) => _updateSetting(
-                    () => _settingsService.setDailyReminderEnabled(value),
-                    'Ежедневные напоминания ${value ? 'включены' : 'выключены'}',
-                  ),
+            ),
+            if (_settings?.dailyReminderEnabled == true) ...[
+              _buildDivider(),
+              _buildSettingTile(
+                icon: Icons.access_time,
+                title: 'settings.reminder_time'.tr(),
+                subtitle: _formatTime(
+                  _settings?.reminderTime ??
+                      const TimeOfDay(hour: 20, minute: 0),
                 ),
-                if (_settings?.dailyReminderEnabled == true) ...[
-                  _buildDivider(),
-                  _buildSettingTile(
-                    icon: Icons.access_time,
-                    title: 'Время напоминания',
-                    subtitle: _formatTime(
-                      _settings?.reminderTime ??
-                          const TimeOfDay(hour: 20, minute: 0),
-                    ),
-                    onTap: _showTimePicker,
-                    trailing: const Icon(Icons.chevron_right),
-                  ),
-                ],
-                _buildDivider(),
-                _buildSwitchTile(
-                  icon: Icons.analytics_outlined,
-                  title: 'Еженедельные отчеты',
-                  subtitle: 'Отчеты о вашем прогрессе',
-                  value: _settings?.weeklyReportEnabled ?? true,
-                  onChanged: (value) => _updateSetting(
-                    () => _settingsService.setWeeklyReportEnabled(value),
-                    'Еженедельные отчеты ${value ? 'включены' : 'выключены'}',
-                  ),
-                ),
-              ],
+                onTap: _showTimePicker,
+                trailing: const Icon(Icons.chevron_right),
+              ),
             ],
-          ),
-        );
-      },
+            _buildDivider(),
+            _buildSwitchTile(
+              icon: Icons.analytics_outlined,
+              title: 'settings.weekly_reports'.tr(),
+              subtitle: 'settings.weekly_reports_desc'.tr(),
+              value: _settings?.weeklyReportEnabled ?? true,
+              onChanged: (value) => _updateSetting(
+                () => _settingsService.setWeeklyReportEnabled(value),
+                '${'settings.weekly_reports'.tr()} ${value ? 'settings.enabled'.tr() : 'settings.disabled'.tr()}',
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
   Widget _buildPrivacySettings() {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        return Container(
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: isDark ? null : AppColors.cardShadow,
-            border: isDark
-                ? Border.all(color: Colors.white.withOpacity(0.1))
-                : null,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        children: [
+          _buildSwitchTile(
+            icon: Icons.analytics_outlined,
+            title: 'settings.analytics'.tr(),
+            subtitle: 'settings.analytics_desc'.tr(),
+            value: _settings?.analyticsEnabled ?? true,
+            onChanged: (value) => _updateSetting(
+              () => _settingsService.setAnalyticsEnabled(value),
+              '${'settings.analytics'.tr()} ${value ? 'settings.enabled_single'.tr() : 'settings.disabled_single'.tr()}',
+            ),
           ),
-          child: Column(
-            children: [
-              _buildSwitchTile(
-                icon: Icons.analytics_outlined,
-                title: 'Аналитика',
-                subtitle: 'Помочь улучшить приложение',
-                value: _settings?.analyticsEnabled ?? true,
-                onChanged: (value) => _updateSetting(
-                  () => _settingsService.setAnalyticsEnabled(value),
-                  'Аналитика ${value ? 'включена' : 'выключена'}',
-                ),
-              ),
-              _buildDivider(),
-              _buildSwitchTile(
-                icon: Icons.backup_outlined,
-                title: 'Экспорт данных',
-                subtitle: 'Возможность экспорта ваших данных',
-                value: _settings?.dataExportEnabled ?? true,
-                onChanged: (value) => _updateSetting(
-                  () => _settingsService.setDataExportEnabled(value),
-                  'Экспорт данных ${value ? 'включен' : 'выключен'}',
-                ),
-              ),
-              _buildDivider(),
-              _buildSettingTile(
-                icon: Icons.download_outlined,
-                title: 'Экспорт данных',
-                subtitle: 'Скачать ваши данные',
-                onTap: _exportData,
-                trailing: const Icon(Icons.chevron_right),
-              ),
-              _buildDivider(),
-              _buildSettingTile(
-                icon: Icons.delete_outline,
-                title: 'Удалить все данные',
-                subtitle: 'Очистить все данные приложения',
-                onTap: _showDeleteDataDialog,
-                trailing: const Icon(Icons.chevron_right),
-                textColor: AppColors.error,
-              ),
-            ],
+          _buildDivider(),
+          _buildSwitchTile(
+            icon: Icons.backup_outlined,
+            title: 'settings.export_data'.tr(),
+            subtitle: 'settings.export_data_desc'.tr(),
+            value: _settings?.dataExportEnabled ?? true,
+            onChanged: (value) => _updateSetting(
+              () => _settingsService.setDataExportEnabled(value),
+              '${'settings.export_data'.tr()} ${value ? 'settings.enabled_export'.tr() : 'settings.disabled_export'.tr()}',
+            ),
           ),
-        );
-      },
+          _buildDivider(),
+          _buildSettingTile(
+            icon: Icons.download_outlined,
+            title: 'settings.download_data'.tr(),
+            subtitle: 'settings.download_data'.tr(),
+            onTap: _exportData,
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          _buildDivider(),
+          _buildSettingTile(
+            icon: Icons.delete_outline,
+            title: 'settings.delete_all_data'.tr(),
+            subtitle: 'settings.delete_all_data_desc'.tr(),
+            onTap: _showDeleteDataDialog,
+            trailing: const Icon(Icons.chevron_right),
+            textColor: AppColors.error,
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildAdditionalSettings() {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        return Container(
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: isDark ? null : AppColors.cardShadow,
-            border: isDark
-                ? Border.all(color: Colors.white.withOpacity(0.1))
-                : null,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        children: [
+          _buildSettingTile(
+            icon: Icons.help_outline,
+            title: 'settings.help_support'.tr(),
+            subtitle: 'settings.help_support_desc'.tr(),
+            onTap: () => _showHelpDialog(),
+            trailing: const Icon(Icons.chevron_right),
           ),
-          child: Column(
-            children: [
-              _buildSettingTile(
-                icon: Icons.help_outline,
-                title: 'Помощь и поддержка',
-                subtitle: 'Часто задаваемые вопросы',
-                onTap: () => _showHelpDialog(),
-                trailing: const Icon(Icons.chevron_right),
-              ),
-              _buildDivider(),
-              _buildSettingTile(
-                icon: Icons.feedback_outlined,
-                title: 'Обратная связь',
-                subtitle: 'Сообщить о проблеме или предложении',
-                onTap: () => _showFeedbackDialog(),
-                trailing: const Icon(Icons.chevron_right),
-              ),
-              _buildDivider(),
-              _buildSettingTile(
-                icon: Icons.star_outline,
-                title: 'Оценить приложение',
-                subtitle: 'Оценить в App Store / Google Play',
-                onTap: _rateApp,
-                trailing: const Icon(Icons.chevron_right),
-              ),
-            ],
+          _buildDivider(),
+          _buildSettingTile(
+            icon: Icons.feedback_outlined,
+            title: 'settings.feedback'.tr(),
+            subtitle: 'settings.feedback_desc'.tr(),
+            onTap: () => _showFeedbackDialog(),
+            trailing: const Icon(Icons.chevron_right),
           ),
-        );
-      },
+          _buildDivider(),
+          _buildSettingTile(
+            icon: Icons.star_outline,
+            title: 'settings.rate_app'.tr(),
+            subtitle: 'settings.rate_app_desc'.tr(),
+            onTap: _rateApp,
+            trailing: const Icon(Icons.chevron_right),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildAboutSection() {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        return Container(
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: isDark ? null : AppColors.cardShadow,
-            border: isDark
-                ? Border.all(color: Colors.white.withOpacity(0.1))
-                : null,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        children: [
+          _buildSettingTile(
+            icon: Icons.info_outline,
+            title: 'settings.app_version'.tr(),
+            subtitle: '1.0.0',
+            onTap: null,
           ),
-          child: Column(
-            children: [
-              _buildSettingTile(
-                icon: Icons.info_outline,
-                title: 'Версия приложения',
-                subtitle: '1.0.0',
-                onTap: null,
-              ),
-              _buildDivider(),
-              _buildSettingTile(
-                icon: Icons.privacy_tip_outlined,
-                title: 'Политика конфиденциальности',
-                subtitle: 'Как мы используем ваши данные',
-                onTap: () => _showPrivacyPolicy(),
-                trailing: const Icon(Icons.chevron_right),
-              ),
-              _buildDivider(),
-              _buildSettingTile(
-                icon: Icons.description_outlined,
-                title: 'Условия использования',
-                subtitle: 'Правила использования приложения',
-                onTap: () => _showTermsOfService(),
-                trailing: const Icon(Icons.chevron_right),
-              ),
-              _buildDivider(),
-              _buildSettingTile(
-                icon: Icons.refresh,
-                title: 'Сбросить настройки',
-                subtitle: 'Вернуть настройки по умолчанию',
-                onTap: _showResetSettingsDialog,
-                trailing: const Icon(Icons.chevron_right),
-                textColor: AppColors.warning,
-              ),
-            ],
+          _buildDivider(),
+          _buildSettingTile(
+            icon: Icons.privacy_tip_outlined,
+            title: 'settings.privacy_policy'.tr(),
+            subtitle: 'settings.privacy_policy_desc'.tr(),
+            onTap: () => _showPrivacyPolicy(),
+            trailing: const Icon(Icons.chevron_right),
           ),
-        );
-      },
+          _buildDivider(),
+          _buildSettingTile(
+            icon: Icons.description_outlined,
+            title: 'settings.terms_of_service'.tr(),
+            subtitle: 'settings.terms_of_service_desc'.tr(),
+            onTap: () => _showTermsOfService(),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          _buildDivider(),
+          _buildSettingTile(
+            icon: Icons.refresh,
+            title: 'settings.reset_settings'.tr(),
+            subtitle: 'settings.reset_settings_desc'.tr(),
+            onTap: _showResetSettingsDialog,
+            trailing: const Icon(Icons.chevron_right),
+            textColor: AppColors.warning,
+          ),
+        ],
+      ),
     );
   }
 
@@ -527,42 +508,29 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     Widget? trailing,
     Color? textColor,
   }) {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        return ListTile(
-          leading: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, color: AppColors.primary, size: 20),
-          ),
-          title: Text(
-            title,
-            style: AppTypography.bodyMedium.copyWith(
-              color:
-                  textColor ?? (isDark ? Colors.white : AppColors.textPrimary),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          subtitle: Text(
-            subtitle,
-            style: AppTypography.bodySmall.copyWith(
-              color: isDark ? Colors.white70 : AppColors.textSecondary,
-            ),
-          ),
-          trailing: trailing,
-          onTap: onTap,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 4,
-          ),
-        );
-      },
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Icon(icon, color: AppColors.primary, size: 20),
+      ),
+      title: Text(
+        title,
+        style: AppTypography.bodyMedium.copyWith(
+          color: textColor ?? AppColors.textPrimary,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
+      ),
+      trailing: trailing,
+      onTap: onTap,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     );
   }
 
@@ -573,60 +541,37 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     required bool value,
     required ValueChanged<bool> onChanged,
   }) {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        return ListTile(
-          leading: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, color: AppColors.primary, size: 20),
-          ),
-          title: Text(
-            title,
-            style: AppTypography.bodyMedium.copyWith(
-              color: isDark ? Colors.white : AppColors.textPrimary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          subtitle: Text(
-            subtitle,
-            style: AppTypography.bodySmall.copyWith(
-              color: isDark ? Colors.white70 : AppColors.textSecondary,
-            ),
-          ),
-          trailing: Switch.adaptive(
-            value: value,
-            onChanged: onChanged,
-            activeColor: AppColors.primary,
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 4,
-          ),
-        );
-      },
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Icon(icon, color: AppColors.primary, size: 20),
+      ),
+      title: Text(
+        title,
+        style: AppTypography.bodyMedium.copyWith(
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
+      ),
+      trailing: Switch.adaptive(
+        value: value,
+        onChanged: onChanged,
+        activeColor: AppColors.primary,
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     );
   }
 
   Widget _buildDivider() {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final isDark = theme.brightness == Brightness.dark;
-
-        return Divider(
-          height: 1,
-          color: isDark ? Colors.white.withOpacity(0.1) : AppColors.border,
-          indent: 56,
-        );
-      },
-    );
+    return Divider(height: 1, color: AppColors.border, indent: 56);
   }
 
   String _formatTime(TimeOfDay time) {
@@ -642,7 +587,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       await _loadSettings();
       _showSuccessSnackBar(successMessage);
     } catch (e) {
-      _showErrorSnackBar('Ошибка обновления настройки');
+      _showErrorSnackBar('settings.settings_update_error'.tr());
     }
   }
 
@@ -650,20 +595,23 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Выберите тему'),
+        title: Text('settings.select_theme'.tr()),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: settings.AppTheme.values.map((theme) {
             return RadioListTile<settings.AppTheme>(
-              title: Text(theme.displayName),
+              title: Text(_getThemeName(context, theme)),
               value: theme,
               groupValue: _settings?.theme,
               onChanged: (value) async {
                 if (value != null) {
                   Navigator.of(context).pop();
+                  final themeName = _getThemeName(context, value);
                   await _updateSetting(
                     () => _settingsService.setTheme(value),
-                    'Тема изменена на ${value.displayName}',
+                    'settings.theme_changed'.tr(
+                      namedArgs: {'theme': themeName},
+                    ),
                   );
                   // Обновляем провайдер темы
                   if (mounted) {
@@ -687,16 +635,39 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           mainAxisSize: MainAxisSize.min,
           children: settings.AppLanguage.values.map((language) {
             return RadioListTile<settings.AppLanguage>(
-              title: Text(language.displayName),
+              title: Text(_getLanguageName(context, language)),
               value: language,
               groupValue: _settings?.language,
               onChanged: (value) async {
                 if (value != null) {
                   Navigator.of(context).pop();
-                  await _updateSetting(
-                    () => _settingsService.setLanguage(value),
-                    'Язык изменен на ${value.displayName}',
+                  final langName = _getLanguageName(context, value);
+
+                  // Сохраняем язык
+                  await _settingsService.setLanguage(value);
+
+                  // Обновляем локаль в EasyLocalization
+                  final newLocale = Locale(
+                    value.code == 'tk' ? 'tr' : value.code,
                   );
+                  if (context.mounted) {
+                    context.setLocale(newLocale);
+                  }
+
+                  // Инвалидируем провайдер для обновления локали в main.dart
+                  ref.invalidate(savedLocaleProvider);
+
+                  // Показываем сообщение об успехе
+                  if (mounted) {
+                    _showSuccessSnackBar(
+                      'settings.language_changed'.tr(
+                        namedArgs: {'language': langName},
+                      ),
+                    );
+                  }
+
+                  // Перезагружаем настройки
+                  await _loadSettings();
                 }
               },
             );
@@ -710,19 +681,18 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Цель отслеживания настроения'),
+        title: Text('settings.mood_tracking_goal_dialog'.tr()),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(7, (index) {
             final days = index + 1;
+            final dayText = days == 1
+                ? 'settings.day'.tr()
+                : days < 5
+                ? 'settings.days'.tr()
+                : 'settings.days_many'.tr();
             return RadioListTile<int>(
-              title: Text(
-                '$days ${days == 1
-                    ? 'день'
-                    : days < 5
-                    ? 'дня'
-                    : 'дней'} в неделю',
-              ),
+              title: Text('$days $dayText ${'settings.days_per_week'.tr()}'),
               value: days,
               groupValue: _settings?.moodTrackingGoal,
               onChanged: (value) async {
@@ -730,7 +700,9 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
                   Navigator.of(context).pop();
                   await _updateSetting(
                     () => _settingsService.setMoodTrackingGoal(value),
-                    'Цель установлена: $value дней в неделю',
+                    'settings.goal_set'.tr(
+                      namedArgs: {'goal': value.toString()},
+                    ),
                   );
                 }
               },
@@ -751,28 +723,28 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     if (time != null) {
       await _updateSetting(
         () => _settingsService.setReminderTime(time),
-        'Время напоминания изменено на ${_formatTime(time)}',
+        'settings.reminder_time_updated'.tr(
+          namedArgs: {'time': _formatTime(time)},
+        ),
       );
     }
   }
 
   void _exportData() {
     // TODO: Реализовать экспорт данных
-    _showSuccessSnackBar('Экспорт данных будет реализован в следующей версии');
+    _showSuccessSnackBar('settings.export_data_message'.tr());
   }
 
   void _showDeleteDataDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Удалить все данные?'),
-        content: const Text(
-          'Это действие нельзя отменить. Все ваши записи настроения и настройки будут удалены.',
-        ),
+        title: Text('settings.delete_all_data_dialog'.tr()),
+        content: Text('settings.delete_all_data_warning'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Отмена'),
+            child: Text('common.cancel'.tr()),
           ),
           TextButton(
             onPressed: () async {
@@ -780,7 +752,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
               await _deleteAllData();
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: const Text('Удалить'),
+            child: Text('common.delete'.tr()),
           ),
         ],
       ),
@@ -791,9 +763,9 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     try {
       await _levelService.resetLevelData();
       // TODO: Удалить все данные из базы данных
-      _showSuccessSnackBar('Все данные удалены');
+      _showSuccessSnackBar('settings.all_data_deleted'.tr());
     } catch (e) {
-      _showErrorSnackBar('Ошибка удаления данных');
+      _showErrorSnackBar('settings.delete_data_error'.tr());
     }
   }
 
@@ -801,14 +773,12 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Помощь и поддержка'),
-        content: const Text(
-          'Здесь будет раздел помощи с часто задаваемыми вопросами и инструкциями по использованию приложения.',
-        ),
+        title: Text('settings.help_support'.tr()),
+        content: Text('settings.help_support_desc'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Закрыть'),
+            child: Text('common.close'.tr()),
           ),
         ],
       ),
@@ -819,14 +789,12 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Обратная связь'),
-        content: const Text(
-          'Спасибо за использование Mind Space! Ваше мнение очень важно для нас. Вы можете отправить отзыв через App Store или Google Play.',
-        ),
+        title: Text('settings.feedback_dialog'.tr()),
+        content: Text('settings.feedback_message'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Закрыть'),
+            child: Text('common.close'.tr()),
           ),
         ],
       ),
@@ -835,21 +803,19 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
 
   void _rateApp() {
     // TODO: Реализовать переход в магазин приложений
-    _showSuccessSnackBar('Спасибо за оценку!');
+    _showSuccessSnackBar('settings.thank_you_rating'.tr());
   }
 
   void _showPrivacyPolicy() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Политика конфиденциальности'),
-        content: const Text(
-          'Здесь будет текст политики конфиденциальности, описывающий как мы собираем, используем и защищаем ваши данные.',
-        ),
+        title: Text('settings.privacy_policy'.tr()),
+        content: Text('settings.privacy_policy_content'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Закрыть'),
+            child: Text('common.close'.tr()),
           ),
         ],
       ),
@@ -860,14 +826,12 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Условия использования'),
-        content: const Text(
-          'Здесь будут условия использования приложения, правила и ограничения.',
-        ),
+        title: Text('settings.terms_of_service'.tr()),
+        content: Text('settings.terms_of_service_content'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Закрыть'),
+            child: Text('common.close'.tr()),
           ),
         ],
       ),
@@ -878,14 +842,12 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Сбросить настройки?'),
-        content: const Text(
-          'Все настройки будут возвращены к значениям по умолчанию. Ваши данные настроения не будут затронуты.',
-        ),
+        title: Text('settings.reset_settings_dialog_title'.tr()),
+        content: Text('settings.reset_settings_warning'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Отмена'),
+            child: Text('common.cancel'.tr()),
           ),
           TextButton(
             onPressed: () async {
@@ -893,7 +855,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
               await _resetSettings();
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.warning),
-            child: const Text('Сбросить'),
+            child: Text('common.reset'.tr()),
           ),
         ],
       ),
@@ -904,9 +866,9 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     try {
       await _settingsService.resetAllSettings();
       await _loadSettings();
-      _showSuccessSnackBar('Настройки сброшены');
+      _showSuccessSnackBar('settings.settings_reset_success'.tr());
     } catch (e) {
-      _showErrorSnackBar('Ошибка сброса настроек');
+      _showErrorSnackBar('settings.settings_reset_error'.tr());
     }
   }
 }

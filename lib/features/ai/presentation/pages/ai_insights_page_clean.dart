@@ -55,22 +55,22 @@ class AIInsightsPageClean extends ConsumerWidget {
         children: [
           // Обзор
           _buildOverview(entries),
-          
+
           const SizedBox(height: 24),
-          
+
           // Анализ настроений
           _buildMoodAnalysis(entries),
-          
+
           const SizedBox(height: 24),
-          
+
           // Паттерны
           _buildPatterns(entries),
-          
+
           const SizedBox(height: 24),
-          
+
           // Рекомендации
           _buildRecommendations(entries),
-          
+
           const SizedBox(height: 32),
         ],
       ),
@@ -80,12 +80,17 @@ class AIInsightsPageClean extends ConsumerWidget {
   /// Обзор
   Widget _buildOverview(List<dynamic> entries) {
     final totalEntries = entries.length;
-    final avgMood = entries.isEmpty 
-        ? 0.0 
-        : entries.map((e) => e.moodValue).reduce((a, b) => a + b) / entries.length;
-    final thisWeek = entries.where((e) => 
-        e.createdAt.isAfter(DateTime.now().subtract(const Duration(days: 7)))
-    ).length;
+    final avgMood = entries.isEmpty
+        ? 0.0
+        : entries.map((e) => e.moodValue).reduce((a, b) => a + b) /
+              entries.length;
+    final thisWeek = entries
+        .where(
+          (e) => e.createdAt.isAfter(
+            DateTime.now().subtract(const Duration(days: 7)),
+          ),
+        )
+        .length;
 
     return Container(
       width: double.infinity,
@@ -122,9 +127,9 @@ class AIInsightsPageClean extends ConsumerWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Row(
             children: [
               Expanded(
@@ -146,12 +151,13 @@ class AIInsightsPageClean extends ConsumerWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           _InsightCard(
             title: 'ai.insights.weekly_entries'.tr(),
-            value: '$thisWeek записей',
+            value:
+                '$thisWeek ${thisWeek == 1 ? 'stats.entry'.tr() : 'stats.entries'.tr()}',
             icon: Icons.calendar_today,
             color: AppColors.info,
             isFullWidth: true,
@@ -163,10 +169,13 @@ class AIInsightsPageClean extends ConsumerWidget {
 
   /// Анализ настроений
   Widget _buildMoodAnalysis(List<dynamic> entries) {
-    final moodCounts = List.generate(5, (index) => 
-        entries.where((e) => e.moodValue == index + 1).length);
+    final moodCounts = List.generate(
+      5,
+      (index) => entries.where((e) => e.moodValue == index + 1).length,
+    );
     final total = entries.length;
-    final dominantMood = moodCounts.indexOf(moodCounts.reduce((a, b) => a > b ? a : b)) + 1;
+    final dominantMood =
+        moodCounts.indexOf(moodCounts.reduce((a, b) => a > b ? a : b)) + 1;
 
     return Container(
       width: double.infinity,
@@ -203,9 +212,9 @@ class AIInsightsPageClean extends ConsumerWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Доминирующее настроение
           Container(
             width: double.infinity,
@@ -213,7 +222,9 @@ class AIInsightsPageClean extends ConsumerWidget {
             decoration: BoxDecoration(
               color: getMoodColor(dominantMood).withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: getMoodColor(dominantMood).withOpacity(0.3)),
+              border: Border.all(
+                color: getMoodColor(dominantMood).withOpacity(0.3),
+              ),
             ),
             child: Row(
               children: [
@@ -260,15 +271,15 @@ class AIInsightsPageClean extends ConsumerWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Распределение настроений
           ...List.generate(5, (index) {
             final moodValue = index + 1;
             final count = moodCounts[index];
             final percentage = total == 0 ? 0.0 : (count / total) * 100;
-            
+
             return _MoodDistributionBar(
               moodValue: moodValue,
               count: count,
@@ -321,9 +332,9 @@ class AIInsightsPageClean extends ConsumerWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Недельный паттерн
           _PatternCard(
             title: 'ai.insights.weekly_pattern'.tr(),
@@ -331,9 +342,9 @@ class AIInsightsPageClean extends ConsumerWidget {
             icon: Icons.calendar_view_week,
             color: AppColors.primary,
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Месячный паттерн
           _PatternCard(
             title: 'ai.insights.monthly_pattern'.tr(),
@@ -385,15 +396,17 @@ class AIInsightsPageClean extends ConsumerWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
-          ...recommendations.map((recommendation) => _RecommendationCard(
-            title: recommendation.title,
-            description: recommendation.description,
-            icon: recommendation.icon,
-            priority: recommendation.priority,
-          )),
+
+          ...recommendations.map(
+            (recommendation) => _RecommendationCard(
+              title: recommendation.title,
+              description: recommendation.description,
+              icon: recommendation.icon,
+              priority: recommendation.priority,
+            ),
+          ),
         ],
       ),
     );
@@ -414,11 +427,7 @@ class AIInsightsPageClean extends ConsumerWidget {
               ),
               borderRadius: BorderRadius.circular(40),
             ),
-            child: const Icon(
-              Icons.psychology,
-              color: Colors.white,
-              size: 40,
-            ),
+            child: const Icon(Icons.psychology, color: Colors.white, size: 40),
           ),
           const SizedBox(height: 16),
           Text(
@@ -428,7 +437,9 @@ class AIInsightsPageClean extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             'ai.insights.add_entries_for_insights'.tr(),
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -443,9 +454,7 @@ class AIInsightsPageClean extends ConsumerWidget {
 
   /// Состояние загрузки
   Widget _buildLoadingState() {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
+    return const Center(child: CircularProgressIndicator());
   }
 
   /// Состояние ошибки
@@ -454,11 +463,7 @@ class AIInsightsPageClean extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64,
-            color: AppColors.error,
-          ),
+          Icon(Icons.error_outline, size: 64, color: AppColors.error),
           const SizedBox(height: 16),
           Text(
             'common.error'.tr(),
@@ -467,7 +472,9 @@ class AIInsightsPageClean extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             error.toString(),
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -478,54 +485,80 @@ class AIInsightsPageClean extends ConsumerWidget {
   // Вспомогательные методы
   IconData _getMoodIcon(int mood) {
     switch (mood) {
-      case 5: return Icons.sentiment_very_satisfied;
-      case 4: return Icons.sentiment_satisfied;
-      case 3: return Icons.sentiment_neutral;
-      case 2: return Icons.sentiment_dissatisfied;
-      case 1: return Icons.sentiment_very_dissatisfied;
-      default: return Icons.sentiment_neutral;
+      case 5:
+        return Icons.sentiment_very_satisfied;
+      case 4:
+        return Icons.sentiment_satisfied;
+      case 3:
+        return Icons.sentiment_neutral;
+      case 2:
+        return Icons.sentiment_dissatisfied;
+      case 1:
+        return Icons.sentiment_very_dissatisfied;
+      default:
+        return Icons.sentiment_neutral;
     }
   }
 
   String _getMoodLabel(int mood) {
     switch (mood) {
-      case 5: return 'mood.moods.very_happy'.tr();
-      case 4: return 'mood.moods.happy'.tr();
-      case 3: return 'mood.moods.neutral'.tr();
-      case 2: return 'mood.moods.sad'.tr();
-      case 1: return 'mood.moods.very_sad'.tr();
-      default: return 'stats.unknown'.tr();
+      case 5:
+        return 'mood.moods.very_happy'.tr();
+      case 4:
+        return 'mood.moods.happy'.tr();
+      case 3:
+        return 'mood.moods.neutral'.tr();
+      case 2:
+        return 'mood.moods.sad'.tr();
+      case 1:
+        return 'mood.moods.very_sad'.tr();
+      default:
+        return 'stats.unknown'.tr();
     }
   }
 
   String _getWeeklyPattern(List<dynamic> entries) {
     if (entries.isEmpty) return 'ai.insights.insufficient_data'.tr();
-    
+
     final weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     final counts = List.generate(7, (index) => 0);
-    
+
     for (final entry in entries) {
       final weekday = entry.createdAt.weekday - 1;
       counts[weekday]++;
     }
-    
+
     final maxIndex = counts.indexOf(counts.reduce((a, b) => a > b ? a : b));
-    return 'ai.insights.most_records_on'.tr(namedArgs: {'day': weekdays[maxIndex]});
+    return 'ai.insights.most_records_on'.tr(
+      namedArgs: {'day': weekdays[maxIndex]},
+    );
   }
 
   String _getMonthlyPattern(List<dynamic> entries) {
     if (entries.isEmpty) return 'ai.insights.insufficient_data'.tr();
-    
+
     final now = DateTime.now();
-    final thisMonth = entries.where((e) => 
-        e.createdAt.month == now.month && e.createdAt.year == now.year).length;
-    final lastMonth = entries.where((e) => 
-        e.createdAt.month == now.month - 1 && e.createdAt.year == now.year).length;
-    
+    final thisMonth = entries
+        .where(
+          (e) => e.createdAt.month == now.month && e.createdAt.year == now.year,
+        )
+        .length;
+    final lastMonth = entries
+        .where(
+          (e) =>
+              e.createdAt.month == now.month - 1 &&
+              e.createdAt.year == now.year,
+        )
+        .length;
+
     if (thisMonth > lastMonth) {
-      return 'ai.insights.activity_growing'.tr(namedArgs: {'diff': (thisMonth - lastMonth).toString()});
+      return 'ai.insights.activity_growing'.tr(
+        namedArgs: {'diff': (thisMonth - lastMonth).toString()},
+      );
     } else if (thisMonth < lastMonth) {
-      return 'ai.insights.activity_decreasing'.tr(namedArgs: {'diff': (lastMonth - thisMonth).toString()});
+      return 'ai.insights.activity_decreasing'.tr(
+        namedArgs: {'diff': (lastMonth - thisMonth).toString()},
+      );
     } else {
       return 'ai.insights.stable_activity'.tr();
     }
@@ -533,41 +566,51 @@ class AIInsightsPageClean extends ConsumerWidget {
 
   List<_Recommendation> _generateRecommendations(List<dynamic> entries) {
     final recommendations = <_Recommendation>[];
-    
+
     if (entries.isEmpty) {
-      recommendations.add(_Recommendation(
-        title: 'ai.insights.start_tracking_mood'.tr(),
-        description: 'ai.insights.add_first_entry_desc'.tr(),
-        icon: Icons.add_circle_outline,
-        priority: _Priority.high,
-      ));
+      recommendations.add(
+        _Recommendation(
+          title: 'ai.insights.start_tracking_mood'.tr(),
+          description: 'ai.insights.add_first_entry_desc'.tr(),
+          icon: Icons.add_circle_outline,
+          priority: _Priority.high,
+        ),
+      );
       return recommendations;
     }
 
-    final avgMood = entries.map((e) => e.moodValue).reduce((a, b) => a + b) / entries.length;
-    
+    final avgMood =
+        entries.map((e) => e.moodValue).reduce((a, b) => a + b) /
+        entries.length;
+
     if (avgMood < 3) {
-      recommendations.add(_Recommendation(
-        title: 'ai.insights.try_meditation'.tr(),
-        description: 'ai.insights.meditation_help_mood'.tr(),
-        icon: Icons.self_improvement,
-        priority: _Priority.high,
-      ));
+      recommendations.add(
+        _Recommendation(
+          title: 'ai.insights.try_meditation'.tr(),
+          description: 'ai.insights.meditation_help_mood'.tr(),
+          icon: Icons.self_improvement,
+          priority: _Priority.high,
+        ),
+      );
     }
-    
-    recommendations.add(_Recommendation(
-      title: 'ai.insights.keep_gratitude_journal'.tr(),
-      description: 'ai.insights.gratitude_journal_desc'.tr(),
-      icon: Icons.favorite,
-      priority: _Priority.medium,
-    ));
-    
-    recommendations.add(_Recommendation(
-      title: 'ai.insights.track_mood_regularly'.tr(),
-      description: 'ai.insights.daily_records_help'.tr(),
-      icon: Icons.trending_up,
-      priority: _Priority.medium,
-    ));
+
+    recommendations.add(
+      _Recommendation(
+        title: 'ai.insights.keep_gratitude_journal'.tr(),
+        description: 'ai.insights.gratitude_journal_desc'.tr(),
+        icon: Icons.favorite,
+        priority: _Priority.medium,
+      ),
+    );
+
+    recommendations.add(
+      _Recommendation(
+        title: 'ai.insights.track_mood_regularly'.tr(),
+        description: 'ai.insights.daily_records_help'.tr(),
+        icon: Icons.trending_up,
+        priority: _Priority.medium,
+      ),
+    );
 
     return recommendations;
   }
@@ -602,10 +645,7 @@ class _InsightCard extends StatelessWidget {
         children: [
           Icon(icon, color: color, size: 24),
           const SizedBox(height: 8),
-          Text(
-            value,
-            style: AppTypography.h3.copyWith(color: color),
-          ),
+          Text(value, style: AppTypography.h3.copyWith(color: color)),
           const SizedBox(height: 4),
           Text(
             title,
@@ -645,11 +685,7 @@ class _MoodDistributionBar extends StatelessWidget {
               gradient: getMoodGradient(moodValue),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(
-              _getMoodIcon(moodValue),
-              color: Colors.white,
-              size: 16,
-            ),
+            child: Icon(_getMoodIcon(moodValue), color: Colors.white, size: 16),
           ),
           const SizedBox(width: 12),
           SizedBox(
@@ -663,7 +699,9 @@ class _MoodDistributionBar extends StatelessWidget {
             child: LinearProgressIndicator(
               value: total == 0 ? 0.0 : count / total,
               backgroundColor: AppColors.border,
-              valueColor: AlwaysStoppedAnimation<Color>(getMoodColor(moodValue)),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                getMoodColor(moodValue),
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -682,23 +720,35 @@ class _MoodDistributionBar extends StatelessWidget {
 
   IconData _getMoodIcon(int mood) {
     switch (mood) {
-      case 5: return Icons.sentiment_very_satisfied;
-      case 4: return Icons.sentiment_satisfied;
-      case 3: return Icons.sentiment_neutral;
-      case 2: return Icons.sentiment_dissatisfied;
-      case 1: return Icons.sentiment_very_dissatisfied;
-      default: return Icons.sentiment_neutral;
+      case 5:
+        return Icons.sentiment_very_satisfied;
+      case 4:
+        return Icons.sentiment_satisfied;
+      case 3:
+        return Icons.sentiment_neutral;
+      case 2:
+        return Icons.sentiment_dissatisfied;
+      case 1:
+        return Icons.sentiment_very_dissatisfied;
+      default:
+        return Icons.sentiment_neutral;
     }
   }
 
   String _getMoodLabel(int mood) {
     switch (mood) {
-      case 5: return 'mood.moods.very_happy'.tr();
-      case 4: return 'mood.moods.happy'.tr();
-      case 3: return 'mood.moods.neutral'.tr();
-      case 2: return 'mood.moods.sad'.tr();
-      case 1: return 'mood.moods.very_sad'.tr();
-      default: return 'stats.unknown'.tr();
+      case 5:
+        return 'mood.moods.very_happy'.tr();
+      case 4:
+        return 'mood.moods.happy'.tr();
+      case 3:
+        return 'mood.moods.neutral'.tr();
+      case 2:
+        return 'mood.moods.sad'.tr();
+      case 1:
+        return 'mood.moods.very_sad'.tr();
+      default:
+        return 'stats.unknown'.tr();
     }
   }
 }
@@ -790,11 +840,7 @@ class _RecommendationCard extends StatelessWidget {
               color: _getPriorityColor(priority).withOpacity(0.2),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Icon(
-              icon,
-              color: _getPriorityColor(priority),
-              size: 20,
-            ),
+            child: Icon(icon, color: _getPriorityColor(priority), size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -813,7 +859,10 @@ class _RecommendationCard extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: _getPriorityColor(priority),
                         borderRadius: BorderRadius.circular(12),

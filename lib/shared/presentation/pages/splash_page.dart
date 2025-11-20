@@ -24,14 +24,14 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     try {
       // Получаем настройки приложения
       final settingsNotifier = ref.read(appSettingsProvider.notifier);
-      
+
       // Проверяем, показывался ли уже splash screen
       final hasShownSplash = await settingsNotifier.hasShownSplash();
-      
+
       if (!hasShownSplash) {
         // Показываем splash screen в первый раз
         await Future.delayed(const Duration(seconds: 2));
-        
+
         // Отмечаем, что splash был показан
         await settingsNotifier.setSplashShown();
       } else {

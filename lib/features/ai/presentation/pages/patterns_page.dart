@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../app/providers/ai_features_provider.dart';
 import '../../../../presentation/widgets/core/glass_surface.dart';
@@ -31,7 +32,7 @@ class _PatternsPageState extends ConsumerState<PatternsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Patterns Analysis'),
+        title: Text('ai.patterns.title'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -209,7 +210,10 @@ class _PatternsErrorWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(onPressed: onRetry, child: const Text('Повторить')),
+            ElevatedButton(
+              onPressed: onRetry,
+              child: Text('common.try_again'.tr()),
+            ),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
@@ -15,12 +16,18 @@ class SettingsScreenClean extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Настройки'),
+        title: Text('settings.title'.tr()),
         backgroundColor: AppColors.surface,
         elevation: 1,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/home');
+            }
+          },
         ),
       ),
       body: ListView(
@@ -28,102 +35,102 @@ class SettingsScreenClean extends ConsumerWidget {
         children: [
           // Профиль
           _SettingsSection(
-            title: 'Профиль',
+            title: 'settings.profile'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.person_outline,
-                title: 'Мой профиль',
-                subtitle: 'Редактировать информацию',
+                title: 'profile.title'.tr(),
+                subtitle: 'profile.edit'.tr(),
                 onTap: () => context.go('/settings/profile'),
               ),
               _SettingsTile(
                 icon: Icons.emoji_events_outlined,
-                title: 'Достижения',
-                subtitle: 'Ваши успехи',
+                title: 'profile.achievements'.tr(),
+                subtitle: 'achievements.title'.tr(),
                 onTap: () => context.go('/settings/achievements'),
               ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Уведомления
           _SettingsSection(
-            title: 'Уведомления',
+            title: 'settings.notifications'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.notifications_outlined,
-                title: 'Напоминания',
-                subtitle: 'Управление уведомлениями',
+                title: 'notifications.daily_reminders'.tr(),
+                subtitle: 'settings.manage_notifications'.tr(),
                 onTap: () => context.go('/settings/notifications'),
               ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Внешний вид
           _SettingsSection(
-            title: 'Внешний вид',
+            title: 'settings.appearance'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.palette_outlined,
-                title: 'Тема',
-                subtitle: 'Светлая тема',
+                title: 'settings.theme'.tr(),
+                subtitle: 'settings.themes.light'.tr(),
                 onTap: () => context.go('/settings/appearance'),
               ),
               _SettingsTile(
                 icon: Icons.language_outlined,
-                title: 'Язык',
-                subtitle: 'Русский',
+                title: 'settings.language'.tr(),
+                subtitle: 'settings.languages.russian'.tr(),
                 onTap: () => context.go('/settings/language'),
               ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Данные
           _SettingsSection(
-            title: 'Данные',
+            title: 'settings.data'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.download_outlined,
-                title: 'Экспорт данных',
-                subtitle: 'Скачать ваши записи',
+                title: 'settings.export_data'.tr(),
+                subtitle: 'settings.download_data'.tr(),
                 onTap: () => context.go('/settings/export'),
               ),
               _SettingsTile(
                 icon: Icons.delete_forever_outlined,
-                title: 'Очистить данные',
-                subtitle: 'Удалить все записи',
+                title: 'settings.delete_all_data'.tr(),
+                subtitle: 'settings.delete_all_data_desc'.tr(),
                 onTap: () => _showClearDataDialog(context, ref),
                 isDestructive: true,
               ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // О приложении
           _SettingsSection(
-            title: 'О приложении',
+            title: 'settings.about'.tr(),
             children: [
               _SettingsTile(
                 icon: Icons.info_outline,
-                title: 'О приложении',
-                subtitle: 'Версия 1.0.0',
+                title: 'settings.about_app'.tr(),
+                subtitle: 'profile.version_1_0_0'.tr(),
                 onTap: () => context.go('/settings/about'),
               ),
               _SettingsTile(
                 icon: Icons.privacy_tip_outlined,
-                title: 'Конфиденциальность',
-                subtitle: 'Политика конфиденциальности',
+                title: 'settings.privacy_policy'.tr(),
+                subtitle: 'settings.privacy_policy_desc'.tr(),
                 onTap: () => context.go('/settings/privacy'),
               ),
             ],
           ),
-          
+
           const SizedBox(height: 32),
         ],
       ),
@@ -135,14 +142,12 @@ class SettingsScreenClean extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Очистить данные'),
-        content: const Text(
-          'Вы уверены, что хотите удалить все записи настроения и AI инсайты? Это действие нельзя отменить.',
-        ),
+        title: Text('settings.delete_all_data_dialog'.tr()),
+        content: Text('settings.delete_all_data_warning'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Отмена'),
+            child: Text('common.cancel'.tr()),
           ),
           TextButton(
             onPressed: () async {
@@ -150,15 +155,15 @@ class SettingsScreenClean extends ConsumerWidget {
               await _clearAllData(ref);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Все данные очищены'),
+                  SnackBar(
+                    content: Text('settings.all_data_deleted'.tr()),
                     backgroundColor: AppColors.success,
                   ),
                 );
               }
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: const Text('Удалить'),
+            child: Text('common.delete'.tr()),
           ),
         ],
       ),
@@ -177,10 +182,7 @@ class _SettingsSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
 
-  const _SettingsSection({
-    required this.title,
-    required this.children,
-  });
+  const _SettingsSection({required this.title, required this.children});
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +237,7 @@ class _SettingsTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: isDestructive 
+                color: isDestructive
                     ? AppColors.error.withOpacity(0.1)
                     : AppColors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
@@ -254,21 +256,17 @@ class _SettingsTile extends StatelessWidget {
                   Text(
                     title,
                     style: AppTypography.bodyLarge.copyWith(
-                      color: isDestructive ? AppColors.error : AppColors.textPrimary,
+                      color: isDestructive
+                          ? AppColors.error
+                          : AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: AppTypography.caption,
-                  ),
+                  Text(subtitle, style: AppTypography.caption),
                 ],
               ),
             ),
-            Icon(
-              Icons.chevron_right,
-              color: AppColors.textHint,
-            ),
+            Icon(Icons.chevron_right, color: AppColors.textHint),
           ],
         ),
       ),

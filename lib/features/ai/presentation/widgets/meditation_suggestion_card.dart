@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../../presentation/widgets/core/glass_surface.dart';
 import '../../domain/entities/meditation_entity.dart';
@@ -257,7 +258,11 @@ class MeditationSuggestionCard extends StatelessWidget {
           child: ElevatedButton.icon(
             onPressed: onStart,
             icon: const Icon(Icons.play_arrow),
-            label: Text('Начать медитацию (${meditation.duration} мин)'),
+            label: Text(
+              'ai.meditation.start_meditation'.tr(
+                namedArgs: {'duration': meditation.duration.toString()},
+              ),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: meditation.accentColor,
               foregroundColor: Colors.white,
@@ -635,7 +640,7 @@ class MeditationSuggestionErrorCard extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Попробовать снова'),
+                label: Text('common.try_again'.tr()),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,

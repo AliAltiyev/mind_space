@@ -120,12 +120,8 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
-        border: Border(
-          bottom: BorderSide(
-            color: isDark ? Colors.white.withOpacity(0.1) : AppColors.border,
-          ),
-        ),
+        color: AppColors.surface,
+        border: Border(bottom: BorderSide(color: AppColors.border)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,47 +163,57 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   /// Пустое состояние
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.primary, AppColors.secondary],
-              ),
-              borderRadius: BorderRadius.circular(40),
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight:
+              MediaQuery.of(context).size.height -
+              MediaQuery.of(context).padding.top -
+              kToolbarHeight -
+              200, // Высота AppBar + QuickActions + InputArea
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppColors.primary, AppColors.secondary],
+                    ),
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: const Icon(
+                    Icons.psychology,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'ai.chat.ready_to_help'.tr(),
+                  style: AppTypography.h3.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'ai.chat.ask_any_question'.tr(),
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            child: const Icon(Icons.psychology, color: Colors.white, size: 40),
           ),
-          const SizedBox(height: 16),
-          Builder(
-            builder: (context) {
-              final theme = Theme.of(context);
-              final isDark = theme.brightness == Brightness.dark;
-              return Column(
-                children: [
-                  Text(
-                    'ai.chat.ready_to_help'.tr(),
-                    style: AppTypography.h3.copyWith(
-                      color: isDark ? Colors.white : AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'ai.chat.ask_any_question'.tr(),
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: isDark ? Colors.white70 : AppColors.textSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -220,12 +226,8 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
-        border: Border(
-          top: BorderSide(
-            color: isDark ? Colors.white.withOpacity(0.1) : AppColors.border,
-          ),
-        ),
+        color: AppColors.surface,
+        border: Border(top: BorderSide(color: AppColors.border)),
       ),
       child: Row(
         children: [
@@ -271,7 +273,13 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               ),
               maxLines: null,
               textInputAction: TextInputAction.send,
-              onSubmitted: (_) => _sendCurrentMessage(),
+              onSubmitted: (_) {
+                final text = _messageController.text.trim();
+                if (text.isNotEmpty && !_isLoading) {
+                  _sendMessage(text);
+                  _messageController.clear();
+                }
+              },
             ),
           ),
           const SizedBox(width: 8),
@@ -283,7 +291,15 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               borderRadius: BorderRadius.circular(24),
             ),
             child: IconButton(
-              onPressed: _isLoading ? null : _sendCurrentMessage,
+              onPressed: _isLoading
+                  ? null
+                  : () {
+                      final text = _messageController.text.trim();
+                      if (text.isNotEmpty && !_isLoading) {
+                        _sendMessage(text);
+                        _messageController.clear();
+                      }
+                    },
               icon: _isLoading
                   ? const SizedBox(
                       width: 20,
@@ -299,15 +315,6 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
         ],
       ),
     );
-  }
-
-  /// Отправка текущего сообщения
-  void _sendCurrentMessage() {
-    final text = _messageController.text.trim();
-    if (text.isNotEmpty && !_isLoading) {
-      _sendMessage(text);
-      _messageController.clear();
-    }
   }
 
   /// Отправка сообщения
@@ -330,31 +337,12 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
       // Генерация ответа AI через Groq API
       final aiResponse = await _generateAiResponse(text);
 
-      setState(() {
-        _messages.add(
-          ChatMessage(
-            text: aiResponse,
-            isUser: false,
-            timestamp: DateTime.now(),
-          ),
-        );
-        _isLoading = false;
-      });
-    } catch (e) {
-      // В случае ошибки показываем понятное сообщение пользователю
-      String errorMessage = _getUserFriendlyErrorMessage(e);
-
-      setState(() {
-        _messages.add(
-          ChatMessage(
-            text: errorMessage,
-            isUser: false,
-            timestamp: DateTime.now(),
-          ),
-        );
-        _isLoading = false;
-      });
-    }
+    setState(() {
+      _messages.add(
+        ChatMessage(text: aiResponse, isUser: false, timestamp: DateTime.now()),
+      );
+      _isLoading = false;
+    });
 
     _scrollToBottom();
   }
@@ -604,11 +592,7 @@ class _ChatBubble extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: message.isUser
-                    ? AppColors.primary
-                    : (isDark
-                          ? Colors.white.withOpacity(0.05)
-                          : AppColors.surface),
+                color: message.isUser ? AppColors.primary : AppColors.surface,
                 borderRadius: BorderRadius.circular(16).copyWith(
                   bottomLeft: message.isUser
                       ? const Radius.circular(16)

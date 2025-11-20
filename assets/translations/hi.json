@@ -21,8 +21,8 @@
         "no": "नहीं",
         "try_again": "फिर से कोशिश करें",
         "refresh": "रिफ्रेश करें",
-        "clear": "साफ करें",
-        "minutes": "मिनट"
+        "unknown_state": "अज्ञात स्थिति",
+        "reset": "रीसेट करें"
     },
     "navigation": {
         "home": "होम",
@@ -488,5 +488,31 @@
         "ai_pattern_format": "उत्तर को JSON के रूप में प्रारूपित करें: title, description, emoji, accentColor, patterns और recommendations फ़ील्ड के साथ",
         "ai_gratitude_format": "उत्तर को JSON के रूप में प्रारूपित करें: title, description, emoji, accentColor और prompts फ़ील्ड के साथ",
         "ai_meditation_format": "उत्तर को JSON के रूप में प्रारूपित करें: title, description, emoji, accentColor, type, duration, instructions और tips फ़ील्ड के साथ"
+    },
+    "settings": {
+        "all_data_deleted": "सभी डेटा हटाया गया",
+        "delete_data_error": "डेटा हटाने में त्रुटि",
+        "settings_reset_success": "सेटिंग्स सफलतापूर्वक रीसेट हुईं",
+        "settings_reset_error": "सेटिंग्स रीसेट करने में त्रुटि",
+        "reset_settings_dialog_title": "सेटिंग्स रीसेट करें?",
+        "reset_settings_warning": "सभी सेटिंग्स डिफ़ॉल्ट मानों पर वापस आ जाएंगी। आपका मूड डेटा प्रभावित नहीं होगा।",
+        "reminder_time_updated": "अनुस्मारक समय {time} में बदला गया"
+    },
+    "ai": {
+        "meditation": {
+            "start_with_duration": "ध्यान शुरू करें ({duration} मिनट)"
+        },
+        "error_analysis_title": "विश्लेषण त्रुटि"
+    },
+    "demo": {
+        "performance_list": "• पेंट ऑब्जेक्ट कैशिंग\n• अनुकूलित CustomPainter\n• अलगाव के लिए RepaintBoundary\n• तरंग प्रभावों के लिए टाइमर-आधारित सफाई\n• स्थिरांक के साथ एकीकृत डिज़ाइन सिस्टम"
+    },
+    "profile": {
+        "updated_successfully": "प्रोफ़ाइल सफलतापूर्वक अपडेट की गई!",
+        "loading_error_full": "प्रोफ़ाइल लोड करने में त्रुटि"
+    },
+    "stats": {
+        "loading_error_full": "सांख्यिकी लोड करने में त्रुटि",
+        "error_loading_title": "लोडिंग त्रुटि"
     }
 }

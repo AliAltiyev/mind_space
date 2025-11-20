@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Экран профиля пользователя
 class ProfileScreen extends ConsumerWidget {
@@ -10,7 +11,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text('profile.title'.tr()),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -36,7 +37,7 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Column(
+              child: Column(
                 children: [
                   CircleAvatar(
                     radius: 40,
@@ -49,7 +50,7 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Your Name',
+                    'profile.your_name'.tr(),
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -58,7 +59,7 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Member since January 2024',
+                    'profile.member_since_placeholder'.tr(),
                     style: TextStyle(fontSize: 16, color: Colors.white70),
                   ),
                 ],
@@ -68,9 +69,9 @@ class ProfileScreen extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // Статистика
-            const Text(
-              'Your Stats',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              'profile.your_stats'.tr(),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
 
@@ -78,7 +79,7 @@ class ProfileScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _StatCard(
-                    title: 'Entries',
+                    title: 'entries.title'.tr(),
                     value: '0',
                     icon: Icons.article,
                   ),
@@ -86,7 +87,7 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: _StatCard(
-                    title: 'Streak',
+                    title: 'stats.streak'.tr(),
                     value: '0 days',
                     icon: Icons.local_fire_department,
                   ),
@@ -100,7 +101,7 @@ class ProfileScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _StatCard(
-                    title: 'Insights',
+                    title: 'ai.insights.title'.tr(),
                     value: '0',
                     icon: Icons.psychology,
                   ),
@@ -108,7 +109,7 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: _StatCard(
-                    title: 'Goals',
+                    title: 'profile.goals'.tr(),
                     value: '0',
                     icon: Icons.flag,
                   ),
@@ -119,23 +120,23 @@ class ProfileScreen extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // Действия
-            const Text(
-              'Actions',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              'profile.actions'.tr(),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
 
             _ActionTile(
               icon: Icons.settings,
-              title: 'Settings',
-              subtitle: 'App preferences and configuration',
+              title: 'settings.title'.tr(),
+              subtitle: 'profile.app_configuration'.tr(),
               onTap: () => context.go('/settings'),
             ),
 
             _ActionTile(
               icon: Icons.share,
-              title: 'Share App',
-              subtitle: 'Tell your friends about MindSpace',
+              title: 'profile.share'.tr(),
+              subtitle: 'profile.tell_friends'.tr(),
               onTap: () {
                 // TODO: Поделиться приложением
               },
@@ -143,8 +144,8 @@ class ProfileScreen extends ConsumerWidget {
 
             _ActionTile(
               icon: Icons.help,
-              title: 'Help & Support',
-              subtitle: 'Get help or contact support',
+              title: 'profile.help'.tr(),
+              subtitle: 'profile.support_faq'.tr(),
               onTap: () {
                 // TODO: Показать помощь
               },
@@ -152,8 +153,8 @@ class ProfileScreen extends ConsumerWidget {
 
             _ActionTile(
               icon: Icons.logout,
-              title: 'Sign Out',
-              subtitle: 'Sign out of your account',
+              title: 'auth.sign_out'.tr(),
+              subtitle: 'auth.sign_out_desc'.tr(),
               onTap: () {
                 // TODO: Выйти из аккаунта
               },
@@ -228,4 +229,3 @@ class _ActionTile extends StatelessWidget {
     );
   }
 }
-

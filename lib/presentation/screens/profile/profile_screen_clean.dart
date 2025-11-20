@@ -111,11 +111,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Информация о пользователе
-            userProfileAsync.when(
-              data: (profile) => _buildUserInfo(context, profile),
-              loading: () => _buildUserInfoLoading(context),
-              error: (error, stack) => _buildUserInfo(context, null),
-            ),
+            _buildUserInfo(context),
 
             const SizedBox(height: 24),
 
@@ -255,61 +251,13 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           Text(
             'profile.member_since'.tr(
               namedArgs: {
-                'date': profile != null
-                    ? DateFormat('MMMM yyyy').format(profile.joinedDate)
-                    : DateFormat('MMMM yyyy').format(DateTime.now()),
+                'date': DateFormat('MMMM yyyy').format(DateTime.now()),
               },
             ),
             style: AppTypography.bodyMedium.copyWith(
-              color: isDark ? Colors.white70 : AppColors.textSecondary,
+              color: AppColors.textSecondary,
             ),
           ),
-
-          // Email, если есть
-          if (profile?.email != null && profile!.email!.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(
-              profile.email!,
-              style: AppTypography.bodySmall.copyWith(
-                color: isDark ? Colors.white70 : AppColors.textSecondary,
-              ),
-            ),
-          ],
-
-          // Возраст, если указана дата рождения
-          if (profile?.dateOfBirth != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              'profile.age'.tr(namedArgs: {'age': profile!.age.toString()}),
-              style: AppTypography.bodySmall.copyWith(
-                color: isDark ? Colors.white70 : AppColors.textSecondary,
-              ),
-            ),
-          ],
-
-          // Описание, если есть
-          if (profile?.bio != null && profile!.bio!.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: isDark
-                    ? Colors.white.withOpacity(0.05)
-                    : AppColors.surfaceVariant,
-                borderRadius: BorderRadius.circular(8),
-                border: isDark
-                    ? Border.all(color: Colors.white.withOpacity(0.1))
-                    : null,
-              ),
-              child: Text(
-                profile.bio!,
-                style: AppTypography.bodyMedium.copyWith(
-                  color: isDark ? Colors.white70 : AppColors.textSecondary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
 
           const SizedBox(height: 16),
 
@@ -384,9 +332,6 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
     BuildContext context,
     AsyncValue<List<dynamic>> allEntriesAsync,
   ) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -687,7 +632,7 @@ class _ProfileScreenCleanState extends ConsumerState<ProfileScreenClean> {
           Text(
             'database.error_loading'.tr(),
             style: AppTypography.bodyMedium.copyWith(
-              color: isDark ? Colors.white70 : AppColors.textSecondary,
+              color: AppColors.textSecondary,
             ),
           ),
         ],
@@ -966,19 +911,11 @@ class _ActionTile extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: AppTypography.caption.copyWith(
-                      color: isDark ? Colors.white70 : null,
-                    ),
-                  ),
+                  Text(subtitle, style: AppTypography.caption),
                 ],
               ),
             ),
-            Icon(
-              Icons.chevron_right,
-              color: isDark ? Colors.white54 : AppColors.textHint,
-            ),
+            Icon(Icons.chevron_right, color: AppColors.textHint),
           ],
         ),
       ),

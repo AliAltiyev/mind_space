@@ -358,13 +358,13 @@ class _StatsErrorWidget extends StatelessWidget {
           const Icon(Icons.error, color: Colors.red, size: 32),
           const SizedBox(height: 8),
           Text(
-            'Ошибка загрузки статистики',
+            'errors.load_stats'.tr(),
             style: Theme.of(
               context,
             ).textTheme.titleSmall?.copyWith(color: Colors.red),
           ),
           const SizedBox(height: 8),
-          ElevatedButton(onPressed: onRetry, child: const Text('Повторить')),
+          ElevatedButton(onPressed: onRetry, child: Text('common.try_again'.tr())),
         ],
       ),
     );
@@ -410,13 +410,13 @@ class _AchievementsErrorWidget extends StatelessWidget {
           const Icon(Icons.error, color: Colors.red, size: 32),
           const SizedBox(height: 8),
           Text(
-            'Ошибка загрузки достижений',
+            'errors.load_achievements'.tr(),
             style: Theme.of(
               context,
             ).textTheme.titleSmall?.copyWith(color: Colors.red),
           ),
           const SizedBox(height: 8),
-          ElevatedButton(onPressed: onRetry, child: const Text('Повторить')),
+          ElevatedButton(onPressed: onRetry, child: Text('common.try_again'.tr())),
         ],
       ),
     );
@@ -442,14 +442,14 @@ class _EmptyAchievementsWidget extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Пока нет достижений',
+            'achievements.empty'.tr(),
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(color: Colors.white70),
           ),
           const SizedBox(height: 8),
           Text(
-            'Продолжайте вести дневник настроения, чтобы получить первые достижения!',
+            'achievements.empty_hint'.tr(),
             style: Theme.of(
               context,
             ).textTheme.bodySmall?.copyWith(color: Colors.white60),

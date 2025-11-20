@@ -391,6 +391,58 @@ class HomeScreenClean extends ConsumerWidget {
 
   /// Быстрые действия
   Widget _buildQuickActions(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'home.quick_actions'.tr(),
+            style: AppTypography.h4.copyWith(color: AppColors.textPrimary),
+          ),
+          const SizedBox(height: 16),
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 1.5,
+            children: [
+              _ActionCard(
+                title: 'stats.title'.tr(),
+                icon: Icons.analytics,
+                color: AppColors.primary,
+                onTap: () => context.go('/stats'),
+              ),
+              _ActionCard(
+                title: 'entries.title'.tr(),
+                icon: Icons.list,
+                color: AppColors.secondary,
+                onTap: () => context.go('/home/entries'),
+              ),
+              _ActionCard(
+                title: 'home.ai_insights'.tr(),
+                icon: Icons.psychology,
+                color: AppColors.info,
+                onTap: () => context.go('/stats/insights'),
+              ),
+              _ActionCard(
+                title: 'ai.meditation.title'.tr(),
+                icon: Icons.self_improvement,
+                color: AppColors.success,
+                onTap: () => context.go('/stats/meditation'),
+              ),
+            ],
+          ),
+        ],
+      ),
     return Builder(
       builder: (context) {
         final theme = Theme.of(context);

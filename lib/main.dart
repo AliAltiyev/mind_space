@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,9 +16,9 @@ import 'features/profile/presentation/blocs/achievements_bloc.dart';
 import 'features/profile/presentation/blocs/preferences_bloc.dart';
 import 'features/profile/presentation/blocs/profile_bloc.dart';
 import 'features/profile/presentation/blocs/stats_bloc.dart';
-import 'app/providers/theme_provider.dart';
-import 'core/services/app_settings_service.dart';
-import 'shared/presentation/theme/app_theme.dart' as app_theme;
+import 'core/constants/app_typography.dart';
+import 'core/services/app_settings_service.dart' hide AppTheme;
+import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,37 +26,39 @@ void main() async {
   // Инициализация SharedPreferences
   await SharedPreferencesService.instance.init();
 
-  // Получаем сохраненный язык
-  final settingsService = AppSettingsService();
-  final savedLanguage = await settingsService.getLanguage();
-
-  // Инициализация локализации
-  await EasyLocalization.ensureInitialized();
-
   // Инициализация DI
   await configureDependencies();
+
+  // Инициализация EasyLocalization
+  await EasyLocalization.ensureInitialized();
 
   runApp(
     EasyLocalization(
       supportedLocales: const [
-        Locale('en'), // English
-        Locale('ru'), // Russian
-        Locale('zh'), // Chinese (Mandarin)
-        Locale('hi'), // Hindi
-        Locale('es'), // Spanish
-        Locale('fr'), // French
-        Locale('tr'), // Turkish
-        Locale('tk'), // Turkmen (используем турецкий как fallback)
+        Locale('en'),
+        Locale('ru'),
+        Locale('zh'),
+        Locale('hi'),
+        Locale('es'),
+        Locale('fr'),
+        Locale('tr'),
+        Locale('tk'),
       ],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      startLocale: savedLanguage.code == 'tk'
-          ? const Locale('tr')
-          : Locale(savedLanguage.code),
       child: const ProviderScope(child: MindSpaceApp()),
     ),
   );
 }
+
+/// Провайдер для сохраненной локали
+final savedLocaleProvider = FutureProvider<Locale>((ref) async {
+  final settingsService = AppSettingsService();
+  final savedLanguage = await settingsService.getLanguage();
+  // Для туркменского языка используем турецкий как fallback
+  final localeCode = savedLanguage.code == 'tk' ? 'tr' : savedLanguage.code;
+  return Locale(localeCode);
+});
 
 /// Главное приложение
 class MindSpaceApp extends ConsumerWidget {
@@ -66,7 +67,7 @@ class MindSpaceApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
-    final themeMode = ref.watch(appThemeProvider);
+    final savedLocale = ref.watch(savedLocaleProvider);
 
     return MultiBlocProvider(
       providers: [
@@ -109,19 +110,8 @@ class MindSpaceApp extends ConsumerWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: const [
-          Locale('en'), // English - поддерживается MaterialLocalizations
-          Locale('ru'), // Russian - поддерживается MaterialLocalizations
-          Locale('zh'), // Chinese - поддерживается MaterialLocalizations
-          Locale('hi'), // Hindi - поддерживается MaterialLocalizations
-          Locale('es'), // Spanish - поддерживается MaterialLocalizations
-          Locale('fr'), // French - поддерживается MaterialLocalizations
-          Locale('tr'), // Turkish - поддерживается MaterialLocalizations
-          // Locale('tk'), // Turkmen - НЕ поддерживается MaterialLocalizations
-        ],
-        locale: context.locale.languageCode == 'tk'
-            ? const Locale('tr')
-            : context.locale,
+        supportedLocales: context.supportedLocales,
+        locale: savedLocale.valueOrNull ?? context.locale,
 
         // Тема
         theme: app_theme.AppTheme.lightTheme,

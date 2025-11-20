@@ -451,7 +451,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
     // Перенаправления и защищенные маршруты
     redirect: (context, state) {
-      // Перенаправляем корневой путь на /home
+      // Перенаправление корневого маршрута на главный экран
       if (state.uri.path == '/') {
         return '/home';
       }

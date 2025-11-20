@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-import '../../../../presentation/widgets/core/amazing_background.dart' as amazing;
-import '../../../../presentation/widgets/core/amazing_glass_surface.dart' as amazing;
+import '../../../../presentation/widgets/core/amazing_background.dart'
+    as amazing;
+import '../../../../presentation/widgets/core/amazing_glass_surface.dart'
+    as amazing;
 import '../../../../core/services/ai_analysis_service.dart';
 
 /// Страница ИИ инсайтов и рекомендаций
@@ -35,9 +38,11 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
     try {
       // Mock данные для демонстрации
       final mockEntries = _generateMockEntries();
-      
+
       final patternAnalysis = await _aiService.analyzeMoodPatterns(mockEntries);
-      final activityAnalysis = await _aiService.analyzeActivityCorrelations(mockEntries);
+      final activityAnalysis = await _aiService.analyzeActivityCorrelations(
+        mockEntries,
+      );
       final recommendations = await _aiService.generatePersonalRecommendations(
         mockEntries,
         patternAnalysis,
@@ -57,7 +62,9 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loading insights: $e'),
+            content: Text(
+              'errors.load_insights'.tr(namedArgs: {'error': e.toString()}),
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -112,19 +119,19 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
                   children: [
                     // Overview
                     _buildOverview(),
-                    
+
                     const SizedBox(height: 20),
-                    
+
                     // Pattern Analysis
                     if (_patternAnalysis != null) _buildPatternAnalysis(),
-                    
+
                     const SizedBox(height: 20),
-                    
+
                     // Activity Correlations
                     if (_activityAnalysis != null) _buildActivityCorrelations(),
-                    
+
                     const SizedBox(height: 20),
-                    
+
                     // Recommendations
                     _buildRecommendations(),
                   ],
@@ -143,11 +150,7 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
         children: [
           Row(
             children: [
-              const Icon(
-                Icons.psychology,
-                color: Color(0xFFFB9E3A),
-                size: 28,
-              ),
+              const Icon(Icons.psychology, color: Color(0xFFFB9E3A), size: 28),
               const SizedBox(width: 12),
               Text(
                 'AI Analysis Overview',
@@ -163,11 +166,7 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
           const SizedBox(height: 16),
           const Text(
             'Based on your mood tracking data, here are personalized insights and recommendations to help you understand and improve your mental well-being.',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white70,
-              height: 1.5,
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.white70, height: 1.5),
           ),
         ],
       ),
@@ -176,7 +175,7 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
 
   Widget _buildPatternAnalysis() {
     final analysis = _patternAnalysis!;
-    
+
     return amazing.AmazingGlassSurface(
       effectType: amazing.GlassEffectType.cyber,
       colorScheme: amazing.ColorScheme.cyber,
@@ -193,29 +192,25 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
             ),
           ),
           const SizedBox(height: 16),
-          
+
           // Average Mood
           Row(
             children: [
               Expanded(
                 child: _MetricCard(
-                  title: 'Average Mood',
+                  title: 'stats.average_mood'.tr(),
                   value: analysis.averageMood.toStringAsFixed(1),
                   icon: Icons.trending_up,
                   color: _getMoodColor(analysis.averageMood),
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
-                child: _TrendCard(
-                  trend: analysis.trend,
-                ),
-              ),
+              Expanded(child: _TrendCard(trend: analysis.trend)),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Insights
           Text(
             'Key Insights',
@@ -226,30 +221,32 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
             ),
           ),
           const SizedBox(height: 8),
-          ...analysis.insights.map((insight) => Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Icon(
-                  Icons.lightbulb_outline,
-                  color: Color(0xFFFB9E3A),
-                  size: 16,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    insight,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
-                      height: 1.4,
+          ...analysis.insights.map(
+            (insight) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.lightbulb_outline,
+                    color: Color(0xFFFB9E3A),
+                    size: 16,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      insight,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                        height: 1.4,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          )),
+          ),
         ],
       ),
     );
@@ -257,7 +254,7 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
 
   Widget _buildActivityCorrelations() {
     final analysis = _activityAnalysis!;
-    
+
     return amazing.AmazingGlassSurface(
       effectType: amazing.GlassEffectType.rainbow,
       colorScheme: amazing.ColorScheme.rainbow,
@@ -274,7 +271,7 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
             ),
           ),
           const SizedBox(height: 16),
-          
+
           // Top Positive Activities
           if (analysis.topPositiveActivities.isNotEmpty) ...[
             Text(
@@ -286,13 +283,12 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
               ),
             ),
             const SizedBox(height: 8),
-            ...analysis.topPositiveActivities.map((activity) => _ActivityItem(
-              activity: activity,
-              isPositive: true,
-            )),
+            ...analysis.topPositiveActivities.map(
+              (activity) => _ActivityItem(activity: activity, isPositive: true),
+            ),
             const SizedBox(height: 16),
           ],
-          
+
           // Top Negative Activities
           if (analysis.topNegativeActivities.isNotEmpty) ...[
             Text(
@@ -304,13 +300,14 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
               ),
             ),
             const SizedBox(height: 8),
-            ...analysis.topNegativeActivities.map((activity) => _ActivityItem(
-              activity: activity,
-              isPositive: false,
-            )),
+            ...analysis.topNegativeActivities.map(
+              (activity) =>
+                  _ActivityItem(activity: activity, isPositive: false),
+            ),
           ],
-          
-          if (analysis.topPositiveActivities.isEmpty && analysis.topNegativeActivities.isEmpty)
+
+          if (analysis.topPositiveActivities.isEmpty &&
+              analysis.topNegativeActivities.isEmpty)
             const Text(
               'Add more activities to your mood entries to see activity correlations.',
               style: TextStyle(
@@ -351,11 +348,11 @@ class _AIInsightsPageState extends ConsumerState<AIInsightsPage> {
             ],
           ),
           const SizedBox(height: 16),
-          
+
           ..._recommendations.asMap().entries.map((entry) {
             final index = entry.key;
             final recommendation = entry.value;
-            
+
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.all(16),
@@ -488,10 +485,7 @@ class _MetricCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            color.withOpacity(0.2),
-            Colors.transparent,
-          ],
+          colors: [color.withOpacity(0.2), Colors.transparent],
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withOpacity(0.3)),
@@ -511,10 +505,7 @@ class _MetricCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.white70,
-            ),
+            style: const TextStyle(fontSize: 12, color: Colors.white70),
             textAlign: TextAlign.center,
           ),
         ],
@@ -556,10 +547,7 @@ class _TrendCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            trendColor.withOpacity(0.2),
-            Colors.transparent,
-          ],
+          colors: [trendColor.withOpacity(0.2), Colors.transparent],
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: trendColor.withOpacity(0.3)),
@@ -579,10 +567,7 @@ class _TrendCard extends StatelessWidget {
           const SizedBox(height: 4),
           const Text(
             'Trend',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.white70,
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.white70),
           ),
         ],
       ),
@@ -594,10 +579,7 @@ class _ActivityItem extends StatelessWidget {
   final String activity;
   final bool isPositive;
 
-  const _ActivityItem({
-    required this.activity,
-    required this.isPositive,
-  });
+  const _ActivityItem({required this.activity, required this.isPositive});
 
   @override
   Widget build(BuildContext context) {

@@ -21,9 +21,8 @@
         "no": "Hayır",
         "try_again": "Tekrar Dene",
         "refresh": "Yenile",
-        "clear": "Temizle",
-        "minutes": "dk",
-        "saving": "Saving..."
+        "unknown_state": "Bilinmeyen durum",
+        "reset": "Sıfırla"
     },
     "navigation": {
         "home": "Ana Sayfa",
@@ -443,74 +442,30 @@
         "ai_gratitude_format": "Yanıtı JSON olarak formatlayın: title, description, emoji, accentColor ve prompts alanları ile",
         "ai_meditation_format": "Yanıtı JSON olarak formatlayın: title, description, emoji, accentColor, type, duration, instructions ve tips alanları ile"
     },
-    "stats": {
-        "title": "İstatistikler",
-        "overall_stats": "Genel İstatistikler",
-        "mood_trends": "Ruh Hali Eğilimleri",
-        "weekly_overview": "Haftalık Genel Bakış",
-        "monthly_overview": "Aylık Genel Bakış",
-        "average_mood": "Ortalama Ruh Hali",
-        "total_entries": "Toplam Girişler",
-        "streak": "Mevcut Seri",
-        "best_day": "En İyi Gün",
-        "this_week": "Bu Hafta",
-        "mood_distribution": "Ruh Hali Dağılımı",
-        "weekly_trends": "Haftalık Eğilimler",
-        "no_data": "İstatistikler için veri yok",
-        "add_entries_for_stats": "İstatistikleri görmek için ruh hali girişleri ekleyin",
-        "no_data_display": "Gösterilecek veri yok",
-        "unknown": "Bilinmiyor"
+    "settings": {
+        "all_data_deleted": "Tüm veriler silindi",
+        "delete_data_error": "Veri silinirken hata",
+        "settings_reset_success": "Ayarlar başarıyla sıfırlandı",
+        "settings_reset_error": "Ayarları sıfırlarken hata",
+        "reset_settings_dialog_title": "Ayarları sıfırla?",
+        "reset_settings_warning": "Tüm ayarlar varsayılan değerlere döndürülecek. Ruh hali verileriniz etkilenmeyecek.",
+        "reminder_time_updated": "Hatırlatma zamanı {time} olarak değiştirildi"
     },
-    "achievements": {
-        "title": "Başarılar",
-        "first_entry": "İlk Giriş",
-        "week_streak": "Haftalık Seri",
-        "month_streak": "Aylık Seri",
-        "hundred_entries": "100 Giriş",
-        "five_hundred_entries": "500 Giriş"
-    },
-    "user_level": {
-        "level": "Seviye",
-        "experience": "Deneyim",
-        "next_level": "Sonraki seviyeye",
-        "level_up": "Seviye atlandı!",
-        "achievement_unlocked": "Başarı açıldı",
-        "points_earned": "Puan kazanıldı",
-        "novice": "Acemi",
-        "explorer": "Kaşif",
-        "expert": "Uzman",
-        "master": "Usta",
-        "guru": "Guru",
-        "legend": "Efsane",
-        "novice_desc": "Kendini tanıma yolunun başlangıcı",
-        "explorer_desc": "Duygularınızın aktif keşfi",
-        "expert_desc": "Ruh hali kalıplarının derinlemesine anlaşılması",
-        "master_desc": "Duygu yönetiminde ustalık",
-        "guru_desc": "Zihinsel sağlık uzmanı",
-        "legend_desc": "Duyguların efsanevi ustası"
-    },
-    "api": {
-        "connection_error": "Bağlantı hatası",
-        "timeout_error": "Zaman aşımı hatası",
-        "server_error": "Sunucu hatası",
-        "invalid_response": "Geçersiz sunucu yanıtı"
+    "ai": {
+        "meditation": {
+            "start_with_duration": "Meditasyona başla ({duration} dk)"
+        },
+        "error_analysis_title": "Analiz Hatası"
     },
     "demo": {
-        "title": "Mükemmelleştirilmiş MoodBlob Gösterimi",
-        "description": "Tüm iyileştirmelerin ve optimizasyonların gösterimi",
-        "select_mood": "Ruh Hali Notunu Seç",
-        "performance_optimizations": "Performans Optimizasyonları"
+        "performance_list": "• Paint nesneleri önbellekleme\n• Optimize CustomPainter\n• İzolasyon için RepaintBoundary\n• Dalga efektleri için zamanlayıcı tabanlı temizleme\n• Sabitlerle birleşik tasarım sistemi"
     },
-    "analytics": {
-        "title": "Analitik",
-        "page": "Analitik Sayfası"
+    "profile": {
+        "updated_successfully": "Profil başarıyla güncellendi!",
+        "loading_error_full": "Profil yüklenirken hata"
     },
-    "database": {
-        "error_saving": "Kaydetme hatası",
-        "error_loading": "Yükleme hatası",
-        "data_cleared": "Veriler temizlendi",
-        "backup_created": "Yedek oluşturuldu",
-        "mood_entry_added": "✅ Ruh hali girişi eklendi: {mood} - {note} - Tarih: {date}",
-        "no_note": "not yok"
+    "stats": {
+        "loading_error_full": "İstatistikler yüklenirken hata",
+        "error_loading_title": "Yükleme Hatası"
     }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:easy_localization/easy_localization.dart';
 import '../constants/navigation.dart';
 
 /// Сервис для управления настройками приложения
@@ -46,18 +45,6 @@ class AppSettingsService {
   Future<void> setLanguage(AppLanguage language) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_languageKey, language.code);
-    
-    // Обновляем локаль в EasyLocalization
-    try {
-      final context = navigatorKey.currentContext;
-      if (context != null) {
-        // Для туркменского языка используем турецкий как fallback
-        final localeCode = language.code == 'tk' ? 'tr' : language.code;
-        await context.setLocale(Locale(localeCode));
-      }
-    } catch (e) {
-      print('Error setting locale: $e');
-    }
   }
 
   /// Уведомления
@@ -87,15 +74,13 @@ class AppSettingsService {
     final prefs = await SharedPreferences.getInstance();
     final timeString = prefs.getString(_reminderTimeKey) ?? '20:00';
     final parts = timeString.split(':');
-    return TimeOfDay(
-      hour: int.parse(parts[0]),
-      minute: int.parse(parts[1]),
-    );
+    return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
   }
 
   Future<void> setReminderTime(TimeOfDay time) async {
     final prefs = await SharedPreferences.getInstance();
-    final timeString = '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+    final timeString =
+        '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
     await prefs.setString(_reminderTimeKey, timeString);
   }
 
@@ -207,8 +192,6 @@ enum AppTheme {
 
   const AppTheme(this.displayNameKey);
   final String displayNameKey;
-  
-  String get displayName => displayNameKey.tr();
 }
 
 /// Язык приложения
@@ -225,8 +208,6 @@ enum AppLanguage {
   const AppLanguage(this.displayNameKey, this.code);
   final String displayNameKey;
   final String code;
-  
-  String get displayName => displayNameKey.tr();
 }
 
 /// Модель настроек приложения

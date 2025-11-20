@@ -21,9 +21,8 @@
         "no": "Non",
         "try_again": "Essayer à nouveau",
         "refresh": "Actualiser",
-        "clear": "Effacer",
-        "minutes": "min",
-        "saving": "Saving..."
+        "unknown_state": "État inconnu",
+        "reset": "Réinitialiser"
     },
     "navigation": {
         "home": "Accueil",
@@ -510,5 +509,31 @@
         "ai_pattern_format": "FORMATEZ LA RÉPONSE EN JSON avec les champs title, description, emoji, accentColor, patterns et recommendations",
         "ai_gratitude_format": "FORMATEZ LA RÉPONSE EN JSON avec les champs title, description, emoji, accentColor et prompts",
         "ai_meditation_format": "FORMATEZ LA RÉPONSE EN JSON avec les champs title, description, emoji, accentColor, type, duration, instructions et tips"
+    },
+    "settings": {
+        "all_data_deleted": "Toutes les données supprimées",
+        "delete_data_error": "Erreur lors de la suppression des données",
+        "settings_reset_success": "Paramètres réinitialisés avec succès",
+        "settings_reset_error": "Erreur lors de la réinitialisation des paramètres",
+        "reset_settings_dialog_title": "Réinitialiser les paramètres?",
+        "reset_settings_warning": "Tous les paramètres seront rétablis aux valeurs par défaut. Vos données d'humeur ne seront pas affectées.",
+        "reminder_time_updated": "Heure du rappel changée à {time}"
+    },
+    "ai": {
+        "meditation": {
+            "start_with_duration": "Commencer la méditation ({duration} min)"
+        },
+        "error_analysis_title": "Erreur d'analyse"
+    },
+    "demo": {
+        "performance_list": "• Mise en cache des objets Paint\n• CustomPainter optimisé\n• RepaintBoundary pour l'isolation\n• Nettoyage basé sur minuterie pour effets d'ondulation\n• Système de conception unifié avec constantes"
+    },
+    "profile": {
+        "updated_successfully": "Profil mis à jour avec succès!",
+        "loading_error_full": "Erreur lors du chargement du profil"
+    },
+    "stats": {
+        "loading_error_full": "Erreur lors du chargement des statistiques",
+        "error_loading_title": "Erreur de chargement"
     }
 }

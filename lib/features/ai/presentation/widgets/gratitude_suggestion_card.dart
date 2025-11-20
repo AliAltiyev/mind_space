@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../../presentation/widgets/core/glass_surface.dart';
 import '../../domain/entities/gratitude_entity.dart';
@@ -465,7 +466,7 @@ class GratitudeSuggestionErrorCard extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Попробовать снова'),
+                label: Text('common.try_again'.tr()),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,

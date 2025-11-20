@@ -20,10 +20,7 @@
         "yes": "Hawa",
         "no": "Ýok",
         "try_again": "Gaýtadan synanyşmak",
-        "refresh": "Täzelemek",
-        "clear": "Arassalamak",
-        "minutes": "min",
-        "saving": "Saving..."
+        "refresh": "Täzelemek"
     },
     "navigation": {
         "home": "Baş sahypa",
@@ -386,75 +383,5 @@
         "ai_pattern_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor, patterns we recommendations meýdanlary bilen",
         "ai_gratitude_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor we prompts meýdanlary bilen",
         "ai_meditation_format": "Jogaby JSON formatda düzüň: title, description, emoji, accentColor, type, duration, instructions we tips meýdanlary bilen"
-    },
-    "stats": {
-        "title": "Statistika",
-        "overall_stats": "Jemi statistika",
-        "mood_trends": "Köwüş ugurlary",
-        "weekly_overview": "Hepdelik gözden geçirme",
-        "monthly_overview": "Aýlyk gözden geçirme",
-        "average_mood": "Ortaça köwüş",
-        "total_entries": "Jemi ýazgylar",
-        "streak": "Häzirki seriýa",
-        "best_day": "Iň gowy gün",
-        "this_week": "Bu hepde",
-        "mood_distribution": "Köwüş paýlanyşy",
-        "weekly_trends": "Hepdelik ugurlar",
-        "no_data": "Statistika üçin maglumat ýok",
-        "add_entries_for_stats": "Statistikany görmek üçin köwüş ýazgylary goşuň",
-        "no_data_display": "Görkezmek üçin maglumat ýok",
-        "unknown": "Näbelli"
-    },
-    "achievements": {
-        "title": "Üstünlikler",
-        "first_entry": "Ilkinji ýazgy",
-        "week_streak": "Hepdelik seriýa",
-        "month_streak": "Aýlyk seriýa",
-        "hundred_entries": "100 ýazgy",
-        "five_hundred_entries": "500 ýazgy"
-    },
-    "user_level": {
-        "level": "Seýp",
-        "experience": "Täjribe",
-        "next_level": "Indiki seýpe",
-        "level_up": "Seýp ýokarlandy!",
-        "achievement_unlocked": "Üstünlik açyldy",
-        "points_earned": "Hasaplar gazanyldy",
-        "novice": "Başlangyç",
-        "explorer": "Açyjy",
-        "expert": "Hünärmen",
-        "master": "Ustaz",
-        "guru": "Guru",
-        "legend": "Legenda",
-        "novice_desc": "Özüňi bilmek ýolunyň başlangyjy",
-        "explorer_desc": "Duýgularyňyzyň işjeň öwrenilmegi",
-        "expert_desc": "Köwüş nusgalarynyň çuň düşünmegi",
-        "master_desc": "Duýgulary dolandyrmakda ussatlyk",
-        "guru_desc": "Akyl saglygy boýunça hünärmen",
-        "legend_desc": "Duýgularyň legenda ustazy"
-    },
-    "api": {
-        "connection_error": "Birikme ýalňyşlygy",
-        "timeout_error": "Wagt ýalňyşlygy",
-        "server_error": "Serwer ýalňyşlygy",
-        "invalid_response": "Nädogry serwer jogaby"
-    },
-    "demo": {
-        "title": "Gowulaşdyrylan MoodBlob görkezmesi",
-        "description": "Hemme üýtgeşmeleriň we optimizasiýalaryň görkezmegi",
-        "select_mood": "Köwüş bahasy saýlaň",
-        "performance_optimizations": "Öndürijilik optimizasiýalary"
-    },
-    "analytics": {
-        "title": "Analitika",
-        "page": "Analitika sahypasy"
-    },
-    "database": {
-        "error_saving": "Saklamakda ýalňyşlyk",
-        "error_loading": "Ýüklemekde ýalňyşlyk",
-        "data_cleared": "Maglumatlar arassalandy",
-        "backup_created": "Yedek nusga döredildi",
-        "mood_entry_added": "✅ Köwüş ýazgysy goşuldy: {mood} - {note} - Senesi: {date}",
-        "no_note": "bellik ýok"
     }
 }

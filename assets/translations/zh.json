@@ -21,9 +21,8 @@
         "no": "否",
         "try_again": "再试一次",
         "refresh": "刷新",
-        "clear": "清除",
-        "minutes": "分钟",
-        "saving": "Saving..."
+        "unknown_state": "未知状态",
+        "reset": "重置"
     },
     "navigation": {
         "home": "首页",
@@ -444,74 +443,30 @@
         "ai_gratitude_format": "将回答格式化为JSON，包含title、description、emoji、accentColor和prompts字段",
         "ai_meditation_format": "将回答格式化为JSON，包含title、description、emoji、accentColor、type、duration、instructions和tips字段"
     },
-    "stats": {
-        "title": "统计",
-        "overall_stats": "总体统计",
-        "mood_trends": "情绪趋势",
-        "weekly_overview": "周概览",
-        "monthly_overview": "月概览",
-        "average_mood": "平均情绪",
-        "total_entries": "总条目",
-        "streak": "当前连续天数",
-        "best_day": "最佳日子",
-        "this_week": "本周",
-        "mood_distribution": "情绪分布",
-        "weekly_trends": "周趋势",
-        "no_data": "没有统计数据",
-        "add_entries_for_stats": "添加情绪条目以查看统计",
-        "no_data_display": "没有要显示的数据",
-        "unknown": "未知"
+    "settings": {
+        "all_data_deleted": "所有数据已删除",
+        "delete_data_error": "删除数据时出错",
+        "settings_reset_success": "设置已成功重置",
+        "settings_reset_error": "重置设置时出错",
+        "reset_settings_dialog_title": "重置设置？",
+        "reset_settings_warning": "所有设置将恢复为默认值。您的心情数据不会受到影响。",
+        "reminder_time_updated": "提醒时间已更改为{time}"
     },
-    "achievements": {
-        "title": "成就",
-        "first_entry": "第一条",
-        "week_streak": "周连续",
-        "month_streak": "月连续",
-        "hundred_entries": "100条",
-        "five_hundred_entries": "500条"
-    },
-    "user_level": {
-        "level": "等级",
-        "experience": "经验",
-        "next_level": "到下一级",
-        "level_up": "升级！",
-        "achievement_unlocked": "成就解锁",
-        "points_earned": "获得积分",
-        "novice": "新手",
-        "explorer": "探索者",
-        "expert": "专家",
-        "master": "大师",
-        "guru": "导师",
-        "legend": "传奇",
-        "novice_desc": "自我认识之路的开始",
-        "explorer_desc": "积极探索你的情绪",
-        "expert_desc": "深入理解情绪模式",
-        "master_desc": "情绪管理大师",
-        "guru_desc": "心理健康专家",
-        "legend_desc": "情绪传奇大师"
-    },
-    "api": {
-        "connection_error": "连接错误",
-        "timeout_error": "超时错误",
-        "server_error": "服务器错误",
-        "invalid_response": "无效的服务器响应"
+    "ai": {
+        "meditation": {
+            "start_with_duration": "开始冥想（{duration}分钟）"
+        },
+        "error_analysis_title": "分析错误"
     },
     "demo": {
-        "title": "完美MoodBlob展示",
-        "description": "展示所有改进和优化",
-        "select_mood": "选择情绪评分",
-        "performance_optimizations": "性能优化"
+        "performance_list": "• Paint对象缓存\n• 优化的CustomPainter\n• RepaintBoundary用于隔离\n• 基于计时器的波纹效果清理\n• 具有常量的统一设计系统"
     },
-    "analytics": {
-        "title": "分析",
-        "page": "分析页面"
+    "profile": {
+        "updated_successfully": "个人资料更新成功！",
+        "loading_error_full": "加载个人资料时出错"
     },
-    "database": {
-        "error_saving": "保存错误",
-        "error_loading": "加载错误",
-        "data_cleared": "数据已清除",
-        "backup_created": "已创建备份",
-        "mood_entry_added": "✅ 情绪条目已添加：{mood} - {note} - 日期：{date}",
-        "no_note": "无备注"
+    "stats": {
+        "loading_error_full": "加载统计数据时出错",
+        "error_loading_title": "加载错误"
     }
 }

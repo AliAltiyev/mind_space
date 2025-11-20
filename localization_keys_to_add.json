@@ -1,0 +1,185 @@
+{
+  "ИНСТРУКЦИЯ": "Эти ключи нужно добавить в файлы assets/translations/*.json",
+  "ПРИМЕЧАНИЕ": "Для всех 8 языков: en, ru, es, fr, zh, hi, tr, tk",
+  
+  "common": {
+    "unknown_state": {
+      "en": "Unknown state",
+      "ru": "Неизвестное состояние",
+      "es": "Estado desconocido",
+      "fr": "État inconnu",
+      "zh": "未知状态",
+      "hi": "अज्ञात स्थिति",
+      "tr": "Bilinmeyen durum",
+      "tk": "Näbelli ýagdaý"
+    },
+    "reset": {
+      "en": "Reset",
+      "ru": "Сбросить",
+      "es": "Restablecer",
+      "fr": "Réinitialiser",
+      "zh": "重置",
+      "hi": "रीसेट करें",
+      "tr": "Sıfırla",
+      "tk": "Täzeden başla"
+    }
+  },
+  
+  "settings": {
+    "all_data_deleted": {
+      "en": "All data deleted",
+      "ru": "Все данные удалены",
+      "es": "Todos los datos eliminados",
+      "fr": "Toutes les données supprimées",
+      "zh": "所有数据已删除",
+      "hi": "सभी डेटा हटाया गया",
+      "tr": "Tüm veriler silindi",
+      "tk": "Ähli maglumatlar öçürildi"
+    },
+    "delete_data_error": {
+      "en": "Error deleting data",
+      "ru": "Ошибка удаления данных",
+      "es": "Error al eliminar datos",
+      "fr": "Erreur lors de la suppression des données",
+      "zh": "删除数据时出错",
+      "hi": "डेटा हटाने में त्रुटि",
+      "tr": "Veri silinirken hata",
+      "tk": "Maglumatlary öçürmekde ýalňyşlyk"
+    },
+    "settings_reset_success": {
+      "en": "Settings reset successfully",
+      "ru": "Настройки успешно сброшены",
+      "es": "Configuración restablecida con éxito",
+      "fr": "Paramètres réinitialisés avec succès",
+      "zh": "设置已成功重置",
+      "hi": "सेटिंग्स सफलतापूर्वक रीसेट हुईं",
+      "tr": "Ayarlar başarıyla sıfırlandı",
+      "tk": "Sazlamalar üstünlikli täzeden düzüldi"
+    },
+    "settings_reset_error": {
+      "en": "Error resetting settings",
+      "ru": "Ошибка сброса настроек",
+      "es": "Error al restablecer configuración",
+      "fr": "Erreur lors de la réinitialisation des paramètres",
+      "zh": "重置设置时出错",
+      "hi": "सेटिंग्स रीसेट करने में त्रुटि",
+      "tr": "Ayarları sıfırlarken hata",
+      "tk": "Sazlamalary täzeden düzmekde ýalňyşlyk"
+    },
+    "reset_settings_dialog_title": {
+      "en": "Reset settings?",
+      "ru": "Сбросить настройки?",
+      "es": "¿Restablecer configuración?",
+      "fr": "Réinitialiser les paramètres?",
+      "zh": "重置设置？",
+      "hi": "सेटिंग्स रीसेट करें?",
+      "tr": "Ayarları sıfırla?",
+      "tk": "Sazlamalary täzeden düz?"
+    },
+    "reset_settings_warning": {
+      "en": "All settings will be returned to default values. Your mood data will not be affected.",
+      "ru": "Все настройки будут возвращены к значениям по умолчанию. Ваши данные настроения не будут затронуты.",
+      "es": "Toda la configuración volverá a los valores predeterminados. Tus datos de estado de ánimo no se verán afectados.",
+      "fr": "Tous les paramètres seront rétablis aux valeurs par défaut. Vos données d'humeur ne seront pas affectées.",
+      "zh": "所有设置将恢复为默认值。您的心情数据不会受到影响。",
+      "hi": "सभी सेटिंग्स डिफ़ॉल्ट मानों पर वापस आ जाएंगी। आपका मूड डेटा प्रभावित नहीं होगा।",
+      "tr": "Tüm ayarlar varsayılan değerlere döndürülecek. Ruh hali verileriniz etkilenmeyecek.",
+      "tk": "Ähli sazlamalar deslapky bahalara gaýtarylar. Siziň keýpiňiz maglumatlary täsir etmez."
+    },
+    "reminder_time_updated": {
+      "en": "Reminder time changed to {time}",
+      "ru": "Время напоминания изменено на {time}",
+      "es": "Hora del recordatorio cambiada a {time}",
+      "fr": "Heure du rappel changée à {time}",
+      "zh": "提醒时间已更改为{time}",
+      "hi": "अनुस्मारक समय {time} में बदला गया",
+      "tr": "Hatırlatma zamanı {time} olarak değiştirildi",
+      "tk": "Ýatlatma wagty {time} üýtgedildi"
+    }
+  },
+  
+  "profile": {
+    "updated_successfully": {
+      "en": "Profile updated successfully!",
+      "ru": "Профиль успешно обновлен!",
+      "es": "¡Perfil actualizado con éxito!",
+      "fr": "Profil mis à jour avec succès!",
+      "zh": "个人资料更新成功！",
+      "hi": "प्रोफ़ाइल सफलतापूर्वक अपडेट की गई!",
+      "tr": "Profil başarıyla güncellendi!",
+      "tk": "Profil üstünlikli täzelendi!"
+    },
+    "loading_error_full": {
+      "en": "Error loading profile",
+      "ru": "Ошибка загрузки профиля",
+      "es": "Error al cargar perfil",
+      "fr": "Erreur lors du chargement du profil",
+      "zh": "加载个人资料时出错",
+      "hi": "प्रोफ़ाइल लोड करने में त्रुटि",
+      "tr": "Profil yüklenirken hata",
+      "tk": "Profili ýüklemekde ýalňyşlyk"
+    }
+  },
+  
+  "stats": {
+    "loading_error_full": {
+      "en": "Error loading statistics",
+      "ru": "Ошибка загрузки статистики",
+      "es": "Error al cargar estadísticas",
+      "fr": "Erreur lors du chargement des statistiques",
+      "zh": "加载统计数据时出错",
+      "hi": "सांख्यिकी लोड करने में त्रुटि",
+      "tr": "İstatistikler yüklenirken hata",
+      "tk": "Statistikany ýüklemekde ýalňyşlyk"
+    },
+    "error_loading_title": {
+      "en": "Loading Error",
+      "ru": "Ошибка загрузки",
+      "es": "Error de carga",
+      "fr": "Erreur de chargement",
+      "zh": "加载错误",
+      "hi": "लोडिंग त्रुटि",
+      "tr": "Yükleme Hatası",
+      "tk": "Ýüklemek ýalňyşlygy"
+    }
+  },
+  
+  "ai": {
+    "meditation": {
+      "start_with_duration": {
+        "en": "Start meditation ({duration} min)",
+        "ru": "Начать медитацию ({duration} мин)",
+        "es": "Iniciar meditación ({duration} min)",
+        "fr": "Commencer la méditation ({duration} min)",
+        "zh": "开始冥想（{duration}分钟）",
+        "hi": "ध्यान शुरू करें ({duration} मिनट)",
+        "tr": "Meditasyona başla ({duration} dk)",
+        "tk": "Meditasiýa başla ({duration} min)"
+      }
+    },
+    "error_analysis_title": {
+      "en": "Analysis Error",
+      "ru": "Ошибка анализа",
+      "es": "Error de análisis",
+      "fr": "Erreur d'analyse",
+      "zh": "分析错误",
+      "hi": "विश्लेषण त्रुटि",
+      "tr": "Analiz Hatası",
+      "tk": "Derňew ýalňyşlygy"
+    }
+  },
+  
+  "demo": {
+    "performance_list": {
+      "en": "• Paint objects caching\n• Optimized CustomPainter\n• RepaintBoundary for isolation\n• Timer-based cleanup for ripple effects\n• Unified design system with constants",
+      "ru": "• Кэширование Paint объектов\n• Оптимизированные CustomPainter\n• RepaintBoundary для изоляции\n• Timer-based cleanup для ripple эффектов\n• Единая дизайн-система с константами",
+      "es": "• Almacenamiento en caché de objetos Paint\n• CustomPainter optimizado\n• RepaintBoundary para aislamiento\n• Limpieza basada en temporizador para efectos de ondulación\n• Sistema de diseño unificado con constantes",
+      "fr": "• Mise en cache des objets Paint\n• CustomPainter optimisé\n• RepaintBoundary pour l'isolation\n• Nettoyage basé sur minuterie pour effets d'ondulation\n• Système de conception unifié avec constantes",
+      "zh": "• Paint对象缓存\n• 优化的CustomPainter\n• RepaintBoundary用于隔离\n• 基于计时器的波纹效果清理\n• 具有常量的统一设计系统",
+      "hi": "• पेंट ऑब्जेक्ट कैशिंग\n• अनुकूलित CustomPainter\n• अलगाव के लिए RepaintBoundary\n• तरंग प्रभावों के लिए टाइमर-आधारित सफाई\n• स्थिरांक के साथ एकीकृत डिज़ाइन सिस्टम",
+      "tr": "• Paint nesneleri önbellekleme\n• Optimize CustomPainter\n• İzolasyon için RepaintBoundary\n• Dalga efektleri için zamanlayıcı tabanlı temizleme\n• Sabitlerle birleşik tasarım sistemi",
+      "tk": "• Paint obýektlerini keşlemek\n• Optimizasiýa edilen CustomPainter\n• Izolýasiýa üçin RepaintBoundary\n• Tolkun effektleri üçin Timer esasly arassalama\n• Hemişelikler bilen birleşen dizaýn ulgamy"
+    }
+  }
+}
+

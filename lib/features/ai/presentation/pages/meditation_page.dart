@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:io';
 
 import '../../../../app/providers/ai_features_provider.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
-import '../../../../shared/presentation/theme/platform_utils.dart';
 import '../blocs/meditation_bloc.dart';
-import '../../domain/entities/meditation_entity.dart';
 
 /// Страница медитации и релаксации
 class MeditationPage extends ConsumerStatefulWidget {
@@ -63,16 +63,13 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text('ai.meditation.title'.tr()),
-        backgroundColor: colorScheme.surface,
+        backgroundColor: AppColors.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
-            Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-            color: colorScheme.onSurface,
-          ),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -83,8 +80,13 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh, color: colorScheme.onSurface),
-            onPressed: _loadMeditation,
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              if (!context.read<MeditationBloc>().isClosed) {
+                context.read<MeditationBloc>().add(LoadMeditationSession([]));
+              }
+            },
+            tooltip: 'common.refresh'.tr(),
           ),
         ],
       ),
@@ -98,21 +100,16 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.all(PlatformUtils.getAdaptivePadding(context)),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Hero Section
-                _buildHeroSection(context, theme, colorScheme, isDark),
+                // Приветственный заголовок
+                _buildWelcomeSection(),
 
                 const SizedBox(height: 24),
 
-                // Quick Actions
-                _buildQuickActions(context, theme, colorScheme),
-
-                const SizedBox(height: 24),
-
-                // Meditation Content
+                // Контент медитации
                 BlocBuilder<MeditationBloc, MeditationState>(
                   builder: (context, state) {
                     if (state is MeditationLoading) {
@@ -121,11 +118,7 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
                         colorScheme: colorScheme,
                       );
                     } else if (state is MeditationLoaded) {
-                      return _MeditationCard(
-                        meditation: state.meditation,
-                        theme: theme,
-                        colorScheme: colorScheme,
-                      );
+                      return _buildMeditationContent(state.meditation);
                     } else if (state is MeditationError) {
                       return _MeditationErrorWidget(
                         message: state.message,
@@ -145,32 +138,22 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
     );
   }
 
-  Widget _buildHeroSection(
-    BuildContext context,
-    ThemeData theme,
-    ColorScheme colorScheme,
-    bool isDark,
-  ) {
+  /// Приветственная секция
+  Widget _buildWelcomeSection() {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isDark
-              ? [colorScheme.surfaceContainerHighest, colorScheme.surface]
-              : [
-                  colorScheme.primaryContainer.withOpacity(0.3),
-                  colorScheme.secondaryContainer.withOpacity(0.1),
-                ],
+          colors: [
+            AppColors.primary.withOpacity(0.1),
+            AppColors.secondary.withOpacity(0.05),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(
-          PlatformUtils.getAdaptiveRadius(context),
-        ),
-        border: Border.all(
-          color: colorScheme.outline.withOpacity(0.1),
-          width: 1,
-        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primary.withOpacity(0.2), width: 1),
       ),
       child: Row(
         children: [
@@ -178,16 +161,13 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [colorScheme.primary, colorScheme.secondary],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              gradient: AppColors.primaryGradient,
               borderRadius: BorderRadius.circular(16),
+              boxShadow: AppColors.cardShadow,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.self_improvement,
-              color: colorScheme.onPrimary,
+              color: Colors.white,
               size: 32,
             ),
           ),
@@ -199,14 +179,15 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
                 Text(
                   'ai.meditation.title'.tr(),
                   style: AppTypography.h2.copyWith(
-                    color: colorScheme.onSurface,
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Text(
                   'ai.meditation.personal_practices'.tr(),
                   style: AppTypography.bodyMedium.copyWith(
-                    color: colorScheme.onSurface.withOpacity(0.7),
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -217,393 +198,196 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
     );
   }
 
-  Widget _buildQuickActions(
-    BuildContext context,
-    ThemeData theme,
-    ColorScheme colorScheme,
-  ) {
-    final moodEntriesAsync = ref.watch(recentMoodEntriesProvider);
-
-    return Row(
+  /// Контент медитации
+  Widget _buildMeditationContent(meditation) {
+    return Column(
       children: [
-        Expanded(
-          child: _QuickActionButton(
-            icon: Icons.access_time,
-            label: 'ai.meditation.quick'.tr(),
-            colorScheme: colorScheme,
-            onTap: () {
-              final bloc = context.read<MeditationBloc>();
-              if (!bloc.isClosed) {
-                moodEntriesAsync.when(
-                  data: (moodEntries) {
-                    if (!bloc.isClosed) {
-                      bloc.add(LoadShortMeditationSession(moodEntries));
-                    }
-                  },
-                  loading: () {
-                    if (!bloc.isClosed) {
-                      bloc.add(LoadShortMeditationSession([]));
-                    }
-                  },
-                  error: (_, __) {
-                    if (!bloc.isClosed) {
-                      bloc.add(LoadShortMeditationSession([]));
-                    }
-                  },
-                );
-              }
-            },
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: AppColors.cardShadow,
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _QuickActionButton(
-            icon: Icons.timer,
-            label: 'ai.meditation.deep'.tr(),
-            colorScheme: colorScheme,
-            onTap: () {
-              final bloc = context.read<MeditationBloc>();
-              if (!bloc.isClosed) {
-                moodEntriesAsync.when(
-                  data: (moodEntries) {
-                    if (!bloc.isClosed) {
-                      bloc.add(LoadLongMeditationSession(moodEntries));
-                    }
-                  },
-                  loading: () {
-                    if (!bloc.isClosed) {
-                      bloc.add(LoadLongMeditationSession([]));
-                    }
-                  },
-                  error: (_, __) {
-                    if (!bloc.isClosed) {
-                      bloc.add(LoadLongMeditationSession([]));
-                    }
-                  },
-                );
-              }
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEmptyState(
-    BuildContext context,
-    ThemeData theme,
-    ColorScheme colorScheme,
-  ) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          children: [
-            Icon(
-              Icons.self_improvement_outlined,
-              size: 64,
-              color: colorScheme.onSurface.withOpacity(0.5),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'ai.meditation.no_meditation'.tr(),
-              style: AppTypography.h3.copyWith(color: colorScheme.onSurface),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'ai.meditation.tap_to_load'.tr(),
-              style: AppTypography.bodyMedium.copyWith(
-                color: colorScheme.onSurface.withOpacity(0.7),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: _loadMeditation,
-              icon: const Icon(Icons.refresh),
-              label: Text('common.refresh'.tr()),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Карточка медитации
-class _MeditationCard extends StatelessWidget {
-  final MeditationEntity meditation;
-  final ThemeData theme;
-  final ColorScheme colorScheme;
-
-  const _MeditationCard({
-    required this.meditation,
-    required this.theme,
-    required this.colorScheme,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            Row(
-              children: [
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: meditation.accentColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Center(
-                    child: Text(
-                      meditation.emoji,
-                      style: const TextStyle(fontSize: 28),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Заголовок медитации
+              Row(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColors.primary, AppColors.primaryLight],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Center(
+                      child: Text(
+                        meditation.emoji,
+                        style: const TextStyle(fontSize: 28),
+                      ),
                     ),
                   ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          meditation.title,
+                          style: AppTypography.h3.copyWith(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.access_time,
+                              size: 14,
+                              color: AppColors.textSecondary,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${meditation.duration} ${'common.minutes'.tr()}',
+                              style: AppTypography.caption.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              // Описание
+              Text(
+                meditation.description,
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.textSecondary,
+                  height: 1.6,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
+              ),
+
+              const SizedBox(height: 24),
+
+              // Инструкции
+              if (meditation.instructions.isNotEmpty)
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppColors.primary.withOpacity(0.1),
+                    ),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        meditation.title,
-                        style: AppTypography.h3.copyWith(
-                          color: colorScheme.onSurface,
-                        ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.psychology,
+                            size: 18,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'ai.meditation.instructions'.tr(),
+                            style: AppTypography.bodyLarge.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        meditation.type.displayName,
-                        style: AppTypography.caption.copyWith(
-                          color: colorScheme.onSurface.withOpacity(0.7),
+                      const SizedBox(height: 12),
+                      ...meditation.instructions.map(
+                        (instruction) => Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 6,
+                                height: 6,
+                                margin: const EdgeInsets.only(
+                                  top: 6,
+                                  right: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  instruction,
+                                  style: AppTypography.bodyMedium.copyWith(
+                                    color: AppColors.textPrimary,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
 
-            const SizedBox(height: 20),
-
-            // Description
-            Text(
-              meditation.description,
-              style: AppTypography.bodyMedium.copyWith(
-                color: colorScheme.onSurface.withOpacity(0.8),
-                height: 1.5,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Info Chips
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                _InfoChip(
-                  icon: Icons.timer,
-                  label: '${meditation.duration} ${'common.minutes'.tr()}',
-                  color: meditation.accentColor,
-                  colorScheme: colorScheme,
-                ),
-                _InfoChip(
-                  icon: Icons.speed,
-                  label: meditation.difficulty.displayName,
-                  color: meditation.difficulty.color,
-                  colorScheme: colorScheme,
-                ),
-                _InfoChip(
-                  icon: meditation.type.emoji,
-                  label: meditation.type.displayName,
-                  color: meditation.accentColor,
-                  colorScheme: colorScheme,
-                  isEmoji: true,
-                ),
-              ],
-            ),
-
-            if (meditation.instructions.isNotEmpty) ...[
               const SizedBox(height: 24),
-              Divider(color: colorScheme.outline.withOpacity(0.1)),
-              const SizedBox(height: 16),
-              Text(
-                'ai.meditation.instructions'.tr(),
-                style: AppTypography.h4.copyWith(color: colorScheme.onSurface),
-              ),
-              const SizedBox(height: 12),
-              ...meditation.instructions
-                  .take(5)
-                  .map(
-                    (instruction) => _InstructionItem(
-                      instruction: instruction,
-                      index: meditation.instructions.indexOf(instruction) + 1,
-                      color: meditation.accentColor,
-                      colorScheme: colorScheme,
+
+              // Кнопка начала медитации
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // TODO: Start meditation session
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                    elevation: 0,
                   ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.play_arrow, size: 24),
+                      const SizedBox(width: 8),
+                      Text(
+                        'ai.meditation.start_meditation'.tr(
+                          namedArgs: {
+                            'duration': meditation.duration.toString(),
+                          },
+                        ),
+                        style: AppTypography.button.copyWith(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
-
-            const SizedBox(height: 24),
-
-            // Start Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  context.push('/stats/meditation/timer', extra: meditation);
-                },
-                icon: const Icon(Icons.play_arrow),
-                label: Text(
-                  'ai.meditation.start_meditation'.tr(
-                    namedArgs: {'duration': meditation.duration.toString()},
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: meditation.accentColor,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
-    );
-  }
-}
-
-/// Информационный чип
-class _InfoChip extends StatelessWidget {
-  final dynamic icon;
-  final String label;
-  final Color color;
-  final ColorScheme colorScheme;
-  final bool isEmoji;
-
-  const _InfoChip({
-    required this.icon,
-    required this.label,
-    required this.color,
-    required this.colorScheme,
-    this.isEmoji = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3), width: 1),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          isEmoji
-              ? Text(icon, style: const TextStyle(fontSize: 14))
-              : Icon(icon, size: 16, color: color),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: AppTypography.caption.copyWith(
-              color: color,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Элемент инструкции
-class _InstructionItem extends StatelessWidget {
-  final String instruction;
-  final int index;
-  final Color color;
-  final ColorScheme colorScheme;
-
-  const _InstructionItem({
-    required this.instruction,
-    required this.index,
-    required this.color,
-    required this.colorScheme,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Text(
-                '$index',
-                style: AppTypography.caption.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              instruction,
-              style: AppTypography.bodyMedium.copyWith(
-                color: colorScheme.onSurface.withOpacity(0.8),
-                height: 1.5,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Кнопка быстрого действия
-class _QuickActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final ColorScheme colorScheme;
-  final VoidCallback onTap;
-
-  const _QuickActionButton({
-    required this.icon,
-    required this.label,
-    required this.colorScheme,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-      onPressed: onTap,
-      icon: Icon(icon, size: 18),
-      label: Text(label),
-      style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-      ),
+      ],
     );
   }
 }
@@ -620,30 +404,29 @@ class _MeditationLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 48,
-              height: 48,
-              child: CircularProgressIndicator(
-                strokeWidth: 3,
-                valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
-              ),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(48),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'ai.meditation.loading_practices'.tr(),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
             ),
-            const SizedBox(height: 20),
-            Text(
-              'ai.meditation.loading_practices'.tr(),
-              style: AppTypography.bodyMedium.copyWith(
-                color: colorScheme.onSurface.withOpacity(0.7),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
@@ -665,46 +448,54 @@ class _MeditationErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: colorScheme.error.withOpacity(0.1),
-                shape: BoxShape.circle,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: AppColors.error.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.error_outline, color: AppColors.error, size: 32),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'common.error'.tr(),
+            style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            message,
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            onPressed: onRetry,
+            icon: const Icon(Icons.refresh, size: 20),
+            label: Text('common.retry'.tr()),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                Icons.error_outline,
-                color: colorScheme.error,
-                size: 32,
-              ),
             ),
-            const SizedBox(height: 20),
-            Text(
-              'common.error'.tr(),
-              style: AppTypography.h3.copyWith(color: colorScheme.onSurface),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              message,
-              style: AppTypography.bodyMedium.copyWith(
-                color: colorScheme.onSurface.withOpacity(0.7),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh, size: 18),
-              label: Text('common.retry'.tr()),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
