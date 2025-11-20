@@ -349,7 +349,20 @@
             "no_meditation": "Méditation non disponible",
             "tap_to_load": "Appuyez sur actualiser pour charger une session de méditation",
             "starting": "Démarrage d'une méditation de {duration} minutes...",
-            "start_meditation": "Commencer une méditation de {duration} minutes"
+            "start_meditation": "Commencer une méditation de {duration} minutes",
+            "start": "Commencer",
+            "completed": "Méditation Terminée",
+            "completed_message": "Excellent travail ! Vous avez terminé votre session de méditation.",
+            "current_step": "Étape Actuelle",
+            "stop_title": "Arrêter la Méditation ?",
+            "stop_message": "Êtes-vous sûr de vouloir arrêter la session de méditation ?",
+            "sound": {
+                "silence": "Silence",
+                "nature": "Sons de la Nature",
+                "ocean": "Vagues de l'Océan",
+                "rain": "Pluie",
+                "forest": "Forêt"
+            }
         },
         "patterns": {
             "title": "Modèles",

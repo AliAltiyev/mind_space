@@ -130,7 +130,10 @@ class SuggestMeditationUseCase {
 
       return meditation;
     } catch (e) {
-      throw Exception('Failed to suggest meditation with cache: $e');
+      print(
+        '⚠️ Ошибка при получении медитации с кэшем, используем fallback: $e',
+      );
+      return _createBasicMeditation(recentMoods);
     }
   }
 
@@ -168,7 +171,10 @@ class SuggestMeditationUseCase {
         );
       }
     } catch (e) {
-      throw Exception('Failed to suggest meditation for time of day: $e');
+      print(
+        '⚠️ Ошибка при получении медитации для времени дня, используем fallback: $e',
+      );
+      return _createBasicMeditation(recentMoods);
     }
   }
 
@@ -176,11 +182,9 @@ class SuggestMeditationUseCase {
   Future<MeditationEntity> callForCurrentMood(
     List<MoodEntry> recentMoods,
   ) async {
-    if (recentMoods.isEmpty) {
-      throw Exception('No mood data available for meditation suggestion');
-    }
-
-    final currentMood = recentMoods.first.moodValue;
+    final currentMood = recentMoods.isNotEmpty
+        ? recentMoods.first.moodValue
+        : 3;
 
     try {
       final meditation = await call(recentMoods);
@@ -209,7 +213,10 @@ class SuggestMeditationUseCase {
         );
       }
     } catch (e) {
-      throw Exception('Failed to suggest meditation for current mood: $e');
+      print(
+        '⚠️ Ошибка при получении медитации для настроения, используем fallback: $e',
+      );
+      return _createBasicMeditation(recentMoods);
     }
   }
 

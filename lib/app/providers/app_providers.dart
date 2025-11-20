@@ -39,11 +39,11 @@ class AppSettingsNotifier
 
       // Загрузка настроек из SharedPreferences
       final settings = <String, String>{};
-      
+
       // Загружаем основные настройки
       final theme = await sharedPrefs.getSetting('theme');
       if (theme != null) settings['theme'] = theme;
-      
+
       final locale = await sharedPrefs.getSetting('locale');
       if (locale != null) settings['locale'] = locale;
 
@@ -107,9 +107,22 @@ final appSettingsProvider =
 
 /// Провайдер для темы приложения
 class AppThemeNotifier extends StateNotifier<String> {
-  AppThemeNotifier(this.ref) : super('light');
+  AppThemeNotifier(this.ref) : super('dark') {
+    _initTheme();
+  }
 
   final Ref ref;
+
+  Future<void> _initTheme() async {
+    final settingsNotifier = ref.read(appSettingsProvider.notifier);
+    final theme = settingsNotifier.getSetting('theme');
+    if (theme != null) {
+      state = theme;
+    } else {
+      state = 'dark';
+      await settingsNotifier.updateSetting('theme', 'dark');
+    }
+  }
 
   /// Переключение темы
   Future<void> toggleTheme() async {

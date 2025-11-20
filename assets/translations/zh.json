@@ -365,7 +365,20 @@
             "no_meditation": "冥想不可用",
             "tap_to_load": "点击刷新以加载冥想课程",
             "starting": "正在启动{duration}分钟冥想...",
-            "start_meditation": "开始{duration}分钟冥想"
+            "start_meditation": "开始{duration}分钟冥想",
+            "start": "开始",
+            "completed": "冥想完成",
+            "completed_message": "太棒了！您已完成冥想课程。",
+            "current_step": "当前步骤",
+            "stop_title": "停止冥想？",
+            "stop_message": "您确定要停止冥想课程吗？",
+            "sound": {
+                "silence": "静音",
+                "nature": "自然声音",
+                "ocean": "海浪",
+                "rain": "雨声",
+                "forest": "森林"
+            }
         },
         "patterns": {
             "title": "模式",

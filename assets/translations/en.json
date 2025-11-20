@@ -23,7 +23,8 @@
         "try_again": "Try Again",
         "refresh": "Refresh",
         "clear": "Clear",
-        "minutes": "min"
+        "minutes": "min",
+        "stop": "Stop"
     },
     "navigation": {
         "home": "Home",
@@ -32,7 +33,8 @@
         "settings": "Settings",
         "profile": "Profile",
         "stats": "Statistics",
-        "entries": "Entries"
+        "entries": "Entries",
+        "sleep": "Sleep"
     },
     "splash": {
         "title": "Mind Space",
@@ -289,7 +291,20 @@
             "tap_to_load": "Tap refresh to load a meditation session",
             "starting": "Starting {duration}-minute meditation...",
             "start_meditation": "Start {duration}-minute meditation",
-            "duration": "Duration"
+            "duration": "Duration",
+            "start": "Start",
+            "completed": "Meditation Completed",
+            "completed_message": "Great job! You've completed your meditation session.",
+            "current_step": "Current Step",
+            "stop_title": "Stop Meditation?",
+            "stop_message": "Are you sure you want to stop the meditation session?",
+            "sound": {
+                "silence": "Silence",
+                "nature": "Nature Sounds",
+                "ocean": "Ocean Waves",
+                "rain": "Rain",
+                "forest": "Forest"
+            }
         },
         "patterns": {
             "title": "Patterns",
@@ -479,6 +494,77 @@
         "data_cleared": "Data cleared",
         "backup_created": "Backup created",
         "mood_entry_added": "✅ Mood entry added: {mood} - {note} - Date: {date}",
-        "no_note": "no note"
+        "no_note": "no note",
+        "error_loading_sleep_entry": "Error loading sleep entry: {error}"
+    },
+    "sleep": {
+        "title": "Sleep Tracking",
+        "add_entry": "Add Sleep Entry",
+        "last_sleep": "Last Sleep",
+        "duration": "Duration",
+        "quality": "Quality",
+        "sleep_start": "Sleep Start",
+        "sleep_end": "Sleep End",
+        "select_time": "Select time",
+        "factors": "Factors",
+        "notes": "Notes",
+        "notes_hint": "How did you sleep? Any thoughts?",
+        "save_entry": "Save Entry",
+        "entry_saved": "Sleep entry saved successfully",
+        "enter_sleep_times": "Please enter sleep start and end times",
+        "invalid_times": "Wake time must be after sleep time",
+        "no_entries": "No sleep entries yet",
+        "hours": "hours",
+        "minutes_short": "min",
+        "view_stats": "View Statistics",
+        "stats": {
+            "title": "Sleep Statistics",
+            "overview": "Overview",
+            "avg_duration": "Avg Duration",
+            "avg_quality": "Avg Quality",
+            "total_entries": "Total Entries",
+            "duration_chart": "Sleep Duration (Last 14 Days)",
+            "quality_chart": "Sleep Quality (Last 14 Days)",
+            "ai_insights": "AI Insights",
+            "recommendations": "Recommendations",
+            "mood_correlation": "Sleep & Mood Correlation",
+            "strong_correlation": "Strong correlation between sleep quality and mood detected",
+            "moderate_correlation": "Moderate correlation between sleep and mood",
+            "weak_correlation": "Weak correlation. More data needed",
+            "error": "Error loading statistics",
+            "no_data": "No sleep data",
+            "no_data_description": "Start tracking your sleep to see statistics and insights",
+            "insights": {
+                "no_data_title": "Not enough data",
+                "no_data_description": "Add more sleep entries to generate insights.",
+                "loading_title": "Loading...",
+                "loading_description": "Analyzing your sleep patterns",
+                "error_title": "Error",
+                "error_description": "Couldn't analyze your sleep."
+            }
+        },
+        "reminder": {
+            "title": "Time to log your sleep",
+            "body": "Don't forget to record your sleep for today",
+            "settings": "Sleep Reminder",
+            "enabled": "Reminder enabled",
+            "disabled": "Reminder disabled",
+            "scheduled": "Sleep reminder scheduled successfully",
+            "scheduled_at": "Reminder scheduled for {hour}:{minute}",
+            "select_time": "Select reminder time",
+            "cancelled": "Sleep reminder cancelled",
+            "error": "Failed to schedule reminder. Please grant notification permissions in settings.",
+            "test_title": "Test: Time to log your sleep",
+            "test_body": "This is a test notification. If you see this, reminders are working!",
+            "debug_title": "Testing (debug only)",
+            "debug_description": "Trigger a reminder in 10 seconds to verify notifications.",
+            "test_button": "Test (10 sec)",
+            "test_cancel_button": "Cancel test",
+            "test_success": "Test reminder scheduled! Check again in 10 seconds.",
+            "test_cancelled": "Test reminder cancelled.",
+            "test_error": "Test reminder failed: {error}",
+            "open_settings": "Open system settings",
+            "permission_required": "Please enable “Alarms & reminders” in system settings to allow precise sleep reminders."
+        }
     }
 }

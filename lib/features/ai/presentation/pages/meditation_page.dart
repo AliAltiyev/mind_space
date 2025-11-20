@@ -10,6 +10,7 @@ import '../../../../core/constants/app_typography.dart';
 import '../../../../shared/presentation/theme/platform_utils.dart';
 import '../blocs/meditation_bloc.dart';
 import '../../domain/entities/meditation_entity.dart';
+import 'meditation_timer_page.dart';
 
 /// Страница медитации и релаксации
 class MeditationPage extends ConsumerStatefulWidget {
@@ -32,7 +33,27 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
   void _loadMeditation() {
     final bloc = context.read<MeditationBloc>();
     if (!bloc.isClosed) {
-      bloc.add(LoadMeditationSession([]));
+      // Получаем реальные данные настроений из provider
+      final moodEntriesAsync = ref.read(recentMoodEntriesProvider);
+      moodEntriesAsync.when(
+        data: (moodEntries) {
+          if (!bloc.isClosed) {
+            bloc.add(LoadMeditationSession(moodEntries));
+          }
+        },
+        loading: () {
+          // Данные загружаются, используем пустой список (fallback медитация будет создана)
+          if (!bloc.isClosed) {
+            bloc.add(LoadMeditationSession([]));
+          }
+        },
+        error: (_, __) {
+          // Ошибка загрузки, используем пустой список
+          if (!bloc.isClosed) {
+            bloc.add(LoadMeditationSession([]));
+          }
+        },
+      );
     }
   }
 
@@ -202,6 +223,8 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
     ThemeData theme,
     ColorScheme colorScheme,
   ) {
+    final moodEntriesAsync = ref.watch(recentMoodEntriesProvider);
+
     return Row(
       children: [
         Expanded(
@@ -212,7 +235,23 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
             onTap: () {
               final bloc = context.read<MeditationBloc>();
               if (!bloc.isClosed) {
-                bloc.add(LoadShortMeditationSession([]));
+                moodEntriesAsync.when(
+                  data: (moodEntries) {
+                    if (!bloc.isClosed) {
+                      bloc.add(LoadShortMeditationSession(moodEntries));
+                    }
+                  },
+                  loading: () {
+                    if (!bloc.isClosed) {
+                      bloc.add(LoadShortMeditationSession([]));
+                    }
+                  },
+                  error: (_, __) {
+                    if (!bloc.isClosed) {
+                      bloc.add(LoadShortMeditationSession([]));
+                    }
+                  },
+                );
               }
             },
           ),
@@ -226,7 +265,23 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
             onTap: () {
               final bloc = context.read<MeditationBloc>();
               if (!bloc.isClosed) {
-                bloc.add(LoadLongMeditationSession([]));
+                moodEntriesAsync.when(
+                  data: (moodEntries) {
+                    if (!bloc.isClosed) {
+                      bloc.add(LoadLongMeditationSession(moodEntries));
+                    }
+                  },
+                  loading: () {
+                    if (!bloc.isClosed) {
+                      bloc.add(LoadLongMeditationSession([]));
+                    }
+                  },
+                  error: (_, __) {
+                    if (!bloc.isClosed) {
+                      bloc.add(LoadLongMeditationSession([]));
+                    }
+                  },
+                );
               }
             },
           ),
@@ -406,17 +461,10 @@ class _MeditationCard extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // TODO: Implement meditation timer
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'ai.meditation.starting'.tr(
-                          namedArgs: {
-                            'duration': meditation.duration.toString(),
-                          },
-                        ),
-                      ),
-                      backgroundColor: colorScheme.primary,
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MeditationTimerPage(meditation: meditation),
                     ),
                   );
                 },

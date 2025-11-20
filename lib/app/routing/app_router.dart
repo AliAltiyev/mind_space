@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mind_space/features/ai/presentation/pages/gratitude_journal_page.dart';
 import 'package:mind_space/features/ai/presentation/pages/meditation_page.dart';
+import 'package:mind_space/features/ai/presentation/pages/meditation_timer_page.dart';
+import 'package:mind_space/features/ai/domain/entities/meditation_entity.dart';
 import 'package:mind_space/features/ai/presentation/pages/patterns_page.dart';
 
 import '../../features/profile/presentation/pages/achievements_page.dart';
@@ -28,6 +30,8 @@ import '../../presentation/screens/stats/stats_screen_clean.dart';
 import '../../presentation/screens/ai/ai_chat_screen.dart';
 import '../../presentation/screens/profile/profile_screen_clean.dart';
 import '../../features/ai/presentation/pages/ai_insights_page_clean.dart';
+import '../../features/sleep/presentation/pages/sleep_tracking_page.dart';
+import '../../features/sleep/presentation/pages/sleep_stats_page.dart';
 import '../../shared/presentation/pages/onboarding_page.dart';
 import '../../shared/presentation/pages/splash_page.dart';
 
@@ -156,6 +160,27 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: '/meditation',
                 name: 'meditation',
                 builder: (context, state) => const MeditationPage(),
+                routes: [
+                  // Meditation Timer
+                  GoRoute(
+                    path: '/timer',
+                    name: 'meditation-timer',
+                    pageBuilder: (context, state) {
+                      final meditation = state.extra as MeditationEntity;
+                      return CustomTransitionPage(
+                        key: state.pageKey,
+                        child: MeditationTimerPage(meditation: meditation),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -168,6 +193,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               key: state.pageKey,
               child: const AiChatScreen(),
             ),
+          ),
+
+          // Sleep Tab
+          GoRoute(
+            path: '/sleep',
+            name: 'sleep',
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const SleepTrackingPage(),
+            ),
+            routes: [
+              // Sleep Stats
+              GoRoute(
+                path: '/stats',
+                name: 'sleep-stats',
+                builder: (context, state) => const SleepStatsPage(),
+              ),
+            ],
           ),
 
           // Profile Tab
@@ -444,6 +487,11 @@ class MainShell extends ConsumerWidget {
             label: 'navigation.stats'.tr(),
           ),
           BottomNavigationBarItem(
+            icon: const Icon(Icons.bedtime_outlined),
+            activeIcon: const Icon(Icons.bedtime),
+            label: 'navigation.sleep'.tr(),
+          ),
+          BottomNavigationBarItem(
             icon: const Icon(Icons.psychology_outlined),
             activeIcon: const Icon(Icons.psychology),
             label: 'ai.chat.title'.tr(),
@@ -463,8 +511,9 @@ class MainShell extends ConsumerWidget {
 
     if (location.startsWith('/home')) return 0;
     if (location.startsWith('/stats')) return 1;
-    if (location.startsWith('/ai-chat')) return 2;
-    if (location.startsWith('/profile')) return 3;
+    if (location.startsWith('/sleep')) return 2;
+    if (location.startsWith('/ai-chat')) return 3;
+    if (location.startsWith('/profile')) return 4;
 
     return 0;
   }
@@ -478,9 +527,12 @@ class MainShell extends ConsumerWidget {
         context.go('/stats');
         break;
       case 2:
-        context.go('/ai-chat');
+        context.go('/sleep');
         break;
       case 3:
+        context.go('/ai-chat');
+        break;
+      case 4:
         context.go('/profile');
         break;
     }

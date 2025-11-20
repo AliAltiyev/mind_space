@@ -327,7 +327,20 @@
             "no_meditation": "ध्यान उपलब्ध नहीं है",
             "tap_to_load": "ध्यान सत्र लोड करने के लिए रीफ्रेश टैप करें",
             "starting": "{duration}-मिनट का ध्यान शुरू हो रहा है...",
-            "start_meditation": "{duration}-मिनट का ध्यान शुरू करें"
+            "start_meditation": "{duration}-मिनट का ध्यान शुरू करें",
+            "start": "शुरू करें",
+            "completed": "ध्यान पूर्ण",
+            "completed_message": "बहुत बढ़िया! आपने अपना ध्यान सत्र पूरा कर लिया है।",
+            "current_step": "वर्तमान चरण",
+            "stop_title": "ध्यान रोकें?",
+            "stop_message": "क्या आप वाकई ध्यान सत्र रोकना चाहते हैं?",
+            "sound": {
+                "silence": "मौन",
+                "nature": "प्रकृति की आवाज़ें",
+                "ocean": "समुद्र की लहरें",
+                "rain": "बारिश",
+                "forest": "जंगल"
+            }
         },
         "patterns": {
             "title": "पैटर्न",

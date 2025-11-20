@@ -364,7 +364,20 @@
             "no_meditation": "Meditasyon mevcut değil",
             "tap_to_load": "Meditasyon oturumu yüklemek için yenile'ye dokunun",
             "starting": "{duration} dakikalık meditasyon başlatılıyor...",
-            "start_meditation": "{duration} dakikalık meditasyon başlat"
+            "start_meditation": "{duration} dakikalık meditasyon başlat",
+            "start": "Başlat",
+            "completed": "Meditasyon Tamamlandı",
+            "completed_message": "Harika iş! Meditasyon seansınızı tamamladınız.",
+            "current_step": "Mevcut Adım",
+            "stop_title": "Meditasyonu Durdur?",
+            "stop_message": "Meditasyon seansını durdurmak istediğinizden emin misiniz?",
+            "sound": {
+                "silence": "Sessizlik",
+                "nature": "Doğa Sesleri",
+                "ocean": "Okyanus Dalgaları",
+                "rain": "Yağmur",
+                "forest": "Orman"
+            }
         },
         "patterns": {
             "title": "Desenler",

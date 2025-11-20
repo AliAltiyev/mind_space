@@ -120,6 +120,7 @@ class GroqDataSource {
       return _parseJsonResponse(response.content);
     } catch (e) {
       print('❌ Ошибка в GroqDataSource.suggestMeditationSession: $e');
+      // Пробрасываем ошибку дальше, чтобы repository мог создать правильный fallback
       rethrow;
     }
   }
@@ -136,25 +137,20 @@ class GroqDataSource {
       }
 
       final jsonString = content.substring(jsonStart, jsonEnd);
-      return json.decode(jsonString) as Map<String, dynamic>;
+      final parsed = json.decode(jsonString) as Map<String, dynamic>;
+
+      // Проверяем, что это валидная структура медитации
+      if (parsed['title'] == null || parsed['instructions'] == null) {
+        throw Exception('Invalid meditation structure in response');
+      }
+
+      return parsed;
     } catch (e) {
       print('❌ Ошибка парсинга JSON: $e');
       print('📝 Содержимое ответа: $content');
-
-      // Возвращаем fallback ответ
-      return _createFallbackResponse();
+      // Пробрасываем ошибку, чтобы repository мог создать правильный fallback
+      rethrow;
     }
-  }
-
-  /// Создание fallback ответа при ошибке
-  Map<String, dynamic> _createFallbackResponse() {
-    return {
-      'title': 'AI временно недоступен',
-      'description': 'Попробуйте позже или обратитесь к специалисту',
-      'emoji': '🤖',
-      'accentColor': '#FF6B6B',
-      'suggestions': ['Попробуйте позже', 'Обратитесь к специалисту'],
-    };
   }
 
   /// Проверка доступности сервиса

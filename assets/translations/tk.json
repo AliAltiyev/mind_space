@@ -308,7 +308,20 @@
             "no_meditation": "Meditasiýa elýeterli däl",
             "tap_to_load": "Meditasiýa sessiyasyny ýüklemek üçin täzelemäge basyň",
             "starting": "{duration} minutlyk meditasiýa başlanýar...",
-            "start_meditation": "{duration} minutlyk meditasiýa başla"
+            "start_meditation": "{duration} minutlyk meditasiýa başla",
+            "start": "Başla",
+            "completed": "Meditasiýa tamamlandy",
+            "completed_message": "Ajaýyp iş! Meditasiýa sessiyasyny tamamladyňyz.",
+            "current_step": "Häzirki ädim",
+            "stop_title": "Meditasiýany durdur?",
+            "stop_message": "Meditasiýa sessiyasyny durdurmak isleýändigiňize ynanýarsyňyzmy?",
+            "sound": {
+                "silence": "Süküt",
+                "nature": "Tebigat sesleri",
+                "ocean": "Okean tolkunlary",
+                "rain": "Ýagyş",
+                "forest": "Tokaý"
+            }
         },
         "patterns": {
             "title": "Nusgalar",

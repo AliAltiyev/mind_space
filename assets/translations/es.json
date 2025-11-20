@@ -32,7 +32,8 @@
         "settings": "Configuración",
         "profile": "Perfil",
         "stats": "Estadísticas",
-        "entries": "Entradas"
+        "entries": "Entradas",
+        "sleep": "Sueño"
     },
     "splash": {
         "title": "Espacio Mental",
@@ -365,7 +366,78 @@
         "data_cleared": "Datos limpiados",
         "backup_created": "Copia de seguridad creada",
         "mood_entry_added": "✅ Entrada de estado de ánimo agregada: {mood} - {note} - Fecha: {date}",
-        "no_note": "sin nota"
+        "no_note": "sin nota",
+        "error_loading_sleep_entry": "Error al cargar entrada de sueño: {error}"
+    },
+    "sleep": {
+        "title": "Seguimiento del Sueño",
+        "add_entry": "Agregar Entrada de Sueño",
+        "last_sleep": "Último Sueño",
+        "duration": "Duración",
+        "quality": "Calidad",
+        "sleep_start": "Inicio del Sueño",
+        "sleep_end": "Fin del Sueño",
+        "select_time": "Seleccionar hora",
+        "factors": "Factores",
+        "notes": "Notas",
+        "notes_hint": "¿Cómo dormiste? ¿Algún pensamiento?",
+        "save_entry": "Guardar Entrada",
+        "entry_saved": "Entrada de sueño guardada exitosamente",
+        "enter_sleep_times": "Por favor ingrese la hora de inicio y fin del sueño",
+        "invalid_times": "La hora de despertar debe ser después de la hora de dormir",
+        "no_entries": "Aún no hay entradas de sueño",
+        "hours": "horas",
+        "minutes_short": "min",
+        "view_stats": "Ver Estadísticas",
+        "stats": {
+            "title": "Estadísticas del Sueño",
+            "overview": "Resumen",
+            "avg_duration": "Duración Promedio",
+            "avg_quality": "Calidad Promedio",
+            "total_entries": "Total de Entradas",
+            "duration_chart": "Duración del Sueño (Últimos 14 Días)",
+            "quality_chart": "Calidad del Sueño (Últimos 14 Días)",
+            "ai_insights": "Insights de IA",
+            "recommendations": "Recomendaciones",
+            "mood_correlation": "Correlación Sueño y Estado de Ánimo",
+            "strong_correlation": "Se detectó una fuerte correlación entre la calidad del sueño y el estado de ánimo",
+            "moderate_correlation": "Correlación moderada entre sueño y estado de ánimo",
+            "weak_correlation": "Correlación débil. Se necesitan más datos",
+            "error": "Error al cargar estadísticas",
+            "no_data": "Sin datos de sueño",
+            "no_data_description": "Comience a rastrear su sueño para ver estadísticas e insights",
+            "insights": {
+                "no_data_title": "Datos insuficientes",
+                "no_data_description": "Agrega más registros de sueño para generar ideas.",
+                "loading_title": "Cargando...",
+                "loading_description": "Analizando tus patrones de sueño",
+                "error_title": "Error",
+                "error_description": "No se pudo analizar tu sueño."
+            }
+        },
+        "reminder": {
+            "title": "Hora de registrar tu sueño",
+            "body": "No olvides registrar tu sueño de hoy",
+            "settings": "Recordatorio de Sueño",
+            "enabled": "Recordatorio activado",
+            "disabled": "Recordatorio desactivado",
+            "scheduled": "Recordatorio de sueño programado correctamente",
+            "scheduled_at": "Recordatorio programado para las {hour}:{minute}",
+            "select_time": "Selecciona la hora del recordatorio",
+            "cancelled": "Recordatorio de sueño cancelado",
+            "error": "No se pudo programar el recordatorio. Concede permisos de notificación en los ajustes.",
+            "test_title": "Prueba: hora de registrar tu sueño",
+            "test_body": "Esta es una notificación de prueba. Si la ves, los recordatorios funcionan.",
+            "debug_title": "Prueba (solo debug)",
+            "debug_description": "Activa un recordatorio en 10 segundos para verificar las notificaciones.",
+            "test_button": "Probar (10 s)",
+            "test_cancel_button": "Cancelar prueba",
+            "test_success": "¡Recordatorio de prueba programado! Revisa en 10 segundos.",
+            "test_cancelled": "Recordatorio de prueba cancelado.",
+            "test_error": "Error en el recordatorio de prueba: {error}",
+            "open_settings": "Abrir ajustes del sistema",
+            "permission_required": "Activa «Alarmas y recordatorios» en los ajustes del sistema para que los recordatorios de sueño sean precisos."
+        }
     },
     "entries": {
         "title": "Todas las Entradas",
@@ -470,7 +542,20 @@
             "no_meditation": "Meditación no disponible",
             "tap_to_load": "Toca actualizar para cargar una sesión de meditación",
             "starting": "Iniciando meditación de {duration} minutos...",
-            "start_meditation": "Iniciar meditación de {duration} minutos"
+            "start_meditation": "Iniciar meditación de {duration} minutos",
+            "start": "Iniciar",
+            "completed": "Meditación Completada",
+            "completed_message": "¡Excelente trabajo! Has completado tu sesión de meditación.",
+            "current_step": "Paso Actual",
+            "stop_title": "¿Detener la meditación?",
+            "stop_message": "¿Estás seguro de que quieres detener la sesión de meditación?",
+            "sound": {
+                "silence": "Silencio",
+                "nature": "Sonidos de la naturaleza",
+                "ocean": "Olas del océano",
+                "rain": "Lluvia",
+                "forest": "Bosque"
+            }
         },
         "patterns": {
             "title": "Patrones",

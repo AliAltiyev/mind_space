@@ -71,9 +71,11 @@ class GroqClient {
     int maxTokens = GroqApiConstants.defaultMaxTokens,
   }) async {
     // Проверяем, что API ключ настроен
-    if (GroqApiConstants.apiKey ==
-            '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' ||
-        GroqApiConstants.apiKey.isEmpty) {
+    if (GroqApiConstants.apiKey.isEmpty ||
+        GroqApiConstants.apiKey.startsWith(
+          'gsk_AfHhPf8LFR4dUbsbOkaBWGdyb3FYFVXxIXxttnDDzOo59W68q1O',
+        ) ||
+        GroqApiConstants.apiKey.length < 20) {
       throw Exception(
         'API ключ Groq не настроен. Получите бесплатный ключ на https://console.groq.com/keys и добавьте его в lib/core/api/groq_client.dart',
       );
@@ -99,47 +101,78 @@ class GroqClient {
 
       return OpenRouterResponse.fromJson(response.data);
     } on DioException catch (e) {
-      print('❌ Ошибка Groq API: ${e.message}');
+      print('❌ Ошибка Groq API: ${e.message ?? 'Unknown error'}');
+      print('📋 Тип ошибки: ${e.type}');
+      print('📋 URL: ${e.requestOptions.uri}');
 
       // Логируем детали ошибки для отладки
       if (e.response != null) {
         print('📋 Статус код: ${e.response!.statusCode}');
         print('📋 Тело ответа: ${e.response!.data}');
+      } else {
+        print('📋 Нет ответа от сервера');
       }
 
-      if (e.type == DioExceptionType.connectionTimeout ||
-          e.type == DioExceptionType.receiveTimeout) {
+      // Обработка различных типов ошибок
+      if (e.type == DioExceptionType.connectionTimeout) {
+        throw Exception('Превышено время ожидания подключения к AI сервису');
+      } else if (e.type == DioExceptionType.receiveTimeout) {
         throw Exception('Превышено время ожидания ответа от AI');
-      } else if (e.response?.statusCode == 400) {
-        // Пытаемся извлечь детали ошибки из ответа
-        String errorDetails = 'Неверный формат запроса';
-        if (e.response?.data != null) {
-          try {
-            final errorData = e.response!.data;
-            if (errorData is Map) {
-              errorDetails =
-                  errorData['error']?['message'] ?? errorData.toString();
-            } else {
-              errorDetails = errorData.toString();
+      } else if (e.type == DioExceptionType.sendTimeout) {
+        throw Exception('Превышено время отправки запроса к AI');
+      } else if (e.type == DioExceptionType.connectionError) {
+        throw Exception(
+          'Ошибка подключения к AI сервису. Проверьте интернет-соединение',
+        );
+      } else if (e.type == DioExceptionType.badResponse) {
+        // Обработка ошибок ответа
+        if (e.response?.statusCode == 400) {
+          // Пытаемся извлечь детали ошибки из ответа
+          String errorDetails = 'Неверный формат запроса';
+          if (e.response?.data != null) {
+            try {
+              final errorData = e.response!.data;
+              if (errorData is Map) {
+                errorDetails =
+                    errorData['error']?['message'] ?? errorData.toString();
+              } else {
+                errorDetails = errorData.toString();
+              }
+            } catch (_) {
+              errorDetails = e.response!.data.toString();
             }
-          } catch (_) {
-            errorDetails = e.response!.data.toString();
           }
+          throw Exception(
+            'Неверный формат запроса к Groq API. Проверьте модель и параметры. Детали: $errorDetails',
+          );
+        } else if (e.response?.statusCode == 401) {
+          throw Exception(
+            'Неверный API ключ Groq. Получите бесплатный ключ на https://console.groq.com/keys',
+          );
+        } else if (e.response?.statusCode == 429) {
+          throw Exception('Превышен лимит запросов. Попробуйте позже');
+        } else if (e.response?.statusCode != null &&
+            e.response!.statusCode! >= 500) {
+          throw Exception('Ошибка сервера Groq. Попробуйте позже');
+        } else {
+          // Для badResponse без статус кода
+          throw Exception('Ошибка ответа от AI сервиса');
         }
-        throw Exception(
-          'Неверный формат запроса к Groq API. Проверьте модель и параметры. Детали: $errorDetails',
-        );
-      } else if (e.response?.statusCode == 401) {
-        throw Exception(
-          'Неверный API ключ Groq. Получите бесплатный ключ на https://console.groq.com/keys',
-        );
-      } else if (e.response?.statusCode == 429) {
-        throw Exception('Превышен лимит запросов. Попробуйте позже');
-      } else if (e.response?.statusCode != null &&
-          e.response!.statusCode! >= 500) {
-        throw Exception('Ошибка сервера Groq. Попробуйте позже');
+      } else if (e.type == DioExceptionType.cancel) {
+        throw Exception('Запрос к AI сервису был отменен');
+      } else if (e.type == DioExceptionType.unknown) {
+        // Неизвестная ошибка - может быть проблема с интернетом
+        final errorMsg = e.message ?? 'Неизвестная ошибка';
+        if (errorMsg.contains('SocketException') ||
+            errorMsg.contains('Network') ||
+            errorMsg.contains('Failed host lookup')) {
+          throw Exception('Нет подключения к интернету. Проверьте соединение');
+        }
+        throw Exception('Ошибка подключения к AI сервису: $errorMsg');
       } else {
-        throw Exception('Ошибка подключения к AI сервису');
+        throw Exception(
+          'Ошибка подключения к AI сервису: ${e.message ?? 'Неизвестная ошибка'}',
+        );
       }
     } catch (e) {
       print('❌ Неожиданная ошибка: $e');
