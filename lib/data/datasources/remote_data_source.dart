@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/api/groq_client.dart';
 import '../../core/database/database.dart';
 import '../../domain/entities/ai_insight.dart';
 
@@ -24,12 +25,19 @@ class RemoteDataSource {
       print('🔍 Отправляем запрос к AI с данными: ${entries.length} записей');
 
       // Отправляем запрос к Groq API
+      // Импортируем GroqApiConstants для использования API ключа
+      final apiKey = GroqApiConstants.apiKey;
+      if (apiKey.isEmpty) {
+        throw Exception(
+          'Groq API ключ не настроен. Получите бесплатный ключ на https://console.groq.com/keys',
+        );
+      }
+
       final response = await _dio.post(
         'https://api.groq.com/openai/v1/chat/completions',
         options: Options(
           headers: {
-            'Authorization':
-                'Bearer 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',
+            'Authorization': 'Bearer $apiKey',
             'Content-Type': 'application/json',
           },
         ),

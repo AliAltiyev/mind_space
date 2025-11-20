@@ -202,7 +202,9 @@ class MeditationPhaseModel {
 
       final easyLocalization = EasyLocalization.of(context);
       if (easyLocalization == null) {
-        debugPrint('⚠️ EasyLocalization недоступен для getTitle, используем fallback');
+        debugPrint(
+          '⚠️ EasyLocalization недоступен для getTitle, используем fallback',
+        );
         return _getFallbackTitle();
       }
 

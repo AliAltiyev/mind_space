@@ -14,16 +14,21 @@ class GroqApiConstants {
   static const String chatEndpoint = '/chat/completions';
 
   /// API ключ (бесплатный, можно получить на console.groq.com)
-  /// ВАЖНО: Для продакшена лучше хранить в переменных окружения
+  /// ВАЖНО: Ключ должен быть получен из настроек приложения или переменных окружения
   /// Получите бесплатный ключ на: https://console.groq.com/keys
   /// Groq предоставляет щедрый бесплатный tier с хорошими лимитами
-  static const String apiKey =
-      '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'; // Замените на свой ключ с console.groq.com
+  ///
+  /// Для получения ключа из настроек используйте AppSettingsService
+  static String get apiKey {
+    // TODO: Получать ключ из настроек приложения или переменных окружения
+    // Пример: return AppSettingsService().getGroqApiKey() ?? '';
+    return ''; // Пустой ключ по умолчанию - должен быть настроен пользователем
+  }
 
   /// Заголовки по умолчанию
   static Map<String, String> get headers => {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer $apiKey',
+    if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
   };
 
   /// Таймауты
@@ -72,9 +77,6 @@ class GroqClient {
   }) async {
     // Проверяем, что API ключ настроен
     if (GroqApiConstants.apiKey.isEmpty ||
-        GroqApiConstants.apiKey.startsWith(
-          'gsk_AfHhPf8LFR4dUbsbOkaBWGdyb3FYFVXxIXxttnDDzOo59W68q1O',
-        ) ||
         GroqApiConstants.apiKey.length < 20) {
       throw Exception(
         'API ключ Groq не настроен. Получите бесплатный ключ на https://console.groq.com/keys и добавьте его в lib/core/api/groq_client.dart',

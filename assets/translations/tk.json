@@ -321,6 +321,39 @@
                 "ocean": "Okean tolkunlary",
                 "rain": "Ýagyş",
                 "forest": "Tokaý"
+            },
+            "phase": {
+                "preparation": {
+                    "title": "Taýýarlyk",
+                    "1": "Rahat ýagdaý tapyň. Özüňizi rahat duýýan bolsaňyz, gözleriňizi ýapyň.",
+                    "2": "Bu meýdana ýerleşmek üçin bir sany wagt alyň.",
+                    "3": "Islendik gözlegi goýuň we häzirki wagtda boluň."
+                },
+                "breathing": {
+                    "title": "Dem almak",
+                    "1": "Burundan çuň dem alyň.",
+                    "2": "Bir sany tutuň, soň bolsa agzyňyzdan ýawaşlyk bilen dem çykaryň.",
+                    "3": "Tebigy we çuň dem almagy dowam etdiriň.",
+                    "4": "Uwagtyňyzy dem almagyňyza ýygnap goýuň."
+                },
+                "body_scan": {
+                    "title": "Bedeni skanirlemek",
+                    "1": "Bedeniňizi başdan aýaklara çenli ýawaşlyk bilen skanirleň.",
+                    "2": "Häkimlik etmezden islendik dartgynlyk ýa-da rahatsyzlygy bellemek.",
+                    "3": "Bedeniňiziň ýumşamagyna we boşatmagyna rugsat beriň."
+                },
+                "visualization": {
+                    "title": "Görkezmek",
+                    "1": "Özüňizi howply we rahat duýýan rahat ýeri göz öňüne getiriň.",
+                    "2": "Özüňizi bu ýerde, doly meýdanda görkeziň.",
+                    "3": "Bu rahat meýdanyň ähli jikme-jiklerini alyň."
+                },
+                "completion": {
+                    "title": "Tamamlamak",
+                    "1": "Ýawaşlyk bilen özüňiziň düşünjäňizi häzirki wagtda yzyna getiriň.",
+                    "2": "Barmaklaryňyzy we aýak barmaklaryňyzy ýumşaklyk bilen hereket etdiriň.",
+                    "3": "Taýýar bolsaňyz, gözleriňizi açyň."
+                }
             }
         },
         "patterns": {

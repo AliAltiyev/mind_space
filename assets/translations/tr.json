@@ -377,6 +377,39 @@
                 "ocean": "Okyanus Dalgaları",
                 "rain": "Yağmur",
                 "forest": "Orman"
+            },
+            "phase": {
+                "preparation": {
+                    "title": "Hazırlık",
+                    "1": "Rahat bir pozisyon bulun. Rahat hissediyorsanız gözlerinizi kapatın.",
+                    "2": "Bu alana yerleşmek için bir an ayırın.",
+                    "3": "Herhangi bir beklentiyi bırakın ve şimdiki zamanda olun."
+                },
+                "breathing": {
+                    "title": "Nefes",
+                    "1": "Burnunuzdan derin bir nefes alın.",
+                    "2": "Bir an tutun, sonra yavaşça ağzınızdan nefes verin.",
+                    "3": "Doğal ve derin nefes almaya devam edin.",
+                    "4": "Dikkatinizi nefesinize odaklayın."
+                },
+                "body_scan": {
+                    "title": "Vücut Taraması",
+                    "1": "Vücudunuzu baştan ayağa kadar yavaşça tarayın.",
+                    "2": "Yargılamadan herhangi bir gerginlik veya rahatsızlığı fark edin.",
+                    "3": "Vücudunuzun gevşemesine ve serbest kalmasına izin verin."
+                },
+                "visualization": {
+                    "title": "Görselleştirme",
+                    "1": "Kendinizi güvende ve sakin hissettiğiniz huzurlu bir yer hayal edin.",
+                    "2": "Kendinizi bu yerde, tamamen mevcut olarak görselleştirin.",
+                    "3": "Bu huzurlu alanın tüm detaylarını içselleştirin."
+                },
+                "completion": {
+                    "title": "Tamamlama",
+                    "1": "Yavaşça farkındalığınızı şimdiki ana geri getirin.",
+                    "2": "Parmaklarınızı ve ayak parmaklarınızı nazikçe hareket ettirin.",
+                    "3": "Hazır olduğunuzda gözlerinizi açın."
+                }
             }
         },
         "patterns": {
