@@ -45,3 +45,4 @@ scrape_configs:
         labels:
           service: 'redis'
 
+

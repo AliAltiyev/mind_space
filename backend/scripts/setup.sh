@@ -55,3 +55,4 @@ echo "1. Edit .env file with your configuration"
 echo "2. Start the development server: npm run dev"
 echo "3. Or start with clustering: npm run start:cluster"
 
+

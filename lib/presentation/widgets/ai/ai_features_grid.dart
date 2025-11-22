@@ -6,6 +6,7 @@ import 'package:mind_space/core/database/database.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../../app/providers/ai_features_provider.dart';
+import '../../../core/constants/app_colors.dart';
 import '../../../features/ai/presentation/blocs/ai_insights_bloc.dart';
 import '../../../features/ai/presentation/blocs/gratitude_bloc.dart';
 import '../../../features/ai/presentation/blocs/meditation_bloc.dart';
@@ -143,7 +144,7 @@ class AIFeaturesGrid extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    child: Icon(icon, color: Colors.white, size: 24),
+                    child: Icon(icon, color: AppColors.textOnPrimary, size: 24),
                   ),
 
                   const SizedBox(width: 16),
@@ -154,7 +155,7 @@ class AIFeaturesGrid extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: AppColors.textOnPrimary,
                         shadows: [
                           Shadow(
                             color: colorScheme.borderColor,
@@ -183,7 +184,7 @@ class AIFeaturesGrid extends ConsumerWidget {
                       ),
                       child: const Icon(
                         Icons.arrow_forward_ios,
-                        color: Colors.white,
+                        color: AppColors.textOnPrimary,
                         size: 16,
                       ),
                     ),
@@ -267,11 +268,11 @@ class _AIInsightsWidgetState extends State<_AIInsightsWidget> {
           child:  Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.psychology_outlined, color: Colors.white70, size: 32),
+              Icon(Icons.psychology_outlined, color: AppColors.darkTextSecondary, size: 32),
               SizedBox(height: 8),
               Text(
                 'home.add_mood_entries'.tr(),
-                style: TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: AppColors.darkTextSecondary, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -353,11 +354,11 @@ class _PatternsWidgetState extends State<_PatternsWidget> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.psychology_outlined, color: Colors.white70, size: 32),
+              Icon(Icons.psychology_outlined, color: AppColors.darkTextSecondary, size: 32),
               SizedBox(height: 8),
               Text(
                 'home.add_mood_entries'.tr(),
-                style: TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: AppColors.darkTextSecondary, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -433,11 +434,11 @@ class _GratitudeWidgetState extends State<_GratitudeWidget> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.psychology_outlined, color: Colors.white70, size: 32),
+              Icon(Icons.psychology_outlined, color: AppColors.darkTextSecondary, size: 32),
               SizedBox(height: 8),
               Text(
                 'home.add_mood_entries'.tr(),
-                style: TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: AppColors.darkTextSecondary, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -516,11 +517,11 @@ class _MeditationWidgetState extends State<_MeditationWidget> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.psychology_outlined, color: Colors.white70, size: 32),
+              Icon(Icons.psychology_outlined, color: AppColors.darkTextSecondary, size: 32),
               SizedBox(height: 8),
               Text(
                 'home.add_mood_entries'.tr(),
-                style: TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: AppColors.darkTextSecondary, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
             ],

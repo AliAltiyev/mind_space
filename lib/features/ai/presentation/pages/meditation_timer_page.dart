@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import '../../domain/entities/meditation_entity.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/meditation_audio_service.dart';
 
 /// Экран медитации с таймером
@@ -182,10 +183,10 @@ class _MeditationTimerPageState extends State<MeditationTimerPage> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : colorScheme.surface,
+      backgroundColor: isDark ? AppColors.darkBackground : colorScheme.surface,
       appBar: AppBar(
         title: Text('ai.meditation.title'.tr()),
-        backgroundColor: isDark ? const Color(0xFF1E293B) : colorScheme.surface,
+        backgroundColor: isDark ? AppColors.darkSurface : colorScheme.surface,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close),
@@ -261,7 +262,7 @@ class _MeditationTimerPageState extends State<MeditationTimerPage> {
                         widget.meditation.title,
                         style: AppTypography.h3.copyWith(
                           fontSize: 20,
-                          color: isDark ? Colors.white : colorScheme.onSurface,
+                          color: isDark ? AppColors.darkTextPrimary : colorScheme.onSurface,
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 2,
@@ -324,7 +325,7 @@ class _MeditationTimerPageState extends State<MeditationTimerPage> {
                               widget.meditation.instructions.length - 1,
                             )],
                         style: AppTypography.bodyLarge.copyWith(
-                          color: isDark ? Colors.white : colorScheme.onSurface,
+                          color: isDark ? AppColors.darkTextPrimary : colorScheme.onSurface,
                         ),
                         textAlign: TextAlign.center,
                       ),

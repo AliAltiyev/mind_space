@@ -85,3 +85,4 @@ echo "Load Balancer IP: $(doctl compute load-balancer get $LB_ID --format IP --n
 echo "Database Host: $(doctl databases connection $DB_ID --format Host --no-header)"
 echo "Redis Host: $(doctl databases connection $REDIS_ID --format Host --no-header)"
 
+

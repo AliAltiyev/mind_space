@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../constants/navigation.dart';
 
 /// Сервис для управления настройками приложения
 class AppSettingsService {
@@ -197,13 +196,7 @@ enum AppTheme {
 /// Язык приложения
 enum AppLanguage {
   russian('settings.languages.russian', 'ru'),
-  english('settings.languages.english', 'en'),
-  chinese('settings.languages.chinese', 'zh'),
-  hindi('settings.languages.hindi', 'hi'),
-  spanish('settings.languages.spanish', 'es'),
-  french('settings.languages.french', 'fr'),
-  turkish('settings.languages.turkish', 'tr'),
-  turkmen('settings.languages.turkmen', 'tk');
+  english('settings.languages.english', 'en');
 
   const AppLanguage(this.displayNameKey, this.code);
   final String displayNameKey;

@@ -18,11 +18,20 @@ class GroqApiConstants {
   /// Получите бесплатный ключ на: https://console.groq.com/keys
   /// Groq предоставляет щедрый бесплатный tier с хорошими лимитами
   ///
+  /// ИНСТРУКЦИЯ ПО НАСТРОЙКЕ:
+  /// 1. Перейдите на https://console.groq.com/keys
+  /// 2. Создайте аккаунт или войдите в существующий
+  /// 3. Создайте новый API ключ
+  /// 4. Скопируйте ключ и вставьте его ниже вместо пустой строки
+  ///
   /// Для получения ключа из настроек используйте AppSettingsService
   static String get apiKey {
     // TODO: Получать ключ из настроек приложения или переменных окружения
     // Пример: return AppSettingsService().getGroqApiKey() ?? '';
-    return ''; // Пустой ключ по умолчанию - должен быть настроен пользователем
+
+    // ⚠️ ВСТАВЬТЕ ВАШ API КЛЮЧ GROQ СЮДА:
+    // Получите бесплатный ключ на: https://console.groq.com/keys
+    return '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'; // Вставьте ваш API ключ сюда, например: return 'gsk_...';
   }
 
   /// Заголовки по умолчанию
@@ -78,8 +87,10 @@ class GroqClient {
     // Проверяем, что API ключ настроен
     if (GroqApiConstants.apiKey.isEmpty ||
         GroqApiConstants.apiKey.length < 20) {
+      // Не пробрасываем исключение, чтобы не крашить приложение
+      // Вместо этого возвращаем понятное сообщение об ошибке
       throw Exception(
-        'API ключ Groq не настроен. Получите бесплатный ключ на https://console.groq.com/keys и добавьте его в lib/core/api/groq_client.dart',
+        'API ключ Groq не настроен. Получите бесплатный ключ на https://console.groq.com/keys и добавьте его в lib/core/api/groq_client.dart в метод GroqApiConstants.apiKey',
       );
     }
 

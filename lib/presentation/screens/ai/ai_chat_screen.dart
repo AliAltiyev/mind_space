@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -7,7 +8,7 @@ import '../../../core/constants/app_typography.dart';
 import '../../../core/services/user_level_service.dart';
 import '../../../core/api/groq_client.dart';
 
-/// Экран чата с AI - простой и понятный дизайн
+/// Экран чата с AI - Профессиональный дизайн в стиле отслеживания сна
 class AiChatScreen extends ConsumerStatefulWidget {
   const AiChatScreen({super.key});
 
@@ -15,7 +16,8 @@ class AiChatScreen extends ConsumerStatefulWidget {
   ConsumerState<AiChatScreen> createState() => _AiChatScreenState();
 }
 
-class _AiChatScreenState extends ConsumerState<AiChatScreen> {
+class _AiChatScreenState extends ConsumerState<AiChatScreen>
+    with TickerProviderStateMixin {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
   final List<ChatMessage> _messages = [];
@@ -23,9 +25,49 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   final UserLevelService _levelService = UserLevelService();
   final GroqClient _aiClient = GroqClient();
 
+  late AnimationController _fadeController;
+  late AnimationController _slideController;
+  late AnimationController _pulseController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _pulseAnimation;
+
   @override
   void initState() {
     super.initState();
+
+    // Анимации для экрана
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
+    _slideController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOut));
+
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero).animate(
+          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+        );
+
+    _pulseAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+
+    _fadeController.forward();
+    _slideController.forward();
     _addWelcomeMessage();
   }
 
@@ -33,6 +75,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
+    _fadeController.dispose();
+    _slideController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -53,163 +98,207 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : AppColors.background,
-      appBar: AppBar(
-        title: Row(
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
+      body: SafeArea(
+        child: Column(
           children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.primary, AppColors.secondary],
-                ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(
-                Icons.psychology,
-                color: Colors.white,
-                size: 18,
-              ),
+            // Современный AppBar
+            _buildModernAppBar(isDark),
+
+            // Список сообщений
+            Expanded(
+              child: _messages.isEmpty
+                  ? _buildEmptyState(isDark)
+                  : FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: SlideTransition(
+                        position: _slideAnimation,
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.all(20),
+                          itemCount: _messages.length,
+                          itemBuilder: (context, index) {
+                            return _AnimatedChatBubble(
+                              message: _messages[index],
+                              index: index,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
             ),
-            const SizedBox(width: 12),
-            Text('ai.chat.title'.tr()),
+
+            // Поле ввода
+            _buildInputArea(isDark),
           ],
         ),
-        backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
-        elevation: 1,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _clearChat,
-            tooltip: 'ai.chat.clear_chat'.tr(),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Быстрые действия
-          _buildQuickActions(),
-
-          // Список сообщений
-          Expanded(
-            child: _messages.isEmpty
-                ? _buildEmptyState()
-                : ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _messages.length,
-                    itemBuilder: (context, index) {
-                      return _ChatBubble(message: _messages[index]);
-                    },
-                  ),
-          ),
-
-          // Поле ввода
-          _buildInputArea(),
-        ],
       ),
     );
   }
 
-  /// Быстрые действия
-  Widget _buildQuickActions() {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
+  /// Современный AppBar в стиле sleep tracking
+  Widget _buildModernAppBar(bool isDark) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border(bottom: BorderSide(color: AppColors.border)),
+        color: isDark ? AppColors.darkSurface : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            'ai.chat.quick_questions'.tr(),
-            style: AppTypography.bodySmall.copyWith(
-              color: isDark ? Colors.white70 : AppColors.textSecondary,
-              fontWeight: FontWeight.w600,
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.primary, AppColors.primaryLight],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Icon(
+              CupertinoIcons.sparkles,
+              color: AppColors.textOnPrimary,
+              size: 24,
             ),
           ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _QuickActionChip(
-                text: 'ai.chat.how_are_you'.tr(),
-                onTap: () => _sendMessage('ai.chat.how_are_you'.tr()),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'ai.chat.title'.tr(),
+                  style: AppTypography.h3.copyWith(
+                    color: isDark
+                        ? AppColors.darkTextPrimary
+                        : AppColors.textPrimary,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'ai.chat.subtitle'.tr(),
+                  style: AppTypography.caption.copyWith(
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: _clearChat,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppColors.darkSurfaceVariant
+                    : AppColors.surfaceVariant,
+                borderRadius: BorderRadius.circular(12),
               ),
-              _QuickActionChip(
-                text: 'ai.chat.mood_analysis'.tr(),
-                onTap: () => _sendMessage('ai.chat.analyze_my_mood'.tr()),
+              child: Icon(
+                CupertinoIcons.arrow_clockwise,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
+                size: 20,
               ),
-              _QuickActionChip(
-                text: 'ai.chat.tips'.tr(),
-                onTap: () => _sendMessage('ai.chat.give_tips_for_mood'.tr()),
-              ),
-              _QuickActionChip(
-                text: 'ai.meditation.title'.tr(),
-                onTap: () => _sendMessage('ai.chat.recommend_meditation'.tr()),
-              ),
-            ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  /// Пустое состояние
-  Widget _buildEmptyState() {
-    return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight:
-              MediaQuery.of(context).size.height -
-              MediaQuery.of(context).padding.top -
-              kToolbarHeight -
-              200, // Высота AppBar + QuickActions + InputArea
-        ),
+  /// Пустое состояние с анимацией
+  Widget _buildEmptyState(bool isDark) {
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
         child: Center(
-          child: Padding(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(32),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppColors.primary, AppColors.secondary],
-                    ),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: const Icon(
-                    Icons.psychology,
-                    color: Colors.white,
-                    size: 40,
-                  ),
+                // Анимированная иконка
+                AnimatedBuilder(
+                  animation: _pulseAnimation,
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _pulseAnimation.value,
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [AppColors.primary, AppColors.primaryLight],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withOpacity(0.4),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          CupertinoIcons.sparkles,
+                          color: AppColors.textOnPrimary,
+                          size: 50,
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 32),
                 Text(
                   'ai.chat.ready_to_help'.tr(),
                   style: AppTypography.h3.copyWith(
-                    color: AppColors.textPrimary,
+                    color: isDark
+                        ? AppColors.darkTextPrimary
+                        : AppColors.textPrimary,
+                    fontWeight: FontWeight.w700,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Text(
                   'ai.chat.ask_any_question'.tr(),
                   style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: 32),
+                // Быстрые действия
+                _buildQuickActions(isDark),
               ],
             ),
           ),
@@ -218,98 +307,176 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     );
   }
 
-  /// Область ввода
-  Widget _buildInputArea() {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+  /// Быстрые действия в стиле sleep tracking
+  Widget _buildQuickActions(bool isDark) {
+    final actions = [
+      {
+        'text': 'ai.chat.how_are_you'.tr(),
+        'icon': CupertinoIcons.smiley,
+        'onTap': () => _sendMessage('ai.chat.how_are_you'.tr()),
+      },
+      {
+        'text': 'ai.chat.mood_analysis'.tr(),
+        'icon': CupertinoIcons.chart_bar,
+        'onTap': () => _sendMessage('ai.chat.analyze_my_mood'.tr()),
+      },
+      {
+        'text': 'ai.chat.tips'.tr(),
+        'icon': CupertinoIcons.lightbulb,
+        'onTap': () => _sendMessage('ai.chat.give_tips_for_mood'.tr()),
+      },
+      {
+        'text': 'ai.meditation.title'.tr(),
+        'icon': CupertinoIcons.star,
+        'onTap': () => _sendMessage('ai.chat.recommend_meditation'.tr()),
+      },
+    ];
 
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      alignment: WrapAlignment.center,
+      children: actions.asMap().entries.map((entry) {
+        final index = entry.key;
+        final action = entry.value;
+        return TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0.0, end: 1.0),
+          duration: Duration(milliseconds: 300 + (index * 100)),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, child) {
+            return Transform.scale(
+              scale: value,
+              child: Opacity(opacity: value, child: child),
+            );
+          },
+          child: _QuickActionCard(
+            text: action['text'] as String,
+            icon: action['icon'] as IconData,
+            onTap: action['onTap'] as VoidCallback,
+            isDark: isDark,
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  /// Область ввода в современном стиле
+  Widget _buildInputArea(bool isDark) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border(top: BorderSide(color: AppColors.border)),
+        color: isDark ? AppColors.darkSurface : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
       ),
       child: Row(
         children: [
           Expanded(
-            child: TextField(
-              controller: _messageController,
-              decoration: InputDecoration(
-                hintText: 'ai.chat.placeholder'.tr(),
-                hintStyle: AppTypography.bodyMedium.copyWith(
-                  color: isDark ? Colors.white70 : AppColors.textHint,
-                ),
-                filled: true,
-                fillColor: isDark
-                    ? Colors.white.withOpacity(0.05)
-                    : Colors.transparent,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide(
-                    color: isDark
-                        ? Colors.white.withOpacity(0.1)
-                        : AppColors.border,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide(
-                    color: isDark
-                        ? Colors.white.withOpacity(0.1)
-                        : AppColors.border,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(
-                    color: AppColors.primary,
-                    width: 2,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+            child: Container(
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppColors.darkSurfaceVariant
+                    : AppColors.surfaceVariant,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : AppColors.border,
+                  width: 1.5,
                 ),
               ),
-              maxLines: null,
-              textInputAction: TextInputAction.send,
-              onSubmitted: (_) {
-                final text = _messageController.text.trim();
-                if (text.isNotEmpty && !_isLoading) {
-                  _sendMessage(text);
-                  _messageController.clear();
-                }
-              },
+              child: TextField(
+                controller: _messageController,
+                style: AppTypography.bodyMedium.copyWith(
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : AppColors.textPrimary,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'ai.chat.placeholder'.tr(),
+                  hintStyle: AppTypography.bodyMedium.copyWith(
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textHint,
+                  ),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 14,
+                  ),
+                ),
+                maxLines: null,
+                textInputAction: TextInputAction.send,
+                onSubmitted: (_) {
+                  final text = _messageController.text.trim();
+                  if (text.isNotEmpty && !_isLoading) {
+                    _sendMessage(text);
+                    _messageController.clear();
+                  }
+                },
+              ),
             ),
           ),
-          const SizedBox(width: 8),
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.primary, AppColors.secondary],
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: _isLoading
+                ? null
+                : () {
+                    final text = _messageController.text.trim();
+                    if (text.isNotEmpty && !_isLoading) {
+                      _sendMessage(text);
+                      _messageController.clear();
+                    }
+                  },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                gradient: _isLoading
+                    ? null
+                    : const LinearGradient(
+                        colors: [AppColors.primary, AppColors.primaryLight],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                color: _isLoading
+                    ? (isDark
+                          ? AppColors.darkSurfaceVariant
+                          : AppColors.surfaceVariant)
+                    : null,
+                borderRadius: BorderRadius.circular(26),
+                boxShadow: _isLoading
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.4),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
               ),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: IconButton(
-              onPressed: _isLoading
-                  ? null
-                  : () {
-                      final text = _messageController.text.trim();
-                      if (text.isNotEmpty && !_isLoading) {
-                        _sendMessage(text);
-                        _messageController.clear();
-                      }
-                    },
-              icon: _isLoading
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              child: _isLoading
+                  ? const Center(
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.primary,
+                          ),
+                        ),
                       ),
                     )
-                  : const Icon(Icons.send, color: Colors.white),
+                  : const Icon(
+                      CupertinoIcons.paperplane_fill,
+                      color: AppColors.textOnPrimary,
+                      size: 24,
+                    ),
             ),
           ),
         ],
@@ -337,14 +504,39 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
       // Генерация ответа AI через Groq API
       final aiResponse = await _generateAiResponse(text);
 
-    setState(() {
-      _messages.add(
-        ChatMessage(text: aiResponse, isUser: false, timestamp: DateTime.now()),
-      );
-      _isLoading = false;
-    });
+      setState(() {
+        _messages.add(
+          ChatMessage(
+            text: aiResponse,
+            isUser: false,
+            timestamp: DateTime.now(),
+          ),
+        );
+        _isLoading = false;
+      });
 
-    _scrollToBottom();
+      _scrollToBottom();
+    } catch (e) {
+      print('❌ Ошибка генерации AI ответа: $e');
+
+      setState(() {
+        _isLoading = false;
+
+        // Используем метод для получения понятного сообщения об ошибке
+        final errorMessage = _getUserFriendlyErrorMessage(e);
+
+        // Добавляем сообщение об ошибке в чат
+        _messages.add(
+          ChatMessage(
+            text: errorMessage,
+            isUser: false,
+            timestamp: DateTime.now(),
+          ),
+        );
+      });
+
+      _scrollToBottom();
+    }
   }
 
   /// Генерация ответа AI через Groq API
@@ -355,22 +547,12 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           EasyLocalization.of(context)?.locale ?? const Locale('en');
       final languageCode = currentLocale.languageCode;
 
-      // Маппинг языков для AI промпта (названия языков на английском для лучшего понимания AI)
-      final languageMap = {
-        'en': 'English',
-        'ru': 'Russian',
-        'es': 'Spanish',
-        'fr': 'French',
-        'hi': 'Hindi',
-        'tk': 'Turkmen',
-        'tr': 'Turkish',
-        'zh': 'Chinese',
-      };
+      // Маппинг языков для AI промпта
+      final languageMap = {'en': 'English', 'ru': 'Russian'};
 
       final targetLanguage = languageMap[languageCode] ?? 'English';
 
-      // Формируем системный промпт для AI с явным указанием языка
-      // Используем английский для промпта, чтобы AI лучше понимал инструкции
+      // Формируем системный промпт для AI
       final systemPrompt =
           '''You are a friendly AI assistant for the Mind Space mood tracking app.
 Your task is to help users with questions about mood, emotions, and mental well-being.
@@ -389,7 +571,7 @@ CRITICAL LANGUAGE REQUIREMENT:
         {'role': 'user', 'content': userMessage},
       ];
 
-      // Отправляем запрос к Groq API (бесплатный и быстрый)
+      // Отправляем запрос к Groq API
       final response = await _aiClient.generateContentWithRetry(
         model: GroqApiConstants.defaultModel,
         messages: messages,
@@ -400,12 +582,11 @@ CRITICAL LANGUAGE REQUIREMENT:
       if (response.content.isNotEmpty) {
         return response.content;
       } else {
-        // Fallback на простые ответы, если API не вернул контент
+        // Fallback на простые ответы
         return _getFallbackResponse(userMessage);
       }
     } catch (e) {
       print('❌ Ошибка генерации AI ответа: $e');
-      // Пробрасываем ошибку выше для обработки
       rethrow;
     }
   }
@@ -414,9 +595,18 @@ CRITICAL LANGUAGE REQUIREMENT:
   String _getUserFriendlyErrorMessage(dynamic error) {
     final errorString = error.toString();
 
+    if (errorString.contains('API ключ Groq не настроен') ||
+        errorString.contains('api key') ||
+        errorString.contains('API key')) {
+      return '⚠️ API ключ Groq не настроен.\n\n'
+          'Для использования AI чата необходимо:\n'
+          '1. Получить бесплатный ключ на https://console.groq.com/keys\n'
+          '2. Добавить его в lib/core/api/groq_client.dart\n\n'
+          'После настройки перезапустите приложение.';
+    }
+
     if (errorString.contains('400') ||
-        errorString.contains('Неверный формат запроса') ||
-        errorString.contains('API ключ Groq не настроен')) {
+        errorString.contains('Неверный формат запроса')) {
       return '${'ai.chat.error_invalid_key'.tr()}\n\n${'ai.chat.get_groq_key'.tr()}';
     }
 
@@ -511,17 +701,18 @@ CRITICAL LANGUAGE REQUIREMENT:
 
   /// Очистка чата
   void _clearChat() {
-    showDialog(
+    showCupertinoDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text('ai.chat.clear_chat'.tr()),
         content: Text('ai.chat.clear_chat_confirm'.tr()),
         actions: [
-          TextButton(
+          CupertinoDialogAction(
             onPressed: () => Navigator.of(context).pop(),
             child: Text('common.cancel'.tr()),
           ),
-          TextButton(
+          CupertinoDialogAction(
+            isDestructiveAction: true,
             onPressed: () {
               Navigator.of(context).pop();
               setState(() {
@@ -529,7 +720,6 @@ CRITICAL LANGUAGE REQUIREMENT:
                 _addWelcomeMessage();
               });
             },
-            style: TextButton.styleFrom(foregroundColor: AppColors.error),
             child: Text('common.clear'.tr()),
           ),
         ],
@@ -551,7 +741,66 @@ class ChatMessage {
   });
 }
 
-/// Пузырек сообщения
+/// Анимированный пузырек сообщения
+class _AnimatedChatBubble extends StatefulWidget {
+  final ChatMessage message;
+  final int index;
+
+  const _AnimatedChatBubble({required this.message, required this.index});
+
+  @override
+  State<_AnimatedChatBubble> createState() => _AnimatedChatBubbleState();
+}
+
+class _AnimatedChatBubbleState extends State<_AnimatedChatBubble>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300 + (widget.index * 50)),
+    );
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(widget.message.isUser ? 0.2 : -0.2, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: _ChatBubble(message: widget.message),
+        ),
+      ),
+    );
+  }
+}
+
+/// Пузырек сообщения в современном стиле
 class _ChatBubble extends StatelessWidget {
   final ChatMessage message;
 
@@ -562,92 +811,125 @@ class _ChatBubble extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        mainAxisAlignment: message.isUser
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!message.isUser) ...[
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.primary, AppColors.secondary],
+    return Row(
+      mainAxisAlignment: message.isUser
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (!message.isUser) ...[
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.primary, AppColors.primaryLight],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
                 ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(
-                Icons.psychology,
-                color: Colors.white,
-                size: 16,
-              ),
+              ],
             ),
-            const SizedBox(width: 8),
-          ],
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: message.isUser ? AppColors.primary : AppColors.surface,
-                borderRadius: BorderRadius.circular(16).copyWith(
-                  bottomLeft: message.isUser
-                      ? const Radius.circular(16)
-                      : const Radius.circular(4),
-                  bottomRight: message.isUser
-                      ? const Radius.circular(4)
-                      : const Radius.circular(16),
-                ),
-                boxShadow: isDark ? null : AppColors.cardShadow,
-                border: isDark && !message.isUser
-                    ? Border.all(color: Colors.white.withOpacity(0.1))
-                    : null,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    message.text,
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: message.isUser
-                          ? Colors.white
-                          : (isDark ? Colors.white : AppColors.textPrimary),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _formatTime(message.timestamp),
-                    style: AppTypography.caption.copyWith(
-                      color: message.isUser
-                          ? Colors.white70
-                          : (isDark ? Colors.white70 : AppColors.textHint),
-                    ),
-                  ),
-                ],
-              ),
+            child: const Icon(
+              CupertinoIcons.sparkles,
+              color: AppColors.textOnPrimary,
+              size: 20,
             ),
           ),
-          if (message.isUser) ...[
-            const SizedBox(width: 8),
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(16),
+          const SizedBox(width: 12),
+        ],
+        Flexible(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: message.isUser
+                  ? const LinearGradient(
+                      colors: [AppColors.primary, AppColors.primaryLight],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : null,
+              color: message.isUser
+                  ? null
+                  : (isDark ? AppColors.darkSurface : Colors.white),
+              borderRadius: BorderRadius.circular(20).copyWith(
+                bottomLeft: message.isUser
+                    ? const Radius.circular(20)
+                    : const Radius.circular(6),
+                bottomRight: message.isUser
+                    ? const Radius.circular(6)
+                    : const Radius.circular(20),
               ),
-              child: const Icon(
-                Icons.person,
-                color: AppColors.primary,
-                size: 16,
+              boxShadow: [
+                BoxShadow(
+                  color: message.isUser
+                      ? AppColors.primary.withOpacity(0.3)
+                      : Colors.black.withOpacity(0.05),
+                  blurRadius: 15,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+              border: !message.isUser && isDark
+                  ? Border.all(color: AppColors.darkBorder, width: 1)
+                  : null,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  message.text,
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: message.isUser
+                        ? AppColors.textOnPrimary
+                        : (isDark
+                              ? AppColors.darkTextPrimary
+                              : AppColors.textPrimary),
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  _formatTime(message.timestamp),
+                  style: AppTypography.caption.copyWith(
+                    color: message.isUser
+                        ? AppColors.textOnPrimary.withOpacity(0.7)
+                        : (isDark
+                              ? AppColors.darkTextSecondary
+                              : AppColors.textSecondary),
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (message.isUser) ...[
+          const SizedBox(width: 12),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: AppColors.primary.withOpacity(0.3),
+                width: 1.5,
               ),
             ),
-          ],
+            child: const Icon(
+              CupertinoIcons.person_fill,
+              color: AppColors.primary,
+              size: 20,
+            ),
+          ),
         ],
-      ),
+      ],
     );
   }
 
@@ -656,39 +938,70 @@ class _ChatBubble extends StatelessWidget {
   }
 }
 
-/// Чип быстрого действия
-class _QuickActionChip extends StatelessWidget {
+/// Карточка быстрого действия в стиле sleep tracking
+class _QuickActionCard extends StatelessWidget {
   final String text;
+  final IconData icon;
   final VoidCallback onTap;
+  final bool isDark;
 
-  const _QuickActionChip({required this.text, required this.onTap});
+  const _QuickActionCard({
+    required this.text,
+    required this.icon,
+    required this.onTap,
+    required this.isDark,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isDark
-              ? AppColors.primary.withOpacity(0.2)
-              : AppColors.primary.withOpacity(0.1),
+          gradient: LinearGradient(
+            colors: isDark
+                ? [AppColors.darkSurface, AppColors.darkSurfaceVariant]
+                : [Colors.white, AppColors.surfaceVariant],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isDark
-                ? AppColors.primary.withOpacity(0.5)
-                : AppColors.primary.withOpacity(0.3),
+            color: isDark ? AppColors.darkBorder : AppColors.border,
+            width: 1.5,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-        child: Text(
-          text,
-          style: AppTypography.bodySmall.copyWith(
-            color: AppColors.primary,
-            fontWeight: FontWeight.w500,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: AppColors.primary, size: 18),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              text,
+              style: AppTypography.bodySmall.copyWith(
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,4 +1,6 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -7,6 +9,7 @@ import 'package:mind_space/features/ai/presentation/pages/meditation_page.dart';
 import 'package:mind_space/features/ai/presentation/pages/meditation_timer_page_tts.dart';
 import 'package:mind_space/features/ai/domain/entities/meditation_entity.dart';
 import 'package:mind_space/features/ai/presentation/pages/patterns_page.dart';
+import 'package:mind_space/presentation/screens/home/home_screen_clean.dart';
 
 import '../../features/profile/presentation/pages/achievements_page.dart';
 import '../../features/profile/presentation/pages/edit_profile_page.dart';
@@ -16,7 +19,6 @@ import '../../presentation/screens/auth/auth_screen.dart';
 import '../../presentation/screens/entry/add_entry_screen_clean.dart';
 import '../../presentation/screens/entry/entry_detail_screen.dart';
 // Основные экраны
-import '../../presentation/screens/home/home_screen_clean.dart';
 import '../../presentation/screens/entries/entries_screen_clean.dart';
 import '../../presentation/screens/home/quick_add_screen.dart';
 import '../../presentation/screens/settings/about_screen.dart';
@@ -159,7 +161,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/meditation',
                 name: 'meditation',
-                builder: (context, state) => const MeditationPage(),
+                pageBuilder: (context, state) => CustomTransitionPage(
+                  key: state.pageKey,
+                  child: const MeditationPage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                ),
                 routes: [
                   // Meditation Timer
                   GoRoute(
@@ -461,47 +470,176 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   );
 });
 
-/// Главная оболочка приложения с навигацией
+/// Главная оболочка приложения с навигацией в стиле iOS
 class MainShell extends ConsumerWidget {
   const MainShell({super.key, required this.child});
 
   final Widget child;
 
+  static const _tabs = [
+    _TabItemData(
+      path: '/home',
+      icon: CupertinoIcons.house,
+      activeIcon: CupertinoIcons.house_fill,
+      labelKey: 'navigation.home',
+    ),
+    _TabItemData(
+      path: '/stats',
+      icon: CupertinoIcons.chart_bar,
+      activeIcon: CupertinoIcons.chart_bar_circle_fill,
+      labelKey: 'navigation.stats',
+    ),
+    _TabItemData(
+      path: '/sleep',
+      icon: CupertinoIcons.bed_double,
+      activeIcon: CupertinoIcons.bed_double_fill,
+      labelKey: 'navigation.sleep',
+    ),
+    _TabItemData(
+      path: '/ai-chat',
+      icon: CupertinoIcons.sparkles,
+      activeIcon: CupertinoIcons.sparkles,
+      labelKey: 'ai.chat.title',
+    ),
+    _TabItemData(
+      path: '/profile',
+      icon: CupertinoIcons.person,
+      activeIcon: CupertinoIcons.person_fill,
+      labelKey: 'navigation.profile',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _getCurrentIndex(context),
-        onTap: (index) => _onTabTapped(context, index),
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home_outlined),
-            activeIcon: const Icon(Icons.home),
-            label: 'navigation.home'.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.analytics_outlined),
-            activeIcon: const Icon(Icons.analytics),
-            label: 'navigation.stats'.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.bedtime_outlined),
-            activeIcon: const Icon(Icons.bedtime),
-            label: 'navigation.sleep'.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.psychology_outlined),
-            activeIcon: const Icon(Icons.psychology),
-            label: 'ai.chat.title'.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.person_outlined),
-            activeIcon: const Icon(Icons.person),
-            label: 'navigation.profile'.tr(),
-          ),
+    final currentIndex = _getCurrentIndex(context);
+
+    return CupertinoPageScaffold(
+      child: Column(
+        children: [
+          Expanded(child: child),
+          _buildCupertinoTabBar(context, currentIndex),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCupertinoTabBar(BuildContext context, int currentIndex) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(28),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? Colors.white.withOpacity(0.05)
+                    : Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(
+                  color: isDark
+                      ? Colors.white.withOpacity(0.08)
+                      : Colors.black.withOpacity(0.04),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.12),
+                    blurRadius: 30,
+                    offset: const Offset(0, 12),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: List.generate(_tabs.length, (index) {
+                  final tab = _tabs[index];
+                  return _buildTabItem(
+                    context,
+                    index: index,
+                    currentIndex: currentIndex,
+                    tab: tab,
+                    isDark: isDark,
+                  );
+                }),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTabItem(
+    BuildContext context, {
+    required int index,
+    required int currentIndex,
+    required _TabItemData tab,
+    required bool isDark,
+  }) {
+    final isActive = index == currentIndex;
+    final label = tab.labelKey.tr();
+    final activeColor = isDark
+        ? Colors.white
+        : Theme.of(context).colorScheme.primary;
+    final inactiveColor = isDark
+        ? Colors.white.withOpacity(0.5)
+        : Colors.black54;
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => _onTabTapped(context, index),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: isActive
+                ? (isDark
+                      ? Colors.white.withOpacity(0.08)
+                      : Theme.of(context).colorScheme.primary.withOpacity(0.12))
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isActive ? tab.activeIcon : tab.icon,
+                size: 24,
+                color: isActive ? activeColor : inactiveColor,
+              ),
+              const SizedBox(height: 4),
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 200),
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                  color: isActive ? activeColor : inactiveColor,
+                ),
+                child: Text(label),
+              ),
+              const SizedBox(height: 4),
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: isActive ? 1 : 0,
+                child: Container(
+                  height: 3,
+                  width: 18,
+                  decoration: BoxDecoration(
+                    color: activeColor,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -519,24 +657,23 @@ class MainShell extends ConsumerWidget {
   }
 
   void _onTabTapped(BuildContext context, int index) {
-    switch (index) {
-      case 0:
-        context.go('/home');
-        break;
-      case 1:
-        context.go('/stats');
-        break;
-      case 2:
-        context.go('/sleep');
-        break;
-      case 3:
-        context.go('/ai-chat');
-        break;
-      case 4:
-        context.go('/profile');
-        break;
-    }
+    final tab = _tabs[index];
+    context.go(tab.path);
   }
+}
+
+class _TabItemData {
+  const _TabItemData({
+    required this.path,
+    required this.icon,
+    required this.activeIcon,
+    required this.labelKey,
+  });
+
+  final String path;
+  final IconData icon;
+  final IconData activeIcon;
+  final String labelKey;
 }
 
 /// Страница ошибки
@@ -553,7 +690,11 @@ class ErrorPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const Icon(
+              CupertinoIcons.exclamationmark_circle,
+              size: 64,
+              color: Colors.red,
+            ),
             const SizedBox(height: 16),
             Text(
               '${'error.occurred'.tr()}: ${error?.toString() ?? 'error.unknown_error'.tr()}',

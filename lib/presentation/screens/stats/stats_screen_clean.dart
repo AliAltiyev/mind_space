@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -19,13 +20,13 @@ class StatsScreenClean extends ConsumerWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : AppColors.background,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
       appBar: AppBar(
         title: Text('stats.title'.tr()),
-        backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+        backgroundColor: isDark ? AppColors.darkSurface : AppColors.surface,
         elevation: 1,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -92,16 +93,19 @@ class StatsScreenClean extends ConsumerWidget {
         )
         .length;
 
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+
         return Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: isDark ? theme.colorScheme.surface : AppColors.surface,
             borderRadius: BorderRadius.circular(12),
-            boxShadow: isDark ? null : AppColors.cardShadow,
-            border: isDark
-                ? Border.all(color: Colors.white.withOpacity(0.1))
-                : null,
+            boxShadow: isDark ? AppColors.darkCardShadow : AppColors.cardShadow,
+            border: isDark ? Border.all(color: AppColors.darkBorder) : null,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +113,9 @@ class StatsScreenClean extends ConsumerWidget {
               Text(
                 'stats.overall_stats'.tr(),
                 style: AppTypography.h3.copyWith(
-                  color: isDark ? Colors.white : AppColors.textPrimary,
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 16),
@@ -119,7 +125,7 @@ class StatsScreenClean extends ConsumerWidget {
                     child: _StatCard(
                       title: 'stats.total_entries'.tr(),
                       value: totalEntries.toString(),
-                      icon: Icons.list_alt,
+                      icon: CupertinoIcons.list_bullet,
                       color: AppColors.primary,
                     ),
                   ),
@@ -128,7 +134,7 @@ class StatsScreenClean extends ConsumerWidget {
                     child: _StatCard(
                       title: 'stats.average_mood'.tr(),
                       value: avgMood.toStringAsFixed(1),
-                      icon: Icons.trending_up,
+                      icon: CupertinoIcons.arrow_up_right,
                       color: AppColors.secondary,
                     ),
                   ),
@@ -141,7 +147,7 @@ class StatsScreenClean extends ConsumerWidget {
                     child: _StatCard(
                       title: 'stats.streak'.tr(),
                       value: streak.toString(),
-                      icon: Icons.local_fire_department,
+                      icon: CupertinoIcons.flame,
                       color: AppColors.warning,
                     ),
                   ),
@@ -150,7 +156,7 @@ class StatsScreenClean extends ConsumerWidget {
                     child: _StatCard(
                       title: 'stats.this_week'.tr(),
                       value: thisWeek.toString(),
-                      icon: Icons.calendar_today,
+                      icon: CupertinoIcons.calendar,
                       color: AppColors.info,
                     ),
                   ),
@@ -244,9 +250,7 @@ class StatsScreenClean extends ConsumerWidget {
         color: isDark ? theme.colorScheme.surface : AppColors.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: isDark ? null : AppColors.cardShadow,
-        border: isDark
-            ? Border.all(color: Colors.white.withOpacity(0.1))
-            : null,
+        border: isDark ? Border.all(color: AppColors.darkBorder) : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,7 +261,9 @@ class StatsScreenClean extends ConsumerWidget {
               Text(
                 'home.recent_entries'.tr(),
                 style: AppTypography.h3.copyWith(
-                  color: isDark ? Colors.white : AppColors.textPrimary,
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : AppColors.textPrimary,
                 ),
               ),
               TextButton(
@@ -279,7 +285,7 @@ class StatsScreenClean extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.analytics_outlined, size: 64, color: AppColors.textHint),
+          Icon(CupertinoIcons.chart_bar, size: 64, color: AppColors.textHint),
           const SizedBox(height: 16),
           Text(
             'stats.no_data'.tr(),
@@ -312,7 +318,11 @@ class StatsScreenClean extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, size: 64, color: AppColors.error),
+          Icon(
+            CupertinoIcons.exclamationmark_circle,
+            size: 64,
+            color: AppColors.error,
+          ),
           const SizedBox(height: 16),
           Text(
             'common.error'.tr(),
@@ -344,11 +354,9 @@ class StatsScreenClean extends ConsumerWidget {
       );
     }
 
-        return CustomPaint(
-          size: const Size(double.infinity, 200),
-          painter: _SimpleChartPainter(data),
-        );
-      },
+    return CustomPaint(
+      size: const Size(double.infinity, 200),
+      painter: _SimpleChartPainter(data),
     );
   }
 
@@ -442,7 +450,9 @@ class _StatCard extends StatelessWidget {
               return Text(
                 title,
                 style: AppTypography.caption.copyWith(
-                  color: isDark ? Colors.white70 : AppColors.textSecondary,
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.textSecondary,
                 ),
                 textAlign: TextAlign.center,
               );
@@ -482,7 +492,11 @@ class _MoodStatBar extends StatelessWidget {
               gradient: getMoodGradient(moodValue),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(_getMoodIcon(moodValue), color: Colors.white, size: 16),
+            child: Icon(
+              getMoodIcon(moodValue),
+              color: AppColors.textOnPrimary,
+              size: 16,
+            ),
           ),
           const SizedBox(width: 12),
           // Название
@@ -495,7 +509,9 @@ class _MoodStatBar extends StatelessWidget {
                 return Text(
                   getMoodLabel(moodValue),
                   style: AppTypography.bodyMedium.copyWith(
-                    color: isDark ? Colors.white : AppColors.textPrimary,
+                    color: isDark
+                        ? AppColors.darkTextPrimary
+                        : AppColors.textPrimary,
                   ),
                 );
               },
@@ -522,7 +538,9 @@ class _MoodStatBar extends StatelessWidget {
                 return Text(
                   '${percentage.toStringAsFixed(0)}%',
                   style: AppTypography.caption.copyWith(
-                    color: isDark ? Colors.white70 : AppColors.textSecondary,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
                   ),
                   textAlign: TextAlign.right,
                 );
@@ -537,17 +555,17 @@ class _MoodStatBar extends StatelessWidget {
   IconData getMoodIcon(int mood) {
     switch (mood) {
       case 5:
-        return Icons.sentiment_very_satisfied;
+        return CupertinoIcons.smiley;
       case 4:
-        return Icons.sentiment_satisfied;
+        return CupertinoIcons.smiley;
       case 3:
-        return Icons.sentiment_neutral;
+        return CupertinoIcons.smiley;
       case 2:
-        return Icons.sentiment_dissatisfied;
+        return CupertinoIcons.smiley;
       case 1:
-        return Icons.sentiment_very_dissatisfied;
+        return CupertinoIcons.smiley;
       default:
-        return Icons.sentiment_neutral;
+        return CupertinoIcons.smiley;
     }
   }
 
@@ -598,7 +616,9 @@ class _RecentEntryItem extends StatelessWidget {
                 return Text(
                   getMoodLabel(entry.moodValue),
                   style: AppTypography.bodyMedium.copyWith(
-                    color: isDark ? Colors.white : AppColors.textPrimary,
+                    color: isDark
+                        ? AppColors.darkTextPrimary
+                        : AppColors.textPrimary,
                   ),
                 );
               },
@@ -611,7 +631,9 @@ class _RecentEntryItem extends StatelessWidget {
               return Text(
                 DateFormat('dd.MM').format(entry.createdAt),
                 style: AppTypography.caption.copyWith(
-                  color: isDark ? Colors.white70 : AppColors.textSecondary,
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.textSecondary,
                 ),
               );
             },

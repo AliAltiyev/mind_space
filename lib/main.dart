@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -16,8 +17,9 @@ import 'features/profile/presentation/blocs/achievements_bloc.dart';
 import 'features/profile/presentation/blocs/preferences_bloc.dart';
 import 'features/profile/presentation/blocs/profile_bloc.dart';
 import 'features/profile/presentation/blocs/stats_bloc.dart';
-import 'core/constants/app_typography.dart';
 import 'core/services/app_settings_service.dart' hide AppTheme;
+import 'shared/presentation/theme/app_theme.dart';
+import 'app/providers/theme_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
@@ -34,16 +36,7 @@ void main() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: const [
-        Locale('en'),
-        Locale('ru'),
-        Locale('zh'),
-        Locale('hi'),
-        Locale('es'),
-        Locale('fr'),
-        Locale('tr'),
-        Locale('tk'),
-      ],
+      supportedLocales: const [Locale('en'), Locale('ru')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
       child: const ProviderScope(child: MindSpaceApp()),
@@ -55,9 +48,7 @@ void main() async {
 final savedLocaleProvider = FutureProvider<Locale>((ref) async {
   final settingsService = AppSettingsService();
   final savedLanguage = await settingsService.getLanguage();
-  // Для туркменского языка используем турецкий как fallback
-  final localeCode = savedLanguage.code == 'tk' ? 'tr' : savedLanguage.code;
-  return Locale(localeCode);
+  return Locale(savedLanguage.code);
 });
 
 /// Главное приложение
@@ -68,6 +59,7 @@ class MindSpaceApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
     final savedLocale = ref.watch(savedLocaleProvider);
+    final themeMode = ref.watch(appThemeProvider);
 
     return MultiBlocProvider(
       providers: [
@@ -103,6 +95,11 @@ class MindSpaceApp extends ConsumerWidget {
         title: 'Mind Space',
         debugShowCheckedModeBanner: false,
 
+        // Тема
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: themeMode,
+
         // Локализация
         localizationsDelegates: [
           ...context.localizationDelegates,
@@ -112,11 +109,6 @@ class MindSpaceApp extends ConsumerWidget {
         ],
         supportedLocales: context.supportedLocales,
         locale: savedLocale.valueOrNull ?? context.locale,
-
-        // Тема
-        theme: app_theme.AppTheme.lightTheme,
-        darkTheme: app_theme.AppTheme.darkTheme,
-        themeMode: themeMode,
 
         // Роутинг
         routerConfig: router,

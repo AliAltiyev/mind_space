@@ -125,10 +125,10 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
 
   /// Темная тема
   static const AppThemeExtension dark = AppThemeExtension(
-    primary: AppColors.primary,
-    primaryVariant: AppColors.primaryVariant,
+    primary: AppColors.darkPrimary,
+    primaryVariant: AppColors.darkPrimaryDark,
     secondary: AppColors.secondary,
-    secondaryVariant: AppColors.secondaryVariant,
+    secondaryVariant: AppColors.darkSecondaryLight,
     success: AppColors.success,
     warning: AppColors.warning,
     error: AppColors.error,
@@ -138,8 +138,8 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
     neutral: AppColors.neutral,
     sad: AppColors.sad,
     verySad: AppColors.verySad,
-    glassBackground: Color(0x1A000000),
-    glassBorder: Color(0x33000000),
+    glassBackground: AppColors.darkGlassBackground,
+    glassBorder: AppColors.darkGlassBorder,
   );
 }
 
@@ -147,4 +147,3 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
 extension AppThemeExtensionGetter on ThemeData {
   AppThemeExtension get appColors => extension<AppThemeExtension>()!;
 }
-

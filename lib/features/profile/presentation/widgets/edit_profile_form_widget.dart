@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
@@ -120,10 +123,10 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
               ),
               prefixIcon: const Icon(Icons.person_outline),
               filled: true,
-              fillColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+              fillColor: isDark ? AppColors.darkSurface : AppColors.surface,
             ),
             style: AppTypography.bodyLarge.copyWith(
-              color: isDark ? Colors.white : AppColors.textPrimary,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
@@ -149,10 +152,10 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
               ),
               prefixIcon: const Icon(Icons.email_outlined),
               filled: true,
-              fillColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+              fillColor: isDark ? AppColors.darkSurface : AppColors.surface,
             ),
             style: AppTypography.bodyLarge.copyWith(
-              color: isDark ? Colors.white : AppColors.textPrimary,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
             ),
             keyboardType: TextInputType.emailAddress,
             validator: (value) {
@@ -181,7 +184,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                 ),
                 prefixIcon: const Icon(Icons.calendar_today_outlined),
                 filled: true,
-                fillColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+                fillColor: isDark ? AppColors.darkSurface : AppColors.surface,
               ),
               child: Text(
                 _selectedDate != null
@@ -189,7 +192,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                     : 'profile.select_date'.tr(),
                 style: AppTypography.bodyLarge.copyWith(
                   color: isDark
-                      ? (_selectedDate != null ? Colors.white : Colors.white70)
+                      ? (_selectedDate != null ? AppColors.darkTextPrimary : AppColors.darkTextSecondary)
                       : (_selectedDate != null
                             ? AppColors.textPrimary
                             : AppColors.textHint),
@@ -210,7 +213,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                 },
               ),
               style: AppTypography.caption.copyWith(
-                color: isDark ? Colors.white70 : AppColors.textSecondary,
+                color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
               ),
             ),
           ],
@@ -236,7 +239,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
           Text(
             'profile.interests'.tr(),
             style: AppTypography.h4.copyWith(
-              color: isDark ? Colors.white : AppColors.textPrimary,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 12),
@@ -263,11 +266,11 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                 labelStyle: AppTypography.bodyMedium.copyWith(
                   color: isSelected
                       ? AppColors.primary
-                      : (isDark ? Colors.white70 : AppColors.textSecondary),
+                      : (isDark ? AppColors.darkTextSecondary : AppColors.textSecondary),
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                 ),
                 backgroundColor: isDark
-                    ? const Color(0xFF1E293B)
+                    ? AppColors.darkSurface
                     : AppColors.surfaceVariant,
               );
             }).toList(),
@@ -328,12 +331,12 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                     ? _isLoadingImage
                           ? const CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
+                                AppColors.textOnPrimary,
                               ),
                             )
                           : const Icon(
                               Icons.person,
-                              color: Colors.white,
+                              color: AppColors.textOnPrimary,
                               size: 60,
                             )
                     : null,
@@ -347,11 +350,11 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
+                    border: Border.all(color: AppColors.textOnPrimary, width: 3),
                   ),
                   child: const Icon(
                     Icons.camera_alt,
-                    color: Colors.white,
+                    color: AppColors.textOnPrimary,
                     size: 18,
                   ),
                 ),
@@ -376,7 +379,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+      backgroundColor: isDark ? AppColors.darkSurface : AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -401,7 +404,7 @@ class _EditProfileFormWidgetState extends State<EditProfileFormWidget> {
               Text(
                 'profile.select_photo'.tr(),
                 style: AppTypography.h3.copyWith(
-                  color: sheetIsDark ? Colors.white : AppColors.textPrimary,
+                  color: sheetIsDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 24),

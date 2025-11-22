@@ -27,19 +27,9 @@ targets:
           # Настройки для json_serializable
           create_factory: true
           create_to_json: true
-          create_per_file_to_string: false
           explicit_to_json: true
           field_rename: snake
           include_if_null: false
-
-      # Injectable
-      injectable_generator:
-        enabled: true
-        generate_for:
-          - lib/core/di/injection.dart
-        options:
-          auto_register: true
-          generate_for_dir: ['lib']
 
       # Riverpod Generator
       riverpod_generator:
@@ -58,9 +48,6 @@ targets:
         enabled: true
         generate_for:
           - lib/core/database/*.dart
-        options:
-          # Настройки для drift
-          sqlite3: true
 
       # Retrofit
       retrofit_generator:

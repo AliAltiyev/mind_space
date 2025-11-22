@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/database/database.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../app/providers/app_providers.dart';
 import '../../../../app/providers/ai_features_provider.dart';
 import '../../domain/entities/sleep_entry.dart';
@@ -12,8 +15,6 @@ import '../../domain/entities/sleep_insight.dart';
 import '../../data/repositories/sleep_repository_impl.dart';
 import '../../data/repositories/sleep_repository.dart';
 import '../../../../core/api/groq_client.dart';
-import '../widgets/sleep_background.dart';
-import '../widgets/sleep_card.dart';
 
 /// Провайдер для репозитория сна
 final sleepRepositoryProvider = Provider<SleepRepository>((ref) {
@@ -72,7 +73,7 @@ final sleepRecommendationsProvider = FutureProvider<List<SleepInsight>>((
   final entriesAsync = ref.watch(sleepEntriesProvider);
   final moodEntriesAsync = ref.watch(recentMoodEntriesProvider);
 
-  return await entriesAsync.when(
+  return entriesAsync.when(
     data: (entries) async {
       if (entries.isEmpty) {
         return [];
@@ -85,130 +86,292 @@ final sleepRecommendationsProvider = FutureProvider<List<SleepInsight>>((
       final repository = ref.read(sleepRepositoryProvider);
       return await repository.getSleepRecommendations(entries, moodEntries);
     },
-    loading: () => [],
-    error: (_, __) => [],
+    loading: () async => [],
+    error: (_, __) async => [],
   );
 });
 
-/// Экран статистики сна
-class SleepStatsPage extends ConsumerWidget {
+/// Экран статистики сна - Профессиональный дизайн
+class SleepStatsPage extends ConsumerStatefulWidget {
   const SleepStatsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SleepStatsPage> createState() => _SleepStatsPageState();
+}
+
+class _SleepStatsPageState extends ConsumerState<SleepStatsPage>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
+  late AnimationController _animationController;
+  late AnimationController _chartAnimationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _chartAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _chartAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
+
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
+
+    _chartAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _chartAnimationController,
+        curve: Curves.easeOutCubic,
+      ),
+    );
+
+    _animationController.forward();
+    // Запускаем анимацию графика с небольшой задержкой
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        _chartAnimationController.forward();
+      }
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // Обновляем данные при возврате в приложение
+    if (state == AppLifecycleState.resumed && mounted) {
+      ref.invalidate(sleepEntriesProvider);
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _animationController.dispose();
+    _chartAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
     final entriesAsync = ref.watch(sleepEntriesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'sleep.stats.title'.tr(),
-          style: AppTypography.h3.copyWith(
-            color: isDark ? Colors.white : const Color(0xFF1E293B),
-            fontWeight: FontWeight.w600,
-            letterSpacing: -0.5,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: isDark ? Colors.white : const Color(0xFF1E293B),
-        ),
-      ),
-      body: SleepBackground(
-        child: SafeArea(
-          child: entriesAsync.when(
-            data: (entries) {
-              if (entries.isEmpty) {
-                return _buildEmptyState(context, theme, colorScheme, isDark);
-              }
-              return _buildStatsContent(
-                context,
-                ref,
-                theme,
-                colorScheme,
-                isDark,
-                entries,
-              );
-            },
-            loading: () => Center(
-              child: CircularProgressIndicator(color: colorScheme.primary),
-            ),
-            error: (error, stack) => Center(
-              child: SleepCard(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: 64,
-                      color: isDark
-                          ? Colors.white.withOpacity(0.7)
-                          : const Color(0xFF64748B),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'sleep.stats.error'.tr(),
-                      style: AppTypography.bodyLarge.copyWith(
-                        color: isDark
-                            ? Colors.white.withOpacity(0.7)
-                            : const Color(0xFF64748B),
-                      ),
-                    ),
-                  ],
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Современный AppBar
+            _buildModernAppBar(context, isDark),
+
+            // Основной контент
+            Expanded(
+              child: entriesAsync.when(
+                data: (entries) {
+                  if (entries.isEmpty) {
+                    return _buildEmptyState(context, isDark);
+                  }
+                  return _buildStatsContent(context, ref, isDark, entries);
+                },
+                loading: () => Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primary,
+                    strokeWidth: 3,
+                  ),
                 ),
+                error: (error, stack) => _buildErrorState(context, isDark),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildEmptyState(
-    BuildContext context,
-    ThemeData theme,
-    ColorScheme colorScheme,
-    bool isDark,
-  ) {
+  Widget _buildModernAppBar(BuildContext context, bool isDark) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.darkSurface : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => context.pop(),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppColors.darkSurfaceVariant
+                    : AppColors.surfaceVariant,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                CupertinoIcons.arrow_left,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
+                size: 20,
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'sleep.stats.title'.tr(),
+                  style: AppTypography.h3.copyWith(
+                    color: isDark
+                        ? AppColors.darkTextPrimary
+                        : AppColors.textPrimary,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Последние 30 дней',
+                  style: AppTypography.caption.copyWith(
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Кнопка обновления
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: () {
+              ref.invalidate(sleepEntriesProvider);
+              // Перезапускаем анимацию графика
+              _chartAnimationController.reset();
+              Future.delayed(const Duration(milliseconds: 100), () {
+                if (mounted) {
+                  _chartAnimationController.forward();
+                }
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppColors.darkSurfaceVariant
+                    : AppColors.surfaceVariant,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                CupertinoIcons.arrow_clockwise,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
+                size: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context, bool isDark) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
-        child: SleepCard(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.bedtime_outlined,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                CupertinoIcons.bed_double,
                 size: 64,
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(height: 32),
+            Text(
+              'sleep.stats.no_data'.tr(),
+              style: AppTypography.h3.copyWith(
                 color: isDark
-                    ? Colors.white.withOpacity(0.3)
-                    : const Color(0xFF64748B),
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
+                fontWeight: FontWeight.w700,
               ),
-              const SizedBox(height: 24),
-              Text(
-                'sleep.stats.no_data'.tr(),
-                style: AppTypography.h3.copyWith(
-                  color: isDark ? Colors.white : const Color(0xFF1E293B),
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: -0.3,
-                ),
-                textAlign: TextAlign.center,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'sleep.stats.no_data_description'.tr(),
+              style: AppTypography.bodyMedium.copyWith(
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
               ),
-              const SizedBox(height: 12),
-              Text(
-                'sleep.stats.no_data_description'.tr(),
-                style: AppTypography.bodyMedium.copyWith(
-                  color: isDark
-                      ? Colors.white.withOpacity(0.7)
-                      : const Color(0xFF64748B),
-                ),
-                textAlign: TextAlign.center,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorState(BuildContext context, bool isDark) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              CupertinoIcons.exclamationmark_circle,
+              size: 64,
+              color: AppColors.error,
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'sleep.stats.error'.tr(),
+              style: AppTypography.h4.copyWith(
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
+                fontWeight: FontWeight.w600,
               ),
-            ],
-          ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
@@ -217,8 +380,6 @@ class SleepStatsPage extends ConsumerWidget {
   Widget _buildStatsContent(
     BuildContext context,
     WidgetRef ref,
-    ThemeData theme,
-    ColorScheme colorScheme,
     bool isDark,
     List<SleepEntry> entries,
   ) {
@@ -227,475 +388,498 @@ class SleepStatsPage extends ConsumerWidget {
     final hours = avgDuration ~/ 60;
     final minutes = avgDuration.toInt() % 60;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Общая статистика
-          _buildOverallStats(
-            context,
-            colorScheme,
-            isDark,
-            hours,
-            minutes,
-            avgQuality,
-            entries.length,
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 24),
+
+              // Ключевые метрики
+              _buildKeyMetrics(
+                isDark,
+                hours,
+                minutes,
+                avgQuality,
+                entries.length,
+              ),
+
+              const SizedBox(height: 24),
+
+              // График продолжительности
+              _buildAnimatedChart(
+                child: _buildDurationChart(isDark, entries),
+                delay: 300,
+              ),
+
+              const SizedBox(height: 24),
+
+              // График качества
+              _buildAnimatedChart(
+                child: _buildQualityChart(isDark, entries),
+                delay: 400,
+              ),
+
+              const SizedBox(height: 24),
+
+              // AI Инсайты
+              _buildAnimatedChart(
+                child: _buildAIInsights(context, ref, isDark),
+                delay: 500,
+              ),
+
+              const SizedBox(height: 24),
+
+              // Рекомендации
+              _buildAnimatedChart(
+                child: _buildRecommendations(context, ref, isDark),
+                delay: 600,
+              ),
+
+              const SizedBox(height: 24),
+
+              // Корреляция с настроением
+              _buildAnimatedChart(
+                child: _buildMoodCorrelation(context, ref, isDark, entries),
+                delay: 700,
+              ),
+
+              const SizedBox(height: 32),
+            ],
           ),
-
-          const SizedBox(height: 24),
-
-          // График продолжительности сна
-          _buildDurationChart(context, colorScheme, isDark, entries),
-
-          const SizedBox(height: 24),
-
-          // График качества сна
-          _buildQualityChart(context, colorScheme, isDark, entries),
-
-          const SizedBox(height: 24),
-
-          // AI Инсайты
-          _buildAIInsights(context, ref, colorScheme, isDark),
-
-          const SizedBox(height: 24),
-
-          // Рекомендации
-          _buildRecommendations(context, ref, colorScheme, isDark),
-
-          const SizedBox(height: 24),
-
-          // Корреляция с настроением
-          _buildMoodCorrelation(context, ref, colorScheme, isDark, entries),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildOverallStats(
-    BuildContext context,
-    ColorScheme colorScheme,
+  Widget _buildAnimatedChart({required Widget child, required int delay}) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: Duration(milliseconds: 500 + delay),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, 20 * (1 - value)),
+            child: child,
+          ),
+        );
+      },
+      child: child,
+    );
+  }
+
+  Widget _buildKeyMetrics(
     bool isDark,
     int hours,
     int minutes,
     double avgQuality,
     int totalEntries,
   ) {
-    return SleepCard(
-      child: Column(
-        children: [
-          Text(
-            'sleep.stats.overview'.tr(),
-            style: AppTypography.h4.copyWith(
-              color: isDark ? Colors.white : const Color(0xFF1E293B),
-              fontWeight: FontWeight.w600,
-              letterSpacing: -0.3,
-            ),
-          ),
-          const SizedBox(height: 24),
-          Row(
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: SleepStatCard(
+                child: _buildAnimatedMetricCard(
+                  icon: CupertinoIcons.clock_fill,
                   value: '$hoursч $minutesм',
                   label: 'sleep.stats.avg_duration'.tr(),
-                  icon: Icons.access_time_rounded,
-                  color: isDark
-                      ? const Color(0xFF6366F1)
-                      : const Color(0xFF475569),
+                  color: AppColors.primary,
+                  isDark: isDark,
+                  delay: 0,
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: SleepStatCard(
+                child: _buildAnimatedMetricCard(
+                  icon: CupertinoIcons.star_fill,
                   value: avgQuality.toStringAsFixed(1),
                   label: 'sleep.stats.avg_quality'.tr(),
-                  icon: Icons.star_rounded,
-                  color: isDark
-                      ? const Color(0xFF8B5CF6)
-                      : const Color(0xFF475569),
+                  color: AppColors.primaryLight,
+                  isDark: isDark,
+                  delay: 100,
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: SleepStatCard(
+                child: _buildAnimatedMetricCard(
+                  icon: CupertinoIcons.bed_double_fill,
                   value: totalEntries.toString(),
                   label: 'sleep.stats.total_entries'.tr(),
-                  icon: Icons.bedtime_rounded,
-                  color: isDark
-                      ? const Color(0xFF6366F1)
-                      : const Color(0xFF475569),
+                  color: AppColors.primaryDark,
+                  isDark: isDark,
+                  delay: 200,
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAnimatedMetricCard({
+    required IconData icon,
+    required String value,
+    required String label,
+    required Color color,
+    required bool isDark,
+    required int delay,
+  }) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: Duration(milliseconds: 400 + delay),
+      curve: Curves.easeOutBack,
+      builder: (context, scale, child) {
+        return Transform.scale(
+          scale: scale,
+          child: _buildMetricCard(
+            icon: icon,
+            value: value,
+            label: label,
+            color: color,
+            isDark: isDark,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildMetricCard({
+    required IconData icon,
+    required String value,
+    required String label,
+    required Color color,
+    required bool isDark,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withOpacity(0.2), width: 1.5),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: AppTypography.h3.copyWith(
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+              fontWeight: FontWeight.w800,
+              fontSize: 20,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Flexible(
+            child: Text(
+              label,
+              style: AppTypography.caption.copyWith(
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDurationChart(
-    BuildContext context,
-    ColorScheme colorScheme,
-    bool isDark,
-    List<SleepEntry> entries,
-  ) {
-    final recentEntries = entries.take(14).toList().reversed.toList();
+  Widget _buildDurationChart(bool isDark, List<SleepEntry> entries) {
+    // Создаем копию списка для сортировки
+    final entriesCopy = List<SleepEntry>.from(entries);
+
+    // Сортируем по дате и времени начала сна (от старых к новым)
+    entriesCopy.sort((a, b) {
+      // Сравниваем по дате и времени начала сна
+      final startCompare = a.sleepStart.compareTo(b.sleepStart);
+      if (startCompare != 0) return startCompare;
+      // Если время начала одинаковое, сравниваем по времени окончания
+      return a.sleepEnd.compareTo(b.sleepEnd);
+    });
+
+    // Берем последние 14 записей (самые новые) - они уже отсортированы от старых к новым
+    final recentEntries = entriesCopy.length > 14
+        ? entriesCopy.sublist(entriesCopy.length - 14)
+        : entriesCopy;
     if (recentEntries.isEmpty) {
-      return SleepCard(
-        child: _buildEmptyChartState(
-          isDark: isDark,
-          text: 'sleep.stats.no_data'.tr(),
-        ),
-      );
+      return _buildEmptyChartCard(isDark, 'sleep.stats.duration_chart'.tr());
     }
 
-    final chartColor = isDark
-        ? const Color(0xFF6366F1)
-        : const Color(0xFF475569);
+    final chartColor = AppColors.primary;
     final dateLabels = recentEntries
         .map((entry) => DateFormat('dd.MM').format(entry.sleepStart))
         .toList();
 
-    return SleepCard(
+    // Вычисляем максимальное значение для правильного масштабирования
+    final allHours = recentEntries
+        .map((e) => e.durationMinutes / 60.0)
+        .toList();
+    if (allHours.isEmpty) {
+      return _buildEmptyChartCard(isDark, 'sleep.stats.duration_chart'.tr());
+    }
+
+    final maxHours = allHours.reduce((a, b) => a > b ? a : b);
+
+    // Добавляем 25% отступ сверху для комфортного отображения
+    // Округляем до ближайшего целого числа вверх
+    double maxY = (maxHours * 1.25).ceil().toDouble();
+
+    // Минимум 8 часов для нормального отображения
+    if (maxY < 8.0) {
+      maxY = 8.0;
+    }
+
+    // Для очень больших значений (больше 24 часов) ограничиваем до 24
+    if (maxY > 24.0) {
+      maxY = 24.0;
+    }
+
+    // Гарантируем, что maxY всегда больше максимального значения данных
+    // Добавляем небольшой запас на случай округления
+    if (maxY <= maxHours) {
+      maxY = (maxHours * 1.3).ceil().toDouble();
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.darkSurface : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : AppColors.border,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'sleep.stats.duration_chart'.tr(),
-            style: AppTypography.h4.copyWith(
-              color: isDark ? Colors.white : const Color(0xFF1E293B),
-              fontWeight: FontWeight.w600,
-              letterSpacing: -0.3,
-            ),
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            height: 220,
-            child: LineChart(
-              LineChartData(
-                lineTouchData: LineTouchData(
-                  handleBuiltInTouches: true,
-                  touchTooltipData: LineTouchTooltipData(
-                    getTooltipColor: (touchedSpot) =>
-                        isDark ? Colors.black.withOpacity(0.7) : Colors.white,
-                    getTooltipItems: (touchedSpots) {
-                      return touchedSpots.map((barSpot) {
-                        final hours = barSpot.y;
-                        return LineTooltipItem(
-                          '${hours.toStringAsFixed(1)} ч',
-                          AppTypography.bodyMedium.copyWith(
-                            color: isDark
-                                ? Colors.white
-                                : const Color(0xFF1E293B),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        );
-                      }).toList();
-                    },
-                  ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: chartColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                gridData: FlGridData(
-                  show: true,
-                  drawVerticalLine: false,
-                  horizontalInterval: 2,
-                  getDrawingHorizontalLine: (value) {
-                    return FlLine(
-                      color: isDark
-                          ? Colors.white.withOpacity(0.05)
-                          : Colors.black.withOpacity(0.05),
-                      strokeWidth: 1,
-                    );
-                  },
-                ),
-                titlesData: FlTitlesData(
-                  show: true,
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 40,
-                      getTitlesWidget: (value, meta) {
-                        return Text(
-                          '${value.toInt()}ч',
-                          style: AppTypography.caption.copyWith(
-                            color: isDark
-                                ? Colors.white.withOpacity(0.5)
-                                : const Color(0xFF94A3B8),
-                            fontSize: 10,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 32,
-                      getTitlesWidget: (value, meta) {
-                        final index = value.toInt();
-                        if (index < 0 ||
-                            index >= dateLabels.length ||
-                            index.isOdd) {
-                          return const SizedBox.shrink();
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            dateLabels[index],
-                            style: AppTypography.caption.copyWith(
-                              color: isDark
-                                  ? Colors.white.withOpacity(0.5)
-                                  : const Color(0xFF94A3B8),
-                              fontSize: 10,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                ),
-                borderData: FlBorderData(show: false),
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: recentEntries.asMap().entries.map((e) {
-                      final hours = e.value.durationMinutes / 60;
-                      return FlSpot(e.key.toDouble(), hours);
-                    }).toList(),
-                    isCurved: true,
-                    color: chartColor,
-                    barWidth: 3,
-                    dotData: FlDotData(
-                      show: true,
-                      getDotPainter: (spot, percent, barData, index) {
-                        return FlDotCirclePainter(
-                          radius: 3,
-                          color: chartColor,
-                          strokeWidth: 2,
-                          strokeColor: isDark
-                              ? const Color(0xFF0F172A)
-                              : Colors.white,
-                        );
-                      },
-                    ),
-                    belowBarData: BarAreaData(
-                      show: true,
-                      gradient: LinearGradient(
-                        colors: [
-                          chartColor.withOpacity(0.15),
-                          chartColor.withOpacity(0.0),
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
-                    ),
-                  ),
-                ],
-                minY: 0,
-                maxY: 12,
-                extraLinesData: ExtraLinesData(
-                  horizontalLines: [
-                    HorizontalLine(
-                      y: 8,
-                      strokeWidth: 1,
-                      dashArray: [6, 4],
-                      color: isDark
-                          ? Colors.white.withOpacity(0.2)
-                          : const Color(0xFFCBD5F5),
-                      label: HorizontalLineLabel(
-                        show: true,
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 8),
-                        style: AppTypography.caption.copyWith(
-                          color: isDark
-                              ? Colors.white.withOpacity(0.6)
-                              : const Color(0xFF475569),
-                        ),
-                        labelResolver: (line) => '8ч',
-                      ),
-                    ),
-                  ],
+                child: Icon(CupertinoIcons.clock, color: chartColor, size: 18),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'sleep.stats.duration_chart'.tr(),
+                style: AppTypography.h4.copyWith(
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : AppColors.textPrimary,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.3,
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQualityChart(
-    BuildContext context,
-    ColorScheme colorScheme,
-    bool isDark,
-    List<SleepEntry> entries,
-  ) {
-    final recentEntries = entries.take(14).toList().reversed.toList();
-    if (recentEntries.isEmpty) {
-      return SleepCard(
-        child: _buildEmptyChartState(
-          isDark: isDark,
-          text: 'sleep.stats.no_data'.tr(),
-        ),
-      );
-    }
-    final baseColor = isDark
-        ? const Color(0xFF6366F1)
-        : const Color(0xFF475569);
-    final dateLabels = recentEntries
-        .map((entry) => DateFormat('dd.MM').format(entry.sleepStart))
-        .toList();
-
-    return SleepCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'sleep.stats.quality_chart'.tr(),
-            style: AppTypography.h4.copyWith(
-              color: isDark ? Colors.white : const Color(0xFF1E293B),
-              fontWeight: FontWeight.w600,
-              letterSpacing: -0.3,
-            ),
+            ],
           ),
           const SizedBox(height: 24),
           SizedBox(
-            height: 220,
-            child: BarChart(
-              BarChartData(
-                barTouchData: BarTouchData(
-                  enabled: true,
-                  touchTooltipData: BarTouchTooltipData(
-                    getTooltipColor: (touchedSpot) =>
-                        isDark ? Colors.black.withOpacity(0.7) : Colors.white,
-                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                      return BarTooltipItem(
-                        '${rod.toY.toStringAsFixed(1)} ★',
-                        AppTypography.bodyMedium.copyWith(
+            height: 240,
+            child: AnimatedBuilder(
+              animation: _chartAnimation,
+              builder: (context, child) {
+                return LineChart(
+                  LineChartData(
+                    lineTouchData: LineTouchData(
+                      handleBuiltInTouches: true,
+                      touchTooltipData: LineTouchTooltipData(
+                        getTooltipColor: (touchedSpot) =>
+                            isDark ? AppColors.darkSurface : Colors.white,
+                        getTooltipItems: (touchedSpots) {
+                          return touchedSpots.map((spot) {
+                            final hours = spot.y;
+                            return LineTooltipItem(
+                              '${hours.toStringAsFixed(1)} ч',
+                              AppTypography.bodyMedium.copyWith(
+                                color: isDark
+                                    ? AppColors.darkTextPrimary
+                                    : AppColors.textPrimary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            );
+                          }).toList();
+                        },
+                      ),
+                    ),
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: false,
+                      horizontalInterval:
+                          maxY /
+                          6, // Динамический интервал в зависимости от maxY
+                      getDrawingHorizontalLine: (value) {
+                        return FlLine(
                           color: isDark
-                              ? Colors.white
-                              : const Color(0xFF1E293B),
-                          fontWeight: FontWeight.w600,
+                              ? AppColors.darkSurfaceVariant
+                              : AppColors.surfaceVariant,
+                          strokeWidth: 1,
+                        );
+                      },
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          getTitlesWidget: (value, meta) {
+                            return Text(
+                              '${value.toInt()}ч',
+                              style: AppTypography.caption.copyWith(
+                                color: isDark
+                                    ? AppColors.darkTextSecondary
+                                    : AppColors.textSecondary,
+                                fontSize: 10,
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
-                gridData: FlGridData(
-                  show: true,
-                  drawVerticalLine: false,
-                  horizontalInterval: 1,
-                  getDrawingHorizontalLine: (value) {
-                    return FlLine(
-                      color: isDark
-                          ? Colors.white.withOpacity(0.05)
-                          : Colors.black.withOpacity(0.05),
-                      strokeWidth: 1,
-                    );
-                  },
-                ),
-                titlesData: FlTitlesData(
-                  show: true,
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 30,
-                      getTitlesWidget: (value, meta) {
-                        return Text(
-                          value.toInt().toString(),
-                          style: AppTypography.caption.copyWith(
-                            color: isDark
-                                ? Colors.white.withOpacity(0.5)
-                                : const Color(0xFF94A3B8),
-                            fontSize: 10,
-                          ),
-                        );
-                      },
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 32,
+                          getTitlesWidget: (value, meta) {
+                            final index = value.toInt();
+                            if (index < 0 ||
+                                index >= dateLabels.length ||
+                                index.isOdd) {
+                              return const SizedBox.shrink();
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                dateLabels[index],
+                                style: AppTypography.caption.copyWith(
+                                  color: isDark
+                                      ? AppColors.darkTextSecondary
+                                      : AppColors.textSecondary,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
                     ),
-                  ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 32,
-                      getTitlesWidget: (value, meta) {
-                        final index = value.toInt();
-                        if (index < 0 ||
-                            index >= dateLabels.length ||
-                            index.isOdd) {
-                          return const SizedBox.shrink();
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            dateLabels[index],
-                            style: AppTypography.caption.copyWith(
-                              color: isDark
-                                  ? Colors.white.withOpacity(0.5)
-                                  : const Color(0xFF94A3B8),
-                              fontSize: 10,
-                            ),
+                    borderData: FlBorderData(show: false),
+                    lineBarsData: [
+                      LineChartBarData(
+                        spots: recentEntries.asMap().entries.map((e) {
+                          final index = e.key;
+                          final entry = e.value;
+                          final hours = entry.durationMinutes / 60.0;
+                          // Гарантируем, что значение не превышает maxY
+                          final clampedHours = hours.clamp(0.0, maxY);
+                          // Применяем анимацию - линия появляется постепенно
+                          final animatedHours =
+                              clampedHours * _chartAnimation.value;
+                          // Используем индекс как X координату (0, 1, 2, ...)
+                          return FlSpot(index.toDouble(), animatedHours);
+                        }).toList(),
+                        isCurved: true,
+                        color: chartColor,
+                        barWidth: 3,
+                        dotData: FlDotData(
+                          show: true,
+                          getDotPainter: (spot, percent, barData, index) {
+                            return FlDotCirclePainter(
+                              radius: 4,
+                              color: chartColor,
+                              strokeWidth: 3,
+                              strokeColor: isDark
+                                  ? AppColors.darkBackground
+                                  : Colors.white,
+                            );
+                          },
+                        ),
+                        belowBarData: BarAreaData(
+                          show: true,
+                          gradient: LinearGradient(
+                            colors: [
+                              chartColor.withOpacity(0.2),
+                              chartColor.withOpacity(0.0),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                ),
-                borderData: FlBorderData(show: false),
-                barGroups: recentEntries.asMap().entries.map((e) {
-                  final quality = e.value.quality.toDouble();
-                  final gradient = LinearGradient(
-                    colors: [baseColor.withOpacity(0.2), baseColor],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  );
-                  return BarChartGroupData(
-                    x: e.key,
-                    barRods: [
-                      BarChartRodData(
-                        toY: quality,
-                        gradient: gradient,
-                        width: 12,
-                        borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                     ],
-                  );
-                }).toList(),
-                maxY: 5,
-                extraLinesData: ExtraLinesData(
-                  horizontalLines: [
-                    HorizontalLine(
-                      y: 4,
-                      dashArray: [6, 4],
-                      strokeWidth: 1,
-                      color: isDark
-                          ? Colors.white.withOpacity(0.2)
-                          : const Color(0xFFE5E7EB),
-                      label: HorizontalLineLabel(
-                        show: true,
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 8),
-                        style: AppTypography.caption.copyWith(
-                          color: isDark
-                              ? Colors.white.withOpacity(0.6)
-                              : const Color(0xFF475569),
-                        ),
-                        labelResolver: (line) => '4★',
-                      ),
+                    minY: 0,
+                    maxY: maxY,
+                    extraLinesData: ExtraLinesData(
+                      horizontalLines: [
+                        // Референсная линия на 8 часов (рекомендуемая норма)
+                        if (maxY >= 8)
+                          HorizontalLine(
+                            y: 8,
+                            strokeWidth: 1,
+                            dashArray: [6, 4],
+                            color: isDark
+                                ? AppColors.darkSurfaceVariant
+                                : AppColors.surfaceVariant,
+                            label: HorizontalLineLabel(
+                              show: true,
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 8),
+                              style: AppTypography.caption.copyWith(
+                                color: isDark
+                                    ? AppColors.darkTextSecondary
+                                    : AppColors.textSecondary,
+                              ),
+                              labelResolver: (line) => '8ч',
+                            ),
+                          ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -703,49 +887,307 @@ class SleepStatsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyChartState({required bool isDark, required String text}) {
-    return SizedBox(
-      height: 140,
-      child: Center(
-        child: Text(
-          text,
-          style: AppTypography.bodyMedium.copyWith(
-            color: isDark
-                ? Colors.white.withOpacity(0.7)
-                : const Color(0xFF64748B),
+  Widget _buildQualityChart(bool isDark, List<SleepEntry> entries) {
+    // Создаем копию списка для сортировки
+    final entriesCopy = List<SleepEntry>.from(entries);
+
+    // Сортируем по дате и времени начала сна (от старых к новым)
+    entriesCopy.sort((a, b) {
+      // Сравниваем по дате и времени начала сна
+      final startCompare = a.sleepStart.compareTo(b.sleepStart);
+      if (startCompare != 0) return startCompare;
+      // Если время начала одинаковое, сравниваем по времени окончания
+      return a.sleepEnd.compareTo(b.sleepEnd);
+    });
+
+    // Берем последние 14 записей (самые новые) - они уже отсортированы от старых к новым
+    final recentEntries = entriesCopy.length > 14
+        ? entriesCopy.sublist(entriesCopy.length - 14)
+        : entriesCopy;
+    if (recentEntries.isEmpty) {
+      return _buildEmptyChartCard(isDark, 'sleep.stats.quality_chart'.tr());
+    }
+
+    final baseColor = AppColors.primaryLight;
+    final dateLabels = recentEntries
+        .map((entry) => DateFormat('dd.MM').format(entry.sleepStart))
+        .toList();
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.darkSurface : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : AppColors.border,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
           ),
-          textAlign: TextAlign.center,
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: baseColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  CupertinoIcons.star_fill,
+                  color: baseColor,
+                  size: 18,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'sleep.stats.quality_chart'.tr(),
+                style: AppTypography.h4.copyWith(
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : AppColors.textPrimary,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.3,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            height: 240,
+            child: AnimatedBuilder(
+              animation: _chartAnimation,
+              builder: (context, child) {
+                return BarChart(
+                  BarChartData(
+                    barTouchData: BarTouchData(
+                      enabled: true,
+                      touchTooltipData: BarTouchTooltipData(
+                        getTooltipColor: (touchedSpot) =>
+                            isDark ? AppColors.darkSurface : Colors.white,
+                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                          return BarTooltipItem(
+                            '${rod.toY.toStringAsFixed(1)} ★',
+                            AppTypography.bodyMedium.copyWith(
+                              color: isDark
+                                  ? AppColors.darkTextPrimary
+                                  : AppColors.textPrimary,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: false,
+                      horizontalInterval: 1,
+                      getDrawingHorizontalLine: (value) {
+                        return FlLine(
+                          color: isDark
+                              ? AppColors.darkSurfaceVariant
+                              : AppColors.surfaceVariant,
+                          strokeWidth: 1,
+                        );
+                      },
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 30,
+                          getTitlesWidget: (value, meta) {
+                            return Text(
+                              value.toInt().toString(),
+                              style: AppTypography.caption.copyWith(
+                                color: isDark
+                                    ? AppColors.darkTextSecondary
+                                    : AppColors.textSecondary,
+                                fontSize: 10,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 32,
+                          getTitlesWidget: (value, meta) {
+                            final index = value.toInt();
+                            if (index < 0 ||
+                                index >= dateLabels.length ||
+                                index.isOdd) {
+                              return const SizedBox.shrink();
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                dateLabels[index],
+                                style: AppTypography.caption.copyWith(
+                                  color: isDark
+                                      ? AppColors.darkTextSecondary
+                                      : AppColors.textSecondary,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    barGroups: recentEntries.asMap().entries.map((e) {
+                      final index = e.key;
+                      final entry = e.value;
+                      final quality = entry.quality.toDouble();
+                      // Применяем анимацию - столбцы растут снизу вверх
+                      final animatedQuality = quality * _chartAnimation.value;
+                      final gradient = LinearGradient(
+                        colors: [baseColor.withOpacity(0.3), baseColor],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      );
+                      return BarChartGroupData(
+                        x: index,
+                        barRods: [
+                          BarChartRodData(
+                            toY: animatedQuality,
+                            gradient: gradient,
+                            width: 14,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                    maxY: 5,
+                    extraLinesData: ExtraLinesData(
+                      horizontalLines: [
+                        HorizontalLine(
+                          y: 4,
+                          dashArray: [6, 4],
+                          strokeWidth: 1,
+                          color: isDark
+                              ? AppColors.darkSurfaceVariant
+                              : AppColors.surfaceVariant,
+                          label: HorizontalLineLabel(
+                            show: true,
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.only(right: 8),
+                            style: AppTypography.caption.copyWith(
+                              color: isDark
+                                  ? AppColors.darkTextSecondary
+                                  : AppColors.textSecondary,
+                            ),
+                            labelResolver: (line) => '4★',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyChartCard(bool isDark, String title) {
+    return Container(
+      padding: const EdgeInsets.all(40),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.darkSurface : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : AppColors.border,
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              CupertinoIcons.chart_bar,
+              size: 48,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.textSecondary,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'sleep.stats.no_data'.tr(),
+              style: AppTypography.bodyMedium.copyWith(
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildAIInsights(
-    BuildContext context,
-    WidgetRef ref,
-    ColorScheme colorScheme,
-    bool isDark,
-  ) {
+  Widget _buildAIInsights(BuildContext context, WidgetRef ref, bool isDark) {
     final insightAsync = ref.watch(sleepInsightProvider);
-    final accentColor = isDark
-        ? const Color(0xFF6366F1)
-        : const Color(0xFF475569);
+    final accentColor = AppColors.primary;
 
     return insightAsync.when(
-      data: (insight) => SleepCard(
-        glowColor: accentColor,
+      data: (insight) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              accentColor.withOpacity(0.15),
+              accentColor.withOpacity(0.05),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: accentColor.withOpacity(0.2), width: 1.5),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(Icons.psychology_rounded, color: accentColor, size: 22),
-                const SizedBox(width: 10),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: accentColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    CupertinoIcons.sparkles,
+                    color: accentColor,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
                 Text(
                   'sleep.stats.ai_insights'.tr(),
                   style: AppTypography.h4.copyWith(
-                    color: isDark ? Colors.white : const Color(0xFF1E293B),
-                    fontWeight: FontWeight.w600,
+                    color: isDark
+                        ? AppColors.darkTextPrimary
+                        : AppColors.textPrimary,
+                    fontWeight: FontWeight.w700,
                     letterSpacing: -0.3,
                   ),
                 ),
@@ -755,8 +1197,10 @@ class SleepStatsPage extends ConsumerWidget {
             Text(
               insight.title,
               style: AppTypography.bodyLarge.copyWith(
-                color: isDark ? Colors.white : const Color(0xFF1E293B),
-                fontWeight: FontWeight.w600,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.textPrimary,
+                fontWeight: FontWeight.w700,
               ),
             ),
             const SizedBox(height: 8),
@@ -764,8 +1208,9 @@ class SleepStatsPage extends ConsumerWidget {
               insight.description,
               style: AppTypography.bodyMedium.copyWith(
                 color: isDark
-                    ? Colors.white.withOpacity(0.7)
-                    : const Color(0xFF64748B),
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
+                height: 1.5,
               ),
             ),
           ],
@@ -779,35 +1224,49 @@ class SleepStatsPage extends ConsumerWidget {
   Widget _buildRecommendations(
     BuildContext context,
     WidgetRef ref,
-    ColorScheme colorScheme,
     bool isDark,
   ) {
     final recommendationsAsync = ref.watch(sleepRecommendationsProvider);
-    final accentColor = isDark
-        ? const Color(0xFF6366F1)
-        : const Color(0xFF475569);
+    final accentColor = AppColors.primaryLight;
 
     return recommendationsAsync.when(
       data: (recommendations) {
         if (recommendations.isEmpty) return const SizedBox.shrink();
 
-        return SleepCard(
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkSurface : Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorder : AppColors.border,
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.lightbulb_outline_rounded,
-                    color: accentColor,
-                    size: 22,
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: accentColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      CupertinoIcons.lightbulb,
+                      color: accentColor,
+                      size: 20,
+                    ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 12),
                   Text(
                     'sleep.stats.recommendations'.tr(),
                     style: AppTypography.h4.copyWith(
-                      color: isDark ? Colors.white : const Color(0xFF1E293B),
-                      fontWeight: FontWeight.w600,
+                      color: isDark
+                          ? AppColors.darkTextPrimary
+                          : AppColors.textPrimary,
+                      fontWeight: FontWeight.w700,
                       letterSpacing: -0.3,
                     ),
                   ),
@@ -820,10 +1279,17 @@ class SleepStatsPage extends ConsumerWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.check_circle_outline_rounded,
-                        color: accentColor,
-                        size: 20,
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: accentColor.withOpacity(0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          CupertinoIcons.check_mark_circled,
+                          color: accentColor,
+                          size: 16,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -834,9 +1300,9 @@ class SleepStatsPage extends ConsumerWidget {
                               rec.title,
                               style: AppTypography.bodyMedium.copyWith(
                                 color: isDark
-                                    ? Colors.white
-                                    : const Color(0xFF1E293B),
-                                fontWeight: FontWeight.w600,
+                                    ? AppColors.darkTextPrimary
+                                    : AppColors.textPrimary,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -844,8 +1310,9 @@ class SleepStatsPage extends ConsumerWidget {
                               rec.description,
                               style: AppTypography.bodySmall.copyWith(
                                 color: isDark
-                                    ? Colors.white.withOpacity(0.7)
-                                    : const Color(0xFF64748B),
+                                    ? AppColors.darkTextSecondary
+                                    : AppColors.textSecondary,
+                                height: 1.4,
                               ),
                             ),
                           ],
@@ -867,7 +1334,6 @@ class SleepStatsPage extends ConsumerWidget {
   Widget _buildMoodCorrelation(
     BuildContext context,
     WidgetRef ref,
-    ColorScheme colorScheme,
     bool isDark,
     List<SleepEntry> sleepEntries,
   ) {
@@ -879,25 +1345,43 @@ class SleepStatsPage extends ConsumerWidget {
           return const SizedBox.shrink();
         }
 
-        // Вычисляем корреляцию
         final correlation = _calculateCorrelation(sleepEntries, moodEntries);
-        final accentColor = isDark
-            ? const Color(0xFF6366F1)
-            : const Color(0xFF475569);
+        final accentColor = AppColors.primary;
 
-        return SleepCard(
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkSurface : Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorder : AppColors.border,
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Icon(Icons.trending_up_rounded, color: accentColor, size: 22),
-                  const SizedBox(width: 10),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: accentColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      CupertinoIcons.arrow_up_right,
+                      color: accentColor,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
                   Text(
                     'sleep.stats.mood_correlation'.tr(),
                     style: AppTypography.h4.copyWith(
-                      color: isDark ? Colors.white : const Color(0xFF1E293B),
-                      fontWeight: FontWeight.w600,
+                      color: isDark
+                          ? AppColors.darkTextPrimary
+                          : AppColors.textPrimary,
+                      fontWeight: FontWeight.w700,
                       letterSpacing: -0.3,
                     ),
                   ),
@@ -908,8 +1392,9 @@ class SleepStatsPage extends ConsumerWidget {
                 _getCorrelationText(correlation),
                 style: AppTypography.bodyMedium.copyWith(
                   color: isDark
-                      ? Colors.white.withOpacity(0.7)
-                      : const Color(0xFF64748B),
+                      ? AppColors.darkTextSecondary
+                      : AppColors.textSecondary,
+                  height: 1.5,
                 ),
               ),
             ],
@@ -925,8 +1410,6 @@ class SleepStatsPage extends ConsumerWidget {
     List<SleepEntry> sleepEntries,
     List<MoodEntry> moodEntries,
   ) {
-    // Упрощенный расчет корреляции
-    // Сопоставляем сон и настроение по датам
     final correlations = <double>[];
 
     for (final sleep in sleepEntries) {
@@ -945,11 +1428,9 @@ class SleepStatsPage extends ConsumerWidget {
         return moodDate.isAtSameMomentAs(sleepDate);
       }, orElse: () => moodEntries.first);
 
-      // Нормализуем значения (0-1)
       final normalizedSleep = sleep.quality / 5.0;
       final normalizedMood = mood.moodValue / 5.0;
 
-      // Простая корреляция
       correlations.add((normalizedSleep + normalizedMood) / 2);
     }
 

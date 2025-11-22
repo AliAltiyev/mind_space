@@ -267,3 +267,4 @@ Outputs:
     Description: ElastiCache endpoint
     Value: !GetAtt RedisCluster.RedisEndpoint.Address
 
+

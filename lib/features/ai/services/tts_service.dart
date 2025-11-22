@@ -169,17 +169,8 @@ class TTSService {
       String targetLanguage;
       if (languageCode == 'ru') {
         targetLanguage = 'ru-RU';
-      } else if (languageCode == 'es') {
-        targetLanguage = 'es-ES';
-      } else if (languageCode == 'zh') {
-        targetLanguage = 'zh-CN';
-      } else if (languageCode == 'hi') {
-        targetLanguage = 'hi-IN';
-      } else if (languageCode == 'fr') {
-        targetLanguage = 'fr-FR';
-      } else if (languageCode == 'tr' || languageCode == 'tk') {
-        targetLanguage = 'tr-TR';
       } else {
+        // По умолчанию английский
         targetLanguage = 'en-US';
       }
 
@@ -387,17 +378,8 @@ class TTSService {
         String expectedLanguage;
         if (languageCode == 'ru') {
           expectedLanguage = 'ru-RU';
-        } else if (languageCode == 'es') {
-          expectedLanguage = 'es-ES';
-        } else if (languageCode == 'zh') {
-          expectedLanguage = 'zh-CN';
-        } else if (languageCode == 'hi') {
-          expectedLanguage = 'hi-IN';
-        } else if (languageCode == 'fr') {
-          expectedLanguage = 'fr-FR';
-        } else if (languageCode == 'tr' || languageCode == 'tk') {
-          expectedLanguage = 'tr-TR';
         } else {
+          // По умолчанию английский
           expectedLanguage = 'en-US';
         }
 

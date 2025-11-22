@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +9,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/services/app_settings_service.dart' as settings;
 import '../../../core/services/user_level_service.dart';
+import '../../../app/providers/theme_provider.dart';
 import '../../../main.dart';
 
 /// Современный экран настроек для iOS и Android
@@ -69,7 +71,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     if (_isLoading) {
       return Scaffold(
         backgroundColor: isDark
-            ? const Color(0xFF0F172A)
+            ? AppColors.darkBackground
             : AppColors.background,
         appBar: _buildAppBar(),
         body: const Center(child: CircularProgressIndicator()),
@@ -77,7 +79,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
     }
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : AppColors.background,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -133,20 +135,20 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       title: Text(
         'settings.title'.tr(),
         style: AppTypography.h4.copyWith(
-          color: isDark ? Colors.white : AppColors.textPrimary,
+          color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
           fontWeight: FontWeight.w600,
         ),
       ),
-      backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+      backgroundColor: isDark ? AppColors.darkSurface : AppColors.surface,
       elevation: 0,
       scrolledUnderElevation: 1,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+        statusBarColor: isDark ? AppColors.darkSurface : AppColors.surface,
         statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
         statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
       ),
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
+        icon: Icon(CupertinoIcons.chevron_left, color: AppColors.textPrimary),
         onPressed: () {
           if (context.canPop()) {
             context.pop();
@@ -169,7 +171,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           child: Text(
             title,
             style: AppTypography.bodyLarge.copyWith(
-              color: isDark ? Colors.white : AppColors.textPrimary,
+              color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -188,31 +190,31 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       child: Column(
         children: [
           _buildSettingTile(
-            icon: Icons.person_outline,
+            icon: CupertinoIcons.person,
             title: 'settings.profile'.tr(),
             subtitle: 'settings.profile_management'.tr(),
             onTap: () => context.go('/profile'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
-            icon: Icons.language,
+            icon: CupertinoIcons.globe,
             title: 'settings.language'.tr(),
             subtitle: _getLanguageName(
               context,
               _settings?.language ?? settings.AppLanguage.russian,
             ),
             onTap: _showLanguageDialog,
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
-            icon: Icons.emoji_emotions_outlined,
+            icon: CupertinoIcons.smiley,
             title: 'settings.mood_tracking_goal'.tr(),
             subtitle:
                 '${_settings?.moodTrackingGoal ?? 7} ${'settings.days_per_week'.tr()}',
             onTap: _showMoodGoalDialog,
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
           ),
         ],
       ),
@@ -225,18 +227,6 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
         return 'settings.languages.russian'.tr();
       case 'en':
         return 'settings.languages.english'.tr();
-      case 'zh':
-        return 'settings.languages.chinese'.tr();
-      case 'hi':
-        return 'settings.languages.hindi'.tr();
-      case 'es':
-        return 'settings.languages.spanish'.tr();
-      case 'fr':
-        return 'settings.languages.french'.tr();
-      case 'tr':
-        return 'settings.languages.turkish'.tr();
-      case 'tk':
-        return 'settings.languages.turkmen'.tr();
       default:
         return language.code;
     }
@@ -256,15 +246,15 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       child: Column(
         children: [
           _buildSettingTile(
-            icon: Icons.palette_outlined,
+            icon: CupertinoIcons.paintbrush,
             title: 'settings.theme'.tr(),
             subtitle: themeName,
             onTap: _showThemeDialog,
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
           ),
           _buildDivider(),
           _buildSwitchTile(
-            icon: Icons.volume_up_outlined,
+            icon: CupertinoIcons.speaker_2,
             title: 'settings.sounds'.tr(),
             subtitle: 'settings.sound_effects'.tr(),
             value: _settings?.soundEnabled ?? true,
@@ -280,7 +270,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           ),
           _buildDivider(),
           _buildSwitchTile(
-            icon: Icons.vibration,
+            icon: CupertinoIcons.waveform,
             title: 'settings.haptic_feedback'.tr(),
             subtitle: 'settings.haptic_feedback_desc'.tr(),
             value: _settings?.hapticFeedbackEnabled ?? true,
@@ -315,7 +305,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       child: Column(
         children: [
           _buildSwitchTile(
-            icon: Icons.notifications_outlined,
+            icon: CupertinoIcons.bell,
             title: 'settings.notifications'.tr(),
             subtitle: 'settings.notifications_desc'.tr(),
             value: _settings?.notificationsEnabled ?? true,
@@ -327,7 +317,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           if (_settings?.notificationsEnabled == true) ...[
             _buildDivider(),
             _buildSwitchTile(
-              icon: Icons.schedule,
+              icon: CupertinoIcons.clock,
               title: 'settings.daily_reminders'.tr(),
               subtitle: 'settings.daily_reminders_desc'.tr(),
               value: _settings?.dailyReminderEnabled ?? true,
@@ -339,19 +329,19 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
             if (_settings?.dailyReminderEnabled == true) ...[
               _buildDivider(),
               _buildSettingTile(
-                icon: Icons.access_time,
+                icon: CupertinoIcons.time,
                 title: 'settings.reminder_time'.tr(),
                 subtitle: _formatTime(
                   _settings?.reminderTime ??
                       const TimeOfDay(hour: 20, minute: 0),
                 ),
                 onTap: _showTimePicker,
-                trailing: const Icon(Icons.chevron_right),
+                trailing: const Icon(CupertinoIcons.chevron_right),
               ),
             ],
             _buildDivider(),
             _buildSwitchTile(
-              icon: Icons.analytics_outlined,
+              icon: CupertinoIcons.chart_bar,
               title: 'settings.weekly_reports'.tr(),
               subtitle: 'settings.weekly_reports_desc'.tr(),
               value: _settings?.weeklyReportEnabled ?? true,
@@ -387,7 +377,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           ),
           _buildDivider(),
           _buildSwitchTile(
-            icon: Icons.backup_outlined,
+            icon: CupertinoIcons.cloud,
             title: 'settings.export_data'.tr(),
             subtitle: 'settings.export_data_desc'.tr(),
             value: _settings?.dataExportEnabled ?? true,
@@ -398,19 +388,19 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
           ),
           _buildDivider(),
           _buildSettingTile(
-            icon: Icons.download_outlined,
+            icon: CupertinoIcons.arrow_down_circle,
             title: 'settings.download_data'.tr(),
             subtitle: 'settings.download_data'.tr(),
             onTap: _exportData,
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
-            icon: Icons.delete_outline,
+            icon: CupertinoIcons.delete,
             title: 'settings.delete_all_data'.tr(),
             subtitle: 'settings.delete_all_data_desc'.tr(),
             onTap: _showDeleteDataDialog,
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
             textColor: AppColors.error,
           ),
         ],
@@ -428,27 +418,27 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       child: Column(
         children: [
           _buildSettingTile(
-            icon: Icons.help_outline,
+            icon: CupertinoIcons.question_circle,
             title: 'settings.help_support'.tr(),
             subtitle: 'settings.help_support_desc'.tr(),
             onTap: () => _showHelpDialog(),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
-            icon: Icons.feedback_outlined,
+            icon: CupertinoIcons.chat_bubble,
             title: 'settings.feedback'.tr(),
             subtitle: 'settings.feedback_desc'.tr(),
             onTap: () => _showFeedbackDialog(),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
-            icon: Icons.star_outline,
+            icon: CupertinoIcons.star,
             title: 'settings.rate_app'.tr(),
             subtitle: 'settings.rate_app_desc'.tr(),
             onTap: _rateApp,
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
           ),
         ],
       ),
@@ -465,34 +455,34 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
       child: Column(
         children: [
           _buildSettingTile(
-            icon: Icons.info_outline,
+            icon: CupertinoIcons.info,
             title: 'settings.app_version'.tr(),
             subtitle: '1.0.0',
             onTap: null,
           ),
           _buildDivider(),
           _buildSettingTile(
-            icon: Icons.privacy_tip_outlined,
+            icon: CupertinoIcons.lock,
             title: 'settings.privacy_policy'.tr(),
             subtitle: 'settings.privacy_policy_desc'.tr(),
             onTap: () => _showPrivacyPolicy(),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
-            icon: Icons.description_outlined,
+            icon: CupertinoIcons.doc_text,
             title: 'settings.terms_of_service'.tr(),
             subtitle: 'settings.terms_of_service_desc'.tr(),
             onTap: () => _showTermsOfService(),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
           ),
           _buildDivider(),
           _buildSettingTile(
-            icon: Icons.refresh,
+            icon: CupertinoIcons.arrow_clockwise,
             title: 'settings.reset_settings'.tr(),
             subtitle: 'settings.reset_settings_desc'.tr(),
             onTap: _showResetSettingsDialog,
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(CupertinoIcons.chevron_right),
             textColor: AppColors.warning,
           ),
         ],
@@ -647,9 +637,7 @@ class _SettingsScreenModernState extends ConsumerState<SettingsScreenModern> {
                   await _settingsService.setLanguage(value);
 
                   // Обновляем локаль в EasyLocalization
-                  final newLocale = Locale(
-                    value.code == 'tk' ? 'tr' : value.code,
-                  );
+                  final newLocale = Locale(value.code);
                   if (context.mounted) {
                     context.setLocale(newLocale);
                   }

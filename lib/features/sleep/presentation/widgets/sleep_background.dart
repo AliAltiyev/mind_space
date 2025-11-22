@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_colors.dart';
 
 /// Анимированный фон для экрана сна с ночным небом
 class SleepBackground extends StatefulWidget {
@@ -23,14 +24,14 @@ class _SleepBackgroundState extends State<SleepBackground> {
           end: Alignment.bottomRight,
           colors: isDark
               ? [
-                  const Color(0xFF0F172A),
-                  const Color(0xFF1E293B),
-                  const Color(0xFF0F172A),
+                  AppColors.darkBackground,
+                  AppColors.darkSurface,
+                  AppColors.darkBackground,
                 ]
               : [
-                  const Color(0xFFF8FAFC),
-                  const Color(0xFFF1F5F9),
-                  const Color(0xFFE2E8F0),
+                  AppColors.background,
+                  AppColors.surfaceVariant,
+                  AppColors.border,
                 ],
         ),
       ),
@@ -48,7 +49,7 @@ class _SleepBackgroundState extends State<SleepBackground> {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      const Color(0xFF6366F1).withOpacity(0.1),
+                      AppColors.primary.withOpacity(0.1),
                       Colors.transparent,
                     ],
                   ),
@@ -66,7 +67,7 @@ class _SleepBackgroundState extends State<SleepBackground> {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      const Color(0xFF8B5CF6).withOpacity(0.08),
+                      AppColors.primaryLight.withOpacity(0.08),
                       Colors.transparent,
                     ],
                   ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/constants/app_colors.dart';
 
 /// Красивая карточка для экрана сна с glassmorphism эффектом
 class SleepCard extends StatelessWidget {
@@ -28,11 +29,11 @@ class SleepCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: isDark
-            ? Colors.white.withOpacity(0.05)
+            ? AppColors.darkSurfaceVariant
             : Colors.white.withOpacity(0.7),
         border: Border.all(
           color: isDark
-              ? Colors.white.withOpacity(0.1)
+              ? AppColors.darkBorder
               : Colors.black.withOpacity(0.05),
           width: 1,
         ),
@@ -108,7 +109,7 @@ class SleepStatCard extends StatelessWidget {
           Text(
             value,
             style: AppTypography.h2.copyWith(
-              color: isDark ? Colors.white : theme.colorScheme.onSurface,
+              color: isDark ? AppColors.darkTextPrimary : theme.colorScheme.onSurface,
               fontWeight: FontWeight.w700,
               letterSpacing: -0.5,
             ),
@@ -118,7 +119,7 @@ class SleepStatCard extends StatelessWidget {
             label,
             style: AppTypography.caption.copyWith(
               color: isDark
-                  ? Colors.white60
+                  ? AppColors.darkTextSecondary
                   : theme.colorScheme.onSurface.withOpacity(0.6),
               fontSize: 12,
               letterSpacing: 0.2,

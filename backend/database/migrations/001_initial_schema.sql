@@ -86,3 +86,4 @@ $$ LANGUAGE plpgsql;
 -- Schedule materialized view refresh (runs via cron job in application)
 -- This can be called periodically to keep stats up to date
 
+
