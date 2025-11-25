@@ -225,7 +225,7 @@ class UserConstants {
     'insights',
     'patterns',
     'gratitude',
-    'meditatio  n',
+    'meditation',
     'achievements',
     'stats',
     'export',
