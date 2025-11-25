@@ -15,6 +15,8 @@ class AppSettingsService {
   static const String _analyticsEnabledKey = 'analytics_enabled';
   static const String _soundEnabledKey = 'sound_enabled';
   static const String _hapticFeedbackKey = 'haptic_feedback';
+  static const String _groqApiKeyKey = 'groq_api_key';
+  static const String _openRouterApiKeyKey = 'openrouter_api_key';
 
   /// Тема приложения
   Future<AppTheme> getTheme() async {
@@ -149,6 +151,40 @@ class AppSettingsService {
     await prefs.setBool(_hapticFeedbackKey, enabled);
   }
 
+  /// Groq API ключ (хранится безопасно в SharedPreferences)
+  /// ВАЖНО: Никогда не коммитьте API ключи в репозиторий!
+  Future<String?> getGroqApiKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_groqApiKeyKey);
+  }
+
+  Future<void> setGroqApiKey(String apiKey) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_groqApiKeyKey, apiKey);
+  }
+
+  Future<void> clearGroqApiKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_groqApiKeyKey);
+  }
+
+  /// OpenRouter API ключ (хранится безопасно в SharedPreferences)
+  /// ВАЖНО: Никогда не коммитьте API ключи в репозиторий!
+  Future<String?> getOpenRouterApiKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_openRouterApiKeyKey);
+  }
+
+  Future<void> setOpenRouterApiKey(String apiKey) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_openRouterApiKeyKey, apiKey);
+  }
+
+  Future<void> clearOpenRouterApiKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_openRouterApiKeyKey);
+  }
+
   /// Получить все настройки
   Future<AppSettings> getAllSettings() async {
     return AppSettings(
@@ -180,6 +216,9 @@ class AppSettingsService {
     await prefs.remove(_analyticsEnabledKey);
     await prefs.remove(_soundEnabledKey);
     await prefs.remove(_hapticFeedbackKey);
+    // НЕ удаляем API ключи при сбросе настроек - они должны удаляться отдельно
+    // await prefs.remove(_groqApiKeyKey);
+    // await prefs.remove(_openRouterApiKeyKey);
   }
 }
 

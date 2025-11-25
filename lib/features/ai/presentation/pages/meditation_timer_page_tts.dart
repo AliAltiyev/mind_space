@@ -297,7 +297,9 @@ class _MeditationTimerPageTTSState
                         widget.meditation.title,
                         style: AppTypography.h3.copyWith(
                           fontSize: 20,
-                          color: isDark ? AppColors.darkTextPrimary : colorScheme.onSurface,
+                          color: isDark
+                              ? AppColors.darkTextPrimary
+                              : colorScheme.onSurface,
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 2,

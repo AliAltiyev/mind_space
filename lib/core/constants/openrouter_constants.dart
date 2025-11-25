@@ -1,3 +1,5 @@
+import '../services/app_settings_service.dart';
+
 /// Константы для OpenRouter API
 class OpenRouterConstants {
   OpenRouterConstants._();
@@ -9,20 +11,34 @@ class OpenRouterConstants {
   static const String chatEndpoint = '/chat/completions';
 
   /// API ключ (получите на openrouter.ai)
-  /// ВАЖНО: Ключ должен быть получен из настроек приложения или переменных окружения
-  static String get apiKey {
-    // TODO: Получать ключ из настроек приложения или переменных окружения
-    // Пример: return AppSettingsService().getOpenRouterApiKey() ?? '';
-    return ''; // Пустой ключ по умолчанию - должен быть настроен пользователем
+  /// ВАЖНО: Ключ должен быть получен из настроек приложения через AppSettingsService
+  /// БЕЗОПАСНОСТЬ: API ключи НИКОГДА не должны быть захардкожены в коде!
+  static Future<String> get apiKey async {
+    final settingsService = AppSettingsService();
+    final apiKey = await settingsService.getOpenRouterApiKey();
+    return apiKey ?? '';
   }
 
   /// Заголовки по умолчанию
+  /// ВАЖНО: Используйте getHeaders() вместо headers для получения актуального API ключа
+  static Future<Map<String, String>> getHeaders() async {
+    final key = await apiKey;
+    return {
+      'Content-Type': 'application/json',
+      'HTTP-Referer': 'https://mindspace.app', // Опционально, для отслеживания
+      'X-Title': 'Mind Space', // Опционально, название приложения
+      if (key.isNotEmpty) 'Authorization': 'Bearer $key',
+    };
+  }
+
+  /// Устаревший метод - используйте getHeaders() вместо этого
+  @Deprecated('Use getHeaders() instead to get the API key from secure storage')
   static Map<String, String> get headers => {
-    'Content-Type': 'application/json',
-    'HTTP-Referer': 'https://mindspace.app', // Опционально, для отслеживания
-    'X-Title': 'Mind Space', // Опционально, название приложения
-    if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
-  };
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://mindspace.app',
+        'X-Title': 'Mind Space',
+        // API ключ больше не доступен синхронно
+      };
 
   /// Таймауты
   static const Duration connectTimeout = Duration(seconds: 30);

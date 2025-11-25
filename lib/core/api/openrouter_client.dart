@@ -12,7 +12,6 @@ class OpenRouterClient {
     : _dio = Dio(
         BaseOptions(
           baseUrl: OpenRouterConstants.baseUrl,
-          headers: OpenRouterConstants.headers,
           connectTimeout: OpenRouterConstants.connectTimeout,
           receiveTimeout: OpenRouterConstants.receiveTimeout,
           responseType: ResponseType.json, // Явно указываем тип ответа
@@ -21,6 +20,12 @@ class OpenRouterClient {
         ),
       );
 
+  /// Обновление заголовков Dio клиента с актуальным API ключом
+  Future<void> _updateHeaders() async {
+    final headers = await OpenRouterConstants.getHeaders();
+    _dio.options.headers = headers;
+  }
+
   /// Генерация контента через OpenRouter API
   Future<OpenRouterResponse> generateContent({
     required String model,
@@ -28,6 +33,9 @@ class OpenRouterClient {
     double temperature = OpenRouterConstants.defaultTemperature,
     int maxTokens = OpenRouterConstants.defaultMaxTokens,
   }) async {
+    // Обновляем заголовки с актуальным API ключом перед каждым запросом
+    await _updateHeaders();
+
     try {
       final request = OpenRouterRequest(
         model: model,
