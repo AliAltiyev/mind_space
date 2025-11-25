@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/api/groq_client.dart';
 import '../../core/database/database.dart';
 import '../../core/services/app_settings_service.dart';
 import '../../domain/entities/ai_insight.dart';
@@ -37,16 +36,17 @@ class RemoteDataSource {
 
       // Отправляем запрос к OpenRouter API
       final response = await _dio.post(
-        'https://api.groq.com/openai/v1/chat/completions',
+        'https://openrouter.ai/api/v1/chat/completions',
         options: Options(
           headers: {
             'Authorization': 'Bearer $apiKey',
-            'Authorization': 'Bearer $apiKey',
             'Content-Type': 'application/json',
+            'HTTP-Referer': 'https://mind-space-app.com',
+            'X-Title': 'Mind Space App',
           },
         ),
         data: {
-          'model': 'llama-3.1-8b-instant',
+          'model': 'anthropic/claude-3.5-sonnet',
           'messages': [
             {
               'role': 'system',
