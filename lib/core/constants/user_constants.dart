@@ -17,31 +17,16 @@ class UserConstants {
   static const bool defaultDataCollectionAllowed = false;
 
   // Available Languages
-  static const List<String> availableLanguages = [
-    'ru',
-    'en',
-    'es',
-    'fr',
-    'de',
-    'zh',
-    'ja',
-    'ko',
-  ];
+  static const List<String> availableLanguages = ['ru', 'en'];
 
   //  Map<String, String> languageNames = {
-    static  Map<String, String> languageNames = {
+  static Map<String, String> languageNames = {
     'ru': 'settings.languages.russian'.tr(),
     'en': 'English',
-    'es': 'Español',
-    'fr': 'Français',
-    'de': 'Deutsch',
-    'zh': '中文',
-    'ja': '日本語',
-    'ko': '한국어',
   };
 
   // Available Interests
-  static    List<String> availableInterests = [
+  static List<String> availableInterests = [
     'interests.meditation'.tr(),
     'interests.yoga'.tr(),
     'interests.sports'.tr(),
@@ -49,7 +34,7 @@ class UserConstants {
     'interests.music'.tr(),
     'interests.art'.tr(),
     'interests.nature'.tr(),
-    'interests.travel'.tr(),  
+    'interests.travel'.tr(),
     'interests.cooking'.tr(),
     'interests.technology'.tr(),
     'interests.science'.tr(),
@@ -64,8 +49,8 @@ class UserConstants {
     'interests.gardening'.tr(),
   ];
 
-    // Mental Health Goals
-    static  List<String> mentalHealthGoals = [
+  // Mental Health Goals
+  static List<String> mentalHealthGoals = [
     'goals.improve_mood'.tr(),
     'goals.reduce_stress'.tr(),
     'goals.improve_sleep'.tr(),
@@ -84,11 +69,11 @@ class UserConstants {
     'mood',
     'frequency',
     'milestone',
-    'special',   
+    'special',
   ];
 
   // Achievement Rarities
-   static const List<String> achievementRarities = [
+  static const List<String> achievementRarities = [
     'common',
     'uncommon',
     'rare',
@@ -97,7 +82,7 @@ class UserConstants {
   ];
 
   // Rarity Colors
-    Map<String, int> rarityColors = {
+  Map<String, int> rarityColors = {
     'common': 0xFF9E9E9E, // Grey
     'uncommon': 0xFF4CAF50, // Green
     'rare': 0xFF2196F3, // Blue
@@ -106,7 +91,7 @@ class UserConstants {
   };
 
   // Mood Categories
-    Map<String, List<int>> moodCategories = {
+  Map<String, List<int>> moodCategories = {
     'very_low': [1],
     'low': [2],
     'medium': [3],
@@ -115,7 +100,7 @@ class UserConstants {
   };
 
   // Mood Category Names
-    Map<String, String> moodCategoryNames = {
+  Map<String, String> moodCategoryNames = {
     'very_low': 'mood.moods.very_sad'.tr(),
     'low': 'mood.moods.sad'.tr(),
     'medium': 'mood.moods.neutral'.tr(),
@@ -124,7 +109,7 @@ class UserConstants {
   };
 
   // Mood Category Colors
-    Map<String, int> moodCategoryColors = {
+  Map<String, int> moodCategoryColors = {
     'very_low': 0xFFE53E3E, // Red
     'low': 0xFFED8936, // Orange
     'medium': 0xFFECC94B, // Yellow
@@ -133,7 +118,7 @@ class UserConstants {
   };
 
   // Default Achievement Definitions
-    List<Map<String, dynamic>> defaultAchievements = [
+  List<Map<String, dynamic>> defaultAchievements = [
     {
       'id': 'first_entry',
       'title': 'achievements.first_entry'.tr(),
@@ -218,7 +203,7 @@ class UserConstants {
   ];
 
   // Notification Types
-   static const List<String> notificationTypes = [
+  static const List<String> notificationTypes = [
     'daily_reminder',
     'streak_reminder',
     'achievement_unlocked',
@@ -227,7 +212,7 @@ class UserConstants {
   ];
 
   //Default Notification Preferences
-     static const Map<String, bool> defaultNotificationPreferences = {
+  static const Map<String, bool> defaultNotificationPreferences = {
     'daily_reminder': true,
     'streak_reminder': true,
     'achievement_unlocked': true,
@@ -236,7 +221,7 @@ class UserConstants {
   };
 
   // Feature Flags
-   static const List<String> availableFeatures = [
+  static const List<String> availableFeatures = [
     'insights',
     'patterns',
     'gratitude',
@@ -248,7 +233,7 @@ class UserConstants {
   ];
 
   // Default Enabled Features
-   static const List<String> defaultEnabledFeatures = [
+  static const List<String> defaultEnabledFeatures = [
     'insights',
     'patterns',
     'gratitude',
@@ -258,30 +243,30 @@ class UserConstants {
   ];
 
   // Profile Image Constants
-   static const int maxProfileImageSize = 5 * 1024 * 1024; // 5MB
-   static const List<String> allowedImageFormats = [
+  static const int maxProfileImageSize = 5 * 1024 * 1024; // 5MB
+  static const List<String> allowedImageFormats = [
     'jpg',
     'jpeg',
     'png',
     'webp',
   ];
-   static const int profileImageSize = 200; // pixels
+  static const int profileImageSize = 200; // pixels
 
   // Validation Constants
-   static const int minNameLength = 2;
-   static   const int maxNameLength = 50;
-   static const int maxBioLength = 200;
-   static const int maxInterestsCount = 10;
-   static const int minAge = 13;
-   static const int maxAge = 120;
+  static const int minNameLength = 2;
+  static const int maxNameLength = 50;
+  static const int maxBioLength = 200;
+  static const int maxInterestsCount = 10;
+  static const int minAge = 13;
+  static const int maxAge = 120;
 
   // Cache Constants
-   static const Duration profileCacheDuration = Duration(hours: 1);
-   static const Duration statsCacheDuration = Duration(minutes: 30);
-   static const Duration achievementsCacheDuration = Duration(hours: 6);
+  static const Duration profileCacheDuration = Duration(hours: 1);
+  static const Duration statsCacheDuration = Duration(minutes: 30);
+  static const Duration achievementsCacheDuration = Duration(hours: 6);
 
   // Sync Constants
-   static const Duration syncInterval = Duration(hours: 2);
-   static const int maxRetryAttempts = 3;
-   static const Duration retryDelay = Duration(seconds: 5);
+  static const Duration syncInterval = Duration(hours: 2);
+  static const int maxRetryAttempts = 3;
+  static const Duration retryDelay = Duration(seconds: 5);
 }

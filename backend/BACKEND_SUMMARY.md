@@ -273,3 +273,4 @@ backend/
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Детальная архитектура
 - [QUICKSTART.md](./QUICKSTART.md) - Быстрый старт
 
+

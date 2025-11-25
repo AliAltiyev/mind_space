@@ -1,430 +1,468 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/cupertino.dart';
 import '../../../../core/constants/app_colors.dart';
 
-/// Универсальная система дизайна для Android и iOS
-/// Использует Material 3 с адаптацией для iOS
+/// Современная система дизайна с красивыми светлой и темной темами
 class AppTheme {
   /// Определение платформы
   static bool get isIOS => Platform.isIOS;
   static bool get isAndroid => Platform.isAndroid;
 
-  /// Получение светлой темы
+  /// Красивая светлая тема
   static ThemeData get lightTheme {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: Brightness.light,
-    );
-
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      colorScheme: colorScheme,
+
+      // Цветовая схема
+      colorScheme: ColorScheme.light(
+        primary: AppColors.primary,
+        onPrimary: AppColors.textOnPrimary,
+        primaryContainer: AppColors.primaryLight,
+        onPrimaryContainer: AppColors.primaryDark,
+        secondary: AppColors.secondary,
+        onSecondary: AppColors.textOnPrimary,
+        secondaryContainer: AppColors.secondaryLight,
+        onSecondaryContainer: AppColors.secondary,
+        tertiary: AppColors.accent,
+        onTertiary: AppColors.textOnPrimary,
+        error: AppColors.error,
+        onError: AppColors.textOnPrimary,
+        errorContainer: AppColors.errorLight,
+        onErrorContainer: AppColors.error,
+        surface: AppColors.surface,
+        onSurface: AppColors.textPrimary,
+        onSurfaceVariant: AppColors.textSecondary,
+        surfaceContainerHighest: AppColors.surfaceVariant,
+        surfaceContainerHigh: AppColors.surfaceVariant,
+        outline: AppColors.border,
+        outlineVariant: AppColors.border,
+        shadow: Colors.black.withOpacity(0.1),
+        scrim: Colors.black.withOpacity(0.5),
+      ),
 
       // Scaffold
-      scaffoldBackgroundColor: colorScheme.surface,
+      scaffoldBackgroundColor: AppColors.background,
 
-      // AppBar - адаптирован для обеих платформ
+      // AppBar
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.surface,
-        foregroundColor: colorScheme.onSurface,
-        elevation: isIOS ? 0 : 1,
-        scrolledUnderElevation: isIOS ? 0 : 1,
+        backgroundColor: AppColors.surface,
+        foregroundColor: AppColors.textPrimary,
+        elevation: 0,
+        scrolledUnderElevation: 1,
         centerTitle: isIOS ? false : true,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         titleTextStyle: TextStyle(
           fontSize: isIOS ? 17 : 20,
-          fontWeight: FontWeight.w600,
-          color: colorScheme.onSurface,
+          fontWeight: FontWeight.w700,
+          color: AppColors.textPrimary,
           letterSpacing: isIOS ? -0.41 : 0,
         ),
-        systemOverlayStyle: isIOS ? null : SystemUiOverlayStyle.dark,
+        iconTheme: IconThemeData(color: AppColors.textPrimary, size: 24),
+        actionsIconTheme: IconThemeData(
+          color: AppColors.textSecondary,
+          size: 24,
+        ),
       ),
 
-      // Card - современный дизайн для обеих платформ
+      // Иконки
+      iconTheme: IconThemeData(color: AppColors.textPrimary, size: 24),
+
+      // Карточки
       cardTheme: CardThemeData(
-        elevation: isIOS ? 0 : 2,
+        color: AppColors.surface,
+        elevation: 0,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 12 : 16),
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide.none,
         ),
-        color: colorScheme.surface,
-        margin: EdgeInsets.symmetric(
-          horizontal: isIOS ? 16 : 16,
-          vertical: isIOS ? 8 : 8,
-        ),
+        margin: EdgeInsets.zero,
       ),
 
-      // ElevatedButton - адаптирован для iOS
+      // Кнопки
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: colorScheme.primary,
-          foregroundColor: colorScheme.onPrimary,
-          elevation: isIOS ? 0 : 2,
-          padding: EdgeInsets.symmetric(
-            horizontal: isIOS ? 16 : 24,
-            vertical: isIOS ? 12 : 14,
-          ),
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.textOnPrimary,
+          elevation: 0,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(isIOS ? 10 : 12),
+            borderRadius: BorderRadius.circular(12),
           ),
           textStyle: TextStyle(
-            fontSize: isIOS ? 17 : 16,
+            fontSize: 16,
             fontWeight: FontWeight.w600,
-            letterSpacing: isIOS ? -0.41 : 0,
+            letterSpacing: 0,
           ),
         ),
       ),
 
-      // OutlinedButton
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: colorScheme.primary,
-          padding: EdgeInsets.symmetric(
-            horizontal: isIOS ? 16 : 24,
-            vertical: isIOS ? 12 : 14,
-          ),
+          foregroundColor: AppColors.primary,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(isIOS ? 10 : 12),
+            borderRadius: BorderRadius.circular(12),
           ),
-          side: BorderSide(color: colorScheme.primary, width: isIOS ? 0.5 : 1),
-          textStyle: TextStyle(
-            fontSize: isIOS ? 17 : 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: isIOS ? -0.41 : 0,
-          ),
+          side: BorderSide(color: AppColors.border, width: 1),
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
 
-      // TextButton
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: colorScheme.primary,
-          padding: EdgeInsets.symmetric(
-            horizontal: isIOS ? 12 : 16,
-            vertical: isIOS ? 8 : 12,
-          ),
-          textStyle: TextStyle(
-            fontSize: isIOS ? 17 : 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: isIOS ? -0.41 : 0,
-          ),
+          foregroundColor: AppColors.primary,
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
 
-      // InputDecoration - адаптирован для iOS
+      // Поля ввода
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: colorScheme.surfaceContainerHighest,
+        fillColor: AppColors.surface,
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 10 : 12),
-          borderSide: BorderSide(
-            color: colorScheme.outline.withOpacity(0.2),
-            width: isIOS ? 0.5 : 1,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.border, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 10 : 12),
-          borderSide: BorderSide(
-            color: colorScheme.outline.withOpacity(0.2),
-            width: isIOS ? 0.5 : 1,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.border, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 10 : 12),
-          borderSide: BorderSide(
-            color: colorScheme.primary,
-            width: isIOS ? 1 : 2,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: isIOS ? 16 : 16,
-          vertical: isIOS ? 14 : 16,
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.error, width: 1),
         ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.error, width: 2),
+        ),
+        labelStyle: TextStyle(color: AppColors.textSecondary, fontSize: 16),
+        hintStyle: TextStyle(color: AppColors.textHint, fontSize: 16),
       ),
 
-      // ListTile - адаптирован для iOS
+      // Список элементов
       listTileTheme: ListTileThemeData(
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: isIOS ? 16 : 16,
-          vertical: isIOS ? 8 : 4,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 10 : 0),
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        iconColor: AppColors.textPrimary,
+        textColor: AppColors.textPrimary,
       ),
 
-      // Divider
+      // Разделители
       dividerTheme: DividerThemeData(
-        color: colorScheme.outline.withOpacity(0.12),
-        thickness: isIOS ? 0.5 : 1,
+        color: AppColors.divider,
+        thickness: 1,
         space: 1,
       ),
 
-      // Switch
+      // Переключатели
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return colorScheme.primary;
+            return AppColors.primary;
           }
-          return colorScheme.outline;
+          return AppColors.border;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return colorScheme.primary.withOpacity(0.5);
+            return AppColors.primary.withOpacity(0.5);
           }
-          return colorScheme.surfaceContainerHighest;
+          return AppColors.surfaceVariant;
         }),
       ),
 
-      // Chip
+      // Чипы
       chipTheme: ChipThemeData(
-        backgroundColor: colorScheme.surfaceContainerHighest,
-        deleteIconColor: colorScheme.onSurface,
-        disabledColor: colorScheme.onSurface.withOpacity(0.12),
-        selectedColor: colorScheme.primaryContainer,
-        secondarySelectedColor: colorScheme.secondaryContainer,
-        padding: EdgeInsets.symmetric(
-          horizontal: isIOS ? 12 : 12,
-          vertical: isIOS ? 8 : 8,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 10 : 8),
-        ),
+        backgroundColor: AppColors.surfaceVariant,
+        deleteIconColor: AppColors.textPrimary,
+        disabledColor: AppColors.textPrimary.withOpacity(0.12),
+        selectedColor: AppColors.primary.withOpacity(0.2),
+        secondarySelectedColor: AppColors.secondary.withOpacity(0.2),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         labelStyle: TextStyle(
-          fontSize: isIOS ? 15 : 14,
+          fontSize: 14,
           fontWeight: FontWeight.w500,
-          letterSpacing: isIOS ? -0.24 : 0,
+          color: AppColors.textPrimary,
         ),
       ),
 
-      // Dialog - адаптирован для iOS
+      // Диалоги
       dialogTheme: DialogThemeData(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 14 : 28),
+        backgroundColor: AppColors.surface,
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        titleTextStyle: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: AppColors.textPrimary,
         ),
-        elevation: isIOS ? 0 : 24,
-        backgroundColor: colorScheme.surface,
+        contentTextStyle: TextStyle(
+          fontSize: 16,
+          color: AppColors.textSecondary,
+        ),
       ),
 
       // BottomSheet
       bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: AppColors.surface,
+        elevation: 8,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(isIOS ? 14 : 28),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
-        backgroundColor: colorScheme.surface,
-        elevation: isIOS ? 0 : 8,
+      ),
+
+      // FloatingActionButton
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.textOnPrimary,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+
+      // ProgressIndicator
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: AppColors.primary,
+        linearTrackColor: AppColors.surfaceVariant,
+        circularTrackColor: AppColors.surfaceVariant,
       ),
     );
   }
 
-  /// Получение темной темы
+  /// Красивая темная тема
   static ThemeData get darkTheme {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: Brightness.dark,
-    );
-
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      colorScheme: colorScheme,
+
+      // Цветовая схема
+      colorScheme: ColorScheme.dark(
+        primary: AppColors.darkPrimary,
+        onPrimary: AppColors.darkTextOnPrimary,
+        primaryContainer: AppColors.darkPrimaryLight,
+        onPrimaryContainer: AppColors.darkPrimaryDark,
+        secondary: AppColors.secondary,
+        onSecondary: AppColors.darkTextOnPrimary,
+        secondaryContainer: AppColors.secondaryLight,
+        onSecondaryContainer: AppColors.secondary,
+        tertiary: AppColors.accent,
+        onTertiary: AppColors.darkTextOnPrimary,
+        error: AppColors.error,
+        onError: AppColors.darkTextOnPrimary,
+        errorContainer: AppColors.errorLight,
+        onErrorContainer: AppColors.error,
+        surface: AppColors.darkSurface,
+        onSurface: AppColors.darkTextPrimary,
+        onSurfaceVariant: AppColors.darkTextSecondary,
+        surfaceContainerHighest: AppColors.darkSurfaceVariant,
+        surfaceContainerHigh: AppColors.darkSurfaceElevated,
+        outline: AppColors.darkBorder,
+        outlineVariant: AppColors.darkBorderSubtle,
+        shadow: Colors.black.withOpacity(0.3),
+        scrim: Colors.black.withOpacity(0.7),
+      ),
 
       // Scaffold
-      scaffoldBackgroundColor: colorScheme.surface,
+      scaffoldBackgroundColor: AppColors.darkBackground,
 
-      // AppBar - адаптирован для обеих платформ
+      // AppBar
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.surface,
-        foregroundColor: colorScheme.onSurface,
-        elevation: isIOS ? 0 : 0,
-        scrolledUnderElevation: isIOS ? 0 : 1,
+        backgroundColor: AppColors.darkSurface,
+        foregroundColor: AppColors.darkTextPrimary,
+        elevation: 0,
+        scrolledUnderElevation: 1,
         centerTitle: isIOS ? false : true,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         titleTextStyle: TextStyle(
           fontSize: isIOS ? 17 : 20,
-          fontWeight: FontWeight.w600,
-          color: colorScheme.onSurface,
+          fontWeight: FontWeight.w700,
+          color: AppColors.darkTextPrimary,
           letterSpacing: isIOS ? -0.41 : 0,
         ),
-        systemOverlayStyle: isIOS ? null : SystemUiOverlayStyle.light,
+        iconTheme: IconThemeData(color: AppColors.darkTextPrimary, size: 24),
+        actionsIconTheme: IconThemeData(
+          color: AppColors.darkTextSecondary,
+          size: 24,
+        ),
       ),
 
-      // Card - современный дизайн для обеих платформ
+      // Иконки
+      iconTheme: IconThemeData(color: AppColors.darkTextPrimary, size: 24),
+
+      // Карточки
       cardTheme: CardThemeData(
-        elevation: isIOS ? 0 : 0,
+        color: AppColors.darkSurface,
+        elevation: 0,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 12 : 16),
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: AppColors.darkBorder, width: 1),
         ),
-        color: colorScheme.surfaceContainerHighest,
-        margin: EdgeInsets.symmetric(
-          horizontal: isIOS ? 16 : 16,
-          vertical: isIOS ? 8 : 8,
-        ),
+        margin: EdgeInsets.zero,
       ),
 
-      // ElevatedButton - адаптирован для iOS
+      // Кнопки
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: colorScheme.primary,
-          foregroundColor: colorScheme.onPrimary,
-          elevation: isIOS ? 0 : 0,
-          padding: EdgeInsets.symmetric(
-            horizontal: isIOS ? 16 : 24,
-            vertical: isIOS ? 12 : 14,
-          ),
+          backgroundColor: AppColors.darkPrimary,
+          foregroundColor: AppColors.darkTextOnPrimary,
+          elevation: 0,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(isIOS ? 10 : 12),
+            borderRadius: BorderRadius.circular(12),
           ),
           textStyle: TextStyle(
-            fontSize: isIOS ? 17 : 16,
+            fontSize: 16,
             fontWeight: FontWeight.w600,
-            letterSpacing: isIOS ? -0.41 : 0,
+            letterSpacing: 0,
           ),
         ),
       ),
 
-      // OutlinedButton
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: colorScheme.primary,
-          padding: EdgeInsets.symmetric(
-            horizontal: isIOS ? 16 : 24,
-            vertical: isIOS ? 12 : 14,
-          ),
+          foregroundColor: AppColors.darkPrimary,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(isIOS ? 10 : 12),
+            borderRadius: BorderRadius.circular(12),
           ),
-          side: BorderSide(color: colorScheme.outline, width: isIOS ? 0.5 : 1),
-          textStyle: TextStyle(
-            fontSize: isIOS ? 17 : 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: isIOS ? -0.41 : 0,
-          ),
+          side: BorderSide(color: AppColors.darkBorder, width: 1),
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
 
-      // TextButton
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: colorScheme.primary,
-          padding: EdgeInsets.symmetric(
-            horizontal: isIOS ? 12 : 16,
-            vertical: isIOS ? 8 : 12,
-          ),
-          textStyle: TextStyle(
-            fontSize: isIOS ? 17 : 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: isIOS ? -0.41 : 0,
-          ),
+          foregroundColor: AppColors.darkPrimary,
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
 
-      // InputDecoration - адаптирован для iOS
+      // Поля ввода
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: colorScheme.surfaceContainerHighest,
+        fillColor: AppColors.darkSurfaceVariant,
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 10 : 12),
-          borderSide: BorderSide(
-            color: colorScheme.outline.withOpacity(0.2),
-            width: isIOS ? 0.5 : 1,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.darkBorder, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 10 : 12),
-          borderSide: BorderSide(
-            color: colorScheme.outline.withOpacity(0.2),
-            width: isIOS ? 0.5 : 1,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.darkBorder, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 10 : 12),
-          borderSide: BorderSide(
-            color: colorScheme.primary,
-            width: isIOS ? 1 : 2,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.darkPrimary, width: 2),
         ),
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: isIOS ? 16 : 16,
-          vertical: isIOS ? 14 : 16,
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.error, width: 1),
         ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.error, width: 2),
+        ),
+        labelStyle: TextStyle(color: AppColors.darkTextSecondary, fontSize: 16),
+        hintStyle: TextStyle(color: AppColors.darkTextHint, fontSize: 16),
       ),
 
-      // ListTile - адаптирован для iOS
+      // Список элементов
       listTileTheme: ListTileThemeData(
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: isIOS ? 16 : 16,
-          vertical: isIOS ? 8 : 4,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 10 : 0),
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        iconColor: AppColors.darkTextPrimary,
+        textColor: AppColors.darkTextPrimary,
       ),
 
-      // Divider
+      // Разделители
       dividerTheme: DividerThemeData(
-        color: colorScheme.outline.withOpacity(0.12),
-        thickness: isIOS ? 0.5 : 1,
+        color: AppColors.darkDivider,
+        thickness: 1,
         space: 1,
       ),
 
-      // Switch
+      // Переключатели
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return colorScheme.primary;
+            return AppColors.darkPrimary;
           }
-          return colorScheme.outline;
+          return AppColors.darkBorder;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return colorScheme.primary.withOpacity(0.5);
+            return AppColors.darkPrimary.withOpacity(0.5);
           }
-          return colorScheme.surfaceContainerHighest;
+          return AppColors.darkSurfaceVariant;
         }),
       ),
 
-      // Chip
+      // Чипы
       chipTheme: ChipThemeData(
-        backgroundColor: colorScheme.surfaceContainerHighest,
-        deleteIconColor: colorScheme.onSurface,
-        disabledColor: colorScheme.onSurface.withOpacity(0.12),
-        selectedColor: colorScheme.primaryContainer,
-        secondarySelectedColor: colorScheme.secondaryContainer,
-        padding: EdgeInsets.symmetric(
-          horizontal: isIOS ? 12 : 12,
-          vertical: isIOS ? 8 : 8,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 10 : 8),
-        ),
+        backgroundColor: AppColors.darkSurfaceVariant,
+        deleteIconColor: AppColors.darkTextPrimary,
+        disabledColor: AppColors.darkTextPrimary.withOpacity(0.12),
+        selectedColor: AppColors.darkPrimary.withOpacity(0.2),
+        secondarySelectedColor: AppColors.secondary.withOpacity(0.2),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         labelStyle: TextStyle(
-          fontSize: isIOS ? 15 : 14,
+          fontSize: 14,
           fontWeight: FontWeight.w500,
-          letterSpacing: isIOS ? -0.24 : 0,
+          color: AppColors.darkTextPrimary,
         ),
       ),
 
-      // Dialog - адаптирован для iOS
+      // Диалоги
       dialogTheme: DialogThemeData(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(isIOS ? 14 : 28),
+        backgroundColor: AppColors.darkSurface,
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        titleTextStyle: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: AppColors.darkTextPrimary,
         ),
-        elevation: isIOS ? 0 : 24,
-        backgroundColor: colorScheme.surface,
+        contentTextStyle: TextStyle(
+          fontSize: 16,
+          color: AppColors.darkTextSecondary,
+        ),
       ),
 
       // BottomSheet
       bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: AppColors.darkSurface,
+        elevation: 8,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(isIOS ? 14 : 28),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
-        backgroundColor: colorScheme.surface,
-        elevation: isIOS ? 0 : 8,
+      ),
+
+      // FloatingActionButton
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: AppColors.darkPrimary,
+        foregroundColor: AppColors.darkTextOnPrimary,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+
+      // ProgressIndicator
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: AppColors.darkPrimary,
+        linearTrackColor: AppColors.darkSurfaceVariant,
+        circularTrackColor: AppColors.darkSurfaceVariant,
       ),
     );
   }

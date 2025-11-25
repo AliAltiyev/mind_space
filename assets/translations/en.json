@@ -260,6 +260,7 @@
     "ai": {
         "chat": {
             "title": "AI Chat",
+            "subtitle": "Your AI assistant",
             "placeholder": "Type a message...",
             "send": "Send",
             "thinking": "Thinking...",
@@ -354,10 +355,12 @@
     },
     "profile": {
         "title": "Profile",
+        "subtitle": "Your personal space",
         "user": "User",
         "member_since": "Member since {date}",
         "edit": "Edit Profile",
         "level": "Level",
+        "exp_to_next": "exp to next level",
         "experience": "Experience",
         "achievements": "Achievements",
         "statistics": "Statistics",
@@ -521,7 +524,8 @@
         "loading": "Loading...",
         "unknown": "Unknown",
         "unknown_state": "Unknown state",
-        "reset": "Reset"
+        "reset": "Reset",
+        "days": "days"
     },
     "notifications": {
         "daily_reminders": "Daily Reminders",
@@ -607,4 +611,71 @@
         "updated_successfully": "Profile updated successfully!",
         "loading_error_full": "Error loading profile"
     },
+    "sleep": {
+        "title": "Sleep Tracking",
+        "add_entry": "Add Sleep Entry",
+        "sleep_start": "Sleep Start",
+        "sleep_end": "Sleep End",
+        "select_time": "Select Time",
+        "quality": "Quality",
+        "factors": "Factors",
+        "notes": "Notes",
+        "notes_hint": "Optional notes about your sleep",
+        "save_entry": "Save Entry",
+        "view_stats": "View Statistics",
+        "last_sleep": "Last Sleep",
+        "duration": "Duration",
+        "no_entries": "No sleep entries yet",
+        "enter_sleep_times": "Please enter sleep start and end times",
+        "invalid_times": "Sleep end time must be after sleep start time",
+        "entry_saved": "Sleep entry saved successfully",
+        "reminder": {
+            "settings": "Sleep Reminder",
+            "enabled": "Enabled",
+            "disabled": "Disabled",
+            "scheduled_at": "Scheduled at {time}",
+            "time": "Reminder Time",
+            "permission_required": "Notification permission required",
+            "open_settings": "Open Settings",
+            "error": "Error setting up reminder",
+            "cancelled": "Reminder cancelled",
+            "debug_title": "Test Sleep Reminder",
+            "debug_description": "This will send a test notification in 5 seconds",
+            "test_button": "Test Reminder",
+            "test_cancel_button": "Cancel",
+            "test_success": "Test reminder sent successfully",
+            "test_error": "Error sending test reminder: {error}",
+            "test_cancelled": "Test reminder cancelled",
+            "title": "Time to Sleep",
+            "body": "Don't forget to track your sleep tonight!",
+            "test_title": "Test Sleep Reminder",
+            "test_body": "This is a test notification for sleep tracking"
+        },
+        "stats": {
+            "title": "Sleep Statistics",
+            "overview": "Overview",
+            "avg_duration": "Avg Duration",
+            "avg_quality": "Avg Quality",
+            "total_entries": "Total Entries",
+            "no_data": "No Data",
+            "no_data_description": "Start tracking your sleep to see statistics",
+            "error": "Error loading statistics",
+            "duration_chart": "Duration Chart",
+            "quality_chart": "Quality Chart",
+            "ai_insights": "AI Insights",
+            "recommendations": "Recommendations",
+            "mood_correlation": "Mood Correlation",
+            "strong_correlation": "Strong correlation",
+            "moderate_correlation": "Moderate correlation",
+            "weak_correlation": "Weak correlation",
+            "insights": {
+                "no_data_title": "No Data Available",
+                "no_data_description": "Track your sleep for at least a week to get AI insights",
+                "loading_title": "Analyzing Your Sleep",
+                "loading_description": "Generating personalized insights...",
+                "error_title": "Error Loading Insights",
+                "error_description": "Please try again later"
+            }
+        }
+    }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../domain/entities/meditation_entity.dart';
 import '../../../../core/constants/app_typography.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/meditation_audio_service.dart';
 import '../../providers/meditation_tts_provider.dart';
 import '../../models/meditation_phase.dart';
@@ -169,10 +170,10 @@ class _MeditationTimerPageTTSState
     }
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : colorScheme.surface,
+      backgroundColor: isDark ? AppColors.darkBackground : colorScheme.surface,
       appBar: AppBar(
         title: Text('ai.meditation.title'.tr()),
-        backgroundColor: isDark ? const Color(0xFF1E293B) : colorScheme.surface,
+        backgroundColor: isDark ? AppColors.darkSurface : colorScheme.surface,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close),
@@ -260,7 +261,7 @@ class _MeditationTimerPageTTSState
                         ),
                         decoration: BoxDecoration(
                           color: isDark
-                              ? const Color(0xFF1E293B)
+                              ? AppColors.darkSurface
                               : colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(18),
                           border: Border.all(
@@ -296,7 +297,9 @@ class _MeditationTimerPageTTSState
                         widget.meditation.title,
                         style: AppTypography.h3.copyWith(
                           fontSize: 20,
-                          color: isDark ? Colors.white : colorScheme.onSurface,
+                          color: isDark
+                              ? AppColors.darkTextPrimary
+                              : colorScheme.onSurface,
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 2,
@@ -311,7 +314,7 @@ class _MeditationTimerPageTTSState
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             color: isDark
-                                ? const Color(0xFF1E293B)
+                                ? AppColors.darkSurface
                                 : colorScheme.surfaceContainerHighest,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
@@ -327,7 +330,7 @@ class _MeditationTimerPageTTSState
                                 'ai.meditation.current_step'.tr(),
                                 style: AppTypography.caption.copyWith(
                                   color: isDark
-                                      ? Colors.white70
+                                      ? AppColors.darkTextSecondary
                                       : colorScheme.onSurface.withOpacity(0.7),
                                 ),
                               ),
@@ -336,7 +339,7 @@ class _MeditationTimerPageTTSState
                                 ttsState.currentInstruction!,
                                 style: AppTypography.bodyLarge.copyWith(
                                   color: isDark
-                                      ? Colors.white
+                                      ? AppColors.darkTextPrimary
                                       : colorScheme.onSurface,
                                 ),
                                 textAlign: TextAlign.center,
@@ -353,7 +356,7 @@ class _MeditationTimerPageTTSState
                             'ai.meditation.audio.tts_unavailable'.tr(),
                             style: AppTypography.bodySmall.copyWith(
                               color: isDark
-                                  ? Colors.white60
+                                  ? AppColors.darkTextSecondary
                                   : colorScheme.onSurface.withOpacity(0.6),
                             ),
                             textAlign: TextAlign.center,
@@ -494,7 +497,7 @@ class _MeditationTimerPageTTSState
                       label: Text('ai.meditation.start'.tr()),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: widget.meditation.accentColor,
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.textOnPrimary,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 32,
                           vertical: 16,

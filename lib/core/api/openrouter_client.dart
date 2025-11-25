@@ -12,11 +12,19 @@ class OpenRouterClient {
     : _dio = Dio(
         BaseOptions(
           baseUrl: OpenRouterConstants.baseUrl,
-          headers: OpenRouterConstants.headers,
           connectTimeout: OpenRouterConstants.connectTimeout,
           receiveTimeout: OpenRouterConstants.receiveTimeout,
+          responseType: ResponseType.json, // Явно указываем тип ответа
+          validateStatus: (status) =>
+              status != null && status < 500, // Принимаем статусы < 500
         ),
       );
+
+  /// Обновление заголовков Dio клиента с актуальным API ключом
+  Future<void> _updateHeaders() async {
+    final headers = await OpenRouterConstants.getHeaders();
+    _dio.options.headers = headers;
+  }
 
   /// Генерация контента через OpenRouter API
   Future<OpenRouterResponse> generateContent({
@@ -25,6 +33,9 @@ class OpenRouterClient {
     double temperature = OpenRouterConstants.defaultTemperature,
     int maxTokens = OpenRouterConstants.defaultMaxTokens,
   }) async {
+    // Обновляем заголовки с актуальным API ключом перед каждым запросом
+    await _updateHeaders();
+
     try {
       final request = OpenRouterRequest(
         model: model,
@@ -42,9 +53,68 @@ class OpenRouterClient {
 
       print('✅ Получен ответ от OpenRouter: ${response.statusCode}');
 
-      return OpenRouterResponse.fromJson(response.data);
+      // Проверяем статус ответа
+      if (response.statusCode != 200) {
+        throw Exception(
+          'OpenRouter API вернул ошибку: ${response.statusCode} - ${response.statusMessage}',
+        );
+      }
+
+      // Обрабатываем ответ
+      Map<String, dynamic> jsonData;
+
+      if (response.data is Map<String, dynamic>) {
+        jsonData = response.data as Map<String, dynamic>;
+      } else {
+        print('❌ Неожиданный тип ответа: ${response.data.runtimeType}');
+        // Пытаемся получить строковое представление для отладки
+        final dataString = response.data.toString();
+        final preview = dataString.length > 1000
+            ? '${dataString.substring(0, 1000)}... (обрезано)'
+            : dataString;
+        print('📄 Содержимое ответа (первые 1000 символов): $preview');
+        throw FormatException(
+          'Invalid response format: expected JSON object, got ${response.data.runtimeType}',
+        );
+      }
+
+      return OpenRouterResponse.fromJson(jsonData);
+    } on FormatException catch (e) {
+      print('❌ Ошибка парсинга JSON: $e');
+      // Если это ошибка на конкретной строке, выводим больше информации
+      if (e.message.contains('line')) {
+        print(
+          '⚠️ Возможно, ответ от API был обрезан или содержит невалидный JSON',
+        );
+        print('💡 Проверьте: размер ответа, таймауты, лимиты токенов');
+      }
+      throw Exception('Ошибка обработки ответа от AI: ${e.message}');
     } on DioException catch (e) {
       final statusCode = e.response?.statusCode;
+
+      // Проверяем, не является ли это ошибкой парсинга JSON
+      if (e.error is FormatException) {
+        final formatError = e.error as FormatException;
+        print('❌ Ошибка парсинга JSON в Dio: ${formatError.message}');
+        print(
+          '⚠️ Возможно, ответ от API был обрезан или содержит невалидный JSON',
+        );
+        if (e.response?.data != null) {
+          try {
+            final dataString = e.response!.data.toString();
+            final preview = dataString.length > 500
+                ? '${dataString.substring(0, 500)}... (обрезано)'
+                : dataString;
+            print('📄 Содержимое ответа (первые 500 символов): $preview');
+          } catch (_) {
+            print('📄 Не удалось получить содержимое ответа');
+          }
+        }
+        throw Exception(
+          'Ошибка обработки ответа от AI: JSON ответ содержит ошибку на ${formatError.message.contains('line') ? formatError.message.split('line')[1].split(',')[0] : 'неизвестной строке'}. Возможно, ответ был обрезан.',
+        );
+      }
+
       final errorMessage = e.response?.data?['error']?['message'] ?? e.message;
 
       print('❌ Ошибка OpenRouter API: ${e.message}');
@@ -77,6 +147,9 @@ class OpenRouterClient {
       }
     } catch (e) {
       print('❌ Неожиданная ошибка: $e');
+      if (e is TypeError) {
+        throw Exception('Ошибка типа данных в ответе API: $e');
+      }
       throw Exception('Неожиданная ошибка: $e');
     }
   }

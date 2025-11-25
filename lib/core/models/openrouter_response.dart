@@ -25,18 +25,50 @@ class OpenRouterResponse {
 
   /// Создание из JSON
   factory OpenRouterResponse.fromJson(Map<String, dynamic> json) {
-    final choices = json['choices'] as List;
-    final message = choices.first['message'] as Map<String, dynamic>;
+    try {
+      // Валидация структуры ответа
+      if (json['choices'] == null || (json['choices'] as List).isEmpty) {
+        throw FormatException(
+          'Invalid response: missing or empty choices array',
+        );
+      }
 
-    return OpenRouterResponse(
-      id: json['id'] as String,
-      model: json['model'] as String,
-      content: message['content'] as String,
-      usageTokens: json['usage']?['total_tokens'] as int?,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-        (json['created'] as int) * 1000,
-      ),
-    );
+      final choices = json['choices'] as List;
+      if (choices.first['message'] == null) {
+        throw FormatException('Invalid response: missing message in choice');
+      }
+
+      final message = choices.first['message'] as Map<String, dynamic>;
+      final content = message['content'] as String? ?? '';
+
+      if (json['id'] == null) {
+        throw FormatException('Invalid response: missing id');
+      }
+      if (json['model'] == null) {
+        throw FormatException('Invalid response: missing model');
+      }
+
+      return OpenRouterResponse(
+        id: json['id'] as String,
+        model: json['model'] as String,
+        content: content,
+        usageTokens:
+            (json['usage'] as Map<String, dynamic>?)?['total_tokens'] as int?,
+        createdAt: json['created'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(
+                (json['created'] as int) * 1000,
+              )
+            : DateTime.now(),
+      );
+    } catch (e) {
+      // Логируем структуру ответа для отладки
+      print('❌ Ошибка парсинга ответа OpenRouter: $e');
+      print('📄 Структура JSON: ${json.keys.toList()}');
+      if (json['choices'] != null) {
+        print('📋 Choices: ${json['choices']}');
+      }
+      rethrow;
+    }
   }
 
   /// Преобразование в JSON

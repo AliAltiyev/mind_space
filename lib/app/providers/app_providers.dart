@@ -105,41 +105,6 @@ final appSettingsProvider =
       },
     );
 
-/// Провайдер для темы приложения
-class AppThemeNotifier extends StateNotifier<String> {
-  AppThemeNotifier(this.ref) : super('dark') {
-    _initTheme();
-  }
-
-  final Ref ref;
-
-  Future<void> _initTheme() async {
-    final settingsNotifier = ref.read(appSettingsProvider.notifier);
-    final theme = settingsNotifier.getSetting('theme');
-    if (theme != null) {
-      state = theme;
-    } else {
-      state = 'dark';
-      await settingsNotifier.updateSetting('theme', 'dark');
-    }
-  }
-
-  /// Переключение темы
-  Future<void> toggleTheme() async {
-    final currentTheme = state;
-    final newTheme = currentTheme == 'light' ? 'dark' : 'light';
-
-    final settingsNotifier = ref.read(appSettingsProvider.notifier);
-    await settingsNotifier.updateSetting('theme', newTheme);
-
-    state = newTheme;
-  }
-}
-
-final appThemeProvider = StateNotifierProvider<AppThemeNotifier, String>((ref) {
-  return AppThemeNotifier(ref);
-});
-
 /// Провайдер для локализации
 class AppLocaleNotifier extends StateNotifier<String> {
   AppLocaleNotifier(this.ref) : super('en');

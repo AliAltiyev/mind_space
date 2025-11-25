@@ -4,3 +4,4 @@
 -- The actual migrations are in database/migrations/
 -- This file can be used for initial setup or seed data
 
+

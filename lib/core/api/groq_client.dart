@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../models/openrouter_request.dart';
 import '../models/openrouter_response.dart';
+import '../services/app_settings_service.dart';
 
 /// Константы для Groq API
 class GroqApiConstants {
@@ -14,21 +15,38 @@ class GroqApiConstants {
   static const String chatEndpoint = '/chat/completions';
 
   /// API ключ (бесплатный, можно получить на console.groq.com)
-  /// ВАЖНО: Ключ должен быть получен из настроек приложения или переменных окружения
+  /// ВАЖНО: Ключ должен быть получен из настроек приложения через AppSettingsService
   /// Получите бесплатный ключ на: https://console.groq.com/keys
   /// Groq предоставляет щедрый бесплатный tier с хорошими лимитами
   ///
-  /// Для получения ключа из настроек используйте AppSettingsService
-  static String get apiKey {
-    // TODO: Получать ключ из настроек приложения или переменных окружения
-    // Пример: return AppSettingsService().getGroqApiKey() ?? '';
-    return ''; // Пустой ключ по умолчанию - должен быть настроен пользователем
+  /// ИНСТРУКЦИЯ ПО НАСТРОЙКЕ:
+  /// 1. Перейдите на https://console.groq.com/keys
+  /// 2. Создайте аккаунт или войдите в существующий
+  /// 3. Создайте новый API ключ
+  /// 4. Сохраните ключ через AppSettingsService.setGroqApiKey() или через настройки приложения
+  ///
+  /// БЕЗОПАСНОСТЬ: API ключи НИКОГДА не должны быть захардкожены в коде!
+  static Future<String> get apiKey async {
+    final settingsService = AppSettingsService();
+    final apiKey = await settingsService.getGroqApiKey();
+    return apiKey ?? '';
   }
 
   /// Заголовки по умолчанию
+  /// ВАЖНО: Используйте getHeaders() вместо headers для получения актуального API ключа
+  static Future<Map<String, String>> getHeaders() async {
+    final key = await apiKey;
+    return {
+      'Content-Type': 'application/json',
+      if (key.isNotEmpty) 'Authorization': 'Bearer $key',
+    };
+  }
+
+  /// Устаревший метод - используйте getHeaders() вместо этого
+  @Deprecated('Use getHeaders() instead to get the API key from secure storage')
   static Map<String, String> get headers => {
     'Content-Type': 'application/json',
-    if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
+    // API ключ больше не доступен синхронно
   };
 
   /// Таймауты
@@ -62,11 +80,16 @@ class GroqClient {
     : _dio = Dio(
         BaseOptions(
           baseUrl: GroqApiConstants.baseUrl,
-          headers: GroqApiConstants.headers,
           connectTimeout: GroqApiConstants.connectTimeout,
           receiveTimeout: GroqApiConstants.receiveTimeout,
         ),
       );
+
+  /// Обновление заголовков Dio клиента с актуальным API ключом
+  Future<void> _updateHeaders() async {
+    final headers = await GroqApiConstants.getHeaders();
+    _dio.options.headers = headers;
+  }
 
   /// Генерация контента через Groq API
   Future<OpenRouterResponse> generateContent({
@@ -75,11 +98,14 @@ class GroqClient {
     double temperature = GroqApiConstants.defaultTemperature,
     int maxTokens = GroqApiConstants.defaultMaxTokens,
   }) async {
+    // Обновляем заголовки с актуальным API ключом перед каждым запросом
+    await _updateHeaders();
+
     // Проверяем, что API ключ настроен
-    if (GroqApiConstants.apiKey.isEmpty ||
-        GroqApiConstants.apiKey.length < 20) {
+    final apiKey = await GroqApiConstants.apiKey;
+    if (apiKey.isEmpty || apiKey.length < 20) {
       throw Exception(
-        'API ключ Groq не настроен. Получите бесплатный ключ на https://console.groq.com/keys и добавьте его в lib/core/api/groq_client.dart',
+        'API ключ Groq не настроен. Получите бесплатный ключ на https://console.groq.com/keys и сохраните его через настройки приложения или AppSettingsService.setGroqApiKey()',
       );
     }
 

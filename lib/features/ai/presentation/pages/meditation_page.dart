@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:go_router/go_router.dart';
-import 'dart:io';
 
 import '../../../../app/providers/ai_features_provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../blocs/meditation_bloc.dart';
+import '../../domain/entities/meditation_entity.dart';
 
 /// Страница медитации и релаксации
 class MeditationPage extends ConsumerStatefulWidget {
@@ -63,13 +63,16 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
       appBar: AppBar(
         title: Text('ai.meditation.title'.tr()),
-        backgroundColor: AppColors.surface,
+        backgroundColor: isDark ? AppColors.darkSurface : AppColors.surface,
+        foregroundColor: isDark
+            ? AppColors.darkTextPrimary
+            : AppColors.textPrimary,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -80,7 +83,7 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(CupertinoIcons.arrow_clockwise),
             onPressed: () {
               if (!context.read<MeditationBloc>().isClosed) {
                 context.read<MeditationBloc>().add(LoadMeditationSession([]));
@@ -166,7 +169,7 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
               boxShadow: AppColors.cardShadow,
             ),
             child: const Icon(
-              Icons.self_improvement,
+              CupertinoIcons.star,
               color: Colors.white,
               size: 32,
             ),
@@ -199,7 +202,7 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
   }
 
   /// Контент медитации
-  Widget _buildMeditationContent(meditation) {
+  Widget _buildMeditationContent(MeditationEntity meditation) {
     return Column(
       children: [
         Container(
@@ -250,7 +253,7 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
                         Row(
                           children: [
                             Icon(
-                              Icons.access_time,
+                              CupertinoIcons.clock,
                               size: 14,
                               color: AppColors.textSecondary,
                             ),
@@ -299,7 +302,7 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
                       Row(
                         children: [
                           Icon(
-                            Icons.psychology,
+                            CupertinoIcons.sparkles,
                             size: 18,
                             color: AppColors.primary,
                           ),
@@ -356,7 +359,8 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Start meditation session
+                    // Навигация к экрану таймера медитации
+                    context.push('/stats/meditation/timer', extra: meditation);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
@@ -370,7 +374,7 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.play_arrow, size: 24),
+                      const Icon(CupertinoIcons.play_fill, size: 24),
                       const SizedBox(width: 8),
                       Text(
                         'ai.meditation.start_meditation'.tr(
@@ -388,6 +392,41 @@ class _MeditationPageState extends ConsumerState<MeditationPage> {
           ),
         ),
       ],
+    );
+  }
+
+  /// Пустое состояние
+  Widget _buildEmptyState(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(48),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: AppColors.cardShadow,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            CupertinoIcons.star,
+            size: 64,
+            color: AppColors.textSecondary.withOpacity(0.5),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'ai.meditation.no_meditation'.tr(),
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -466,7 +505,11 @@ class _MeditationErrorWidget extends StatelessWidget {
               color: AppColors.error.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.error_outline, color: AppColors.error, size: 32),
+            child: Icon(
+              CupertinoIcons.exclamationmark_circle,
+              color: AppColors.error,
+              size: 32,
+            ),
           ),
           const SizedBox(height: 20),
           Text(
@@ -484,7 +527,7 @@ class _MeditationErrorWidget extends StatelessWidget {
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: onRetry,
-            icon: const Icon(Icons.refresh, size: 20),
+            icon: const Icon(CupertinoIcons.arrow_clockwise, size: 20),
             label: Text('common.retry'.tr()),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,

@@ -20,7 +20,9 @@ class AppColors {
   static const Color sad = Color(0xFFE6521F); // Deep Orange-Red - плохо
   static const Color neutral = Color(0xFFFB9E3A); // Vibrant Orange - нормально
   static const Color happy = Color(0xFFFCEF91); // Warm Yellow/Cream - хорошо
-  static const Color veryHappy = Color(0xFFFCEF91); // Warm Yellow/Cream - отлично
+  static const Color veryHappy = Color(
+    0xFFFCEF91,
+  ); // Warm Yellow/Cream - отлично
 
   // Градиенты с новой палитрой
   static const LinearGradient primaryGradient = LinearGradient(
@@ -58,7 +60,19 @@ class AppColors {
   static const Color glassBackground = Color(0x1AFFFFFF);
   static const Color glassBorder = Color(0x33FFFFFF);
 
+  // ========== ТЕМНАЯ ТЕМА - Профессиональная палитра ==========
+
+  // Акцентные цвета для темной темы
+  static const Color darkPrimary = Color(
+    0xFF818CF8,
+  ); // Светлый индиго для темной темы
+  static const Color darkPrimaryDark = Color(0xFF6366F1); // Стандартный индиго
+  static const Color darkSecondaryLight = Color(0xFF22D3EE); // Светло-циан
+
+  // Стеклянные эффекты для темной темы
+  static const Color darkGlassBackground = Color(0x1AFFFFFF);
+  static const Color darkGlassBorder = Color(0x33FFFFFF);
+
   // Приватный конструктор
   AppColors._();
 }
-
