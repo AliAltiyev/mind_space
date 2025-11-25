@@ -42,11 +42,11 @@ class OpenRouterConstants {
   /// Устаревший метод - используйте getHeaders() вместо этого
   @Deprecated('Use getHeaders() instead to get the API key from secure storage')
   static Map<String, String> get headers => {
-        'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://mindspace.app',
-        'X-Title': 'MindSpace - Mental Wellness App',
-        // API ключ больше не доступен синхронно
-      };
+    'Content-Type': 'application/json',
+    'HTTP-Referer': 'https://mindspace.app',
+    'X-Title': 'MindSpace - Mental Wellness App',
+    // API ключ больше не доступен синхронно
+  };
 
   /// Таймауты
   static const Duration connectTimeout = Duration(seconds: 30);
