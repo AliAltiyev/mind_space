@@ -15,7 +15,6 @@ class AppSettingsService {
   static const String _analyticsEnabledKey = 'analytics_enabled';
   static const String _soundEnabledKey = 'sound_enabled';
   static const String _hapticFeedbackKey = 'haptic_feedback';
-  static const String _groqApiKeyKey = 'groq_api_key';
   static const String _openRouterApiKeyKey = 'openrouter_api_key';
 
   /// Тема приложения
@@ -149,23 +148,6 @@ class AppSettingsService {
   Future<void> setHapticFeedbackEnabled(bool enabled) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_hapticFeedbackKey, enabled);
-  }
-
-  /// Groq API ключ (хранится безопасно в SharedPreferences)
-  /// ВАЖНО: Никогда не коммитьте API ключи в репозиторий!
-  Future<String?> getGroqApiKey() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_groqApiKeyKey);
-  }
-
-  Future<void> setGroqApiKey(String apiKey) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_groqApiKeyKey, apiKey);
-  }
-
-  Future<void> clearGroqApiKey() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_groqApiKeyKey);
   }
 
   /// OpenRouter API ключ (хранится безопасно в SharedPreferences)

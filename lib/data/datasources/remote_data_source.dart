@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/api/groq_client.dart';
 import '../../core/database/database.dart';
+import '../../core/services/app_settings_service.dart';
 import '../../domain/entities/ai_insight.dart';
 
 /// Удаленный источник данных для AI инсайтов
@@ -24,19 +25,22 @@ class RemoteDataSource {
 
       print('🔍 Отправляем запрос к AI с данными: ${entries.length} записей');
 
-      // Отправляем запрос к Groq API
-      // Импортируем GroqApiConstants для использования API ключа
-      final apiKey = GroqApiConstants.apiKey;
-      if (apiKey.isEmpty) {
+      // Получаем API ключ из безопасного хранилища
+      final settingsService = AppSettingsService();
+      final apiKey = await settingsService.getOpenRouterApiKey();
+
+      if (apiKey == null || apiKey.isEmpty) {
         throw Exception(
-          'Groq API ключ не настроен. Получите бесплатный ключ на https://console.groq.com/keys',
+          'OpenRouter API ключ не настроен. Сохраните ключ через настройки приложения.',
         );
       }
 
+      // Отправляем запрос к OpenRouter API
       final response = await _dio.post(
         'https://api.groq.com/openai/v1/chat/completions',
         options: Options(
           headers: {
+            'Authorization': 'Bearer $apiKey',
             'Authorization': 'Bearer $apiKey',
             'Content-Type': 'application/json',
           },

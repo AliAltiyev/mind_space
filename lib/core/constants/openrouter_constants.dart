@@ -1,6 +1,6 @@
 import '../services/app_settings_service.dart';
 
-/// Константы для OpenRouter API
+/// Константы для работы с OpenRouter API
 class OpenRouterConstants {
   OpenRouterConstants._();
 
@@ -10,7 +10,7 @@ class OpenRouterConstants {
   /// Эндпоинт для чат-запросов
   static const String chatEndpoint = '/chat/completions';
 
-  /// API ключ (получите на openrouter.ai)
+  /// API ключ (получается из безопасного хранилища)
   /// ВАЖНО: Ключ должен быть получен из настроек приложения через AppSettingsService
   /// БЕЗОПАСНОСТЬ: API ключи НИКОГДА не должны быть захардкожены в коде!
   static Future<String> get apiKey async {
@@ -19,15 +19,23 @@ class OpenRouterConstants {
     return apiKey ?? '';
   }
 
+  /// Модель по умолчанию
+  static const String defaultModel = 'anthropic/claude-3.5-sonnet';
+
+  /// Альтернативные модели
+  static const String gpt4Model = 'openai/gpt-4o';
+  static const String claudeModel = 'anthropic/claude-3.5-sonnet';
+  static const String geminiModel = 'google/gemini-pro';
+
   /// Заголовки по умолчанию
   /// ВАЖНО: Используйте getHeaders() вместо headers для получения актуального API ключа
   static Future<Map<String, String>> getHeaders() async {
     final key = await apiKey;
     return {
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://mindspace.app', // Опционально, для отслеживания
-      'X-Title': 'Mind Space', // Опционально, название приложения
       if (key.isNotEmpty) 'Authorization': 'Bearer $key',
+      'HTTP-Referer': 'https://mindspace.app',
+      'X-Title': 'MindSpace - Mental Wellness App',
     };
   }
 
@@ -36,7 +44,7 @@ class OpenRouterConstants {
   static Map<String, String> get headers => {
         'Content-Type': 'application/json',
         'HTTP-Referer': 'https://mindspace.app',
-        'X-Title': 'Mind Space',
+        'X-Title': 'MindSpace - Mental Wellness App',
         // API ключ больше не доступен синхронно
       };
 
@@ -52,8 +60,7 @@ class OpenRouterConstants {
   static const int maxRetries = 3;
   static const Duration retryDelay = Duration(seconds: 2);
 
-  /// Модели по умолчанию
-  static const String claudeModel = 'anthropic/claude-3-haiku';
-  static const String gpt4Model = 'openai/gpt-4-turbo';
-  static const String defaultModel = claudeModel;
+  /// Настройки кэширования
+  static const Duration cacheMaxAge = Duration(hours: 1);
+  static const String cacheBoxName = 'ai_cache';
 }
